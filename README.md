@@ -1,1 +1,1 @@
-# GroupD-Molekulardynamik
+# GroupG-Molekulardynamik
