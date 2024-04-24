@@ -1,4 +1,1 @@
-MolSim
-===
-
-The Molecular Dynamics teaching code.
+#GroupG-MolSim
