@@ -1,0 +1,3 @@
+/home/felixnboi/GroupG-Molekulardynamik/CMakeFiles/MolSim.dir
+/home/felixnboi/GroupG-Molekulardynamik/CMakeFiles/edit_cache.dir
+/home/felixnboi/GroupG-Molekulardynamik/CMakeFiles/rebuild_cache.dir
