@@ -1,7 +1,6 @@
 GroupG
 
 Members:
-Felix
 Robert
+Felix
 Maria
-
