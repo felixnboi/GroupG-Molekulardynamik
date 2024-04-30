@@ -56,6 +56,7 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   int iteration = 0;
+  plotParticles(iteration);
 
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
@@ -149,6 +150,13 @@ void plotParticles(int iteration) {
 
   std::string out_name("MD_vtk");
 
-  outputWriter::XYZWriter writer;
-  writer.plotParticles(particles, out_name, iteration);
+ outputWriter::VTKWriter writer;
+// writer.initializeOutput(particles.size() * end_time / (delta_t * 10));
+ writer.initializeOutput(particles.size());
+  for(auto &p: particles){
+    writer.plotParticle(p);
+  }
+  writer.writeFile(out_name, iteration);
+  //writer.plotParticles(particles, out_name, iteration);
+
 }
