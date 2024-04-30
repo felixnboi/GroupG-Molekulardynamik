@@ -36,8 +36,8 @@ void calculateV();
 void plotParticles(int iteration);
 
 constexpr double start_time = 0;
-constexpr double end_time = 1000;
-constexpr double delta_t = 0.014;
+double end_time = 1000;
+double delta_t = 0.014;
 
 // TODO: what data structure to pick?
 std::list<Particle> particles;
@@ -45,13 +45,18 @@ std::list<Particle> particles;
 int main(int argc, char *argsv[]) {
 
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
+  if (argc != 4) {
     std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
+    std::cout << "Usage: ./molsym filename end_time delta_t" << std::endl;
   }
 
   FileReader fileReader;
   fileReader.readFile(particles, argsv[1]);
+
+  end_time = std::atof(argsv[2]);
+  delta_t = std::atof(argsv[3]);
+
+  std::cout << "end_time:" << end_time << ", delta_t:" << delta_t << "\n";
 
   double current_time = start_time;
 
@@ -70,7 +75,7 @@ int main(int argc, char *argsv[]) {
     if (iteration % 10 == 0) {
       plotParticles(iteration);
     }
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
+    //std::cout << "Iteration " << iteration << " finished." << std::endl;
 
     current_time += delta_t;
   }
@@ -135,7 +140,6 @@ void calculateX() {
 void calculateV() {
   for (auto &p : particles) {
     auto m = p.getM();
-    auto cur_x = p.getX();
     auto cur_v = p.getV();
     auto cur_F = p.getF();
     auto old_F = p.getOldF();
@@ -149,6 +153,10 @@ void plotParticles(int iteration) {
 
   std::string out_name("MD_vtk");
 
-  outputWriter::XYZWriter writer;
-  writer.plotParticles(particles, out_name, iteration);
+  outputWriter::VTKWriter writer;
+  writer.initializeOutput(particles.size());
+  for(auto &p : particles){
+    writer.plotParticle(p);
+  }
+  writer.writeFile(out_name, iteration);
 }
