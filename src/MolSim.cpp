@@ -61,6 +61,7 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   int iteration = 0;
+  plotParticles(iteration);
 
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
