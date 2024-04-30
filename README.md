@@ -1,4 +1,6 @@
-MolSim
-===
+GroupG
 
-The Molecular Dynamics teaching code.
+Members:
+Robert
+Felix
+Maria
