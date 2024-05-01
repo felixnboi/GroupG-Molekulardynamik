@@ -91,35 +91,36 @@ void calculateF() {
   std::list<Particle>::iterator iterator_j;
 
   for(auto &p : particles){
-    auto old_F = p.getOldF();
-    auto cur_F = p.getF();
-    for(int i = 0; i<3 ;i++){
-      old_F.at(i) = cur_F.at(i);
-      cur_F.at(i) = 0;
-    }
+    p.setOldF(p.getF());
+    p.setF({0,0,0});
   }
   for (int i = 0; i<particles.size()-1; i++) {
-    auto cur_particle_i = *iterator_i;
+    auto &cur_particle_i = *(iterator_i++);
     auto m_i = cur_particle_i.getM();
     auto cur_x_i = cur_particle_i.getX();
-    auto cur_F_i = cur_particle_i.getF();
-    for (iterator_j = iterator_i++; iterator_j!=particles.end(); iterator_j++) {
-      auto cur_particle_j = *iterator_j;
+    auto &cur_F_i = cur_particle_i.getF();
+    std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
+    for (iterator_j = iterator_i; iterator_j!=particles.end(); iterator_j++) {
+      auto &cur_particle_j = *iterator_j;
       auto m_j = cur_particle_j.getM();
-      auto norm = euclidean_norm_x(cur_particle_i, cur_particle_j);
       auto cur_x_j = cur_particle_j.getX(); 
-      auto cur_F_j = cur_particle_j.getF();
+      auto &cur_F_j = cur_particle_j.getF();
+      std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
+
+      auto norm = euclidean_norm_x(cur_particle_i, cur_particle_j);
       for(int k = 0; k<3; k++){
-        double tmp = m_i * m_j / pow(norm, 3) * (cur_x_j.at(k) - cur_x_i.at(k));
-        cur_F_i.at(k) += tmp;
-        cur_F_j.at(k) -= tmp;
+        double tmp = m_i * m_j / pow(norm, 3) * (cur_x_j[k] - cur_x_i[k]);
+        cur_F_i_dummy[k] += tmp;
+        cur_F_j_dummy[k] -= tmp;
       }
+      cur_particle_i.setF(cur_F_i_dummy);
+      cur_particle_j.setF(cur_F_j_dummy);
     }
   }
 }
 
 double euclidean_norm_x(Particle particle1, Particle particle2){
-  double sum = 0;
+  double sum = 0.0;
   for (int i = 0; i<3; i++){
     sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
   }
@@ -132,9 +133,11 @@ void calculateX() {
     auto cur_x = p.getX();
     auto cur_v = p.getV();
     auto cur_F = p.getF();
+    std::array<double, 3> cur_x_dummy = {0,0,0};
     for(int i = 0; i<3; i++){
-      cur_x.at(i) = cur_x.at(i) + delta_t * cur_v.at(i) + delta_t * delta_t * cur_F.at(i) / (2*m); 
+      cur_x_dummy[i] = cur_x[i] + delta_t * cur_v[i] + delta_t * delta_t * cur_F[i] / (2*m); 
     }
+    p.setX(cur_x_dummy);
   }
 }
 
@@ -144,9 +147,11 @@ void calculateV() {
     auto cur_v = p.getV();
     auto cur_F = p.getF();
     auto old_F = p.getOldF();
+    std::array<double, 3> cur_v_dummy = {0,0,0};
     for(int i = 0; i<3; i++){
-      cur_v.at(i) = cur_v.at(i) + delta_t * (old_F.at(i) + cur_F.at(i)) / (2*m);
+      cur_v_dummy[i] = cur_v[i] + delta_t * (old_F[i] + cur_F[i]) / (2*m);
     }
+    p.setV(cur_v_dummy);
   }
 }
 
