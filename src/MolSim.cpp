@@ -1,6 +1,5 @@
 
 #include "FileReader.h"
-#include "outputWriter/XYZWriter.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
 
@@ -13,7 +12,7 @@
 /**
  * calculate the euclidean norm of the distance between two particles
  */
-double euclidean_norm_x(Particle particle1, Particle particle2);
+double euclidean_norm_x(const Particle &particle1, const Particle &particle2);
 
 /**
  * calculate the force for all particles
@@ -52,6 +51,10 @@ int main(int argc, char *argsv[]) {
 
   FileReader fileReader;
   fileReader.readFile(particles, argsv[1]);
+  if(particles.size() <= 0){
+    std::cout << "No particles!" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   end_time = std::atof(argsv[2]);
   delta_t = std::atof(argsv[3]);
@@ -76,7 +79,7 @@ int main(int argc, char *argsv[]) {
     if (iteration % 10 == 0) {
       plotParticles(iteration);
     }
-    //std::cout << "Iteration " << iteration << " finished." << std::endl;
+    std::cout << "Iteration " << iteration << " finished." << std::endl;
 
     current_time += delta_t;
   }
@@ -94,7 +97,7 @@ void calculateF() {
     p.setOldF(p.getF());
     p.setF({0,0,0});
   }
-  for (int i = 0; i<particles.size()-1; i++) {
+  for (size_t i = 0; i<particles.size()-1; i++) {
     auto &cur_particle_i = *(iterator_i++);
     auto m_i = cur_particle_i.getM();
     auto cur_x_i = cur_particle_i.getX();
@@ -119,7 +122,7 @@ void calculateF() {
   }
 }
 
-double euclidean_norm_x(Particle particle1, Particle particle2){
+double euclidean_norm_x(const Particle &particle1, const Particle &particle2){
   double sum = 0.0;
   for (int i = 0; i<3; i++){
     sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
