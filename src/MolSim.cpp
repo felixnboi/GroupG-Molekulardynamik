@@ -13,11 +13,18 @@
 #include <math.h>
 
 /**
- * @brief Calculate the euclidean norm of the distance between two particles.
+ * @brief Calculate the Euclidean Norm of the distance between two particles.
+ * 
+ * This function computes the Euclidean distance between two particles
+ * in three-dimensional space. It takes two Particle objects as input
+ * and calculates the Euclidean distance between their positions. The
+ * Euclidean distance is computed as the square root of the sum of the
+ * squares of the differences in the coordinates of the particles along
+ * each dimension (x, y, and z).
  * 
  * @param particle1 First particle.
  * @param particle2 Second particle.
- * @return The euclidean norm of the distance between the two particles.
+ * @return The Euclidean Norm of the distance between the two particles.
  */
 double euclidean_norm_x(const Particle &particle1, const Particle &particle2);
 
@@ -39,7 +46,12 @@ void calculateX();
 void calculateV();
 
 /**
- * @brief Plot the particles to a vtu-file.
+ * @brief Plot the particles to a VTK file.
+ * 
+ * This function uses the outputwriter of a VTK type to plot the particles into a file 
+ * via the methods of VTKWriter class. As stated in VTKWriter.h notes, this function first prepares to plot a particle by 
+ * initializing internal data structures, then plots it and writes the output of the iteration to a unique file
+ * with a given filename base.
  * 
  * @param iteration The current iteration number.
  */
@@ -148,7 +160,7 @@ void calculateF() {
 }
 
 double euclidean_norm_x(const Particle &particle1, const Particle &particle2){
-  double sum = 0.0;
+  double sum = 0.0; ///< A variable that is used for the sum of squared differences.
   for (int i = 0; i<3; i++){
     sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
   }
@@ -183,15 +195,7 @@ void calculateV() {
   }
 }
 
-/**
- * @brief Plot the particles to a VTK file.
- * 
- * This function uses the outputwriter of a VTK type to plot the particles into a file 
- * via the methods of VTKWriter class. Firstly, 
- * 
- * 
- * @param iteration The current iteration number.
- */
+
 void plotParticles(int iteration) {
 
   std::string out_name("MD_vtk");
