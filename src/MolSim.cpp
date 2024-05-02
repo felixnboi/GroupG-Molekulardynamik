@@ -31,17 +31,35 @@ double euclidean_norm_x(const Particle &particle1, const Particle &particle2);
 /**
  * @brief Calculate the force for all particles.
  * 
- * This function calculates 
+ * This function calculates the force acting on each particle due to gravitational
+ * interactions with other particles. Firstly, it updates the old_f parameter (represents the previous force 
+ * value for the current timestep) of each particle and sets the current Force parameters (f) to 0. 
+ * After that, the function iterates over all pairs of particles and
+ * computes the gravitational force between them based on their masses and positions.
+ * The calculated forces are then updated (added to the current Forces of according particles) for each particle.
+ * 
+ * @see euclidean_norm_x() To calculate the Euclidean distance between particles.
+ * 
  */
 void calculateF();
 
 /**
  * @brief Calculate the position for all particles.
+ * 
+ * This function calculates and updates the new position of each particle based on its current position, 
+ * velocity vector, current forces vector and mass(the last two are used for calculating the acceleration). 
+ * It employs the Velocity-Störmer-Verlet method to advance the particle positions in time. 
  */
 void calculateX();
 
 /**
  * @brief Calculate the velocity for all particles.
+ * 
+ * This function updates the velocity of each particle via the Velocity-Störmer-Verlet method
+ * for the current time moment:
+ * The new (current) velocity is calculated using particle´s previous velocity, the forces that were acting 
+ * on the particle in the previous time stamp, the forces that are acting on it currently, 
+ * and the particle´s mass.
  */
 void calculateV();
 
@@ -68,19 +86,20 @@ std::list<Particle> particles; ///< The list of particles.
  * 
  * This function serves as the entry point for the Molecular Simulation program. 
  * The program first takes command-line arguments
- * to specify the input file name, end time, and time step. The function reads
+ * to specify the input file name, and optionally, end time and time step. The function reads
  * particle data from an input file, performs a simulation over a specified time period 
  * with a given timestep duration, and writes the simulation results to output files. 
- * Iterating through the simulation time steps, the function updates the positions and velocities of particles based on calculated forces,
- * and periodically () writes the particle positions to VTK files for visualization.
+ * Iterating through the simulation time steps, for each 10th iteration, the function updates 
+ * the positions and velocities of particles based on calculated forces,
+ * and writes the particle positions to output VTK files for visualization.
  * 
  * @param argc The number of command-line arguments.
  * @param argsv An array of pointers to the command-line arguments.
  * @return The exit status of the program.
- * 
- * @param argc Number of command-line arguments.
- * @param argsv Array of command-line arguments.
- * @return The exit status of the program.
+ * @see calculateX() To calculate the position for all particles.
+ * @see calculateF() To calculate the force for all particles.
+ * @see calculateV() To calculate the velocity for all particles.
+ * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
 
@@ -161,9 +180,12 @@ void calculateF() {
 
 double euclidean_norm_x(const Particle &particle1, const Particle &particle2){
   double sum = 0.0; ///< A variable that is used for the sum of squared differences.
+  // iterate over the x, y, and z coordinates of the particles
   for (int i = 0; i<3; i++){
+    // add the squared difference along each dimension to the sum
     sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
   }
+  // return the square root of the sum to obtain the Euclidean distance
   return pow(sum, 0.5);
 }
 
