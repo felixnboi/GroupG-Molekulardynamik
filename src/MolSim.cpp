@@ -26,7 +26,7 @@
  * @param particle2 Second particle.
  * @return The Euclidean Norm of the distance between the two particles.
  */
-double euclidean_norm_x(const Particle &particle1, const Particle &particle2);
+double euclidean_norm_x_cubed(const Particle &particle1, const Particle &particle2);
 
 /**
  *test if this string is a double 
