@@ -235,11 +235,11 @@ void calculateF() {
       auto cur_x_j = cur_particle_j.getX(); 
       auto &cur_F_j = cur_particle_j.getF();
       std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
-      // calculating the Euclidean distance between particle i and particle j
-      auto norm = euclidean_norm_x(cur_particle_i, cur_particle_j);
+      // calculating the cubed Euclidean distance between particle i and particle j
+      auto norm_cubed = euclidean_norm_x_cubed(cur_particle_i, cur_particle_j);
       // calculating the force components (along the x, y, z axes) between particle i and particle j
       for(int k = 0; k<3; k++){
-        double force = m_i * m_j / pow(norm, 3) * (cur_x_j[k] - cur_x_i[k]);
+        double force = m_i * m_j / norm_cubed * (cur_x_j[k] - cur_x_i[k]);
         cur_F_i_dummy[k] += force;
         cur_F_j_dummy[k] -= force;
       }
@@ -250,15 +250,15 @@ void calculateF() {
   }
 }
 
-double euclidean_norm_x(const Particle &particle1, const Particle &particle2){
+double euclidean_norm_x_cubed(const Particle &particle1, const Particle &particle2){
   double sum = 0.0; ///< A variable that is used for the sum of squared differences.
   // iterate over the x, y, and z coordinates of the particles
   for (int i = 0; i<3; i++){
     // add the squared difference along each dimension to the sum
     sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
   }
-  // return the square root of the sum to obtain the Euclidean distance
-  return pow(sum, 0.5);
+  // return the cubed square root of the sum to obtain the cubed Euclidean distance
+  return pow(sum, 1.5);
 }
 
 void calculateX() {
