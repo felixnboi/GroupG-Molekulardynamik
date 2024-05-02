@@ -57,9 +57,9 @@ void calculateV();
  */
 void plotParticles(int iteration);
 
-constexpr double start_time = 0; ///< The start time of the simulation. 
-double end_time = 1000; ///< The end time of the simulation. 
-double delta_t = 0.014; ///< The time step of the simulation.
+double start_time; ///< The start time of the simulation. 
+double end_time; ///< The end time of the simulation. 
+double delta_t; ///< The time step of the simulation.
 
 std::list<Particle> particles; ///< The list of particles.
 
@@ -85,27 +85,57 @@ std::list<Particle> particles; ///< The list of particles.
 int main(int argc, char *argsv[]) {
 
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 4) {
-    std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "Usage: ./molsym filename end_time delta_t" << std::endl;
+  if(argc==2){
+    std::cout << "default values end_time = 1000 delta_t = 0.014 start_time = 0 are used" << std::endl;
+    start_time = 0;
+    end_time = 1000;
+    delta_t = 0.014;
+  }else{
+    if(argc == 4) {
+      std::cout << "custom values for end_time delta_t are used. start_time = 0" << std::endl;
+      start_time = 0;
+      end_time = std::atof(argsv[2]);
+      delta_t = std::atof(argsv[3]);
+    }else{
+      if(argc == 5){
+        std::cout << "custom values for end_time, delta_t and start_time are used" << std::endl;
+        start_time = std::atof(argsv[2]);
+        end_time = std::atof(argsv[3]);
+        delta_t = std::atof(argsv[4]);
+      }else{
+        std::cout << "errounous program call" << std::endl;
+        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [end_time] [delta_t] [start_time]]" << std::endl;
+      }
+    }
   }
 
+  if(start_time > end_time){
+    std::cout << "Error: start_time is after end_time" << std::endl;
+    return EXIT_FAILURE;
+  }
+  
   FileReader fileReader;
   fileReader.readFile(particles, argsv[1]);
   if(particles.size() <= 0){
-    std::cout << "No particles!" << std::endl;
+    std::cout << "Failed to read Particles from input file!" << std::endl;
     return EXIT_FAILURE;
   }
 
-  end_time = std::atof(argsv[2]);
-  delta_t = std::atof(argsv[3]);
+  
 
-  std::cout << "end_time:" << end_time << ", delta_t:" << delta_t << "\n";
+  std::cout << "end_time:" << end_time << ", delta_t:" << delta_t << ", start_time:" << start_time << std::endl;
 
-  double current_time = start_time;
+  double current_time = 0;
 
   int iteration = 0;
-  plotParticles(iteration);
+
+  while (current_time < start_time){
+    calculateX();
+    calculateF();
+    calculateV();
+    current_time += delta_t;
+    iteration++;
+  }
 
   while (current_time < end_time) {
     calculateX();
