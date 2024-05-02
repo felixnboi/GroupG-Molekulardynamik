@@ -9,8 +9,8 @@ if(BUILD_DOCUMENTATION)
         message(FATAL_ERROR "Doxygen is required to build documentation.")
     endif()
 
-    set(DOXYGEN_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/GroupG-Molekulardynamik/src/")
-    set(DOXYGEN_OUTPUT_DIR "${CMAKE_BINARY_DIR}/doc")
+    # set(DOXYGEN_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/GroupG-Molekulardynamik/src/")
+    # set(DOXYGEN_OUTPUT_DIR "${CMAKE_BINARY_DIR}/doc")
 
     set(DOXYGEN_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/GroupG-Molekulardynamik/Doxyfile")
 
