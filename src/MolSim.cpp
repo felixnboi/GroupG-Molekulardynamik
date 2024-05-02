@@ -239,9 +239,9 @@ void calculateF() {
       auto norm = euclidean_norm_x(cur_particle_i, cur_particle_j);
       // calculating the force components (along the x, y, z axes) between particle i and particle j
       for(int k = 0; k<3; k++){
-        double tmp = m_i * m_j / pow(norm, 3) * (cur_x_j[k] - cur_x_i[k]);
-        cur_F_i_dummy[k] += tmp;
-        cur_F_j_dummy[k] -= tmp;
+        double force = m_i * m_j / pow(norm, 3) * (cur_x_j[k] - cur_x_i[k]);
+        cur_F_i_dummy[k] += force;
+        cur_F_j_dummy[k] -= force;
       }
       // update the force for particle i and particle j
       cur_particle_i.setF(cur_F_i_dummy);
