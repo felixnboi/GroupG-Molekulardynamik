@@ -123,7 +123,7 @@ int main(int argc, char *argsv[]) {
     if(argc == 4) {
     if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3]))) {
       std::cout << "arguments for end_time or delta_t are not numerical values" << std::endl;
-      std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [start_time] [end_time] [delta_t]]" << std::endl;
+      std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
       return EXIT_FAILURE;
     }
       std::cout << "custom values for end_time delta_t are used. start_time = 0" << std::endl;
@@ -134,16 +134,16 @@ int main(int argc, char *argsv[]) {
       if(argc == 5){
         if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3])&&testIfStringIsDouble(argsv[4]))) {
           std::cout << "arguments for end_time, delta_t or start_time are not numerical values" << std::endl;
-          std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [start_time] [end_time] [delta_t]]" << std::endl;
+          std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
           return EXIT_FAILURE;
         }
         std::cout << "custom values for end_time, delta_t and start_time are used" << std::endl;
-        start_time = std::atof(argsv[4]);
         end_time = std::atof(argsv[2]);
         delta_t = std::atof(argsv[3]);
+        start_time = std::atof(argsv[4]);
       }else{
         std::cout << "errounous program call" << std::endl;
-        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [start_time] [end_time] [delta_t]]" << std::endl;
+        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
       }
     }
   }
