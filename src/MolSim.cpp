@@ -90,7 +90,7 @@ std::list<Particle> particles; ///< The list of particles.
  * 
  * This function serves as the entry point for the Molecular Simulation program. 
  * The program first takes command-line arguments
- * to specify the input file name, and optionally, end time and time step. The function reads
+ * to specify the input file name, and optionally, start time, end time, and delta time step. The function reads
  * particle data from an input file and then loop runs until the current time reaches the specified end time. 
  * In each iteration, the position, velocity, and forces of the particles are updated using the calculateX, 
  * calculateF, and calculateV functions, respectively. The particle positions are periodically 

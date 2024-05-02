@@ -10,13 +10,21 @@
 #include <iostream>
 #include "utils/ArrayUtils.h"
 
-
-
+/**
+ * @brief Constructs a particle with a specified type.
+ * 
+ * This constructor initializes a particle object with the provided type. 
+ * It sets the type member variable to the value of type_arg.
+ * Additionally, it initializes the force (f) and old force (old_f) arrays to {0., 0., 0.}.
+ * Finally, it outputs a message indicating that the particle has been generated.
+ * 
+ * @param type_arg The type of the particle.
+ */
 Particle::Particle(int type_arg) {
-  type = type_arg;
+  type = type_arg; 
   std::cout << "Particle generated!" << std::endl;
-  f = {0., 0., 0.};
-  old_f = {0., 0., 0.};
+  f = {0., 0., 0.}; 
+  old_f = {0., 0., 0.}; 
 }
 
 Particle::Particle(const Particle &other){
