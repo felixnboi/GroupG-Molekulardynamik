@@ -29,6 +29,11 @@
 double euclidean_norm_x(const Particle &particle1, const Particle &particle2);
 
 /**
+ *test if this string is a double 
+ */ 
+bool testIfStringIsDouble(char * string);
+
+/**
  * @brief Calculate the force for all particles.
  * 
  * This function calculates the force acting on each particle due to gravitational
@@ -116,16 +121,24 @@ int main(int argc, char *argsv[]) {
     delta_t = 0.014;
   }else{
     if(argc == 4) {
+    if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3]))) {
+      std::cout << "arguments for end_time or delta_t are not numerical values" << std::endl;
+      return EXIT_FAILURE;
+    }
       std::cout << "custom values for end_time delta_t are used. start_time = 0" << std::endl;
       start_time = 0;
       end_time = std::atof(argsv[2]);
       delta_t = std::atof(argsv[3]);
     }else{
       if(argc == 5){
+        if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3])&&testIfStringIsDouble(argsv[4]))) {
+          std::cout << "arguments for end_time, delta_t or start_time are not numerical values" << std::endl;
+          return EXIT_FAILURE;
+        }
         std::cout << "custom values for end_time, delta_t and start_time are used" << std::endl;
-        start_time = std::atof(argsv[2]);
-        end_time = std::atof(argsv[3]);
-        delta_t = std::atof(argsv[4]);
+        start_time = std::atof(argsv[4]);
+        end_time = std::atof(argsv[2]);
+        delta_t = std::atof(argsv[3]);
       }else{
         std::cout << "errounous program call" << std::endl;
         std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [start_time] [end_time] [delta_t]]" << std::endl;
@@ -180,6 +193,20 @@ int main(int argc, char *argsv[]) {
   std::cout << "output written. Terminating..." << std::endl;
   return 0;
 }
+
+bool testIfStringIsDouble(char * string){
+  while (isdigit(*string)){
+    string++;   
+  }   
+  if(*string == '.') {    
+    string++;   
+  }   
+  while (isdigit(*string)){    
+    string++;   
+  }
+    return *string == '\0'; 
+}
+
 
 void calculateF() {
   std::list<Particle>::iterator iterator_i; ///< Iterator for iterating over particles.
