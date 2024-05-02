@@ -9,16 +9,22 @@ if(BUILD_DOCUMENTATION)
         message(FATAL_ERROR "Doxygen is required to build documentation.")
     endif()
 
-    # set(DOXYGEN_INPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/GroupG-Molekulardynamik/src/")
-    # set(DOXYGEN_OUTPUT_DIR "${CMAKE_BINARY_DIR}/doc")
+    # Set the input files for Doxygen
+    set(DOXYGEN_INPUT_FILES
+        "${CMAKE_SOURCE_DIR}/src/MolSim.cpp"
+        "${CMAKE_SOURCE_DIR}/src/Particle.h"
+        "${CMAKE_SOURCE_DIR}/src/ParticleContainer.h"
+    )
 
+    # Set the output directory for Doxygen
+    set(DOXYGEN_OUTPUT_DIR "${CMAKE_BINARY_DIR}/doxys_documentation")
+
+    # Configure Doxygen file directly
     set(DOXYGEN_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/GroupG-Molekulardynamik/Doxyfile")
 
     add_custom_target(doc_doxygen
         COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/GroupG-Molekulardynamik/Doxyfile
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMENT "Generating Doxygen documentation"
-        VERBATIM
     )
 
     set_target_properties(doc_doxygen PROPERTIES EXCLUDE_FROM_ALL TRUE)
