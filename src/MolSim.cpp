@@ -236,11 +236,10 @@ void calculateF() {
       auto &cur_F_j = cur_particle_j.getF();
       std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
       // calculating the cubed Euclidean distance between particle i and particle j
-      auto norm_cubed = euclidean_norm_x_cubed(cur_particle_i, cur_particle_j);
-      auto m_const = m_i * m_j;
+      auto dividend = m_i * m_j/euclidean_norm_x_cubed(cur_particle_i, cur_particle_j);
       // calculating the force components (along the x, y, z axes) between particle i and particle j
       for(int k = 0; k<3; k++){
-        double force = m_const / norm_cubed * (cur_x_j[k] - cur_x_i[k]);
+        double force = dividend * (cur_x_j[k] - cur_x_i[k]);
         cur_F_i_dummy[k] += force;
         cur_F_j_dummy[k] -= force;
       }
