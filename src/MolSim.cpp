@@ -1,3 +1,8 @@
+/**
+ * @file MolSim.cpp
+ * @brief Main file for Molecular Simulation for PSE. 
+ * Contains methods for calculating the changing parameters of the particles as well as methods for plotting them.
+ */
 
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
@@ -7,40 +12,64 @@
 #include <list>
 #include <math.h>
 
-/**** forward declaration of the calculation functions ****/
-
 /**
- * calculate the euclidean norm of the distance between two particles
+ * @brief Calculate the euclidean norm of the distance between two particles.
+ * 
+ * @param particle1 First particle.
+ * @param particle2 Second particle.
+ * @return The euclidean norm of the distance between the two particles.
  */
 double euclidean_norm_x(const Particle &particle1, const Particle &particle2);
 
 /**
- * calculate the force for all particles
+ * @brief Calculate the force for all particles.
+ * 
+ * This function calculates 
  */
 void calculateF();
 
 /**
- * calculate the position for all particles
+ * @brief Calculate the position for all particles.
  */
 void calculateX();
 
 /**
- * calculate the position for all particles
+ * @brief Calculate the velocity for all particles.
  */
 void calculateV();
 
 /**
- * plot the particles to a xyz-file
+ * @brief Plot the particles to a vtu-file.
+ * 
+ * @param iteration The current iteration number.
  */
 void plotParticles(int iteration);
 
-constexpr double start_time = 0;
-double end_time = 1000;
-double delta_t = 0.014;
+constexpr double start_time = 0; ///< The start time of the simulation. 
+double end_time = 1000; ///< The end time of the simulation. 
+double delta_t = 0.014; ///< The time step of the simulation.
 
-// TODO: what data structure to pick?
-std::list<Particle> particles;
+std::list<Particle> particles; ///< The list of particles.
 
+/**
+ * @brief Main function for the Molecular Simulation (MolSim) program.
+ * 
+ * This function serves as the entry point for the Molecular Simulation program. 
+ * The program first takes command-line arguments
+ * to specify the input file name, end time, and time step. The function reads
+ * particle data from an input file, performs a simulation over a specified time period 
+ * with a given timestep duration, and writes the simulation results to output files. 
+ * Iterating through the simulation time steps, the function updates the positions and velocities of particles based on calculated forces,
+ * and periodically () writes the particle positions to VTK files for visualization.
+ * 
+ * @param argc The number of command-line arguments.
+ * @param argsv An array of pointers to the command-line arguments.
+ * @return The exit status of the program.
+ * 
+ * @param argc Number of command-line arguments.
+ * @param argsv Array of command-line arguments.
+ * @return The exit status of the program.
+ */
 int main(int argc, char *argsv[]) {
 
   std::cout << "Hello from MolSim for PSE!" << std::endl;
@@ -66,13 +95,9 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
   plotParticles(iteration);
 
-  // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
-    // calculate new x
     calculateX();
-    // calculate new f
     calculateF();
-    // calculate new v
     calculateV();
 
     iteration++;
@@ -158,11 +183,20 @@ void calculateV() {
   }
 }
 
+/**
+ * @brief Plot the particles to a VTK file.
+ * 
+ * This function uses the outputwriter of a VTK type to plot the particles into a file 
+ * via the methods of VTKWriter class. Firstly, 
+ * 
+ * 
+ * @param iteration The current iteration number.
+ */
 void plotParticles(int iteration) {
 
   std::string out_name("MD_vtk");
 
-  outputWriter::VTKWriter writer;
+  outputWriter::VTKWriter writer; ///< The VTK writer. 
   writer.initializeOutput(particles.size());
   for(auto &p : particles){
     writer.plotParticle(p);

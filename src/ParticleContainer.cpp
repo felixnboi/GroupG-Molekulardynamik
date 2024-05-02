@@ -1,12 +1,15 @@
 
+/**
+ * @file ParticleContainer.cpp
+ * @brief This file contains a ParticleContainer class and its functions.
+ */
 #include "ParticleContainer.h"
 
-// Add a particle to the container
+
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);
 }
 
-// Getters for particles
 const std::vector<Particle>& ParticleContainer::getParticles() {
     return particles;
 }

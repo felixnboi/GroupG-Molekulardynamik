@@ -10,6 +10,8 @@
 #include <iostream>
 #include "utils/ArrayUtils.h"
 
+
+
 Particle::Particle(int type_arg) {
   type = type_arg;
   std::cout << "Particle generated!" << std::endl;
