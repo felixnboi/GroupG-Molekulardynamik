@@ -128,7 +128,7 @@ int main(int argc, char *argsv[]) {
         delta_t = std::atof(argsv[4]);
       }else{
         std::cout << "errounous program call" << std::endl;
-        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [end_time] [delta_t] [start_time]]" << std::endl;
+        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time] [delta_t] | [start_time] [end_time] [delta_t]]" << std::endl;
       }
     }
   }
