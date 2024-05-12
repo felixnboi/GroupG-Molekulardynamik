@@ -10,14 +10,24 @@
 #include <iostream>
 #include "utils/ArrayUtils.h"
 
+/**
+ * @brief Constructs a particle with a specified type.
+ * 
+ * This constructor initializes a particle object with the provided type. 
+ * It sets the type member variable to the value of type_arg.
+ * Additionally, it initializes the force (f) and old force (old_f) arrays to {0., 0., 0.}.
+ * Finally, it outputs a message indicating that the particle has been generated.
+ * 
+ * @param type_arg The type of the particle.
+ */
 Particle::Particle(int type_arg) {
-  type = type_arg;
+  type = type_arg; 
   std::cout << "Particle generated!" << std::endl;
-  f = {0., 0., 0.};
-  old_f = {0., 0., 0.};
+  f = {0., 0., 0.}; 
+  old_f = {0., 0., 0.}; 
 }
 
-Particle::Particle(const Particle &other) {
+Particle::Particle(const Particle &other){
   x = other.x;
   v = other.v;
   f = other.f;
@@ -28,8 +38,7 @@ Particle::Particle(const Particle &other) {
 }
 
 // Todo: maybe use initializater list instead of copy?
-Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
-                   double m_arg, int type_arg) {
+Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, int type_arg){
   x = x_arg;
   v = v_arg;
   m = m_arg;
@@ -39,7 +48,10 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
   std::cout << "Particle generated!" << std::endl;
 }
 
-Particle::~Particle() { std::cout << "Particle destructed!" << std::endl; }
+
+Particle::~Particle() { 
+  std::cout << "Particle destructed!" << std::endl;
+}
 
 const std::array<double, 3> &Particle::getX() const { return x; }
 
@@ -48,6 +60,22 @@ const std::array<double, 3> &Particle::getV() const { return v; }
 const std::array<double, 3> &Particle::getF() const { return f; }
 
 const std::array<double, 3> &Particle::getOldF() const { return old_f; }
+
+void Particle::setX(const std::array<double, 3>& newX) {
+  x = newX;
+}
+
+void Particle::setV(const std::array<double, 3>& newV) {
+  v = newV;
+}
+
+void Particle::setF(const std::array<double, 3>& newF) {
+  f = newF;
+}
+
+void Particle::setOldF(const std::array<double, 3>& newOldF) {
+  old_f = newOldF;
+}
 
 double Particle::getM() const { return m; }
 
