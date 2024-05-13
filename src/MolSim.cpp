@@ -206,20 +206,24 @@ void calculateF() {
   }
 
   // iterate over all pairs of particles to calculate forces
-  for (; cur_particle_i != particles.end();) {
+  for (; cur_particle_i != --particles.end(); cur_particle_i++) {
     auto m_i = cur_particle_i->getM();
     auto cur_x_i = cur_particle_i->getX();
-    auto cur_F_i = cur_particle_i->getF();
+    auto &cur_F_i = cur_particle_i->getF();
     std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
-     // inner loop to calculate force between particle i and all particles j after i respectfully
-    for (cur_particle_j = ++cur_particle_i; cur_particle_j!=particles.end(); cur_particle_j++) {
+    //std::list<Particle>::iterator cur_particle_i_copy = cur_particle_i;
+
+    // inner loop to calculate force between particle i and all particles j after i respectfully
+    for (cur_particle_j = std::next(cur_particle_i); cur_particle_j!=particles.end(); cur_particle_j++) {
       auto m_j = cur_particle_j->getM();
-      auto cur_x_j = cur_particle_j->getX(); 
-      auto cur_F_j = cur_particle_j->getF();
+      auto cur_x_j = cur_particle_j->getX();
+      auto &cur_F_j = cur_particle_j->getF();
       std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
+
       // calculating the cubed Euclidean distance between particle i and particle j
-      auto norm = ArrayUtils::L2Norm(cur_x_i - cur_x_j);
+      double norm = ArrayUtils::L2Norm(cur_x_i - cur_x_j);
       auto dividend = m_i * m_j/pow(norm, 3);
+
       // calculating the force components (along the x, y, z axes) between particle i and particle j
       for(int k = 0; k<3; k++){
         double force = dividend * (cur_x_j[k] - cur_x_i[k]);
