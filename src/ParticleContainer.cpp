@@ -5,6 +5,7 @@
  */
 #include "ParticleContainer.h"
 
+ParticleContainer::ParticleContainer() {}
 
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);

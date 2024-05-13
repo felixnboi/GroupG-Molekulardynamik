@@ -1,7 +1,7 @@
 #include "ParticleGenerator.h"
 
 ParticleContainer generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ) {
-    ParticleContainer particles;
+    ParticleContainer particles = *(new ParticleContainer());
     double yClone = y;
     double zClone = z;
     double averageBrwoinanMotion = 0.1;
