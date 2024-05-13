@@ -1,6 +1,7 @@
 GroupG
 
 Members:
+
     Felix Guan
 
     Robert Täger
@@ -9,15 +10,17 @@ Members:
 
 
 Dependencies: 
+
     gcc/g++ compiler: the default version under most linux distributions should be sufficient
 
     xerces library: run sudo apt install libxerces-c-dev in your terminal
     
     cmake: run sudo apt install cmake in your terminal
-    
+
     paraview (for visualizing): run sudo apt install paraview in your terminal
 
 Build instructions:
+
     1.clone the repository
 
     2.mkdir build in the repo
