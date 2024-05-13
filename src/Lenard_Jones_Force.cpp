@@ -3,8 +3,8 @@
 void calculateF(ParticleContainer particles) {
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<Particle>::iterator particle_j;///< Second iterator for nested loop over particles.
-  double epsilon;
-  double sigma;
+  double epsilon = 5;
+  double sigma = 1;
   // reset the force for each particle and store the old force
   for (particle_i = particles.beginParticles(); particle_i != particles.endParticles(); particle_i++){
     particle_i->setOldF(particle_i->getF());

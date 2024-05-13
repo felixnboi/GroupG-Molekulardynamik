@@ -20,5 +20,5 @@ ParticleContainer generateCuboid(double x, double y, double z, size_t sizeX, siz
         y = yClone;
         x += distance;
     }
-    
+    return particles;
 }
