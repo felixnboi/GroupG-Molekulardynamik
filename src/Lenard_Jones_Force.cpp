@@ -22,7 +22,7 @@ void calculateF(ParticleContainer particles) {
       auto &cur_F_j = (*iterator_j).getF();
       std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
       // calculating the Euclidean distance between particle i and particle j
-      auto norm = (*iterator_i).L2Norm(*iterator_j);
+      auto norm = ArrayUtils::L2Norm((*iterator_i).getX() - (*iterator_j).getX());
       // calulating everything for the force exept for the dircetion
       double directionlessForce = -24*epsilon/pow(norm,2)*(pow(sigma/norm,6)-2*pow(sigma/norm,12));
       // calculating the force components (along the x, y, z axes) between particle i and particle j
