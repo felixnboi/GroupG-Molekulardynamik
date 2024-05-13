@@ -23,6 +23,9 @@ private:
  * @param particle The handed over particle that needs to be added.
  */
 public:
+
+    ParticleContainer(){}
+
     void addParticle(const Particle& particle);
 
     /**
@@ -41,7 +44,7 @@ public:
  * 
  * @return An iterator to the beginning of the particle container.
  */
-    ParticleIterator begin();
+    ParticleIterator beginParticles();
 
 /**
  * @brief Get the iterator to the end of the particle container.
@@ -50,6 +53,6 @@ public:
  * 
  * @return An iterator to the end of the particle container.
  */
-    ParticleIterator end();
+    ParticleIterator endParticles();
 
 };

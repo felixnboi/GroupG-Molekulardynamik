@@ -4,16 +4,21 @@ project(ourtests)
 set(CMAKE_CXX_STANDARD 14)
 
 enable_testing()
+include(GoogleTest)
 
 include_directories(${PROJECT_SOURCE_DIR}/../src)
-add_executable(ParticleContainerTest ParticleContainerTest.cpp)
 
-include_directories(our_googletest/googletest/googletest/include)
+include_directories(${PROJECT_SOURCE_DIR}/our_googletest/googletest/googletest/include)
 
+###################add_executable(ParticleContainerTest firsttest.cpp)
+add_executable(ParticleContainerTest 
+our_tests/firsttest.cpp
+    ${PROJECT_SOURCE_DIR}/../src/Particle.cpp
+    ${PROJECT_SOURCE_DIR}/../src/ParticleContainer.cpp
+)
 
-include(GoogleTest)
-#add_executable(teststotest firsttest.cpp)
+target_include_directories(ParticleContainerTest PRIVATE ../src)
+target_link_libraries(ParticleContainerTest gtest gtest_main)
 
 # Link Google Test to your test executable
-#target_link_libraries(teststotest gtest gtest_main)
-#gtest_discover_tests(teststotest)
+gtest_discover_tests(ParticleContainerTest)

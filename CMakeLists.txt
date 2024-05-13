@@ -14,33 +14,23 @@ add_subdirectory(our_googletest/googletest)
 
 # Include directories for Google Test headers
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/../src)
 
 
 include_directories(our_googletest/googletest/googletest/include)
 
 include(GoogleTest)
-add_executable(teststotest our_tests/firsttest.cpp)
 
-# Link Google Test to your test executable
-target_link_libraries(teststotest gtest gtest_main)
-gtest_discover_tests(teststotest)
+##############add_executable(ParticleContainerTest our_tests/firsttest.cpp)
+add_executable(ParticleContainerTest 
+our_tests/firsttest.cpp
+src/Particle.cpp
+src/ParticleContainer.cpp
+)
 
-
-
-
-# Add test_example.cpp as a test target
-#add_executable(tests firsttest.cpp)
-
-# Link Google Test to your test executable
-#target_link_libraries(test gtest gtest_main)
-
-#include(FetchContent)
-#FetchContent_Declare(
- # googletest
-  #URL https://github.com/google/googletest/archive/I0bfbb2da6b3902fc3e41a8e1c4aacb291ffdd098.zip)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-#set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-#FetchContent_MakeAvailable(googletest)
+target_include_directories(ParticleContainerTest PRIVATE ../src)
+target_link_libraries(ParticleContainerTest gtest gtest_main)
+gtest_discover_tests(ParticleContainerTest)
 
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
@@ -96,18 +86,3 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
-
-
-#####################
-# Add test_example.cpp as a test target
-
-#enable_testing()
-
-#include_directories(our_googletest/googletest/googletest/include)
-
-#include(GoogleTest)
-#add_executable(teststotest our_tests/firsttest.cpp)
-
-# Link Google Test to your test executable
-#target_link_libraries(teststotest gtest gtest_main)
-#gtest_discover_tests(teststotest)
