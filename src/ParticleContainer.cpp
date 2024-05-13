@@ -14,10 +14,10 @@ const std::vector<Particle>& ParticleContainer::getParticles() {
     return particles;
 }
 
-ParticleIterator ParticleContainer::beginParticles() {
+ParticleIterator ParticleContainer::begin() {
     return particles.begin();
 }
 
-ParticleIterator ParticleContainer::endParticles() {
+ParticleIterator ParticleContainer::end() {
     return particles.end();
 }

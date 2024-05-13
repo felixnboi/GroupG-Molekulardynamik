@@ -1,7 +1,46 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
+
+enable_testing()
+
+# GoogleTest requires at least C++14
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Add Google Test as a subdirectory
+add_subdirectory(our_googletest/googletest)
+
+# Include directories for Google Test headers
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+
+include_directories(our_googletest/googletest/googletest/include)
+
+include(GoogleTest)
+add_executable(teststotest our_tests/firsttest.cpp)
+
+# Link Google Test to your test executable
+target_link_libraries(teststotest gtest gtest_main)
+gtest_discover_tests(teststotest)
+
+
+
+
+# Add test_example.cpp as a test target
+#add_executable(tests firsttest.cpp)
+
+# Link Google Test to your test executable
+#target_link_libraries(test gtest gtest_main)
+
+#include(FetchContent)
+#FetchContent_Declare(
+ # googletest
+  #URL https://github.com/google/googletest/archive/I0bfbb2da6b3902fc3e41a8e1c4aacb291ffdd098.zip)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+#set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+#FetchContent_MakeAvailable(googletest)
 
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
@@ -21,6 +60,9 @@ file(GLOB_RECURSE MY_SRC
 
 # create make target
 add_executable(MolSim ${MY_SRC})
+
+#################################################
+#target_link_libraries(MolSim gtest gtest_main)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -54,3 +96,18 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
+
+
+#####################
+# Add test_example.cpp as a test target
+
+#enable_testing()
+
+#include_directories(our_googletest/googletest/googletest/include)
+
+#include(GoogleTest)
+#add_executable(teststotest our_tests/firsttest.cpp)
+
+# Link Google Test to your test executable
+#target_link_libraries(teststotest gtest gtest_main)
+#gtest_discover_tests(teststotest)

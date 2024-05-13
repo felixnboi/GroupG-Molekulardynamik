@@ -41,7 +41,7 @@ public:
  * 
  * @return An iterator to the beginning of the particle container.
  */
-    ParticleIterator beginParticles();
+    ParticleIterator begin();
 
 /**
  * @brief Get the iterator to the end of the particle container.
@@ -50,6 +50,6 @@ public:
  * 
  * @return An iterator to the end of the particle container.
  */
-    ParticleIterator endParticles();
+    ParticleIterator end();
 
 };
