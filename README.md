@@ -1,6 +1,6 @@
-GroupG
+#GroupG
 
-Members:
+##Members:
 
     Felix Guan
 
@@ -9,7 +9,7 @@ Members:
     Maria Lelyukh
 
 
-Dependencies: 
+##Dependencies: 
 
     gcc/g++ compiler: the default version under most linux distributions should be sufficient
 
@@ -19,7 +19,7 @@ Dependencies:
 
     paraview (for visualizing): run sudo apt install paraview in your terminal
 
-Build instructions:
+##Build instructions:
 
     1.clone the repository
 
