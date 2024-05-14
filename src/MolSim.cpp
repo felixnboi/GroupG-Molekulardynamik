@@ -12,6 +12,10 @@
 #include <list>
 #include <math.h>
 
+//#include <spdlog/spdlog.h>
+#include <LogLevelConfig.h>
+
+
 /**
  *test if this string is a double 
  */ 
@@ -97,6 +101,9 @@ std::list<Particle> particles; ///< The list of particles.
  */
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
+
+  spdlog::info("INFO") ;
+  spdlog::trace("TRACE") ;
 
   if(argc==2){
     std::cout << "default values end_time = 1000 delta_t = 0.014 start_time = 0 are used" << std::endl;
