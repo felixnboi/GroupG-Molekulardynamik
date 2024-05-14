@@ -1,7 +1,7 @@
 name: C++ Build
 
 on:
-  push:
+  pull_request:
     branches:
       - assignment2
 
@@ -27,3 +27,7 @@ jobs:
         cd build
         cmake ..
         make
+    - name: Run unit tests
+      run: |
+        cd build
+        ctest --output-on-failure
