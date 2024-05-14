@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
@@ -54,3 +54,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
+
+#this part is for the tests
+add_subdirectory(tests)
+enable_testing()
+include(CTest)
