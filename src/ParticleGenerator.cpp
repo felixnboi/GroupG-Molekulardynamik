@@ -11,7 +11,7 @@ ParticleContainer generateCuboid(double x, double y, double z, size_t sizeX, siz
         {
             for (size_t k = 0; k < sizeZ; k++) {
                 std::array<double, 3> brownianMotion = maxwellBoltzmannDistributedVelocity(averageBrwoinanMotion, 3);
-                particles.addParticle(*(new Particle({x,y,z},{velocityX * brownianMotion[0],velocityY * brownianMotion[1],velocityZ * brownianMotion[2]},mass,0)));
+                particles.addParticle(*(new Particle({x,y,z},{velocityX + brownianMotion[0],velocityY + brownianMotion[1],velocityZ + brownianMotion[2]},mass,0)));
                 z += distance;
             }
             z = zClone;
