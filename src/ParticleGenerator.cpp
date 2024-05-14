@@ -4,7 +4,7 @@
 void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ) {
     std::fstream input_file;
     std::string tmp_string;
-    input_file.open("input/generated-input.txt",std::ios::in|std::ios::out);
+    input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
     while (tmp_string.empty() or tmp_string[0] == '#') {
         getline(input_file, tmp_string);
     }
@@ -15,7 +15,7 @@ void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, si
     double yClone = y;
     double zClone = z;
     double averageBrwoinanMotion = 0.1;
-    input_file.open("input/generated-input.txt",std::ios::in|std::ios::out|std::ios::app);
+    input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out|std::ios::app);
     for (size_t i = 0; i < sizeX; i++)
     {
         for (size_t j = 0; j < sizeY; j++)

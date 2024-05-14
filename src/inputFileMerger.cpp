@@ -3,7 +3,7 @@
 void mergeWithImputFile(char *filename){
     std::fstream input_file;
     std::string tmp_string;
-    input_file.open("input/generated-input.txt",std::ios::in|std::ios::out);
+    input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
     while (tmp_string.empty() or tmp_string[0] == '#') {
         getline(input_file, tmp_string);
     }
@@ -27,7 +27,7 @@ void mergeWithImputFile(char *filename){
     int num_particles = std::stoi(tmp_string_merg);
     input_file << std::stoi(tmp_string)+num_particles;    
     input_file.close();
-    input_file.open("input/generated-input.txt",std::ios::in|std::ios::out|std::ios::app);
+    input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out|std::ios::app);
     for (int i = 0; i < num_particles; i++) {
         getline(mergin_file, tmp_string_merg);
         input_file << tmp_string_merg;

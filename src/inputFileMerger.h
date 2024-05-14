@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
-#include <sstream>void mergeWithImputFile(char *filename);
+void mergeWithImputFile(char *filename);
