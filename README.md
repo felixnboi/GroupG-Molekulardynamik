@@ -35,6 +35,10 @@
 Please make sure to pass numerical values to end_time delta_t and start_time. Also pay attention to the order of the arguments. If a start_time is given the program will only plot the position of the particles from start_time to end_time.
 Example for execution: "***./MolSim /path/to/input/file 1000 0.014***" or "***./MolSim /path/to/input/file 10000 0.014 5000***".
 
+## Visualizing with paraview:
+
+>It is possible to visualize the output via paraview. Simply open the output-files in paraview and configure to your preferred visualization.
+
 ## Running Tests:
     
 >After building run ***ctest*** in the build folder or navigate to the tests folder in the build folder and execute with ***./tests***. 
