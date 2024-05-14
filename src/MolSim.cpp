@@ -7,6 +7,9 @@
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
+#include "Forces/GravitationalForce.h"
+#include "Forces/Lenard_Jones_Force.h"
+#include "ParticleGenerator.h"
 
 #include <iostream>
 #include <list>
@@ -33,7 +36,7 @@ bool isDouble(char *string);
  * stored using the setOldF method before calling this function.
  * @see euclidean_norm_x() To calculate the Euclidean distance between particles.
  */
-void calculateF();
+//void calculateF();
 
 /**
  * @brief Calculate the position for all particles.
@@ -74,7 +77,7 @@ double start_time = 0;       ///< The default start time of the simulation.
 double end_time = 1000;      ///< The default end time of the simulation. 
 double delta_t = 0.014;      ///< The default time step of the simulation.
 
-std::list<Particle> particles; ///< The list of particles.
+ParticleContainer particles; ///< The container of the particles.
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.
@@ -144,6 +147,8 @@ int main(int argc, char *argsv[]) {
     }
   }
 
+  Force* force = new GravitationalForce();
+
   if(start_time > end_time){
     std::cout << "Error: start_time is after end_time" << std::endl;
     return EXIT_FAILURE;
@@ -153,7 +158,7 @@ int main(int argc, char *argsv[]) {
   fileReader.readFile(particles, input_file.c_str());
 
   // checking if there are particles in the simulation
-  if(particles.size() <= 0){
+  if(particles.getParticles().empty()){
     std::cout << "Failed to read Particles from input file!" << std::endl;
     return EXIT_FAILURE;
   }
@@ -165,7 +170,7 @@ int main(int argc, char *argsv[]) {
 
   while (current_time < start_time){
     calculateX();
-    calculateF();
+    force->calculateF(particles);
     calculateV();
     current_time += delta_t;
     iteration++;
@@ -174,7 +179,7 @@ int main(int argc, char *argsv[]) {
   //simulation loop
   while (current_time < end_time) {
     calculateX();
-    calculateF();
+    force->calculateF(particles);
     calculateV();
     iteration++;
 
@@ -205,56 +210,13 @@ bool isDouble(char *string){
     return *string == '\0'; 
 }
 
-
-void calculateF() {
-  std::list<Particle>::iterator cur_particle_i; ///< Iterator for iterating over particles.
-  cur_particle_i = particles.begin();
-  std::list<Particle>::iterator cur_particle_j;///< Second iterator for nested loop over particles.
-
-  // reset the force for each particle and store the old force
-  for(auto &p : particles){
-    p.setOldF(p.getF());
-    p.setF({0,0,0});
-  }
-
-  // iterate over all pairs of particles to calculate forces
-  for (; cur_particle_i != --particles.end(); cur_particle_i++) {
-    auto m_i = cur_particle_i->getM();
-    auto cur_x_i = cur_particle_i->getX();
-    auto &cur_F_i = cur_particle_i->getF();
-    std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
-
-    // inner loop to calculate force between particle i and all particles j after i respectfully
-    for (cur_particle_j = std::next(cur_particle_i); cur_particle_j!=particles.end(); cur_particle_j++) {
-      auto m_j = cur_particle_j->getM();
-      auto cur_x_j = cur_particle_j->getX();
-      auto &cur_F_j = cur_particle_j->getF();
-      std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
-
-      // calculating the cubed Euclidean distance between particle i and particle j
-      double norm = ArrayUtils::L2Norm(cur_x_i - cur_x_j);
-      auto dividend = m_i * m_j/pow(norm, 3);
-
-      // calculating the force components (along the x, y, z axes) between particle i and particle j
-      for(int k = 0; k<3; k++){
-        double force = dividend * (cur_x_j[k] - cur_x_i[k]);
-        cur_F_i_dummy[k] += force;
-        cur_F_j_dummy[k] -= force;
-      }
-      // update the force for particle i and particle j
-      cur_particle_i->setF(cur_F_i_dummy);
-      cur_particle_j->setF(cur_F_j_dummy);
-    }
-  }
-}
-
 void calculateX() {
   // iterating over all particles to calculate new positions
-  for (auto &p : particles) {
-    auto m = p.getM(); ///< Mass of the particle.
-    auto cur_x = p.getX(); ///< Current position of the particle.
-    auto cur_v = p.getV(); ///< Current velocity of the particle.
-    auto cur_F = p.getF(); ///< Current force acting on the particle.
+  for (auto p = particles.beginParticles(); p != particles.endParticles(); p++){
+    auto m = p->getM(); ///< Mass of the particle.
+    auto cur_x = p->getX(); ///< Current position of the particle.
+    auto cur_v = p->getV(); ///< Current velocity of the particle.
+    auto cur_F = p->getF(); ///< Current force acting on the particle.
     std::array<double, 3> cur_x_dummy = {0,0,0}; ///< Dummy array to store new position components.
 
     // calculating new position components for each dimension (x, y, z)
@@ -262,24 +224,24 @@ void calculateX() {
       cur_x_dummy[i] = cur_x[i] + delta_t * cur_v[i] + delta_t * delta_t * cur_F[i] / (2*m); 
     }
     // set the new position for the particle
-    p.setX(cur_x_dummy);
+    p->setX(cur_x_dummy);
   }
 }
 
 void calculateV() {
   // iterating over all particles to calculate new positions
-  for (auto &p : particles) {
-    auto m = p.getM(); ///< Mass of the particle.
-    auto cur_v = p.getV(); ///< Current velocity of the particle.
-    auto cur_F = p.getF(); ///< Current force acting on the particle.
-    auto old_F = p.getOldF(); ///< Previous force acting on the particle.
+  for (auto p = particles.beginParticles(); p != particles.endParticles(); p++){
+    auto m = p->getM(); ///< Mass of the particle.
+    auto cur_v = p->getV(); ///< Current velocity of the particle.
+    auto cur_F = p->getF(); ///< Current force acting on the particle.
+    auto old_F = p->getOldF(); ///< Previous force acting on the particle.
     std::array<double, 3> cur_v_dummy = {0,0,0}; ///< Dummy array to store new velocity components.
     // calculating new velocity components for each dimension (x, y, z)
     for(int i = 0; i<3; i++){
       cur_v_dummy[i] = cur_v[i] + delta_t * (old_F[i] + cur_F[i]) / (2*m);
     }
     // set the new velocity for the particle
-    p.setV(cur_v_dummy);
+    p->setV(cur_v_dummy);
   }
 }
 
@@ -290,9 +252,9 @@ void plotParticles(int iteration) {
 
   outputWriter::VTKWriter writer; ///< The VTK writer object. 
   // initializing the VTK writer with the total number of particles.
-  writer.initializeOutput(particles.size()); 
+  writer.initializeOutput(particles.getParticles().size()); 
   // iterating over each particle to plot its position
-  for(auto &p : particles){
+  for(auto p : particles.getParticles()){
     writer.plotParticle(p);
   }
   // write the plotted particle positions to a VTK file
