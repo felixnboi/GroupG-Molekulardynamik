@@ -3,35 +3,6 @@ cmake_minimum_required(VERSION 3.14)
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
 
-enable_testing()
-
-# GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Add Google Test as a subdirectory
-add_subdirectory(our_googletest/googletest)
-
-# Include directories for Google Test headers
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/../src)
-
-
-include_directories(our_googletest/googletest/googletest/include)
-
-include(GoogleTest)
-
-##############add_executable(ParticleContainerTest our_tests/firsttest.cpp)
-add_executable(ParticleContainerTest 
-our_tests/firsttest.cpp
-src/Particle.cpp
-src/ParticleContainer.cpp
-)
-
-target_include_directories(ParticleContainerTest PRIVATE ../src)
-target_link_libraries(ParticleContainerTest gtest gtest_main)
-gtest_discover_tests(ParticleContainerTest)
-
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 
@@ -50,9 +21,6 @@ file(GLOB_RECURSE MY_SRC
 
 # create make target
 add_executable(MolSim ${MY_SRC})
-
-#################################################
-#target_link_libraries(MolSim gtest gtest_main)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -86,3 +54,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
+
+#this part is for the tests
+add_subdirectory(tests)
+enable_testing()
+include(CTest)

@@ -1,4 +1,0 @@
-/home/masha_lelyukh/BachelorPraktikum/GroupG-Molekulardynamik/our_tests/build/CMakeFiles/ParticleContainerTest.dir
-/home/masha_lelyukh/BachelorPraktikum/GroupG-Molekulardynamik/our_tests/build/CMakeFiles/test.dir
-/home/masha_lelyukh/BachelorPraktikum/GroupG-Molekulardynamik/our_tests/build/CMakeFiles/edit_cache.dir
-/home/masha_lelyukh/BachelorPraktikum/GroupG-Molekulardynamik/our_tests/build/CMakeFiles/rebuild_cache.dir
