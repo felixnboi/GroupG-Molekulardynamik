@@ -1,4 +1,3 @@
-
 /**
  * @file ParticleContainer.cpp
  * @brief This file contains a ParticleContainer class and its functions.

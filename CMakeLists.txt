@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
@@ -39,6 +39,8 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE 
+            spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
@@ -54,3 +56,13 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
+
+#this part is for the tests
+add_subdirectory(tests)
+enable_testing()
+include(CTest)
+
+# Add the sanitize address flag
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+
+add_subdirectory(spdlog-1.14.1)

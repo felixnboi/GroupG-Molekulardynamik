@@ -1,0 +1,36 @@
+name: C++ Build
+
+on:
+  pull_request:
+    branches:
+      - assignment2
+  push:
+    branches:
+      - assignment2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Install C++ compiler, build tools, Doxygen, and Xerces
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++
+        sudo apt-get install -y cmake
+        sudo apt-get install -y doxygen
+        sudo apt-get install -y libxerces-c-dev
+        
+    - name: Build C++ code
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make
+    - name: Run unit tests
+      run: |
+        cd build
+        ctest --output-on-failure
