@@ -7,5 +7,11 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unistd.h>
+
+
+namespace ParticleGenerator{
 
 void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ);
+
+};

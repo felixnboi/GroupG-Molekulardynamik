@@ -10,6 +10,7 @@
 #include "Forces/GravitationalForce.h"
 #include "Forces/Lenard_Jones_Force.h"
 #include "ParticleGenerator.h"
+#include "inputFileMerger.h"
 
 #include <iostream>
 #include <list>
@@ -103,14 +104,21 @@ ParticleContainer particles; ///< The container of the particles.
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
   int opt;
-  std::string input_file = "../input/eingabe-sonne.txt";
+  std::string input_file;
+
+  bool g_flag = false;
+  bool i_flag = false;
 
   spdlog::set_level(spdlog::level::trace);
-  spdlog::info("INFO");
-  spdlog::trace("TRACE");
 
-  while((opt = getopt(argc, argsv, "d:e:s:f:")) != -1){
+  Force* force = new Lenard_Jones_Force();
+
+  while((opt = getopt(argc, argsv, "d:e:s:i:f:g")) != -1){
     switch(opt){
+
+      case 'g':
+        g_flag = true;
+        break;
 
       case 'd':
         if(isDouble(optarg)){
@@ -138,16 +146,42 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
-      case 'f':
+      
+      case 'i':
+        i_flag = true;
         input_file = optarg;
         break;
+
+      case 'f':
+        switch (optarg)
+        {
+        case 'g':
+          force = new GravitationalForce();
+          break;
+        case 'f':
+          force = new Lenard_Jones_Force();
+          break;
+        case '?':
+          std::cout << "error\n";
+          return EXIT_FAILURE;
+        }
+
       case '?':
         std::cout << "error\n";
         return EXIT_FAILURE;
     }
   }
 
-  Force* force = new GravitationalForce();
+  if(!g_flag){
+    //set generated file to default
+  }
+
+  if(i_flag){
+    inputFileMerger::mergeWithImputFile(input_file);
+  }
+
+  input_file = "../input/generated-input.txt";
+
 
   if(start_time > end_time){
     std::cout << "Error: start_time is after end_time" << std::endl;

@@ -1,7 +1,7 @@
 #include "ParticleGenerator.h"
 
 
-void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ) {
+void ParticleGenerator::generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ) {
     std::fstream input_file;
     std::string tmp_string;
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
@@ -32,3 +32,25 @@ void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, si
     }
     input_file.close();
 }
+
+int main(int argc, char *argsv[]){
+    int opt;
+
+    bool s_flag = false;
+
+    while((opt = getopt(argc, argsv, "s")) != 1){
+        switch(opt){
+            case 's':
+                s_flag = true;
+                break;
+            case '?':
+                std::cout << "error\n";
+                return EXIT_FAILURE;
+        }
+    }
+
+    if(!s_flag){
+        //reset generated input file
+    }
+}
+

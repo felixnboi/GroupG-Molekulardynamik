@@ -3,4 +3,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace inputFileMerger{
+
 void mergeWithImputFile(char *filename);
+
+};
