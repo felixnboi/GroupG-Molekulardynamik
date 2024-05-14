@@ -1,16 +1,26 @@
-name: C/C++ CI
+name: C++ Build
 
-on: [push]
+on:
+  push:
+    branches:
+      - assignment2
 
 jobs:
-  ubuntu-build:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.0.0
-    - name: Build project
-      uses: nicledomaS/cmake_build_action@v1.4
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up C++ compiler
+      uses: actions/setup-cpp@v2
       with:
-        submodule_update: ON
-        run_tests: ON
-        unit_test_build: -Dtest=ON
+        compiler: 'gcc'
+        
+    - name: Build C++ code
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make
