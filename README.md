@@ -35,7 +35,7 @@
 
 >6. To execute the executable: Run *./MolSim* in the build folder. 
 It is also possible to parse arguments via command line. Usage: */MolSim [-s start_time] [-e end_time] [-d delta_t] [-f path/to/inputfile]*
-Example: "*./MolSim -f /../input/eingabe-sonne.txt -s 1000 -d 0.014*".
+Example: "*./MolSim -f ../input/eingabe-sonne.txt -s 1000 -d 0.014*".
 If no additional arguments are parsed via command line as described a set of defautl values is used.
 
 ## Visualizing with paraview:
