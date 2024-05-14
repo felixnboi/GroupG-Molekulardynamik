@@ -59,3 +59,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
 add_subdirectory(tests)
 enable_testing()
 include(CTest)
+
+# Add the sanitize address flag
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
