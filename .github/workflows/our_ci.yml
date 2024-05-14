@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - assignment2
+  push:
+    branches:
+      - assignment2
 
 jobs:
   build:
