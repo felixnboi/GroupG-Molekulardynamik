@@ -39,6 +39,8 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE 
+            spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
@@ -62,3 +64,5 @@ include(CTest)
 
 # Add the sanitize address flag
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+
+add_subdirectory(spdlog-1.14.1)

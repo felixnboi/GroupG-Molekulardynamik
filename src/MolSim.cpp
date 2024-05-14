@@ -13,6 +13,10 @@
 #include <math.h>
 #include <unistd.h>
 
+#include "spdlog/spdlog.h"
+//#include <LogLevelConfig.h>
+
+
 /**
  *test if this string is a double 
  */ 
@@ -98,6 +102,11 @@ std::list<Particle> particles; ///< The list of particles.
  */
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
+
+  spdlog::set_level(spdlog::level::trace);
+  spdlog::info("INFO") ;
+  spdlog::trace("TRACE") ;
+  
   int opt;
   std::string input_file = "../input/eingabe-sonne.txt";
 
@@ -119,8 +128,6 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           std::cout << "error\n";
-          return EXIT_FAILURE;
-        }
 
       case 's':
         if(isDouble(optarg)){
@@ -178,7 +185,7 @@ int main(int argc, char *argsv[]) {
       plotParticles(iteration);
     }
     // printing simulation progress
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
+    //std::cout << "Iteration " << iteration << " finished." << std::endl;
     // update simulation time
     current_time += delta_t;
   }
