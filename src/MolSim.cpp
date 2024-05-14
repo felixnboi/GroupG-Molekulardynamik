@@ -12,21 +12,9 @@
 #include <list>
 #include <math.h>
 
-/**
- * @brief Calculate the Euclidean Norm of the distance between two particles.
- * 
- * This function computes the Euclidean distance between two particles
- * in three-dimensional space. It takes two Particle objects as input
- * and calculates the Euclidean distance between their positions. The
- * Euclidean distance is computed as the square root of the sum of the
- * squares of the differences in the coordinates of the particles along
- * each dimension (x, y, and z).
- * 
- * @param particle1 First particle.
- * @param particle2 Second particle.
- * @return The Euclidean Norm of the distance between the two particles.
- */
-double euclidean_norm_x_cubed(const Particle &particle1, const Particle &particle2);
+#include "spdlog/spdlog.h"
+//#include <LogLevelConfig.h>
+
 
 /**
  *test if this string is a double 
@@ -114,6 +102,10 @@ std::list<Particle> particles; ///< The list of particles.
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
 
+  spdlog::set_level(spdlog::level::trace);
+  spdlog::info("INFO") ;
+  spdlog::trace("TRACE") ;
+
   if(argc==2){
     std::cout << "default values end_time = 1000 delta_t = 0.014 start_time = 0 are used" << std::endl;
     start_time = 0;
@@ -187,7 +179,7 @@ int main(int argc, char *argsv[]) {
       plotParticles(iteration);
     }
     // printing simulation progress
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
+    //std::cout << "Iteration " << iteration << " finished." << std::endl;
     // update simulation time
     current_time += delta_t;
   }
@@ -211,9 +203,9 @@ bool testIfStringIsDouble(char * string){
 
 
 void calculateF() {
-  std::list<Particle>::iterator iterator_i; ///< Iterator for iterating over particles.
-  iterator_i = particles.begin();
-  std::list<Particle>::iterator iterator_j;///< Second iterator for nested loop over particles.
+  std::list<Particle>::iterator cur_particle_i; ///< Iterator for iterating over particles.
+  cur_particle_i = particles.begin();
+  std::list<Particle>::iterator cur_particle_j;///< Second iterator for nested loop over particles.
 
   // reset the force for each particle and store the old force
   for(auto &p : particles){
@@ -222,21 +214,24 @@ void calculateF() {
   }
 
   // iterate over all pairs of particles to calculate forces
-  for (size_t i = 0; i<particles.size()-1; i++) {
-    auto &cur_particle_i = *(iterator_i++);
-    auto m_i = cur_particle_i.getM();
-    auto cur_x_i = cur_particle_i.getX();
-    auto &cur_F_i = cur_particle_i.getF();
+  for (; cur_particle_i != --particles.end(); cur_particle_i++) {
+    auto m_i = cur_particle_i->getM();
+    auto cur_x_i = cur_particle_i->getX();
+    auto &cur_F_i = cur_particle_i->getF();
     std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
-     // inner loop to calculate force between particle i and all particles j after i respectfully
-    for (iterator_j = iterator_i; iterator_j!=particles.end(); iterator_j++) {
-      auto &cur_particle_j = *iterator_j;
-      auto m_j = cur_particle_j.getM();
-      auto cur_x_j = cur_particle_j.getX(); 
-      auto &cur_F_j = cur_particle_j.getF();
+    //std::list<Particle>::iterator cur_particle_i_copy = cur_particle_i;
+
+    // inner loop to calculate force between particle i and all particles j after i respectfully
+    for (cur_particle_j = std::next(cur_particle_i); cur_particle_j!=particles.end(); cur_particle_j++) {
+      auto m_j = cur_particle_j->getM();
+      auto cur_x_j = cur_particle_j->getX();
+      auto &cur_F_j = cur_particle_j->getF();
       std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
+
       // calculating the cubed Euclidean distance between particle i and particle j
-      auto dividend = m_i * m_j/euclidean_norm_x_cubed(cur_particle_i, cur_particle_j);
+      double norm = ArrayUtils::L2Norm(cur_x_i - cur_x_j);
+      auto dividend = m_i * m_j/pow(norm, 3);
+
       // calculating the force components (along the x, y, z axes) between particle i and particle j
       for(int k = 0; k<3; k++){
         double force = dividend * (cur_x_j[k] - cur_x_i[k]);
@@ -244,21 +239,10 @@ void calculateF() {
         cur_F_j_dummy[k] -= force;
       }
       // update the force for particle i and particle j
-      cur_particle_i.setF(cur_F_i_dummy);
-      cur_particle_j.setF(cur_F_j_dummy);
+      cur_particle_i->setF(cur_F_i_dummy);
+      cur_particle_j->setF(cur_F_j_dummy);
     }
   }
-}
-
-double euclidean_norm_x_cubed(const Particle &particle1, const Particle &particle2){
-  double sum = 0.0; ///< A variable that is used for the sum of squared differences.
-  // iterate over the x, y, and z coordinates of the particles
-  for (int i = 0; i<3; i++){
-    // add the squared difference along each dimension to the sum
-    sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
-  }
-  // return the cubed square root of the sum to obtain the cubed Euclidean distance
-  return pow(sum, 1.5);
 }
 
 void calculateX() {

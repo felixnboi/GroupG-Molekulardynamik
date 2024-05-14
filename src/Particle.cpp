@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include "utils/ArrayUtils.h"
+#include "spdlog/spdlog.h"
 
 /**
  * @brief Constructs a particle with a specified type.
@@ -46,6 +47,7 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, dou
   f = {0., 0., 0.};
   old_f = {0., 0., 0.};
   std::cout << "Particle generated!" << std::endl;
+  spdlog::trace("Particle trace");
 }
 
 

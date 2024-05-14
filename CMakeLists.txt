@@ -39,6 +39,8 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE 
+            spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
@@ -54,3 +56,5 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
+
+add_subdirectory(spdlog-1.14.1)
