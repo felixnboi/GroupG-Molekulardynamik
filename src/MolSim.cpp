@@ -12,10 +12,7 @@
 #include <list>
 #include <math.h>
 #include <unistd.h>
-
 #include "spdlog/spdlog.h"
-//#include <LogLevelConfig.h>
-
 
 /**
  *test if this string is a double 
@@ -102,13 +99,12 @@ std::list<Particle> particles; ///< The list of particles.
  */
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-
-  spdlog::set_level(spdlog::level::trace);
-  spdlog::info("INFO") ;
-  spdlog::trace("TRACE") ;
-  
   int opt;
   std::string input_file = "../input/eingabe-sonne.txt";
+
+  spdlog::set_level(spdlog::level::trace);
+  spdlog::info("INFO");
+  spdlog::trace("TRACE");
 
   while((opt = getopt(argc, argsv, "d:e:s:f:")) != -1){
     switch(opt){
@@ -128,8 +124,9 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           std::cout << "error\n";
+          return EXIT_FAILURE;
         }
-        
+
       case 's':
         if(isDouble(optarg)){
           start_time = atof(optarg);
@@ -186,7 +183,7 @@ int main(int argc, char *argsv[]) {
       plotParticles(iteration);
     }
     // printing simulation progress
-    //std::cout << "Iteration " << iteration << " finished." << std::endl;
+    std::cout << "Iteration " << iteration << " finished." << std::endl;
     // update simulation time
     current_time += delta_t;
   }
@@ -226,7 +223,6 @@ void calculateF() {
     auto cur_x_i = cur_particle_i->getX();
     auto &cur_F_i = cur_particle_i->getF();
     std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
-    //std::list<Particle>::iterator cur_particle_i_copy = cur_particle_i;
 
     // inner loop to calculate force between particle i and all particles j after i respectfully
     for (cur_particle_j = std::next(cur_particle_i); cur_particle_j!=particles.end(); cur_particle_j++) {

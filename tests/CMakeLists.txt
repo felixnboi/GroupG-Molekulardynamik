@@ -8,6 +8,8 @@ add_executable(tests
 
 target_link_libraries(tests gtest_main)
 
+target_include_directories(tests PRIVATE ../spdlog-1.14.1/include)
+
 enable_testing()
 
 add_test(NAME tests COMMAND tests)
