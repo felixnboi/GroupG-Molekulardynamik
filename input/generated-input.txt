@@ -1,0 +1,5 @@
+#inputfile that where all particles wil be stored, that will be used
+#simular sintax to "eingabe-sonne.txt" with the exeption that after the number of particles
+#there have to follow the exat amount of spaces so that the number of chars in this line
+#adds up to 32 (not counting the "\n" at the end)
+0                               

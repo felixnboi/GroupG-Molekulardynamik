@@ -1,3 +1,4 @@
+#pragma once
 #include "ParticleContainer.h"
 
 class Force

@@ -7,8 +7,9 @@
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
-#include "src/Forces/GravitationalForce.h"
-#include "src/Forces/Lenard_Jones_Force.h"
+#include "Forces/GravitationalForce.h"
+#include "Forces/Lenard_Jones_Force.h"
+#include "ParticleGenerator.h"
 
 #include <iostream>
 #include <list>
@@ -33,7 +34,7 @@ bool testIfStringIsDouble(char * string);
  * stored using the setOldF method before calling this function.
  * @see euclidean_norm_x() To calculate the Euclidean distance between particles.
  */
-void calculateF();
+//void calculateF();
 
 /**
  * @brief Calculate the position for all particles.
