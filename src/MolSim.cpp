@@ -128,7 +128,8 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           std::cout << "error\n";
-
+        }
+        
       case 's':
         if(isDouble(optarg)){
           start_time = atof(optarg);
