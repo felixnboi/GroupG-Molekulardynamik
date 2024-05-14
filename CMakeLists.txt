@@ -1,21 +1,7 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
-
-# Include FetchContent module
-include(FetchContent)
-
-# Fetch spdlog
-FetchContent_Declare(
-    spdlog
-    #GIT_REPOSITORY https://github.com/gabime/spdlog/tree/v1.14.1
-    GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG        v1.14.1  # Update this to the latest version
-)
-FetchContent_MakeAvailable(spdlog)
-
-######################################################################
 
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
@@ -35,14 +21,6 @@ file(GLOB_RECURSE MY_SRC
 
 # create make target
 add_executable(MolSim ${MY_SRC})
-############################
-target_link_libraries(MolSim PRIVATE spdlog::spdlog)
-
-set(LOG_LEVEL "TRACE" CACHE STRING "Log level: OFF, ERROR, WARN, INFO, DEBUG, TRACE")
-set_property(CACHE LOG_LEVEL PROPERTY STRINGS OFF ERROR WARN INFO DEBUG TRACE)
-add_compile_definitions(LOG_LEVEL=${LOG_LEVEL})
-
-#########################
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -61,6 +39,8 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE 
+            spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
@@ -76,3 +56,5 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
+
+add_subdirectory(spdlog-1.14.1)

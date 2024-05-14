@@ -12,8 +12,8 @@
 #include <list>
 #include <math.h>
 
-//#include <spdlog/spdlog.h>
-#include <LogLevelConfig.h>
+#include "spdlog/spdlog.h"
+//#include <LogLevelConfig.h>
 
 
 /**
@@ -102,6 +102,7 @@ std::list<Particle> particles; ///< The list of particles.
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
 
+  spdlog::set_level(spdlog::level::trace);
   spdlog::info("INFO") ;
   spdlog::trace("TRACE") ;
 
@@ -178,7 +179,7 @@ int main(int argc, char *argsv[]) {
       plotParticles(iteration);
     }
     // printing simulation progress
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
+    //std::cout << "Iteration " << iteration << " finished." << std::endl;
     // update simulation time
     current_time += delta_t;
   }
