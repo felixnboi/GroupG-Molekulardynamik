@@ -110,6 +110,7 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           std::cout << "error\n";
+          return EXIT_FAILURE;
         }
 
       case 'e':
@@ -118,6 +119,7 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           std::cout << "error\n";
+          return EXIT_FAILURE;
         }
 
       case 's':
@@ -126,6 +128,7 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           std::cout << "error\n";
+          return EXIT_FAILURE;
         }
       case 'f':
         input_file = optarg;

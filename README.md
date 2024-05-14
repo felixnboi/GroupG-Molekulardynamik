@@ -33,9 +33,10 @@
 
 >5. run *make* for building executable and *make doc_doxygen* for building documentation
 
->6. To execute the executable: Run *./MolSim <path/to/input/file> [end_time delta_t]  [end_time delta_t start_time]* in the build folder. 
-Please make sure to pass numerical values to end_time delta_t and start_time. Also pay attention to the order of the arguments. If a start_time is given the program will only plot the position of the particles from start_time to end_time.
-Example for execution: "*./MolSim /../input/eingabe-sonne.txt 1000 0.014*" or "*./MolSim /../input/eingabe-sonne.txt 10000 0.014 5000*".
+>6. To execute the executable: Run *./MolSim* in the build folder. 
+It is also possible to parse arguments via command line. Usage: */MolSim [-s start_time] [-e end_time] [-d delta_t] [-f path/to/inputfile]*
+Example: "*./MolSim -f /../input/eingabe-sonne.txt -s 1000 -d 0.014*".
+If no additional arguments are parsed via command line as described a set of defautl values is used.
 
 ## Visualizing with paraview:
 
