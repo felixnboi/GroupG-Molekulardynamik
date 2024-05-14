@@ -23,9 +23,6 @@ private:
  * @param particle The handed over particle that needs to be added.
  */
 public:
-
-    ParticleContainer(){}
-
     void addParticle(const Particle& particle);
 
     /**
