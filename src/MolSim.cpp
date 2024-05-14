@@ -11,11 +11,12 @@
 #include <iostream>
 #include <list>
 #include <math.h>
+#include <unistd.h>
 
 /**
  *test if this string is a double 
  */ 
-bool testIfStringIsDouble(char * string);
+bool isDouble(char *string);
 
 /**
  * @brief Calculate the force for all particles.
@@ -68,9 +69,9 @@ void calculateV();
  */
 void plotParticles(int iteration);
 
-double start_time; ///< The start time of the simulation. 
-double end_time; ///< The end time of the simulation. 
-double delta_t; ///< The time step of the simulation.
+double start_time = 0;       ///< The default start time of the simulation. 
+double end_time = 1000;      ///< The default end time of the simulation. 
+double delta_t = 0.014;      ///< The default time step of the simulation.
 
 std::list<Particle> particles; ///< The list of particles.
 
@@ -97,38 +98,41 @@ std::list<Particle> particles; ///< The list of particles.
  */
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
+  int opt;
+  std::string input_file = "../input/eingabe-sonne.txt";
 
-  if(argc==2){
-    std::cout << "default values end_time = 1000 delta_t = 0.014 start_time = 0 are used" << std::endl;
-    start_time = 0;
-    end_time = 1000;
-    delta_t = 0.014;
-  }else{
-    if(argc == 4) {
-    if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3]))) {
-      std::cout << "arguments for end_time or delta_t are not numerical values" << std::endl;
-      std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
-      return EXIT_FAILURE;
-    }
-      std::cout << "custom values for end_time delta_t are used. start_time = 0" << std::endl;
-      start_time = 0;
-      end_time = std::atof(argsv[2]);
-      delta_t = std::atof(argsv[3]);
-    }else{
-      if(argc == 5){
-        if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3])&&testIfStringIsDouble(argsv[4]))) {
-          std::cout << "arguments for end_time, delta_t or start_time are not numerical values" << std::endl;
-          std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
-          return EXIT_FAILURE;
+  while((opt = getopt(argc, argsv, "d:e:s:f:")) != -1){
+    switch(opt){
+
+      case 'd':
+        if(isDouble(optarg)){
+          delta_t = atof(optarg);
+          break;
+        }else{
+          std::cout << "error\n";
         }
-        std::cout << "custom values for end_time, delta_t and start_time are used" << std::endl;
-        end_time = std::atof(argsv[2]);
-        delta_t = std::atof(argsv[3]);
-        start_time = std::atof(argsv[4]);
-      }else{
-        std::cout << "errounous program call" << std::endl;
-        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
-      }
+
+      case 'e':
+        if(isDouble(optarg)){
+          end_time = atof(optarg);
+          break;
+        }else{
+          std::cout << "error\n";
+        }
+
+      case 's':
+        if(isDouble(optarg)){
+          start_time = atof(optarg);
+          break;
+        }else{
+          std::cout << "error\n";
+        }
+      case 'f':
+        input_file = optarg;
+        break;
+      case '?':
+        std::cout << "error\n";
+        return EXIT_FAILURE;
     }
   }
 
@@ -138,7 +142,7 @@ int main(int argc, char *argsv[]) {
   }
   
   FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
+  fileReader.readFile(particles, input_file.c_str());
 
   // checking if there are particles in the simulation
   if(particles.size() <= 0){
@@ -180,7 +184,7 @@ int main(int argc, char *argsv[]) {
   return 0;
 }
 
-bool testIfStringIsDouble(char * string){
+bool isDouble(char *string){
   while (isdigit(*string)){
     string++;   
   }   
