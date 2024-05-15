@@ -33,24 +33,24 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
     input_file.close();
 }
 
-int main(int argc, char *argsv[]){
-    int opt;
+// int main(int argc, char *argsv[]){
+//     int opt;
 
-    bool s_flag = false;
+//     bool s_flag = false;
 
-    while((opt = getopt(argc, argsv, "s")) != 1){
-        switch(opt){
-            case 's':
-                s_flag = true;
-                break;
-            case '?':
-                std::cout << "error\n";
-                return EXIT_FAILURE;
-        }
-    }
+//     while((opt = getopt(argc, argsv, "s")) != 1){
+//         switch(opt){
+//             case 's':
+//                 s_flag = true;
+//                 break;
+//             case '?':
+//                 std::cout << "error\n";
+//                 return EXIT_FAILURE;
+//         }
+//     }
 
-    if(!s_flag){
-        //reset generated input file
-    }
-}
+//     if(!s_flag){
+//         //reset generated input file
+//     }
+// }
 

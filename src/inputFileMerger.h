@@ -5,6 +5,6 @@
 
 namespace inputFileMerger{
 
-void mergeWithImputFile(char *filename);
+void mergeWithImputFile(const char *filename);
 
 };

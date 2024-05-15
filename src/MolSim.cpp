@@ -109,18 +109,47 @@ int main(int argc, char *argsv[]) {
   bool g_flag = false;
   bool i_flag = false;
 
-  spdlog::set_level(spdlog::level::trace);
-
   Force* force = new Lenard_Jones_Force();
 
-  while((opt = getopt(argc, argsv, "d:e:s:i:f:g")) != -1){
+  while((opt = getopt(argc, argsv, "l:d:e:s:i:f:g")) != -1){
     switch(opt){
 
-      case 'g':
+      case 'l':{
+        std::string tmp{optarg};
+        if(tmp == "OFF"){
+          spdlog::set_level(spdlog::level::off);
+          break;
+        }
+        if(tmp == "ERROR"){
+          spdlog::set_level(spdlog::level::err);
+          break;
+        }
+        if(tmp == "WARN"){
+          spdlog::set_level(spdlog::level::warn);
+          break;
+        }
+        if(tmp == "INFO"){
+          spdlog::set_level(spdlog::level::info);
+          break;
+        }
+        if(tmp == "DEBUG"){
+          spdlog::set_level(spdlog::level::debug);
+          break;
+        }
+        if(tmp == "TRACE"){
+          spdlog::set_level(spdlog::level::trace);
+          break;
+        }
+        std::cout << "error\n";
+        return EXIT_FAILURE;
+      }
+
+      case 'g':{
         g_flag = true;
         break;
+      }
 
-      case 'd':
+      case 'd':{
         if(isDouble(optarg)){
           delta_t = atof(optarg);
           break;
@@ -128,8 +157,9 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
+      }
 
-      case 'e':
+      case 'e':{
         if(isDouble(optarg)){
           end_time = atof(optarg);
           break;
@@ -137,8 +167,9 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
+      }
 
-      case 's':
+      case 's':{
         if(isDouble(optarg)){
           start_time = atof(optarg);
           break;
@@ -146,29 +177,31 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
+      }
       
-      case 'i':
+      case 'i':{
         i_flag = true;
         input_file = optarg;
         break;
+      }
 
-      case 'f':
-        switch (optarg)
-        {
-        case 'g':
+      case 'f':{
+        if(*optarg == 'g'){
           force = new GravitationalForce();
           break;
-        case 'f':
+        }
+        if(*optarg == 'f'){
           force = new Lenard_Jones_Force();
           break;
-        case '?':
-          std::cout << "error\n";
-          return EXIT_FAILURE;
         }
-
-      case '?':
         std::cout << "error\n";
         return EXIT_FAILURE;
+      }
+
+      case '?':{
+        std::cout << "error\n";
+        return EXIT_FAILURE;
+      }
     }
   }
 
@@ -177,7 +210,7 @@ int main(int argc, char *argsv[]) {
   }
 
   if(i_flag){
-    inputFileMerger::mergeWithImputFile(input_file);
+    inputFileMerger::mergeWithImputFile(input_file.c_str());
   }
 
   input_file = "../input/generated-input.txt";

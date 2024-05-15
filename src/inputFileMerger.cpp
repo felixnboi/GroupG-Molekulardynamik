@@ -1,6 +1,6 @@
 #include "inputFileMerger.h"
 
-void inputFileMerger::mergeWithImputFile(char *filename){
+void inputFileMerger::mergeWithImputFile(const char *filename){
     std::fstream input_file;
     std::string tmp_string;
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
