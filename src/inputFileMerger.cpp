@@ -1,6 +1,7 @@
 #include "inputFileMerger.h"
+#include "spdlog/spdlog.h"
 
-void inputFileMerger::mergeWithImputFile(char *filename){
+void inputFileMerger::mergeWithInputFile(char *filename){
     std::fstream input_file;
     std::string tmp_string;
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
@@ -20,7 +21,7 @@ void inputFileMerger::mergeWithImputFile(char *filename){
         }
     } 
     else {
-    std::cout << "Error: could not open file " << filename << std::endl;
+        spdlog::error("Error: could not open file {}", filename);
     exit(-1);
     }
     input_file.seekp(input_file.tellp()-33);

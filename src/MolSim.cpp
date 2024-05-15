@@ -162,7 +162,7 @@ int main(int argc, char *argsv[]) {
   }
 
   if(i_flag){
-    inputFileMerger::mergeWithImputFile(input_file);
+    inputFileMerger::mergeWithInputFile(input_file);
   }
 
   input_file = "../input/generated-input.txt";
