@@ -1,9 +1,16 @@
 #include "GravitationalForce.h"
+#include "spdlog/spdlog.h"
 
-GravitationalForce::GravitationalForce() {};
-GravitationalForce::~GravitationalForce() {};
+GravitationalForce::GravitationalForce() {
+  spdlog::info("GravitationalForce object constructed");
+};
+GravitationalForce::~GravitationalForce() {
+  spdlog::info("GravitationalForce object destructed");
+};
 
 void GravitationalForce::calculateF(ParticleContainer particles) {
+spdlog::info("Calculating gravitational forces for particles...");
+
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<Particle>::iterator particle_j;///< Second iterator for nested loop over particles.
   // reset the force for each particle and store the old force
@@ -40,6 +47,8 @@ void GravitationalForce::calculateF(ParticleContainer particles) {
       // update the force for particle i and particle j
       particle_i->setF(cur_F_i_dummy);
       particle_j->setF(cur_F_j_dummy);
+      spdlog::trace("Force calculated between particle {} and particle {}", particle_i->toString(), particle_j->toString());
     }
   }
+  spdlog::info("Gravitational forces calculated for all particles");
 }
