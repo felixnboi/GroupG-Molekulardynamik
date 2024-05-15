@@ -8,5 +8,5 @@ class Lenard_Jones_Force : public Force
 public:
     Lenard_Jones_Force();
     ~Lenard_Jones_Force();
-    void calculateF(ParticleContainer particles) override;
+    void calculateF(ParticleContainer &particles) override;
 };

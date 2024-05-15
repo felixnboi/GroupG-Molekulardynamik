@@ -3,25 +3,24 @@
 GravitationalForce::GravitationalForce() {};
 GravitationalForce::~GravitationalForce() {};
 
-void GravitationalForce::calculateF(ParticleContainer particles) {
+void GravitationalForce::calculateF(ParticleContainer &particles) {
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
-  std::vector<Particle>::iterator particle_j;///< Second iterator for nested loop over particles.
+  std::vector<Particle>::iterator particle_j; ///< Second iterator for nested loop over particles.
   // reset the force for each particle and store the old force
-  for (particle_i = particles.beginParticles(); particle_i != particles.endParticles(); particle_i++){
+  for (particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
     particle_i->setOldF(particle_i->getF());
     particle_i->setF({0,0,0});
   }
 
   // iterate over all pairs of particles to calculate forces
-  for (particle_i = particles.beginParticles(); particle_i != --particles.endParticles(); particle_i++) {
+  for (particle_i = particles.begin(); particle_i != --particles.end(); particle_i++) {
     auto m_i = particle_i->getM();
     auto cur_x_i = particle_i->getX();
     auto &cur_F_i = particle_i->getF();
     std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
-    //std::list<Particle>::iterator particle_i_copy = particle_i;
 
     // inner loop to calculate force between particle i and all particles j after i respectfully
-    for (particle_j = std::next(particle_i); particle_j!=particles.endParticles(); particle_j++) {
+    for (particle_j = std::next(particle_i); particle_j!=particles.end(); particle_j++) {
       auto m_j = particle_j->getM();
       auto cur_x_j = particle_j->getX();
       auto &cur_F_j = particle_j->getF();

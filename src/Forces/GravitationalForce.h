@@ -8,5 +8,5 @@ class GravitationalForce : public Force
 public:
     GravitationalForce();
     ~GravitationalForce();
-    void calculateF(ParticleContainer particles) override;
+    void calculateF(ParticleContainer &particles) override;
 };

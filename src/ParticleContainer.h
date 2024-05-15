@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Particle.h"
+#include <iostream>
 
 using ParticleIterator = std::vector<Particle>::iterator; /// Iterator type for iterating over a vector of particles.
 
@@ -15,6 +16,12 @@ class ParticleContainer {
 private:
     std::vector<Particle> particles; ///< Vector to store the particles.
 
+public:
+/**
+ * @brief Constructor for ParticleContainer
+*/
+    ParticleContainer(){}
+
 /**
  * @brief Add a particle to the container.
  * 
@@ -22,10 +29,6 @@ private:
  * 
  * @param particle The handed over particle that needs to be added.
  */
-public:
-
-    ParticleContainer(){}
-
     void addParticle(const Particle& particle);
 
     /**
@@ -44,7 +47,7 @@ public:
  * 
  * @return An iterator to the beginning of the particle container.
  */
-    ParticleIterator beginParticles();
+    ParticleIterator begin();
 
 /**
  * @brief Get the iterator to the end of the particle container.
@@ -53,6 +56,6 @@ public:
  * 
  * @return An iterator to the end of the particle container.
  */
-    ParticleIterator endParticles();
+    ParticleIterator end();
 
 };

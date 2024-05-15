@@ -4,5 +4,6 @@
 class Force
 {
 public:
-    virtual void calculateF(ParticleContainer particles) = 0;
+    virtual void calculateF(ParticleContainer &particles){};
+    virtual ~Force() {}
 };
