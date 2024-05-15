@@ -18,30 +18,14 @@
 #include "spdlog/spdlog.h"
 
 /**
- *test if this string is a double 
+ *@brief test if the given string is a double 
  */ 
 bool isDouble(char *string);
 
 /**
- *test if this string is a unsigend int 
+ *@brief test if this string is a unsigend int 
  */ 
 bool isUnsignedInt(char* str);
-
-/**
- * @brief Calculate the force for all particles.
- * 
- * This function calculates the force acting on each particle due to gravitational
- * interactions with other particles. Firstly, it updates the old_f parameter (represents the previous force 
- * value for the current timestep) of each particle and sets the current Force parameters (f) to 0. 
- * After that, the function iterates over all pairs of particles and
- * computes the gravitational force between them based on their masses and positions.
- * The calculated forces are then updated (added to the current Forces of according particles) for each particle.
- * 
- * @note This function assumes that the old force for each particle has already been
- * stored using the setOldF method before calling this function.
- * @see euclidean_norm_x() To calculate the Euclidean distance between particles.
- */
-//void calculateF();
 
 /**
  * @brief Calculate the position for all particles.
@@ -106,13 +90,19 @@ ParticleContainer particles; ///< The container of the particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
+
+  spdlog::set_level(spdlog::level::trace);
+
+  //std::cout << "Hello from MolSim for PSE!" << std::endl;
+  spdlog::info("Hello from MolSim for PSE!");
   int opt;
   std::string input_file;
 
   bool g_flag = false;
   bool i_flag = false;
+
   int vtk_iteration = 10;
+
 
   Force* force = new Lenard_Jones_Force();
 

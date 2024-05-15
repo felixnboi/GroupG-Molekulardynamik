@@ -157,7 +157,9 @@ public:
    * @param other Another particle to compare.
    * @return True if both particles are equal, otherwise false.
    */
-  bool operator==(const Particle &other);
+
+  bool operator==(const Particle &other) const;
+
 
   /**
    * @brief Converts the particle to a string representation.

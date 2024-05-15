@@ -1,4 +1,5 @@
 #include "Lenard_Jones_Force.h"
+#include "spdlog/spdlog.h"
 
 Lenard_Jones_Force::Lenard_Jones_Force() {};
 Lenard_Jones_Force::~Lenard_Jones_Force() {};
@@ -12,6 +13,7 @@ void Lenard_Jones_Force::calculateF(ParticleContainer &particles) {
   for (particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
     particle_i->setOldF(particle_i->getF());
     particle_i->setF({0,0,0});
+    spdlog::trace("Reset force for particle.");
   }
 
   // iterate over all pairs of particles to calculate forces
@@ -41,6 +43,7 @@ void Lenard_Jones_Force::calculateF(ParticleContainer &particles) {
       // update the force for particle i and particle j
       (*particle_i).setF(cur_F_i_dummy);
       (*particle_j).setF(cur_F_j_dummy);
+      spdlog::debug("Calculated force between particles.");
     }
   }
 }

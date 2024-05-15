@@ -1,3 +1,5 @@
+
+#include "spdlog/spdlog.h"
 #include "inputFileManager.h"
 
 
@@ -22,7 +24,7 @@ void inputFileManager::mergeFile(const char *filename){
         }
     } 
     else {
-    std::cout << "Error: could not open file " << filename << std::endl;
+        spdlog::error("Error: could not open file {}", filename);
     exit(-1);
     }
     input_file.seekp(input_file.tellp()-33);
