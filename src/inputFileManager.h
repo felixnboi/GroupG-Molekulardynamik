@@ -3,8 +3,10 @@
 #include <iostream>
 #include <sstream>
 
-namespace inputFileMerger{
+namespace inputFileManager{
 
 void mergeWithImputFile(char *filename);
+
+void resetGenerateInputFile();
 
 };

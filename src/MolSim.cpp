@@ -10,7 +10,7 @@
 #include "Forces/GravitationalForce.h"
 #include "Forces/Lenard_Jones_Force.h"
 #include "ParticleGenerator.h"
-#include "inputFileMerger.h"
+#include "inputFileManager.h"
 
 #include <iostream>
 #include <list>
@@ -173,11 +173,11 @@ int main(int argc, char *argsv[]) {
   }
 
   if(!g_flag){
-    //set generated file to default
+    inputFileManager::resetGenerateInputFile();
   }
 
   if(i_flag){
-    inputFileMerger::mergeWithImputFile(input_file);
+    inputFileManager::mergeWithImputFile(input_file);
   }
 
   input_file = "../input/generated-input.txt";
@@ -189,7 +189,7 @@ int main(int argc, char *argsv[]) {
   }
   
   FileReader fileReader;
-  fileReader.readFile(particles, input_file.c_str());
+  fileReader.readFile(particles, input_file);
 
   // checking if there are particles in the simulation
   if(particles.getParticles().empty()){

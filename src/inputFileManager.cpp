@@ -1,6 +1,6 @@
-#include "inputFileMerger.h"
+#include "inputFileManager.h"
 
-void inputFileMerger::mergeWithImputFile(char *filename){
+void inputFileManager::mergeWithImputFile(char *filename){
     std::fstream input_file;
     std::string tmp_string;
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
@@ -32,5 +32,12 @@ void inputFileMerger::mergeWithImputFile(char *filename){
         getline(mergin_file, tmp_string_merg);
         input_file << tmp_string_merg;
     }
+    input_file.close();
+}
+
+void inputFileManager::resetGenerateInputFile(){
+    std::fstream input_file;
+    input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out|std::ios::trunc);
+    input_file << "#inputfile that where all particles wil be stored, that will be used\n#simular sintax to \"eingabe-sonne.txt\" with the exeption that after the number of particles\n#there have to follow the exat amount of spaces so that the number of chars in this line\n#adds up to 32 (not counting the \"\\n\" at the end)\n0                               \n";
     input_file.close();
 }

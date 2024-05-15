@@ -50,7 +50,7 @@ int main(int argc, char *argsv[]){
     }
 
     if(!s_flag){
-        //reset generated input file
+        inputFileManager::resetGenerateInputFile();
     }
 }
 
