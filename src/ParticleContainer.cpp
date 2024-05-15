@@ -16,12 +16,12 @@ const std::vector<Particle>& ParticleContainer::getParticles() {
     spdlog::debug("Retrieved particles from the container");
 }
 
-ParticleIterator ParticleContainer::beginParticles() {
+ParticleIterator ParticleContainer::begin(){
     return particles.begin();
     spdlog::debug("Returned iterator to the beginning of particles");
 }
 
-ParticleIterator ParticleContainer::endParticles() {
+ParticleIterator ParticleContainer::end() {
     return particles.end();
     spdlog::debug("Returned iterator to the end of particles");
 }

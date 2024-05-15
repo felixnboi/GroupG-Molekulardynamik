@@ -1,7 +1,10 @@
-#include "inputFileMerger.h"
-#include "spdlog/spdlog.h"
 
-void inputFileMerger::mergeWithInputFile(char *filename){
+#include "spdlog/spdlog.h"
+#include "inputFileManager.h"
+
+
+void inputFileManager::mergeFile(const char *filename){
+
     std::fstream input_file;
     std::string tmp_string;
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
@@ -33,5 +36,12 @@ void inputFileMerger::mergeWithInputFile(char *filename){
         getline(mergin_file, tmp_string_merg);
         input_file << tmp_string_merg;
     }
+    input_file.close();
+}
+
+void inputFileManager::resetFile(){
+    std::fstream input_file;
+    input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out|std::ios::trunc);
+    input_file << "# Inputfile where all used particles will be stored.\n# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles\n# there have to follow the exact quantity of spaces so that the number of chars in the line\n# adds up to 32 (not counting the \"\\n\" at the end)\n0                               \n";
     input_file.close();
 }

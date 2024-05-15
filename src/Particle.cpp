@@ -93,12 +93,13 @@ std::string Particle::toString() const {
   return stream.str();
 }
 
-bool Particle::operator==(const Particle &other) const {
+
+bool Particle::operator==(const Particle &other) {
   return (x == other.x) and (v == other.v) and (f == other.f) and
          (type == other.type) and (m == other.m) and (old_f == other.old_f);
 }
 
-std::ostream &operator<<(std::ostream &stream, Particle &p) {
+std::ostream & operator<<(std::ostream &stream, const Particle &p) {
   stream << p.toString();
   return stream;
 }

@@ -10,9 +10,12 @@
 class Force
 {
 public:
+
 /**
      * @brief Calculates the forces acting on particles.
      * @param particles The ParticleContainer containing the particles on which forces are to be calculated.
      */
-    virtual void calculateF(ParticleContainer particles) = 0;
+    virtual void calculateF(ParticleContainer &particles){};
+    virtual ~Force() {}
+
 };

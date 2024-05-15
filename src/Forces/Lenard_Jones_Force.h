@@ -19,6 +19,7 @@ public:
      * @brief Default destructor for Lenard_Jones_Force.
      */
     ~Lenard_Jones_Force();
+
     /**
      * @brief Calculates the Lenard-Jones forces between particles in a container.
      * 
@@ -27,5 +28,7 @@ public:
      * 
      * @param particles The container of particles for which to calculate the forces.
      */
-    void calculateF(ParticleContainer particles) override;
+
+    void calculateF(ParticleContainer &particles) override;
+
 };

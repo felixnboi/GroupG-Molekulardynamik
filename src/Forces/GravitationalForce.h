@@ -20,6 +20,7 @@ public:
      * @brief Destructor.
      */
     ~GravitationalForce();
+
     /**
      * @brief Calculates gravitational forces between particles.
      * 
@@ -28,5 +29,6 @@ public:
      * 
      * @param particles The ParticleContainer containing the particles for which gravitational forces are to be calculated.
      */
-    void calculateF(ParticleContainer particles) override;
+    void calculateF(ParticleContainer &particles) override;
+
 };

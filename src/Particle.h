@@ -157,7 +157,9 @@ public:
    * @param other Another particle to compare.
    * @return True if both particles are equal, otherwise false.
    */
-  bool operator==(const Particle &other) const;
+
+  bool operator==(const Particle &other);
+
 
   /**
    * @brief Converts the particle to a string representation.
@@ -174,4 +176,4 @@ public:
  * @param p The particle to output.
  * @return The output stream.
  */
-std::ostream &operator<<(std::ostream &stream, Particle &p);
+std::ostream &operator<<(std::ostream &stream, const Particle &p);

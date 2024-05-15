@@ -52,11 +52,12 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     pc.addParticle(p2);
     
     // Test begin iterator
-    ParticleIterator beginIter = pc.beginParticles();
+    ParticleIterator beginIter = pc.begin();
     EXPECT_TRUE(*beginIter==p1);
+
     
     // Test end iterator
-    ParticleIterator endIter = pc.endParticles();
+    ParticleIterator endIter = pc.end();
     EXPECT_NE(beginIter, endIter); 
 }
 

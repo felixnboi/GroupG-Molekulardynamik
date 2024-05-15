@@ -9,8 +9,7 @@
 #include "utils/ArrayUtils.h"
 #include "Forces/GravitationalForce.h"
 #include "Forces/Lenard_Jones_Force.h"
-#include "ParticleGenerator.h"
-#include "inputFileMerger.h"
+#include "inputFileManager.h"
 
 #include <iostream>
 #include <list>
@@ -22,6 +21,12 @@
  *@brief test if the given string is a double 
  */ 
 bool isDouble(char *string);
+
+/**
+ *@brief test if this string is a unsigend int 
+ */ 
+bool isUnsignedInt(char* str);
+
 /**
  * @brief Calculate the position for all particles.
  * 
@@ -96,16 +101,60 @@ int main(int argc, char *argsv[]) {
   bool g_flag = false;
   bool i_flag = false;
 
+  int vtk_iteration = 10;
+
+
   Force* force = new Lenard_Jones_Force();
 
-  while((opt = getopt(argc, argsv, "d:e:s:i:f:g")) != -1){
-    switch(opt){
 
-      case 'g':
+  while((opt = getopt(argc, argsv, "v:l:d:e:s:i:f:g")) != -1){
+    switch(opt){
+      case 'v':{
+        if(isUnsignedInt(optarg)){
+          vtk_iteration = std::stoul(optarg);
+          break;
+        }else{
+          std::cout << "error\n";
+          return EXIT_FAILURE;
+        }
+      }
+
+      case 'l':{
+        std::string tmp{optarg};
+        if(tmp == "OFF"){
+          spdlog::set_level(spdlog::level::off);
+          break;
+        }
+        if(tmp == "ERROR"){
+          spdlog::set_level(spdlog::level::err);
+          break;
+        }
+        if(tmp == "WARN"){
+          spdlog::set_level(spdlog::level::warn);
+          break;
+        }
+        if(tmp == "INFO"){
+          spdlog::set_level(spdlog::level::info);
+          break;
+        }
+        if(tmp == "DEBUG"){
+          spdlog::set_level(spdlog::level::debug);
+          break;
+        }
+        if(tmp == "TRACE"){
+          spdlog::set_level(spdlog::level::trace);
+          break;
+        }
+        std::cout << "error\n";
+        return EXIT_FAILURE;
+      }
+
+      case 'g':{
         g_flag = true;
         break;
+      }
 
-      case 'd':
+      case 'd':{
         if(isDouble(optarg)){
           delta_t = atof(optarg);
           break;
@@ -113,8 +162,9 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
+      }
 
-      case 'e':
+      case 'e':{
         if(isDouble(optarg)){
           end_time = atof(optarg);
           break;
@@ -122,8 +172,9 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
+      }
 
-      case 's':
+      case 's':{
         if(isDouble(optarg)){
           start_time = atof(optarg);
           break;
@@ -131,38 +182,40 @@ int main(int argc, char *argsv[]) {
           std::cout << "error\n";
           return EXIT_FAILURE;
         }
+      }
       
-      case 'i':
+      case 'i':{
         i_flag = true;
         input_file = optarg;
         break;
+      }
 
-      case 'f':
-        switch (optarg)
-        {
-        case 'g':
+      case 'f':{
+        if(*optarg == 'g'){
+          delete force;
           force = new GravitationalForce();
           break;
-        case 'f':
-          force = new Lenard_Jones_Force();
-          break;
-        case '?':
-          std::cout << "error\n";
-          return EXIT_FAILURE;
         }
-
-      case '?':
+        if(*optarg == 'l'){
+          break;
+        }
         std::cout << "error\n";
         return EXIT_FAILURE;
+      }
+
+      case '?':{
+        std::cout << "error\n";
+        return EXIT_FAILURE;
+      }
     }
   }
 
   if(!g_flag){
-    //set generated file to default
+    inputFileManager::resetFile();
   }
 
   if(i_flag){
-    inputFileMerger::mergeWithInputFile(input_file);
+    inputFileManager::mergeFile(input_file.c_str());
   }
 
   input_file = "../input/generated-input.txt";
@@ -175,6 +228,7 @@ int main(int argc, char *argsv[]) {
   
   FileReader fileReader;
   fileReader.readFile(particles, input_file.c_str());
+  std::cout << "start\n";
 
   // checking if there are particles in the simulation
   if(particles.getParticles().empty()){
@@ -203,7 +257,7 @@ int main(int argc, char *argsv[]) {
     iteration++;
 
     // plotting particle positions only at intervals of 10 iterations
-    if (iteration % 10 == 0) {
+    if (iteration % vtk_iteration == 0) {
       plotParticles(iteration);
     }
     // printing simulation progress
@@ -213,25 +267,34 @@ int main(int argc, char *argsv[]) {
   }
   // display output message and terminate the program
   std::cout << "output written. Terminating..." << std::endl;
+
+  delete force;
   return 0;
 }
 
-bool isDouble(char *string){
-  while (isdigit(*string)){
-    string++;   
-  }   
-  if(*string == '.') {    
-    string++;   
-  }   
-  while (isdigit(*string)){    
-    string++;   
-  }
-    return *string == '\0'; 
+
+bool isDouble(char* str) {
+    try {
+        std::stod(str);
+        return true;
+    } catch (...) {
+        return false;
+    }
 }
+
+bool isUnsignedInt(char* str) {
+    try {
+        unsigned long value = std::stoul(str);
+        return value <= std::numeric_limits<unsigned int>::max();
+    } catch (...) {
+        return false;
+    }
+}
+
 
 void calculateX() {
   // iterating over all particles to calculate new positions
-  for (auto p = particles.beginParticles(); p != particles.endParticles(); p++){
+  for (auto p = particles.begin(); p != particles.end(); p++){
     auto m = p->getM(); ///< Mass of the particle.
     auto cur_x = p->getX(); ///< Current position of the particle.
     auto cur_v = p->getV(); ///< Current velocity of the particle.
@@ -249,7 +312,7 @@ void calculateX() {
 
 void calculateV() {
   // iterating over all particles to calculate new positions
-  for (auto p = particles.beginParticles(); p != particles.endParticles(); p++){
+  for (auto p = particles.begin(); p != particles.end(); p++){
     auto m = p->getM(); ///< Mass of the particle.
     auto cur_v = p->getV(); ///< Current velocity of the particle.
     auto cur_F = p->getF(); ///< Current force acting on the particle.
@@ -273,7 +336,7 @@ void plotParticles(int iteration) {
   // initializing the VTK writer with the total number of particles.
   writer.initializeOutput(particles.getParticles().size()); 
   // iterating over each particle to plot its position
-  for(auto p : particles.getParticles()){
+  for(const auto& p : particles.getParticles()){
     writer.plotParticle(p);
   }
   // write the plotted particle positions to a VTK file
