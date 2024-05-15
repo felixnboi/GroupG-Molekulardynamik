@@ -102,14 +102,16 @@ ParticleContainer particles; ///< The container of the particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
+
+  spdlog::set_level(spdlog::level::trace);
+
+  //std::cout << "Hello from MolSim for PSE!" << std::endl;
+  spdlog::info("Hello from MolSim for PSE!");
   int opt;
   std::string input_file;
 
   bool g_flag = false;
   bool i_flag = false;
-
-  spdlog::set_level(spdlog::level::trace);
 
   Force* force = new Lenard_Jones_Force();
 

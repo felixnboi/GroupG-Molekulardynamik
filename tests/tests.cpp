@@ -4,13 +4,13 @@
 #include "../src/ParticleContainer.h"
 
 
-bool compareParticles(const Particle& p1, const Particle& p2) {
+//bool compareParticles(const Particle& p1, const Particle& p2) {
     
     // All comparisons passed, particles are equal
-    return true;
-    return (p1.getX() == p2.getX()) && (p1.getV() == p2.getV()) && (p1.getF() == p2.getF()) 
-    && (p1.getOldF() == p2.getOldF()) && (p1.getM() == p2.getM()) && (p1.getType() == p2.getType()); // Add comparison logic for other members
-}
+  //  return true;
+    //return (p1.getX() == p2.getX()) && (p1.getV() == p2.getV()) && (p1.getF() == p2.getF()) 
+    //&& (p1.getOldF() == p2.getOldF()) && (p1.getM() == p2.getM()) && (p1.getType() == p2.getType()); // Add comparison logic for other members
+//}
 
 // Test case for adding particles and getting particles
 TEST(ParticleContainerTest, AddAndGetParticles) {
@@ -33,9 +33,10 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
     EXPECT_EQ(particles.size(), 3);
     
     // Check if the particles in the container match the added particles
-    EXPECT_TRUE(compareParticles(particles[0], p1));
-    EXPECT_TRUE(compareParticles(particles[1], p2));
-    EXPECT_TRUE(compareParticles(particles[2], p3));
+    //EXPECT_TRUE(compareParticles(particles[0], p1));
+    EXPECT_TRUE(particles[0]==p1);
+    EXPECT_TRUE(particles[1]==p2);
+    EXPECT_TRUE(particles[2]==p3);
 }
 
 // Test case for iterators
@@ -52,7 +53,7 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     
     // Test begin iterator
     ParticleIterator beginIter = pc.beginParticles();
-    EXPECT_TRUE(compareParticles(*beginIter, p1));
+    EXPECT_TRUE(*beginIter==p1);
     
     // Test end iterator
     ParticleIterator endIter = pc.endParticles();
