@@ -48,9 +48,9 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
 //                 return EXIT_FAILURE;
 //         }
 //     }
-
 //     if(!s_flag){
-//         //reset generated input file
+//         inputFileManager::resetGenerateInputFile();
 //     }
 // }
+
 

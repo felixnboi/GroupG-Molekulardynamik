@@ -2,6 +2,7 @@
 
 #include "Particle.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
+#include "inputFileManager.h"
 
 #include <cstdlib>
 #include <fstream>
