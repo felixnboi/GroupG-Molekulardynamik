@@ -158,7 +158,7 @@ public:
    * @return True if both particles are equal, otherwise false.
    */
 
-  bool operator==(const Particle &other);
+  bool operator==(const Particle &other) const;
 
 
   /**
