@@ -13,8 +13,6 @@
 #include <list>
 
 /**
- * @class A class for reading particle data from a file.
- * 
  * @brief This class provides functionality to read particle data from a file and populate a ParticleContainer.
  */
 class FileReader {
