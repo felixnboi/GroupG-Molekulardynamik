@@ -14,7 +14,7 @@
 #include <iostream>
 #include <list>
 #include <math.h>
-#include <unistd.h>
+#include <getopt.h>
 #include "spdlog/spdlog.h"
 
 /**
@@ -95,7 +95,6 @@ int main(int argc, char *argsv[]) {
 
   //std::cout << "Hello from MolSim for PSE!" << std::endl;
   spdlog::info("Hello from MolSim for PSE!");
-  int opt;
   std::string input_file;
 
   bool g_flag = false;
@@ -103,12 +102,22 @@ int main(int argc, char *argsv[]) {
 
   int vtk_iteration = 10;
 
+  const char* const short_ops = "v:l:d:e:s:i:f:g";
+  const option long_opts[] = {
+    {"help", no_argument, nullptr, 'h'},
+    {nullptr, no_argument, nullptr, 0}
+  };
+  int opt;
+
 
   Force* force = new Lenard_Jones_Force();
 
 
-  while((opt = getopt(argc, argsv, "v:l:d:e:s:i:f:g")) != -1){
+  while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
     switch(opt){
+      case 'h':{
+        return EXIT_SUCCESS;
+      }
       case 'v':{
         if(isUnsignedInt(optarg)){
           vtk_iteration = std::stoul(optarg);
