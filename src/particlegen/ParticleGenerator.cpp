@@ -1,5 +1,4 @@
 #include "ParticleGenerator.h"
-#include "spdlog/spdlog.h"
 
 
 bool ParticleGenerator::isDouble(char* str) {
@@ -55,12 +54,19 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
     input_file.close();
 }
 
+void ParticleGenerator::logHelp(){
+    spdlog::info("Usage: \"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double\"");
+    spdlog::info("For further information please read the README.md file at top level.");
+    spdlog::info("Terminating...");
+}
+
 int main(int argc, char *argsv[]){
-    spdlog::info("Starting ParticleGenerator application");
+    spdlog::set_level(spdlog::level::info);
 
     const char* const short_ops = "sx:y:z:m:d:";
     const option long_opts[] = {
         {"help", no_argument, nullptr, 'h'},
+        {"log", required_argument, nullptr, 'l'},
         {"sizeX", required_argument, nullptr, 'X'},
         {"sizeY", required_argument, nullptr, 'Y'},
         {"sizeZ", required_argument, nullptr, 'Z'},
@@ -89,6 +95,42 @@ int main(int argc, char *argsv[]){
 
     while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
         switch(opt){
+            case 'l':{
+            //parsing logging level
+            if(std::string(optarg) == std::string("OFF")){
+                spdlog::set_level(spdlog::level::off);
+                spdlog::info("Logging level set to OFF");
+                break;
+            }
+            if(std::string(optarg) == std::string("ERROR")){
+                spdlog::set_level(spdlog::level::err);
+                spdlog::info("Logging level set to ERROR");
+                break;
+            }
+            if(std::string(optarg) == std::string("WARN")){
+                spdlog::set_level(spdlog::level::warn);
+                spdlog::info("Logging level set to WARN");
+                break;
+            }
+            if(std::string(optarg) == std::string("INFO")){
+                spdlog::set_level(spdlog::level::info);
+                spdlog::info("Logging level set to INFO");
+                break;
+            }
+            if(std::string(optarg) == std::string("DEBUG")){
+                spdlog::set_level(spdlog::level::debug);
+                spdlog::info("Logging level set to DEBUG");
+                break;
+            }
+            if(std::string(optarg) == std::string("TRACE")){
+                spdlog::set_level(spdlog::level::trace);
+                spdlog::info("Logging level set to TRACE");
+                break;
+            }
+            spdlog::error("Invalid logging level: {}", optarg);
+            ParticleGenerator::logHelp();
+            return EXIT_FAILURE;
+            }
             case 'a':{
                 a_flag = true;
                 if(ParticleGenerator::isDouble(optarg)){
@@ -96,6 +138,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for velocityX");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -106,6 +149,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for velocityY");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -116,6 +160,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for velocityZ");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -126,6 +171,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for x");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -136,6 +182,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for y");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -146,6 +193,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for z");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -156,6 +204,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for sizeX");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -166,6 +215,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for sizeY");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -176,6 +226,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for sizeZ");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -186,6 +237,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for distance");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -196,6 +248,7 @@ int main(int argc, char *argsv[]){
                     break;
                 }else{
                     spdlog::error("Invalid argument for mass");
+                    ParticleGenerator::logHelp();
                     return EXIT_FAILURE;
                 }
             }
@@ -205,26 +258,32 @@ int main(int argc, char *argsv[]){
             }
             case 'h':{
                 spdlog::info("Help option selected");
+                ParticleGenerator::logHelp();
                 return EXIT_SUCCESS;
             }
             case '?':{
                 spdlog::error("Invalid option");
+                ParticleGenerator::logHelp();
                 return EXIT_FAILURE;
             }
         }
     }
+
+    spdlog::info("Starting ParticleGenerator application");
+
     if(!s_flag){
-        spdlog::warn("No '-s' flag provided");
+        spdlog::warn("No '-s' flag provided. File was overwritten.");
         inputFileManager::resetFile();
     }
 
     if(!(a_flag&&b_flag&&c_flag&&x_flag&&y_flag&&z_flag&&X_flag&&Y_flag&&Z_flag&&d_flag&&m_flag)){
-        spdlog::error("Fail! Required arguments are missing");
+        spdlog::error("Fail! Required arguments are missing.");
+        ParticleGenerator::logHelp();
         return EXIT_FAILURE;
     }
 
     ParticleGenerator::generateCuboid(x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ);
-    spdlog::info("ParticleGenerator application finished successfully");
+    spdlog::info("ParticleGenerator application finished successfully.");
 }
 
 

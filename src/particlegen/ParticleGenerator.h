@@ -3,12 +3,14 @@
 #include "../Particle.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 #include "../inputFileManager.h"
+#include "spdlog/spdlog.h"
 
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <getopt.h>
+#include <string>
 
 /**
  * @brief Namespace containing functions for generating particles.
@@ -45,5 +47,10 @@ bool isInteger(char* str);
  */     
 
 void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ);
+
+/**
+ * @brief Logs a usage message.
+ */
+void logHelp();
 
 };

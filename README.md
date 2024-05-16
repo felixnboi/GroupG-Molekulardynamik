@@ -28,15 +28,28 @@
 >After making there will be two executables in the build folder. One called *MolSim* which runs the main program and another called *ParticleGenerator* which is for generating Particles. ParticleGenerator takes parameters to define a cuboid, computes the particles within this cuboid and writes these Particles to a file called *generated-input.txt* which is located in the */input* folder. 
 
 #### MolSim:
->The MolSim executable uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:
+>The MolSim executable uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:  
+>Usage: *"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]"*
+
+>*"--help"*: **optional** If set a usage message is logged and program terminates.  
+>*"-g"*: **optional** If set the program uses the *"generated-input.txt"* file in the */input* folder.  
+>*"-i string"*: **optional** Defines the path of the input file.  
+>*"-v int"*: **optional** Defines the iterations of output. For example if the argument is *100*, every 100th iteration a output will be generated.  
+>*"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
+>*"--delta double"*: **optional** Defines the time-step of computing.   
+>*"--end double"*: **optional** Defines the end-time of computing.  
+>*"--force char"*: **optional** Either *'l* or *'g'* can be parsed as argument. If *'l'* then Lennard-Jones Force is used for computing. If *'g'* then Gravitaitonal Force is used for computing.  
+
+>**NOTICE**: For all optional command line options that take an argument there are default values if not specified by user via command line.   
+If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and the file at path provided in *string* are used (i.e. the particles from both files will be used).
 
 
 #### ParticleGenerator:
 >The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:  
 >Usage: *"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double"*
 
->*"--help"*: If set a usage message is logged and program terminates.  
->*"-s"*: If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well.  
+>*"--help"*: **optional** If set a usage message is logged and program terminates.  
+>*"-s"*: **optional** If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well.  
 >*"-m double"*: **mandatory.** Defines the mass of the particles in the cuboid.  
 >*"-d double"*: **mandatory.** Defines the distance between two particles.  
 >*"-x double"*: **mandatory.** Defines starting point x-coordinate of the cuboid.  
@@ -48,7 +61,7 @@
 >*"--velodityX double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in x-direction.  
 >*"--velodityY double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in y-direction.  
 >*"--velodityZ double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in z-direction.  
-
+>*"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
 
 ## Visualizing with paraview:
 

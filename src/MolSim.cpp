@@ -15,6 +15,7 @@
 #include <list>
 #include <math.h>
 #include <getopt.h>
+#include <string>
 #include "spdlog/spdlog.h"
 
 /**
@@ -62,6 +63,11 @@ void calculateV();
  */
 void plotParticles(int iteration);
 
+/**
+ * @brief Logs a usage message.
+ */
+void logHelp();
+
 double start_time = 0;       ///< The default start time of the simulation. 
 double end_time = 1000;      ///< The default end time of the simulation. 
 double delta_t = 0.014;      ///< The default time step of the simulation.
@@ -89,32 +95,40 @@ ParticleContainer particles; ///< The container of the particles.
  */
 int main(int argc, char *argsv[]) {
 
-  spdlog::set_level(spdlog::level::trace);
-  spdlog::info("Hello from MolSim for PSE!");
+  // Set default loglevel to INFO
+  spdlog::set_level(spdlog::level::info);
+  
   std::string input_file;
 
   bool g_flag = false;
   bool i_flag = false;
 
+  // Default value for vtk output. Every tenth iteration a output is generated.
   int vtk_iteration = 10;
 
-  const char* const short_ops = "v:l:d:e:s:i:f:g";
+  const char* const short_ops = "v:i:g";
   const option long_opts[] = {
     {"help", no_argument, nullptr, 'h'},
+    {"end", required_argument, nullptr, 'e'},
+    {"start", required_argument, nullptr, 's'},
+    {"log", required_argument, nullptr, 'l'},
+    {"delta", required_argument, nullptr, 'd'},
+    {"force", required_argument, nullptr, 'f'},
     {nullptr, no_argument, nullptr, 0}
   };
   int opt;
 
-
   // Initialize force object
-  Force* force = new Lenard_Jones_Force();
+  Force* force = nullptr;
 
   // Parsing command line arguments
   while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
     switch(opt){
       case 'h':{
+        logHelp();
         return EXIT_SUCCESS;
       }
+
       case 'v':{
         // parsing vtk iteration
         if(isUnsignedInt(optarg)){
@@ -122,44 +136,46 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           spdlog::error("Invalid value for vtk iteration: {}", optarg);
+          logHelp();
           return EXIT_FAILURE;
         }
       }
 
       case 'l':{
         //parsing logging level
-        std::string tmp{optarg};
-        if(tmp == "OFF"){
+        std::string tmp(optarg);
+        if(tmp == std::string("OFF")){
           spdlog::set_level(spdlog::level::off);
           spdlog::info("Logging level set to OFF");
           break;
         }
-        if(tmp == "ERROR"){
+        if(tmp == std::string("ERROR")){
           spdlog::set_level(spdlog::level::err);
           spdlog::info("Logging level set to ERROR");
           break;
         }
-        if(tmp == "WARN"){
+        if(tmp == std::string("WARN")){
           spdlog::set_level(spdlog::level::warn);
           spdlog::info("Logging level set to WARN");
           break;
         }
-        if(tmp == "INFO"){
+        if(tmp == std::string("INFO")){
           spdlog::set_level(spdlog::level::info);
           spdlog::info("Logging level set to INFO");
           break;
         }
-        if(tmp == "DEBUG"){
+        if(tmp == std::string("DEBUG")){
           spdlog::set_level(spdlog::level::debug);
           spdlog::info("Logging level set to DEBUG");
           break;
         }
-        if(tmp == "TRACE"){
+        if(tmp == std::string("TRACE")){
           spdlog::set_level(spdlog::level::trace);
           spdlog::info("Logging level set to TRACE");
           break;
         }
         spdlog::error("Invalid logging level: {}", optarg);
+        logHelp();
         return EXIT_FAILURE;
       }
 
@@ -174,6 +190,7 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           spdlog::error("Invalid argument for delta_t");
+          logHelp();
           return EXIT_FAILURE;
         }
       }
@@ -184,6 +201,7 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           spdlog::error("Invalid argument for end_time");
+          logHelp();
           return EXIT_FAILURE;
         }
       }
@@ -194,6 +212,7 @@ int main(int argc, char *argsv[]) {
           break;
         }else{
           spdlog::error("Invalid argument for start_time");
+          logHelp();
           return EXIT_FAILURE;
         }
       }
@@ -206,25 +225,28 @@ int main(int argc, char *argsv[]) {
 
       case 'f':{
         if(*optarg == 'g'){
-          delete force;
           force = new GravitationalForce();
           spdlog::info("Force set to Gravitational_Force");
           break;
         }
         if(*optarg == 'l'){
-          spdlog::info("Force set to Lenard_Jones_Force");
+          force = new Lenard_Jones_Force();
+          spdlog::info("Force set to Lennard_Jones_Force");
           break;
         }
         spdlog::error("Invalid argument for force");
+        logHelp();
         return EXIT_FAILURE;
       }
 
       case '?':{
         spdlog::error("Invalid option");
+        logHelp();
         return EXIT_FAILURE;
       }
     }
   }
+  spdlog::info("Hello from MolSim for PSE!");
 
   if(!g_flag){
     inputFileManager::resetFile();
@@ -359,4 +381,10 @@ void plotParticles(int iteration) {
   }
   // write the plotted particle positions to a VTK file
   writer.writeFile(out_name, iteration);
+}
+
+void logHelp(){
+  spdlog::info("Usage: \"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]\"");
+  spdlog::info("For further information please read the README.md file at top level.");
+  spdlog::info("Terminating...");
 }
