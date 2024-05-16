@@ -44,6 +44,7 @@ bool isInteger(char* str);
  * @param velocityX Initial velocity along the x-axis.
  * @param velocityY Initial velocity along the y-axis.
  * @param velocityZ Initial velocity along the z-axis.
+ * @param filename Path of file to which particles are written.
  */     
 
 void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename);

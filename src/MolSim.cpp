@@ -271,7 +271,7 @@ int main(int argc, char *argsv[]) {
   }
 
   if(g_flag && i_flag){
-    inputFileManager::mergeFile(input_file_user.c_str());
+    inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
     spdlog::info("File {} merged into generated input file", input_file_user);
     input_file = "../input/generated-input.txt";
   }

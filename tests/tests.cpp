@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/Forces/Lenard_Jones_Force.h"
+#include "../src/Forces/Lennard_Jones_Force.h"
 #include "../src/inputFileManager.h"
 #include "../src/particlegen/ParticleGenerator.h"
 #include "../src/FileReader.h"

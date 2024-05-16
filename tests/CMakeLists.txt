@@ -4,7 +4,7 @@ add_executable(tests
     tests.cpp
     ${PROJECT_SOURCE_DIR}/src/Particle.cpp
     ${PROJECT_SOURCE_DIR}/src/ParticleContainer.cpp
-    ${PROJECT_SOURCE_DIR}/src/Forces/Lenard_Jones_Force.cpp
+    ${PROJECT_SOURCE_DIR}/src/Forces/Lennard_Jones_Force.cpp
     ${PROJECT_SOURCE_DIR}/src/inputFileManager.cpp
     ${PROJECT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp
     ${PROJECT_SOURCE_DIR}/src/FileReader.cpp

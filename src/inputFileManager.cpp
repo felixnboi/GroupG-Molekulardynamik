@@ -1,7 +1,7 @@
 #include "inputFileManager.h"
 
 
-void inputFileManager::mergeFile(const char *filename1,const char *filename2){
+void inputFileManager::mergeFile(const char *filename1, const char *filename2){
     spdlog::info("Starting to merge file: {}", filename2);
 
     std::fstream input_file;
@@ -59,6 +59,6 @@ void inputFileManager::resetFile(const char *filename){
         spdlog::error(filename);
         exit(-1);
     }
-    input_file << "# Inputfile where all used particles will be stored.\n# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles\n# there have to follow the exact quantity of spaces so that the number of chars in the line\n# adds up to 32 (not counting the \"\\n\" at the end)\n0                               \n\n";
+    input_file << "# Inputfile where all used particles will be stored.\n# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles\n# there have to follow the exact quantity of spaces so that the number of chars in the line\n# adds up to 32 (not counting the \"\\n\" at the end)\n0                               \n";
     input_file.close();
 }

@@ -213,7 +213,7 @@ int main(int argc, char *argsv[]){
 
     if(!s_flag){
         spdlog::warn("No '-s' flag provided. File was overwritten.");
-        inputFileManager::resetFile();
+        inputFileManager::resetFile("../input/generated-input.txt");
     }
 
     if(!(a_flag&&b_flag&&c_flag&&x_flag&&y_flag&&z_flag&&X_flag&&Y_flag&&Z_flag&&d_flag&&m_flag)){
@@ -222,6 +222,6 @@ int main(int argc, char *argsv[]){
         return EXIT_FAILURE;
     }
 
-    ParticleGenerator::generateCuboid(x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ);
+    ParticleGenerator::generateCuboid(x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ, "../input/generated-input.txt");
     spdlog::info("ParticleGenerator application finished successfully.");
 }
