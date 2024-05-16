@@ -1,7 +1,10 @@
 #pragma once
-#include <vector>
+
 #include "Particle.h"
+#include "spdlog/spdlog.h"
+
 #include <iostream>
+#include <vector>
 
 using ParticleIterator = std::vector<Particle>::iterator; /// Iterator type for iterating over a vector of particles.
 

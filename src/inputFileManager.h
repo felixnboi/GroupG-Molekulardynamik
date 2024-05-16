@@ -1,3 +1,7 @@
+#pragma once
+
+#include "spdlog/spdlog.h"
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>

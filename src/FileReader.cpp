@@ -7,11 +7,6 @@
 
 #include "FileReader.h"
 
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include "spdlog/spdlog.h"
 
 FileReader::FileReader() = default;
 

@@ -9,6 +9,12 @@
 
 #include "Particle.h"
 #include "ParticleContainer.h"
+#include "spdlog/spdlog.h"
+
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 #include <list>
 
@@ -18,16 +24,16 @@
 class FileReader {
 
 public:
-    /**
+   /**
      * @brief Default constructor.
      */
   FileReader();
-  /**
+   /**
      * @brief Destructor.
      */
   virtual ~FileReader();
 
-/**
+   /**
      * @brief Reads particle data from a file and populates a ParticleContainer.
      * 
      * This function reads particle data from the specified file and transfers it into the provided ParticleContainer.
@@ -39,5 +45,4 @@ public:
      */
   void readFile(ParticleContainer &particles, const char *filename);
 
-  void addParticlesToContainer(ParticleContainer& particles, const std::vector<Particle>& elements);
 };

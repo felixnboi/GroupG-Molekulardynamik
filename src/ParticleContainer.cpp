@@ -3,7 +3,6 @@
  * @brief This file contains a ParticleContainer class and its functions.
  */
 #include "ParticleContainer.h"
-#include "spdlog/spdlog.h"
 
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);

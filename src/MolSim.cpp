@@ -20,12 +20,12 @@
 #include <chrono>
 
 /**
- *@brief Test if the given string is a double 
+ * @brief Test if the given string is a double 
  */ 
 bool isDouble(char *string);
 
 /**
- *@brief Test if this string is an unsigned int 
+ * @brief Test if this string is an unsigned int 
  */ 
 bool isUnsignedInt(char* str);
 

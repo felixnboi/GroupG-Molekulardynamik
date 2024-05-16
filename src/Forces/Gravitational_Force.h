@@ -1,7 +1,11 @@
-#include "utils/ArrayUtils.h"
-#include <math.h>
-#include "ParticleContainer.h"
+#pragma once
+
+#include "../utils/ArrayUtils.h"
+#include "../ParticleContainer.h"
 #include "Force.h"
+#include "spdlog/spdlog.h"
+
+#include <math.h>
 
 /**
  * @brief This class implements the Force interface to calculate gravitational forces between particles

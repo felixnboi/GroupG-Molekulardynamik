@@ -1,10 +1,14 @@
 #include "Lennard_Jones_Force.h"
-#include "spdlog/spdlog.h"
 
-Lennard_Jones_Force::Lennard_Jones_Force() {};
-Lennard_Jones_Force::~Lennard_Jones_Force() {};
+Lennard_Jones_Force::Lennard_Jones_Force() {
+  spdlog::info("Lennard_Jones_Force object constructed");
+};
+Lennard_Jones_Force::~Lennard_Jones_Force() {
+  spdlog::info("Lennard_Jones_Force object destructed");
+};
 
 void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
+  spdlog::info("Calculating Lennard-Jones forces for particles...");
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<Particle>::iterator particle_j; ///< Second iterator for nested loop over particles.
   double epsilon = 5;
@@ -13,7 +17,6 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
   for (particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
     particle_i->setOldF(particle_i->getF());
     particle_i->setF({0,0,0});
-    spdlog::trace("Reset force for particle.");
   }
 
   // iterate over all pairs of particles to calculate forces
@@ -41,9 +44,10 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
         cur_F_j_dummy[k] -= force;
       }
       // update the force for particle i and particle j
-      (*particle_i).setF(cur_F_i_dummy);
-      (*particle_j).setF(cur_F_j_dummy);
-      spdlog::debug("Calculated force between particles.");
+      particle_i->setF(cur_F_i_dummy);
+      particle_j->setF(cur_F_j_dummy);
+      spdlog::trace("Lennard-Jones force calculated between particle {} and particle {}", particle_i->toString(), particle_j->toString());
     }
   }
+  spdlog::info("Lennard-Jones force calculated for all particles");
 }
