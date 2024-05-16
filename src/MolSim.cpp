@@ -98,6 +98,7 @@ int main(int argc, char *argsv[]) {
   // Set default loglevel to INFO
   spdlog::set_level(spdlog::level::info);
   
+  std::string input_file_user;
   std::string input_file;
 
   bool g_flag = false;
@@ -219,7 +220,7 @@ int main(int argc, char *argsv[]) {
       
       case 'i':{
         i_flag = true;
-        input_file = optarg;
+        input_file_user = optarg;
         break;
       }
 
@@ -248,17 +249,27 @@ int main(int argc, char *argsv[]) {
   }
   spdlog::info("Hello from MolSim for PSE!");
 
-  if(!g_flag){
-    inputFileManager::resetFile();
-    spdlog::info("Generated input file reset");
+  if(!g_flag && i_flag){
+    input_file = input_file_user;
+    spdlog::info("Using user defined input file");
   }
 
-  if(i_flag){
-    inputFileManager::mergeFile(input_file.c_str());
-    spdlog::info("File {} merged into generated input file", input_file);
+  if(g_flag && i_flag){
+    inputFileManager::mergeFile(input_file_user.c_str());
+    spdlog::info("File {} merged into generated input file", input_file_user);
+    input_file = "../input/generated-input.txt";
   }
 
-  input_file = "../input/generated-input.txt";
+  if(g_flag && !i_flag){
+    input_file = "../input/generated-input.txt";
+    spdlog::info("Using \"generated-inout.txt\"");
+  }
+
+  if(!g_flag && !i_flag){
+    input_file = "../input/eingabe-sonne.txt";
+    spdlog::info("Using \"eingabe-sonne.txt\"");
+  }
+  
 
   // Check if start_time is after end_time
   if(start_time > end_time){

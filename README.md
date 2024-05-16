@@ -41,7 +41,8 @@
 >*"--force char"*: **optional** Either *'l* or *'g'* can be parsed as argument. If *'l'* then Lennard-Jones Force is used for computing. If *'g'* then Gravitaitonal Force is used for computing.  
 
 >**NOTICE**: For all optional command line options that take an argument there are default values if not specified by user via command line.   
-If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and the file at path provided in *string* are used (i.e. the particles from both files will be used).
+If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and the file at the path provided in *string* are used (i.e. the particles from both files will be used). The particles from the file at the path provided at *string* will also be written to *"generated-input.txt"*.  
+If none of both are set the *"eingabe-sonne.txt"* file at path */input* is used.
 
 
 #### ParticleGenerator:
