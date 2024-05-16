@@ -45,7 +45,6 @@ void Gravitational_Force::calculateF(ParticleContainer &particles) {
       // update the force for particle i and particle j
       particle_i->setF(cur_F_i_dummy);
       particle_j->setF(cur_F_j_dummy);
-      spdlog::trace("Gravitational calculated between particle {} and particle {}", particle_i->toString(), particle_j->toString());
     }
   }
   spdlog::info("Gravitational force calculated for all particles");
