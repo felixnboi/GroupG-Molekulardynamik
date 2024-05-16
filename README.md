@@ -41,11 +41,10 @@
 
 
 #### ParticleGenerator:
->The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:
-
+>The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:  
 >Usage: *"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double"*
 
->*"--help"*: If set a usage message is logged and program terminates.
+>*"--help"*: If set a usage message is logged and program terminates.  
 >*"-s"*: If set the particles in the already exsisting *generated-input.txt*   file won't be overwritten and the new particles will be added as well.
 >*"-m double"*: **mandatory.** Defines the mass of the particles in the cuboid.
 >*"-d double"*: **mandatory.** Defines the distance between two particles.
