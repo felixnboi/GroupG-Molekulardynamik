@@ -47,7 +47,6 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, dou
   type = type_arg;
   f = {0., 0., 0.};
   old_f = {0., 0., 0.};
-  //spdlog::trace("Particle trace");
   spdlog::info("Particle generated with position ({}, {}, {}) and velocity ({}, {}, {})",
                x_arg[0], x_arg[1], x_arg[2], v_arg[0], v_arg[1], v_arg[2]);
   spdlog::trace("type: {}, mass: {}", type_arg, m_arg);

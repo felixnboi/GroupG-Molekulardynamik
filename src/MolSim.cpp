@@ -18,12 +18,12 @@
 #include "spdlog/spdlog.h"
 
 /**
- *@brief test if the given string is a double 
+ *@brief Test if the given string is a double 
  */ 
 bool isDouble(char *string);
 
 /**
- *@brief test if this string is a unsigend int 
+ *@brief Test if this string is an unsigned int 
  */ 
 bool isUnsignedInt(char* str);
 
@@ -75,9 +75,8 @@ ParticleContainer particles; ///< The container of the particles.
  * The program first takes command-line arguments
  * to specify the input file name, and optionally, start time, end time, and delta time step. The function reads
  * particle data from an input file and then loop runs until the current time reaches the specified end time. 
- * In each iteration, the position, velocity, and forces of the particles are updated using the calculateX, 
- * calculateF, and calculateV functions, respectively. The particle positions are periodically 
- * (at intervals of 10 iterations) plotted using the plotParticles function.
+ * In each iteration, the position, velocity, and forces of the particles are updated respectively. The particle positions are periodically 
+ * (usually, at intervals of 10 iterations) plotted using the plotParticles function.
  * Finally, an output message is displayed, indicating that the simulation is complete, and the program
  * terminates with a success status.
  * 
@@ -86,14 +85,11 @@ ParticleContainer particles; ///< The container of the particles.
  * @return The exit status of the program.
  * @see calculateX() To calculate the position for all particles.
  * @see calculateF() To calculate the force for all particles.
- * @see calculateV() To calculate the velocity for all particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
 
   spdlog::set_level(spdlog::level::trace);
-
-  //std::cout << "Hello from MolSim for PSE!" << std::endl;
   spdlog::info("Hello from MolSim for PSE!");
   std::string input_file;
 
@@ -110,51 +106,60 @@ int main(int argc, char *argsv[]) {
   int opt;
 
 
+  // Initialize force object
   Force* force = new Lenard_Jones_Force();
 
-
+  // Parsing command line arguments
   while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
     switch(opt){
       case 'h':{
         return EXIT_SUCCESS;
       }
       case 'v':{
+        // parsing vtk iteration
         if(isUnsignedInt(optarg)){
           vtk_iteration = std::stoul(optarg);
           break;
         }else{
-          std::cout << "error\n";
+          spdlog::error("Invalid value for vtk iteration: {}", optarg);
           return EXIT_FAILURE;
         }
       }
 
       case 'l':{
+        //parsing logging level
         std::string tmp{optarg};
         if(tmp == "OFF"){
           spdlog::set_level(spdlog::level::off);
+          spdlog::info("Logging level set to OFF");
           break;
         }
         if(tmp == "ERROR"){
           spdlog::set_level(spdlog::level::err);
+          spdlog::info("Logging level set to ERROR");
           break;
         }
         if(tmp == "WARN"){
           spdlog::set_level(spdlog::level::warn);
+          spdlog::info("Logging level set to WARN");
           break;
         }
         if(tmp == "INFO"){
           spdlog::set_level(spdlog::level::info);
+          spdlog::info("Logging level set to INFO");
           break;
         }
         if(tmp == "DEBUG"){
           spdlog::set_level(spdlog::level::debug);
+          spdlog::info("Logging level set to DEBUG");
           break;
         }
         if(tmp == "TRACE"){
           spdlog::set_level(spdlog::level::trace);
+          spdlog::info("Logging level set to TRACE");
           break;
         }
-        std::cout << "error\n";
+        spdlog::error("Invalid logging level: {}", optarg);
         return EXIT_FAILURE;
       }
 
@@ -168,7 +173,7 @@ int main(int argc, char *argsv[]) {
           delta_t = atof(optarg);
           break;
         }else{
-          std::cout << "error\n";
+          spdlog::error("Invalid argument for delta_t");
           return EXIT_FAILURE;
         }
       }
@@ -178,7 +183,7 @@ int main(int argc, char *argsv[]) {
           end_time = atof(optarg);
           break;
         }else{
-          std::cout << "error\n";
+          spdlog::error("Invalid argument for end_time");
           return EXIT_FAILURE;
         }
       }
@@ -188,7 +193,7 @@ int main(int argc, char *argsv[]) {
           start_time = atof(optarg);
           break;
         }else{
-          std::cout << "error\n";
+          spdlog::error("Invalid argument for start_time");
           return EXIT_FAILURE;
         }
       }
@@ -203,17 +208,19 @@ int main(int argc, char *argsv[]) {
         if(*optarg == 'g'){
           delete force;
           force = new GravitationalForce();
+          spdlog::info("Force set to Gravitational_Force");
           break;
         }
         if(*optarg == 'l'){
+          spdlog::info("Force set to Lenard_Jones_Force");
           break;
         }
-        std::cout << "error\n";
+        spdlog::error("Invalid argument for force");
         return EXIT_FAILURE;
       }
 
       case '?':{
-        std::cout << "error\n";
+        spdlog::error("Invalid option");
         return EXIT_FAILURE;
       }
     }
@@ -221,35 +228,37 @@ int main(int argc, char *argsv[]) {
 
   if(!g_flag){
     inputFileManager::resetFile();
+    spdlog::info("Generated input file reset");
   }
 
   if(i_flag){
     inputFileManager::mergeFile(input_file.c_str());
+    spdlog::info("File {} merged into generated input file", input_file);
   }
 
   input_file = "../input/generated-input.txt";
 
-
+  // Check if start_time is after end_time
   if(start_time > end_time){
-    std::cout << "Error: start_time is after end_time" << std::endl;
+    spdlog::error("Error: start_time should not be after end_time!");
     return EXIT_FAILURE;
   }
   
   FileReader fileReader;
   fileReader.readFile(particles, input_file.c_str());
-  std::cout << "start\n";
 
   // checking if there are particles in the simulation
   if(particles.getParticles().empty()){
-    std::cout << "Failed to read Particles from input file!" << std::endl;
+    spdlog::error("Failed to read Particles from input file!");
     return EXIT_FAILURE;
   }
 
-  std::cout << "end_time:" << end_time << ", delta_t:" << delta_t << ", start_time:" << start_time << std::endl;
+  spdlog::info("end_time:{}, delta_t:{}, start_time:{}", end_time, delta_t, start_time);
 
   double current_time = 0;
   int iteration = 0;
 
+  // Advance simulation time to start_time
   while (current_time < start_time){
     calculateX();
     force->calculateF(particles);
@@ -265,17 +274,17 @@ int main(int argc, char *argsv[]) {
     calculateV();
     iteration++;
 
-    // plotting particle positions only at intervals of 10 iterations
+    // plotting particle positions only at intervals of iterations
     if (iteration % vtk_iteration == 0) {
       plotParticles(iteration);
     }
     // printing simulation progress
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
+    spdlog::info("Iteration {} finished", iteration);
     // update simulation time
     current_time += delta_t;
   }
   // display output message and terminate the program
-  std::cout << "output written. Terminating..." << std::endl;
+  spdlog::info("Output written. Terminating...");
 
   delete force;
   return 0;
