@@ -89,7 +89,7 @@ ParticleContainer particles; ///< The container of the particles.
  */
 int main(int argc, char *argsv[]) {
 
-  spdlog::set_level(spdlog::level::trace);
+  spdlog::set_level(spdlog::level::info);
   spdlog::info("Hello from MolSim for PSE!");
   int opt;
   std::string input_file;
@@ -217,12 +217,12 @@ int main(int argc, char *argsv[]) {
   }
 
   if(!g_flag){
-    inputFileManager::resetFile();
+    inputFileManager::resetFile("../input/generated-input.txt");
     spdlog::info("Generated input file reset");
   }
 
   if(i_flag){
-    inputFileManager::mergeFile(input_file.c_str());
+    inputFileManager::mergeFile("../input/generated-input.txt",input_file.c_str());
     spdlog::info("File {} merged into generated input file", input_file);
   }
 

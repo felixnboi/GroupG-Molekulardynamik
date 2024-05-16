@@ -1,6 +1,6 @@
-#include "utils/ArrayUtils.h"
+#include "../utils/ArrayUtils.h"
 #include <math.h>
-#include "ParticleContainer.h"
+#include "../ParticleContainer.h"
 #include "Force.h"
 
 /**

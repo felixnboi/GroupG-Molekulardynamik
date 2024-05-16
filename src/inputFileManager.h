@@ -14,13 +14,13 @@ namespace inputFileManager{
  * 
  * @param filename The name of the file to be merged.
  */
-void mergeFile(const char *filename);
+void mergeFile(const char *filename1,const char *filename2);
 /**
  * @brief Resets the generated input file to its initial state.
  * 
  * This function clears the contents of the generated input file and writes a header line followed by
  * a line specifying the initial number of particles (0).
  */
-void resetFile();
+void resetFile(const char *filename);
 
 };

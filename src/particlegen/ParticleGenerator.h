@@ -3,6 +3,7 @@
 #include "../Particle.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 #include "../inputFileManager.h"
+#include "spdlog/spdlog.h"
 
 #include <cstdlib>
 #include <fstream>
@@ -44,6 +45,6 @@ bool isInteger(char* str);
  * @param velocityZ Initial velocity along the z-axis.
  */     
 
-void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ);
+void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename);
 
 };

@@ -1,5 +1,5 @@
 #pragma once
-#include "ParticleContainer.h"
+#include "../ParticleContainer.h"
 
 /**
  * @class Abstract base class for calculating forces acting on particles.
