@@ -29,10 +29,11 @@
 
 #### MolSim:
 >The MolSim executable uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:  
->Usage: *"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]"*
+>Usage: *"./MolSim [--help] [-g] [-t] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]"*
 
 >*"--help"*: **optional** If set a usage message is logged and program terminates.  
 >*"-g"*: **optional** If set the program uses the *"generated-input.txt"* file in the */input* folder.  
+>*"-t"*: **optional** If set the program execution time will be measured. Measurement takes place with no vtk-output and no logging.  
 >*"-i string"*: **optional** Defines the path of the input file.  
 >*"-v int"*: **optional** Defines the iterations of output. For example if the argument is *100*, every 100th iteration a output will be generated.  
 >*"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
@@ -44,6 +45,8 @@
 If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and the file at the path provided in *string* are used (i.e. the particles from both files will be used). The particles from the file at the path provided at *string* will also be written to *"generated-input.txt"*.  
 If none of both are set the *"eingabe-sonne.txt"* file at path */input* is used.
 
+>Example: ./MolSim -g --force l --delta 0.0002 --end 5
+
 
 #### ParticleGenerator:
 >The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:  
@@ -51,18 +54,20 @@ If none of both are set the *"eingabe-sonne.txt"* file at path */input* is used.
 
 >*"--help"*: **optional** If set a usage message is logged and program terminates.  
 >*"-s"*: **optional** If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well. Please be sure that a *generated-input.txt* file has already been created when setting this option.
->*"-m double"*: **mandatory.** Defines the mass of the particles in the cuboid.  
->*"-d double"*: **mandatory.** Defines the distance between two particles.  
->*"-x double"*: **mandatory.** Defines starting point x-coordinate of the cuboid.  
->*"-y double"*: **mandatory.** Defines starting point y-coordinate of the cuboid.  
->*"-z double"*: **mandatory.** Defines starting point z-coordinate of the cuboid.  
->*"--sizeX int"*: **mandatory.** Defines length of cuboid in x-direction.  
->*"--sizeY int"*: **mandatory.** Defines length of cuboid in y-direction.  
->*"--sizeZ int"*: **mandatory.** Defines length of cuboid in z-direction.  
+>*"-m double"*: **mandatory.** Defines the mass of each particle in the cuboid.  
+>*"-d double"*: **mandatory.** Defines the distance between the particles.  
+>*"-x double"*: **mandatory.** Defines x-coordinate of the lower left front side corner of the cuboid.  
+>*"-y double"*: **mandatory.** Defines y-coordinate of the lower left front side corner of the cuboid.  
+>*"-z double"*: **mandatory.** Defines z-coordinate of the lower left front side corner of the cuboid.  
+>*"--sizeX int"*: **mandatory.** Defines number of particles in x-direction.  
+>*"--sizeY int"*: **mandatory.** Defines number of particles in y-direction.  
+>*"--sizeZ int"*: **mandatory.** Defines number of particles in z-direction.  
 >*"--velocityX double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in x-direction.  
 >*"--velocityY double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in y-direction.  
 >*"--velocityZ double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in z-direction.  
 >*"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
+
+>Example: ./ParticleGenerator -m 1 -d 1.1225 -x 0 -y 0 -z 0 --sizeX 40 --sizeY 8 --sizeZ 1 --velocityX 0 --velocityY 0 --velocityZ 0
 
 ## Visualizing with paraview:
 

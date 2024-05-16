@@ -10,13 +10,14 @@
 #include "Forces/GravitationalForce.h"
 #include "Forces/Lenard_Jones_Force.h"
 #include "inputFileManager.h"
+#include "spdlog/spdlog.h"
 
 #include <iostream>
 #include <list>
 #include <math.h>
 #include <getopt.h>
 #include <string>
-#include "spdlog/spdlog.h"
+#include <chrono>
 
 /**
  *@brief Test if the given string is a double 
@@ -94,6 +95,7 @@ ParticleContainer particles; ///< The container of the particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
+  auto start = std::chrono::high_resolution_clock::now();
 
   // Set default loglevel to INFO
   spdlog::set_level(spdlog::level::info);
@@ -104,11 +106,12 @@ int main(int argc, char *argsv[]) {
   bool g_flag = false;
   bool i_flag = false;
   bool f_flag = false;
+  bool t_flag = false;
 
   // Default value for vtk output. Every tenth iteration a output is generated.
   int vtk_iteration = 10;
 
-  const char* const short_ops = "v:i:g";
+  const char* const short_ops = "v:i:gt";
   const option long_opts[] = {
     {"help", no_argument, nullptr, 'h'},
     {"end", required_argument, nullptr, 'e'},
@@ -126,6 +129,11 @@ int main(int argc, char *argsv[]) {
   // Parsing command line arguments
   while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
     switch(opt){
+      case 't':{
+        spdlog::set_level(spdlog::level::off);
+        t_flag = true;
+        break;
+      }
       case 'h':{
         logHelp();
         return EXIT_SUCCESS;
@@ -308,25 +316,43 @@ int main(int argc, char *argsv[]) {
   }
 
   //simulation loop
-  while (current_time < end_time) {
-    calculateX();
-    force->calculateF(particles);
-    calculateV();
-    iteration++;
-
-    // plotting particle positions only at intervals of iterations
-    if (iteration % vtk_iteration == 0) {
-      plotParticles(iteration);
+  if(t_flag){
+    while (current_time < end_time) {
+      calculateX();
+      force->calculateF(particles);
+      calculateV();
+      iteration++;
+      current_time += delta_t;
     }
-    // printing simulation progress
-    spdlog::info("Iteration {} finished", iteration);
-    // update simulation time
-    current_time += delta_t;
+  }else{
+    while (current_time < end_time) {
+      calculateX();
+      force->calculateF(particles);
+      calculateV();
+      iteration++;
+
+      // plotting particle positions only at intervals of iterations
+      if (iteration % vtk_iteration == 0) {
+        plotParticles(iteration);
+      }
+      // printing simulation progress
+      spdlog::info("Iteration {} finished", iteration);
+      // update simulation time
+      current_time += delta_t;
+    }
   }
+  
   // display output message and terminate the program
   spdlog::info("Output written. Terminating...");
 
   delete force;
+
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> elapsed =  end - start;
+  if(t_flag){
+    std::cout << "Execution time: " << elapsed.count() << " seconds" << std::endl;
+  }
+
   return 0;
 }
 
