@@ -58,9 +58,9 @@ If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and th
 >*"--sizeX int"*: **mandatory.** Defines length of cuboid in x-direction.  
 >*"--sizeY int"*: **mandatory.** Defines length of cuboid in y-direction.  
 >*"--sizeZ int"*: **mandatory.** Defines length of cuboid in z-direction.  
->*"--velodityX double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in x-direction.  
->*"--velodityY double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in y-direction.  
->*"--velodityZ double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in z-direction.  
+>*"--velocityX double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in x-direction.  
+>*"--velocityY double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in y-direction.  
+>*"--velocityZ double"*: **mandatory.** Defines starting velocity of each particle in the cuboid in z-direction.  
 >*"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
 
 ## Visualizing with paraview:
