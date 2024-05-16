@@ -24,9 +24,9 @@
  */
 Particle::Particle(int type_arg) {
   type = type_arg; 
-  spdlog::info("Particle generated with type {}", type_arg);
   f = {0., 0., 0.}; 
   old_f = {0., 0., 0.}; 
+  spdlog::info("Particle generated with type {}", type_arg);
 }
 
 Particle::Particle(const Particle &other){
@@ -53,8 +53,9 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, dou
 }
 
 
-Particle::~Particle() { 
-  spdlog::info("Particle destructed!");
+Particle::~Particle() {
+  // Cannot use logging because at end of main logger is destructed before particles -> Would lead to use-after-free;
+  std::cout << "Particle Destructed\n";
 }
 
 const std::array<double, 3> &Particle::getX() const { return x; }

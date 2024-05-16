@@ -17,8 +17,7 @@ FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
 
-void FileReader::readFile(ParticleContainer &particles, const char *filename) {
-
+void FileReader::readFile(ParticleContainer &particles, const char *filename){
   std::array<double, 3> x;
   std::array<double, 3> v;
   double m;
@@ -45,7 +44,6 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename) {
       spdlog::error("Error: Particle file contains no praticles\n");
       exit(-1);
     }
-    std::cout << "num particles = " << num_particles;
     spdlog::info("Reading {} particles.", num_particles);
     getline(input_file, tmp_string);
     spdlog::info("Read line: {}", tmp_string);
@@ -75,3 +73,4 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename) {
     exit(-1);
   }
 }
+

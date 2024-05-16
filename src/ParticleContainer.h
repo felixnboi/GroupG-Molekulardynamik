@@ -31,7 +31,7 @@ public:
  */
     void addParticle(const Particle& particle);
 
-    /**
+/**
  * @brief Get the vector of particles.
  * 
  * This function returns a constant reference to the vector of particles.

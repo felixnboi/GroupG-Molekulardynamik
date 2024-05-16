@@ -40,4 +40,6 @@ public:
      * @param filename The path to the file containing the particle data.
      */
   void readFile(ParticleContainer &particles, const char *filename);
+
+  void addParticlesToContainer(ParticleContainer& particles, const std::vector<Particle>& elements);
 };

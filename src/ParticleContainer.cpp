@@ -8,7 +8,7 @@
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);
     spdlog::debug("Added a particle to the container");
-    spdlog::trace("A particle with type {}", particle.getType());
+    //spdlog::trace("A particle with type {}", particle.getType());
 }
 
 const std::vector<Particle>& ParticleContainer::getParticles() {

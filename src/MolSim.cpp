@@ -103,6 +103,7 @@ int main(int argc, char *argsv[]) {
 
   bool g_flag = false;
   bool i_flag = false;
+  bool f_flag = false;
 
   // Default value for vtk output. Every tenth iteration a output is generated.
   int vtk_iteration = 10;
@@ -225,6 +226,7 @@ int main(int argc, char *argsv[]) {
       }
 
       case 'f':{
+        f_flag = true;
         if(*optarg == 'g'){
           force = new GravitationalForce();
           spdlog::info("Force set to Gravitational_Force");
@@ -248,6 +250,11 @@ int main(int argc, char *argsv[]) {
     }
   }
   spdlog::info("Hello from MolSim for PSE!");
+  if(!f_flag){
+    spdlog::error("Didn't specify force. Terminating");
+    logHelp();
+    return EXIT_FAILURE;
+  }
 
   if(!g_flag && i_flag){
     input_file = input_file_user;
@@ -395,7 +402,7 @@ void plotParticles(int iteration) {
 }
 
 void logHelp(){
-  spdlog::info("Usage: \"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]\"");
+  spdlog::info("Usage: \"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] --force char\"");
   spdlog::info("For further information please read the README.md file at top level.");
   spdlog::info("Terminating...");
 }

@@ -38,7 +38,7 @@
 >*"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
 >*"--delta double"*: **optional** Defines the time-step of computing.   
 >*"--end double"*: **optional** Defines the end-time of computing.  
->*"--force char"*: **optional** Either *'l* or *'g'* can be parsed as argument. If *'l'* then Lennard-Jones Force is used for computing. If *'g'* then Gravitaitonal Force is used for computing.  
+>*"--force char"*: **madatory** Either *'l* or *'g'* can be parsed as argument. If *'l'* then Lennard-Jones Force is used for computing. If *'g'* then Gravitaitonal Force is used for computing.  
 
 >**NOTICE**: For all optional command line options that take an argument there are default values if not specified by user via command line.   
 If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and the file at the path provided in *string* are used (i.e. the particles from both files will be used). The particles from the file at the path provided at *string* will also be written to *"generated-input.txt"*.  
