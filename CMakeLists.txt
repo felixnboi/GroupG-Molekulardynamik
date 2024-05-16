@@ -20,8 +20,7 @@ file(GLOB_RECURSE MY_SRC
 )
 
 set(EXCLUDE_FILES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp"
 )
 
 list(REMOVE_ITEM MY_SRC ${EXCLUDE_FILES})
@@ -89,6 +88,7 @@ add_executable(ParticleGenerator
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Particle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp    
 )
 
 target_compile_features(ParticleGenerator

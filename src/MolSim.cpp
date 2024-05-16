@@ -101,6 +101,7 @@ int main(int argc, char *argsv[]) {
   spdlog::set_level(spdlog::level::info);
   
   std::string input_file_user;
+
   std::string input_file;
 
   bool g_flag = false;
