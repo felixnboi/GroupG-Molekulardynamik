@@ -4,8 +4,6 @@
 #include "Force.h"
 
 /**
- * @class Represents a Lenard-Jones force calculation.
- * 
  * @brief The Lenard-Jones force is used to model the interaction between particles in a system.
  */
 class Lenard_Jones_Force : public Force

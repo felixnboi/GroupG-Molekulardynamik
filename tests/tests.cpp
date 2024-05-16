@@ -45,7 +45,6 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     // Test begin iterator
     ParticleIterator beginIter = pc.begin();
     EXPECT_TRUE(*beginIter==p1);
-
     
     // Test end iterator
     ParticleIterator endIter = pc.end();

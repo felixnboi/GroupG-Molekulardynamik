@@ -4,9 +4,7 @@
 #include "Force.h"
 
 /**
- * @class A class for calculating gravitational forces between particles.
- * 
- * This class implements the Force interface to calculate gravitational forces between particles
+ * @brief This class implements the Force interface to calculate gravitational forces between particles
  * based on their masses and positions.
  */
 class GravitationalForce : public Force
