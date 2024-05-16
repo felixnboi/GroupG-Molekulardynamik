@@ -1,4 +1,5 @@
 #include "ParticleGenerator.h"
+#include "spdlog/spdlog.h"
 
 
 bool ParticleGenerator::isDouble(char* str) {
@@ -23,6 +24,8 @@ bool ParticleGenerator::isInteger(char* str) {
 void ParticleGenerator::generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ) {
     std::fstream input_file;
     std::string tmp_string;
+    
+    spdlog::info("Generating cuboid with parameters: x={}, y={}, z={}, sizeX={}, sizeY={}, sizeZ={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ);
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
     while (tmp_string.empty() or tmp_string[0] == '#') {
         getline(input_file, tmp_string);
@@ -53,6 +56,8 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
 }
 
 int main(int argc, char *argsv[]){
+    spdlog::info("Starting ParticleGenerator application");
+
     const char* const short_ops = "sx:y:z:m:d:";
     const option long_opts[] = {
         {"help", no_argument, nullptr, 'h'},
@@ -90,6 +95,7 @@ int main(int argc, char *argsv[]){
                     velocityX = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for velocityX");
                     return EXIT_FAILURE;
                 }
             }
@@ -99,6 +105,7 @@ int main(int argc, char *argsv[]){
                     velocityY = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for velocityY");
                     return EXIT_FAILURE;
                 }
             }
@@ -108,6 +115,7 @@ int main(int argc, char *argsv[]){
                     velocityZ = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for velocityZ");
                     return EXIT_FAILURE;
                 }
             }
@@ -117,6 +125,7 @@ int main(int argc, char *argsv[]){
                     x = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for x");
                     return EXIT_FAILURE;
                 }
             }
@@ -126,6 +135,7 @@ int main(int argc, char *argsv[]){
                     y = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for y");
                     return EXIT_FAILURE;
                 }
             }
@@ -135,6 +145,7 @@ int main(int argc, char *argsv[]){
                     z = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for z");
                     return EXIT_FAILURE;
                 }
             }
@@ -144,6 +155,7 @@ int main(int argc, char *argsv[]){
                     sizeX = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for sizeX");
                     return EXIT_FAILURE;
                 }
             }
@@ -153,6 +165,7 @@ int main(int argc, char *argsv[]){
                     sizeY = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for sizeY");
                     return EXIT_FAILURE;
                 }
             }
@@ -162,6 +175,7 @@ int main(int argc, char *argsv[]){
                     sizeZ = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for sizeZ");
                     return EXIT_FAILURE;
                 }
             }
@@ -171,6 +185,7 @@ int main(int argc, char *argsv[]){
                     distance = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for distance");
                     return EXIT_FAILURE;
                 }
             }
@@ -180,6 +195,7 @@ int main(int argc, char *argsv[]){
                     mass = std::atof(optarg);
                     break;
                 }else{
+                    spdlog::error("Invalid argument for mass");
                     return EXIT_FAILURE;
                 }
             }
@@ -188,24 +204,27 @@ int main(int argc, char *argsv[]){
                 break;
             }
             case 'h':{
+                spdlog::info("Help option selected");
                 return EXIT_SUCCESS;
             }
             case '?':{
-                std::cout << "error\n";
+                spdlog::error("Invalid option");
                 return EXIT_FAILURE;
             }
         }
     }
     if(!s_flag){
+        spdlog::warn("No '-s' flag provided");
         inputFileManager::resetFile();
     }
 
     if(!(a_flag&&b_flag&&c_flag&&x_flag&&y_flag&&z_flag&&X_flag&&Y_flag&&Z_flag&&d_flag&&m_flag)){
-        std::cout << "fail\n";
+        spdlog::error("Fail! Required arguments are missing");
         return EXIT_FAILURE;
     }
 
     ParticleGenerator::generateCuboid(x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ);
+    spdlog::info("ParticleGenerator application finished successfully");
 }
 
 

@@ -3,15 +3,6 @@
 #include "../src/Particle.h"
 #include "../src/ParticleContainer.h"
 
-
-//bool compareParticles(const Particle& p1, const Particle& p2) {
-    
-    // All comparisons passed, particles are equal
-  //  return true;
-    //return (p1.getX() == p2.getX()) && (p1.getV() == p2.getV()) && (p1.getF() == p2.getF()) 
-    //&& (p1.getOldF() == p2.getOldF()) && (p1.getM() == p2.getM()) && (p1.getType() == p2.getType()); // Add comparison logic for other members
-//}
-
 // Test case for adding particles and getting particles
 TEST(ParticleContainerTest, AddAndGetParticles) {
     ParticleContainer pc;
@@ -60,17 +51,3 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     ParticleIterator endIter = pc.end();
     EXPECT_NE(beginIter, endIter); 
 }
-
-
-
-
-
-
-//TEST(HelloTest, BasicAssertions) {
-  //EXPECT_EQ(7 * 6, 42);
-  //EXPECT_TRUE(true);
-  //EXPECT_TRUE(false);}
-// rm test_suite[1]_include.cmake
-//cmake GroupG-Molekulardynamik/
-//make
-//./teststotest

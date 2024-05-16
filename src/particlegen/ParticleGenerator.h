@@ -16,12 +16,12 @@
 namespace ParticleGenerator{
 
 /**
- *test if this string is a double 
+ *@brief Tests if this string is a double 
  */ 
 bool isDouble(char* str); 
 
 /**
- *test if this string is a int 
+ *@brief Tests if this string is an int 
  */ 
 bool isInteger(char* str);
 
