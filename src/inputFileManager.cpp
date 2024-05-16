@@ -10,30 +10,32 @@ void inputFileManager::mergeFile(const char *filename){
     std::string tmp_string;
 
     input_file.open("../input/generated-input.txt",std::ios::in|std::ios::out);
+    std::streampos curent = input_file.tellp();
      if (!input_file.is_open()) {
         spdlog::error("Failed to open generated input file");
         exit(-1);
     }
 
     while (tmp_string.empty() or tmp_string[0] == '#') {
+        curent = input_file.tellp();
         getline(input_file, tmp_string);
     }
-    input_file.seekp(input_file.tellp()-33);
+    input_file.seekp(curent);
 
-    std::ifstream mergin_file(filename);
+    std::fstream mergin_file(filename);
     std::string tmp_string_merg;
 
     if (mergin_file.is_open()) {
         getline(mergin_file, tmp_string_merg);
 
         while (tmp_string_merg.empty() or tmp_string_merg[0] == '#') {
+            curent = mergin_file.tellp();
             getline(mergin_file, tmp_string_merg);
         }
     }else {
         spdlog::error("Failed to open file {}", filename);
         exit(-1);
     }
-    input_file.seekp(input_file.tellp()-33);
     int num_particles = std::stoi(tmp_string_merg);
     input_file << std::stoi(tmp_string)+num_particles;    
     input_file.close();

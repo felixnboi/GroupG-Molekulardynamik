@@ -40,6 +40,12 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename) {
 
     std::istringstream numstream(tmp_string);
     numstream >> num_particles;
+    if(num_particles == 0)
+    {
+      spdlog::error("Error: Particle file contains no praticles\n");
+      exit(-1);
+    }
+    std::cout << "num particles = " << num_particles;
     spdlog::info("Reading {} particles.", num_particles);
     getline(input_file, tmp_string);
     spdlog::info("Read line: {}", tmp_string);
