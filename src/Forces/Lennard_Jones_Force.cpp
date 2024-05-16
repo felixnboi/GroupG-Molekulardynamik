@@ -1,10 +1,10 @@
-#include "Lenard_Jones_Force.h"
+#include "Lennard_Jones_Force.h"
 #include "spdlog/spdlog.h"
 
-Lenard_Jones_Force::Lenard_Jones_Force() {};
-Lenard_Jones_Force::~Lenard_Jones_Force() {};
+Lennard_Jones_Force::Lennard_Jones_Force() {};
+Lennard_Jones_Force::~Lennard_Jones_Force() {};
 
-void Lenard_Jones_Force::calculateF(ParticleContainer &particles) {
+void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<Particle>::iterator particle_j; ///< Second iterator for nested loop over particles.
   double epsilon = 5;

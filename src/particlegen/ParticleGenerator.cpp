@@ -45,7 +45,8 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
         {
             for (size_t k = 0; k < sizeZ; k++) {
                 std::array<double, 3> brownianMotion = maxwellBoltzmannDistributedVelocity(averageBrownianMotion, 3);
-                input_file << x << " " << y << " " << z << " " << velocityX + brownianMotion[0] << " " << velocityY + brownianMotion[1] << " " << velocityZ + brownianMotion[2] << " " << mass << "\n";                z += distance;
+                input_file << x << " " << y << " " << z << " " << velocityX + brownianMotion[0] << " " << velocityY + brownianMotion[1] << " " << velocityZ + brownianMotion[2] << " " << mass << "\n";         
+                z += distance;
             }
             z = zClone;
             y += distance;

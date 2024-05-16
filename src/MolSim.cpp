@@ -7,8 +7,8 @@
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
-#include "Forces/GravitationalForce.h"
-#include "Forces/Lenard_Jones_Force.h"
+#include "Forces/Gravitational_Force.h"
+#include "Forces/Lennard_Jones_Force.h"
 #include "inputFileManager.h"
 #include "spdlog/spdlog.h"
 
@@ -236,12 +236,12 @@ int main(int argc, char *argsv[]) {
       case 'f':{
         f_flag = true;
         if(*optarg == 'g'){
-          force = new GravitationalForce();
+          force = new Gravitational_Force();
           spdlog::info("Force set to Gravitational_Force");
           break;
         }
         if(*optarg == 'l'){
-          force = new Lenard_Jones_Force();
+          force = new Lennard_Jones_Force();
           spdlog::info("Force set to Lennard_Jones_Force");
           break;
         }

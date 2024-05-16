@@ -1,15 +1,15 @@
-#include "GravitationalForce.h"
+#include "Gravitational_Force.h"
 #include "spdlog/spdlog.h"
 
-GravitationalForce::GravitationalForce() {
+Gravitational_Force::Gravitational_Force() {
   spdlog::info("GravitationalForce object constructed");
 };
-GravitationalForce::~GravitationalForce() {
+Gravitational_Force::~Gravitational_Force() {
   spdlog::info("GravitationalForce object destructed");
 };
 
 
-void GravitationalForce::calculateF(ParticleContainer &particles) {
+void Gravitational_Force::calculateF(ParticleContainer &particles) {
 
   spdlog::info("Calculating gravitational forces for particles...");
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.

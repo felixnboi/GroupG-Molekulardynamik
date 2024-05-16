@@ -7,17 +7,17 @@
  * @brief This class implements the Force interface to calculate gravitational forces between particles
  * based on their masses and positions.
  */
-class GravitationalForce : public Force
+class Gravitational_Force : public Force
 {
 public:
     /**
      * @brief Default constructor.
      */
-    GravitationalForce();
+    Gravitational_Force();
     /**
      * @brief Destructor.
      */
-    ~GravitationalForce();
+    ~Gravitational_Force();
     /**
      * @brief Calculates gravitational forces between particles.
      * 

@@ -6,17 +6,17 @@
 /**
  * @brief The Lenard-Jones force is used to model the interaction between particles in a system.
  */
-class Lenard_Jones_Force : public Force
+class Lennard_Jones_Force : public Force
 {
 public:
     /**
      * @brief Default constructor for Lenard_Jones_Force.
      */
-    Lenard_Jones_Force();
+    Lennard_Jones_Force();
     /**
      * @brief Default destructor for Lenard_Jones_Force.
      */
-    ~Lenard_Jones_Force();
+    ~Lennard_Jones_Force();
     /**
      * @brief Calculates the Lenard-Jones forces between particles in a container.
      * 
