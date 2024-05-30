@@ -1,25 +1,5 @@
 #include "ParticleGenerator.h"
 
-
-bool ParticleGenerator::isDouble(char* str) {
-    try {
-        std::stod(str);
-        return true;
-    } catch (...) {
-        return false;
-    }
-}
-
-bool ParticleGenerator::isInteger(char* str) {
-    try {
-        std::stoi(str);
-        return true;
-    } catch (...) {
-        return false;
-    }
-}
-
-
 void ParticleGenerator::generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename) {
     std::fstream input_file;
     std::string tmp_string;

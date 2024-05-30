@@ -1,4 +1,6 @@
 #include "ParticleGenerator.h"
+#include "../utils/NumericalUtils.h"
+
 
 int main(int argc, char *argsv[]){
     spdlog::set_level(spdlog::level::info);
@@ -73,7 +75,7 @@ int main(int argc, char *argsv[]){
             }
             case 'a':{
                 a_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     velocityX = std::atof(optarg);
                     break;
                 }else{
@@ -84,7 +86,7 @@ int main(int argc, char *argsv[]){
             }
             case 'b':{
                 b_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     velocityY = std::atof(optarg);
                     break;
                 }else{
@@ -95,7 +97,7 @@ int main(int argc, char *argsv[]){
             }
             case 'c':{
                 c_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     velocityZ = std::atof(optarg);
                     break;
                 }else{
@@ -106,7 +108,7 @@ int main(int argc, char *argsv[]){
             }
             case 'x':{
                 x_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     x = std::atof(optarg);
                     break;
                 }else{
@@ -117,7 +119,7 @@ int main(int argc, char *argsv[]){
             }
             case 'y':{
                 y_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     y = std::atof(optarg);
                     break;
                 }else{
@@ -128,7 +130,7 @@ int main(int argc, char *argsv[]){
             }
             case 'z':{
                 z_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     z = std::atof(optarg);
                     break;
                 }else{
@@ -139,7 +141,7 @@ int main(int argc, char *argsv[]){
             }
             case 'X':{
                 X_flag = true;
-                if(ParticleGenerator::isInteger(optarg)){
+                if(isInteger(optarg)){
                     sizeX = std::atof(optarg);
                     break;
                 }else{
@@ -150,7 +152,7 @@ int main(int argc, char *argsv[]){
             }
             case 'Y':{
                 Y_flag = true;
-                if(ParticleGenerator::isInteger(optarg)){
+                if(isInteger(optarg)){
                     sizeY = std::atof(optarg);
                     break;
                 }else{
@@ -161,7 +163,7 @@ int main(int argc, char *argsv[]){
             }
             case 'Z':{
                 Z_flag = true;
-                if(ParticleGenerator::isInteger(optarg)){
+                if(isInteger(optarg)){
                     sizeZ = std::atof(optarg);
                     break;
                 }else{
@@ -172,7 +174,7 @@ int main(int argc, char *argsv[]){
             }
             case 'd':{
                 d_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     distance = std::atof(optarg);
                     break;
                 }else{
@@ -183,7 +185,7 @@ int main(int argc, char *argsv[]){
             }
             case 'm':{
                 m_flag = true;
-                if(ParticleGenerator::isDouble(optarg)){
+                if(isDouble(optarg)){
                     mass = std::atof(optarg);
                     break;
                 }else{

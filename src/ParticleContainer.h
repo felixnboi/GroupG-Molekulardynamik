@@ -22,15 +22,24 @@ private:
 public:
 /**
  * @brief Constructor for ParticleContainer
-*/
+ */
     ParticleContainer(){}
+
+/**
+ * @brief Allocate space in the vector.
+ * 
+ * This function allocates the specified amount of space in the vector.
+ * 
+ * @param size Amount to be allocated.
+ */
+    void allocate(size_t size);
 
 /**
  * @brief Add a particle to the container.
  * 
  * This function adds a particle to the container.
  * 
- * @param particle The handed over particle that needs to be added.
+ * @param particle Const reference of particle to be added.
  */
     void addParticle(const Particle& particle);
 

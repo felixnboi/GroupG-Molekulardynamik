@@ -7,6 +7,8 @@
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
+#include "utils/NumericalUtils.h"
+
 #include "Forces/Gravitational_Force.h"
 #include "Forces/Lennard_Jones_Force.h"
 #include "inputFileManager.h"
@@ -19,15 +21,6 @@
 #include <string>
 #include <chrono>
 
-/**
- * @brief Test if the given string is a double 
- */ 
-bool isDouble(char *string);
-
-/**
- * @brief Test if this string is an unsigned int 
- */ 
-bool isUnsignedInt(char* str);
 
 /**
  * @brief Calculate the position for all particles.
@@ -355,25 +348,6 @@ int main(int argc, char *argsv[]) {
   }
 
   return 0;
-}
-
-
-bool isDouble(char* str) {
-    try {
-        std::stod(str);
-        return true;
-    } catch (...) {
-        return false;
-    }
-}
-
-bool isUnsignedInt(char* str) {
-    try {
-        unsigned long value = std::stoul(str);
-        return value <= std::numeric_limits<unsigned int>::max();
-    } catch (...) {
-        return false;
-    }
 }
 
 
