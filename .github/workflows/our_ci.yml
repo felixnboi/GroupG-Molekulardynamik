@@ -3,9 +3,13 @@ name: C++ Build
 on:
   pull_request:
     branches:
+      - main
+      - assignment3
       - assignment2
   push:
     branches:
+      - main
+      - assignment3
       - assignment2
 
 jobs:
