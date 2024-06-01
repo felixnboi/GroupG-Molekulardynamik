@@ -9,6 +9,7 @@ void ParticleContainer::allocate(size_t size){
     particles.reserve(size);
 }
 
+
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);
     spdlog::debug("Added a particle to the container");

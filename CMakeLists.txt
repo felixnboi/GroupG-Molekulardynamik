@@ -45,8 +45,6 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
-        PRIVATE 
-            spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
