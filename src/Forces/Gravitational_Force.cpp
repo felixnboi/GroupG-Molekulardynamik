@@ -9,7 +9,6 @@ Gravitational_Force::~Gravitational_Force() {
 
 
 void Gravitational_Force::calculateF(ParticleContainer &particles) {
-  spdlog::info("Calculating Gravitational forces for particles...");
   std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<Particle>::iterator particle_j; ///< Second iterator for nested loop over particles.
   // reset the force for each particle and store the old force
@@ -22,15 +21,15 @@ void Gravitational_Force::calculateF(ParticleContainer &particles) {
   for (particle_i = particles.begin(); particle_i != --particles.end(); particle_i++) {
     auto m_i = particle_i->getM();
     auto cur_x_i = particle_i->getX();
-    auto &cur_F_i = particle_i->getF();
-    std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
+
+    std::array<double, 3> cur_F_i_dummy = particle_i->getF();
 
     // inner loop to calculate force between particle i and all particles j after i respectfully
     for (particle_j = std::next(particle_i); particle_j!=particles.end(); particle_j++) {
       auto m_j = particle_j->getM();
       auto cur_x_j = particle_j->getX();
-      auto &cur_F_j = particle_j->getF();
-      std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
+
+      std::array<double, 3> cur_F_j_dummy = particle_j->getF();
 
       // calculating the cubed Euclidean distance between particle i and particle j
       double norm = ArrayUtils::L2Norm(cur_x_i - cur_x_j);
@@ -47,5 +46,4 @@ void Gravitational_Force::calculateF(ParticleContainer &particles) {
       particle_j->setF(cur_F_j_dummy);
     }
   }
-  spdlog::info("Gravitational force calculated for all particles");
 }
