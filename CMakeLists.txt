@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
@@ -18,12 +18,6 @@ file(GLOB_RECURSE MY_SRC
     # header don't need to be included but this might be necessary for some IDEs
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
-
-set(EXCLUDE_FILES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp"
-)
-
-list(REMOVE_ITEM MY_SRC ${EXCLUDE_FILES})
 
 # create make target
 add_executable(MolSim ${MY_SRC})
@@ -60,60 +54,3 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 #include doxygen module
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/doxygen.cmake)
-
-#this part is for the tests
-add_subdirectory(tests)
-enable_testing()
-include(CTest)
-
-# Add the sanitize address flag
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
-
-add_subdirectory(spdlog-1.14.1)
-
-#This part is for our Particle Generator
-
-# file(GLOB_RECURSE MY_SRC_PARTICLEGEN
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/*.cpp"
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/*.h"
-# )
-
-add_executable(ParticleGenerator 
-    ${MY_SRC_PARTICLEGEN}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/inputFileManager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/inputFileManager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Particle.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Particle.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp    
-)
-
-target_compile_features(ParticleGenerator
-        PRIVATE
-            cxx_std_17
-)
-
-target_include_directories(ParticleGenerator
-        PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
-        PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen
-)
-
-target_link_libraries(ParticleGenerator
-        # stuff that is used in headers and source files
-        PUBLIC
-            xerces-c
-        PRIVATE 
-            spdlog::spdlog
-)
-
-# activate all compiler warnings. Clean up your code :P
-# depending on the compiler different flags are used
-target_compile_options(ParticleGenerator
-        PRIVATE
-            $<$<CXX_COMPILER_ID:GNU>:-Wall>
-            # disable some spam warnings for icpc...
-            $<$<CXX_COMPILER_ID:Intel>:-w3 -wd383,981,1418,1572,2259>
-)

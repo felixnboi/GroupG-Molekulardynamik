@@ -7,12 +7,16 @@
 
 #include "FileReader.h"
 
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
 
-void FileReader::readFile(ParticleContainer &particles, const char *filename){
+void FileReader::readFile(std::list<Particle> &particles, char *filename) {
   std::array<double, 3> x;
   std::array<double, 3> v;
   double m;
@@ -24,24 +28,18 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
   if (input_file.is_open()) {
 
     getline(input_file, tmp_string);
-    spdlog::info("Read line: {}", tmp_string);
+    std::cout << "Read line: " << tmp_string << std::endl;
 
     while (tmp_string.empty() or tmp_string[0] == '#') {
-      spdlog::warn("Empty line or comment found: {}", tmp_string);
       getline(input_file, tmp_string);
-      spdlog::info("Read line: {}", tmp_string);
+      std::cout << "Read line: " << tmp_string << std::endl;
     }
 
     std::istringstream numstream(tmp_string);
     numstream >> num_particles;
-    if(num_particles == 0)
-    {
-      spdlog::error("Error: Particle file contains no praticles\n");
-      exit(-1);
-    }
-    spdlog::info("Reading {} particles.", num_particles);
+    std::cout << "Reading " << num_particles << "." << std::endl;
     getline(input_file, tmp_string);
-    spdlog::info("Read line: {}", tmp_string);
+    std::cout << "Read line: " << tmp_string << std::endl;
 
     for (int i = 0; i < num_particles; i++) {
       std::istringstream datastream(tmp_string);
@@ -53,19 +51,19 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
         datastream >> vj;
       }
       if (datastream.eof()) {
-        spdlog::error("Error reading file: eof reached unexpectedly reading from line {}", i);
+        std::cout
+            << "Error reading file: eof reached unexpectedly reading from line "
+            << i << std::endl;
         exit(-1);
       }
       datastream >> m;
-      Particle tmp{x,v,m};
-      particles.addParticle(tmp);
+      particles.emplace_back(x, v, m);
 
       getline(input_file, tmp_string);
-      spdlog::info("Read line: {}", tmp_string);
+      std::cout << "Read line: " << tmp_string << std::endl;
     }
   } else {
-    spdlog::error("Error: could not open file {}", filename);
+    std::cout << "Error: could not open file " << filename << std::endl;
     exit(-1);
   }
 }
-

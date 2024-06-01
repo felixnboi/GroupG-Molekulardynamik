@@ -7,13 +7,8 @@
 
 #pragma once
 
-#include "utils/ArrayUtils.h"
-#include "spdlog/spdlog.h"
-
 #include <array>
 #include <string>
-#include <iostream>
-
 
 /**
  * @brief Represents a particle in a simulation.
@@ -162,9 +157,7 @@ public:
    * @param other Another particle to compare.
    * @return True if both particles are equal, otherwise false.
    */
-
-  bool operator==(const Particle &other) const;
-
+  bool operator==(Particle &other);
 
   /**
    * @brief Converts the particle to a string representation.
@@ -181,4 +174,4 @@ public:
  * @param p The particle to output.
  * @return The output stream.
  */
-std::ostream &operator<<(std::ostream &stream, const Particle &p);
+std::ostream &operator<<(std::ostream &stream, Particle &p);
