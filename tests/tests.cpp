@@ -93,15 +93,11 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
 
 TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
-    std::cout << "test1\n";
     inputFileManager::resetFile("../input/generated-input.txt");
-    std::cout << "test2\n";
     // Generate particles in a cuboid and write to the file
     ParticleGenerator::generateCuboid(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, "../input/generated-input.txt");
-    std::cout <<"test3\n";
      // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
-    std::cout <<"test4\n";
 
     if (!input_file.is_open()) {
         std::cerr << "Something went wrong, generated input file could not be opened\n";

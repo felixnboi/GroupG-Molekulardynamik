@@ -18,6 +18,8 @@ enable_testing()
 
 add_test(NAME tests COMMAND tests)
 
+set_tests_properties(tests PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 
 

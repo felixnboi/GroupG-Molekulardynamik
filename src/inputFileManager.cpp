@@ -13,15 +13,10 @@ void inputFileManager::mergeFile(const char *filename1, const char *filename2){
         spdlog::error("Failed to open generated input file");
         exit(-1);
     }
-    std::cout << "test1\n";
-
     while (tmp_string.empty() or tmp_string[0] == '#') {
         current = input_file.tellp();
         getline(input_file, tmp_string);
     }
-
-    std::cout <<"test2\n";
-
     input_file.seekp(current);
 
     std::fstream mergin_file(filename2);
@@ -30,12 +25,10 @@ void inputFileManager::mergeFile(const char *filename1, const char *filename2){
     if (mergin_file.is_open()) {
         getline(mergin_file, tmp_string_merg);
 
-        std::cout << "test3\n";
         while (tmp_string_merg.empty() or tmp_string_merg[0] == '#') {
             current = mergin_file.tellp();
             getline(mergin_file, tmp_string_merg);
         }
-        std::cout <<"test4\n";
     }else {
         spdlog::error("Failed to open file {}", filename2);
         exit(-1);
