@@ -1,5 +1,5 @@
 #pragma once
-#include "../ParticleContainer.h"
+#include "../ParticleContainers/ParticleContainerOld.h"
 
 /**
  * @class Abstract base class for calculating forces acting on particles.
@@ -12,8 +12,8 @@ class Force
 public:
     /**
      * @brief Calculates the forces acting on particles.
-     * @param particles The ParticleContainer containing the particles on which forces are to be calculated.
+     * @param particles The ParticleContainerOld containing the particles on which forces are to be calculated.
      */
-    virtual void calculateF(ParticleContainer &particles){};
+    virtual void calculateF(ParticleContainerOld &particles){};
     virtual ~Force() {}
 };
