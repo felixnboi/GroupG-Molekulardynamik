@@ -35,7 +35,7 @@ public:
    *
    * @note: initializeOutput() must have been called before.
    */
-  void plotParticle(const Particle &p);
+  void plotParticle(Particle &p);
 
   /**
    * writes the final output file.
