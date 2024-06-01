@@ -1,6 +1,10 @@
 #pragma once
-#include <vector>
+
 #include "Particle.h"
+#include "spdlog/spdlog.h"
+
+#include <iostream>
+#include <vector>
 
 using ParticleIterator = std::vector<Particle>::iterator; /// Iterator type for iterating over a vector of particles.
 
@@ -15,17 +19,31 @@ class ParticleContainer {
 private:
     std::vector<Particle> particles; ///< Vector to store the particles.
 
+public:
+/**
+ * @brief Constructor for ParticleContainer
+ */
+    ParticleContainer(){}
+
+/**
+ * @brief Allocate space in the vector.
+ * 
+ * This function allocates the specified amount of space in the vector.
+ * 
+ * @param size Amount to be allocated.
+ */
+    void allocate(size_t size);
+
 /**
  * @brief Add a particle to the container.
  * 
  * This function adds a particle to the container.
  * 
- * @param particle The handed over particle that needs to be added.
+ * @param particle Const reference of particle to be added.
  */
-public:
     void addParticle(const Particle& particle);
 
-    /**
+/**
  * @brief Get the vector of particles.
  * 
  * This function returns a constant reference to the vector of particles.
@@ -41,7 +59,7 @@ public:
  * 
  * @return An iterator to the beginning of the particle container.
  */
-    ParticleIterator beginParticles();
+    ParticleIterator begin();
 
 /**
  * @brief Get the iterator to the end of the particle container.
@@ -50,6 +68,6 @@ public:
  * 
  * @return An iterator to the end of the particle container.
  */
-    ParticleIterator endParticles();
+    ParticleIterator end();
 
 };

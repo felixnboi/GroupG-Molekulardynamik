@@ -7,47 +7,20 @@
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
+#include "utils/NumericalUtils.h"
+
+#include "Forces/Gravitational_Force.h"
+#include "Forces/Lennard_Jones_Force.h"
+#include "inputFileManager.h"
+#include "spdlog/spdlog.h"
 
 #include <iostream>
 #include <list>
 #include <math.h>
+#include <getopt.h>
+#include <string>
+#include <chrono>
 
-/**
- * @brief Calculate the Euclidean Norm of the distance between two particles.
- * 
- * This function computes the Euclidean distance between two particles
- * in three-dimensional space. It takes two Particle objects as input
- * and calculates the Euclidean distance between their positions. The
- * Euclidean distance is computed as the square root of the sum of the
- * squares of the differences in the coordinates of the particles along
- * each dimension (x, y, and z).
- * 
- * @param particle1 First particle.
- * @param particle2 Second particle.
- * @return The Euclidean Norm of the distance between the two particles.
- */
-double euclidean_norm_x_cubed(const Particle &particle1, const Particle &particle2);
-
-/**
- *test if this string is a double 
- */ 
-bool testIfStringIsDouble(char * string);
-
-/**
- * @brief Calculate the force for all particles.
- * 
- * This function calculates the force acting on each particle due to gravitational
- * interactions with other particles. Firstly, it updates the old_f parameter (represents the previous force 
- * value for the current timestep) of each particle and sets the current Force parameters (f) to 0. 
- * After that, the function iterates over all pairs of particles and
- * computes the gravitational force between them based on their masses and positions.
- * The calculated forces are then updated (added to the current Forces of according particles) for each particle.
- * 
- * @note This function assumes that the old force for each particle has already been
- * stored using the setOldF method before calling this function.
- * @see euclidean_norm_x() To calculate the Euclidean distance between particles.
- */
-void calculateF();
 
 /**
  * @brief Calculate the position for all particles.
@@ -84,22 +57,26 @@ void calculateV();
  */
 void plotParticles(int iteration);
 
-double start_time; ///< The start time of the simulation. 
-double end_time; ///< The end time of the simulation. 
-double delta_t; ///< The time step of the simulation.
+/**
+ * @brief Logs a usage message.
+ */
+void logHelp();
 
-std::list<Particle> particles; ///< The list of particles.
+double start_time = 0;       ///< The default start time of the simulation. 
+double end_time = 1000;      ///< The default end time of the simulation. 
+double delta_t = 0.014;      ///< The default time step of the simulation.
+
+ParticleContainer particles; ///< The container of the particles.
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.
  * 
  * This function serves as the entry point for the Molecular Simulation program. 
  * The program first takes command-line arguments
- * to specify the input file name, and optionally, start time, end time, and delta time step. The function reads
- * particle data from an input file and then loop runs until the current time reaches the specified end time. 
- * In each iteration, the position, velocity, and forces of the particles are updated using the calculateX, 
- * calculateF, and calculateV functions, respectively. The particle positions are periodically 
- * (at intervals of 10 iterations) plotted using the plotParticles function.
+ * to specify the input file name, and optionally, start time, end time, delta time step, and other parameters.
+ * The function reads particle data from an input file and then loop runs until the current time reaches the specified end time. 
+ * In each iteration, the position, velocity, and forces of the particles are updated respectively. The particle positions are periodically 
+ * (usually, at intervals of 10 iterations) plotted using the plotParticles function.
  * Finally, an output message is displayed, indicating that the simulation is complete, and the program
  * terminates with a success status.
  * 
@@ -108,166 +85,279 @@ std::list<Particle> particles; ///< The list of particles.
  * @return The exit status of the program.
  * @see calculateX() To calculate the position for all particles.
  * @see calculateF() To calculate the force for all particles.
- * @see calculateV() To calculate the velocity for all particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
+  auto start = std::chrono::high_resolution_clock::now();
 
-  if(argc==2){
-    std::cout << "default values end_time = 1000 delta_t = 0.014 start_time = 0 are used" << std::endl;
-    start_time = 0;
-    end_time = 1000;
-    delta_t = 0.014;
-  }else{
-    if(argc == 4) {
-    if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3]))) {
-      std::cout << "arguments for end_time or delta_t are not numerical values" << std::endl;
-      std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
-      return EXIT_FAILURE;
-    }
-      std::cout << "custom values for end_time delta_t are used. start_time = 0" << std::endl;
-      start_time = 0;
-      end_time = std::atof(argsv[2]);
-      delta_t = std::atof(argsv[3]);
-    }else{
-      if(argc == 5){
-        if(!(testIfStringIsDouble(argsv[2])&&testIfStringIsDouble(argsv[3])&&testIfStringIsDouble(argsv[4]))) {
-          std::cout << "arguments for end_time, delta_t or start_time are not numerical values" << std::endl;
-          std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
+  // Set default loglevel to INFO
+  spdlog::set_level(spdlog::level::info);
+  
+  std::string input_file_user;
+
+  std::string input_file;
+
+  bool g_flag = false;
+  bool i_flag = false;
+  bool f_flag = false;
+  bool t_flag = false;
+
+  // Default value for vtk output. Every tenth iteration a output is generated.
+  int vtk_iteration = 10;
+
+  const char* const short_ops = "v:i:gt";
+  const option long_opts[] = {
+    {"help", no_argument, nullptr, 'h'},
+    {"end", required_argument, nullptr, 'e'},
+    {"start", required_argument, nullptr, 's'},
+    {"log", required_argument, nullptr, 'l'},
+    {"delta", required_argument, nullptr, 'd'},
+    {"force", required_argument, nullptr, 'f'},
+    {nullptr, no_argument, nullptr, 0}
+  };
+  int opt;
+
+  // Initialize force object
+  Force* force = nullptr;
+
+  // Parsing command line arguments
+  while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
+    switch(opt){
+      case 't':{
+        spdlog::set_level(spdlog::level::off);
+        t_flag = true;
+        break;
+      }
+      case 'h':{
+        logHelp();
+        return EXIT_SUCCESS;
+      }
+
+      case 'v':{
+        // parsing vtk iteration
+        if(isUnsignedInt(optarg)){
+          vtk_iteration = std::stoul(optarg);
+          break;
+        }else{
+          spdlog::error("Invalid value for vtk iteration: {}", optarg);
+          logHelp();
           return EXIT_FAILURE;
         }
-        std::cout << "custom values for end_time, delta_t and start_time are used" << std::endl;
-        end_time = std::atof(argsv[2]);
-        delta_t = std::atof(argsv[3]);
-        start_time = std::atof(argsv[4]);
-      }else{
-        std::cout << "errounous program call" << std::endl;
-        std::cout << "Usage: ./MolSim <path/to/input/file> [[end_time delta_t] |[end_time delta_t start_time]" << std::endl;
+      }
+
+      case 'l':{
+        //parsing logging level
+        std::string tmp(optarg);
+        if(tmp == std::string("OFF")){
+          spdlog::set_level(spdlog::level::off);
+          spdlog::info("Logging level set to OFF");
+          break;
+        }
+        if(tmp == std::string("ERROR")){
+          spdlog::set_level(spdlog::level::err);
+          spdlog::info("Logging level set to ERROR");
+          break;
+        }
+        if(tmp == std::string("WARN")){
+          spdlog::set_level(spdlog::level::warn);
+          spdlog::info("Logging level set to WARN");
+          break;
+        }
+        if(tmp == std::string("INFO")){
+          spdlog::set_level(spdlog::level::info);
+          spdlog::info("Logging level set to INFO");
+          break;
+        }
+        if(tmp == std::string("DEBUG")){
+          spdlog::set_level(spdlog::level::debug);
+          spdlog::info("Logging level set to DEBUG");
+          break;
+        }
+        if(tmp == std::string("TRACE")){
+          spdlog::set_level(spdlog::level::trace);
+          spdlog::info("Logging level set to TRACE");
+          break;
+        }
+        spdlog::error("Invalid logging level: {}", optarg);
+        logHelp();
+        return EXIT_FAILURE;
+      }
+
+      case 'g':{
+        g_flag = true;
+        break;
+      }
+
+      case 'd':{
+        if(isDouble(optarg)){
+          delta_t = atof(optarg);
+          break;
+        }else{
+          spdlog::error("Invalid argument for delta_t");
+          logHelp();
+          return EXIT_FAILURE;
+        }
+      }
+
+      case 'e':{
+        if(isDouble(optarg)){
+          end_time = atof(optarg);
+          break;
+        }else{
+          spdlog::error("Invalid argument for end_time");
+          logHelp();
+          return EXIT_FAILURE;
+        }
+      }
+
+      case 's':{
+        if(isDouble(optarg)){
+          start_time = atof(optarg);
+          break;
+        }else{
+          spdlog::error("Invalid argument for start_time");
+          logHelp();
+          return EXIT_FAILURE;
+        }
+      }
+      
+      case 'i':{
+        i_flag = true;
+        input_file_user = optarg;
+        break;
+      }
+
+      case 'f':{
+        f_flag = true;
+        if(*optarg == 'g'){
+          force = new Gravitational_Force();
+          spdlog::info("Force set to Gravitational_Force");
+          break;
+        }
+        if(*optarg == 'l'){
+          force = new Lennard_Jones_Force();
+          spdlog::info("Force set to Lennard_Jones_Force");
+          break;
+        }
+        spdlog::error("Invalid argument for force");
+        logHelp();
+        return EXIT_FAILURE;
+      }
+
+      case '?':{
+        spdlog::error("Invalid option");
+        logHelp();
+        return EXIT_FAILURE;
       }
     }
   }
+  spdlog::info("Hello from MolSim for PSE!");
+  if(!f_flag){
+    spdlog::error("Didn't specify force. Terminating");
+    logHelp();
+    return EXIT_FAILURE;
+  }
 
+  if(!g_flag && i_flag){
+    input_file = input_file_user;
+    spdlog::info("Using user defined input file");
+  }
+
+  if(g_flag && i_flag){
+    inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
+    spdlog::info("File {} merged into generated input file", input_file_user);
+    input_file = "../input/generated-input.txt";
+  }
+
+  if(g_flag && !i_flag){
+    input_file = "../input/generated-input.txt";
+    spdlog::info("Using \"generated-inout.txt\"");
+  }
+
+  if(!g_flag && !i_flag){
+    input_file = "../input/eingabe-sonne.txt";
+    spdlog::info("Using \"eingabe-sonne.txt\"");
+  }
+  
+
+  // Check if start_time is after end_time
   if(start_time > end_time){
-    std::cout << "Error: start_time is after end_time" << std::endl;
+    spdlog::error("Error: start_time should not be after end_time!");
     return EXIT_FAILURE;
   }
   
   FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
+  fileReader.readFile(particles, input_file.c_str());
 
   // checking if there are particles in the simulation
-  if(particles.size() <= 0){
-    std::cout << "Failed to read Particles from input file!" << std::endl;
+  if(particles.getParticles().empty()){
+    spdlog::error("Failed to read Particles from input file!");
     return EXIT_FAILURE;
   }
 
-  std::cout << "end_time:" << end_time << ", delta_t:" << delta_t << ", start_time:" << start_time << std::endl;
+  spdlog::info("end_time:{}, delta_t:{}, start_time:{}", end_time, delta_t, start_time);
 
   double current_time = 0;
   int iteration = 0;
 
+  // Advance simulation time to start_time
   while (current_time < start_time){
     calculateX();
-    calculateF();
+    force->calculateF(particles);
     calculateV();
     current_time += delta_t;
     iteration++;
   }
 
   //simulation loop
-  while (current_time < end_time) {
-    calculateX();
-    calculateF();
-    calculateV();
-    iteration++;
-
-    // plotting particle positions only at intervals of 10 iterations
-    if (iteration % 10 == 0) {
-      plotParticles(iteration);
+  if(t_flag){
+    while (current_time < end_time) {
+      calculateX();
+      force->calculateF(particles);
+      calculateV();
+      iteration++;
+      current_time += delta_t;
     }
-    // printing simulation progress
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
-    // update simulation time
-    current_time += delta_t;
+  }else{
+    while (current_time < end_time) {
+      calculateX();
+      force->calculateF(particles);
+      calculateV();
+      iteration++;
+
+      // plotting particle positions only at intervals of iterations
+      if (iteration % vtk_iteration == 0) {
+        plotParticles(iteration);
+      }
+      // printing simulation progress
+      spdlog::info("Iteration {} finished", iteration);
+      // update simulation time
+      current_time += delta_t;
+    }
   }
+  
   // display output message and terminate the program
-  std::cout << "output written. Terminating..." << std::endl;
+  spdlog::info("Output written. Terminating...");
+
+  delete force;
+
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> elapsed =  end - start;
+  if(t_flag){
+    std::cout << "Execution time: " << elapsed.count() << " seconds" << std::endl;
+  }
+
   return 0;
 }
 
-bool testIfStringIsDouble(char * string){
-  while (isdigit(*string)){
-    string++;   
-  }   
-  if(*string == '.') {    
-    string++;   
-  }   
-  while (isdigit(*string)){    
-    string++;   
-  }
-    return *string == '\0'; 
-}
-
-
-void calculateF() {
-  std::list<Particle>::iterator iterator_i; ///< Iterator for iterating over particles.
-  iterator_i = particles.begin();
-  std::list<Particle>::iterator iterator_j;///< Second iterator for nested loop over particles.
-
-  // reset the force for each particle and store the old force
-  for(auto &p : particles){
-    p.setOldF(p.getF());
-    p.setF({0,0,0});
-  }
-
-  // iterate over all pairs of particles to calculate forces
-  for (size_t i = 0; i<particles.size()-1; i++) {
-    auto &cur_particle_i = *(iterator_i++);
-    auto m_i = cur_particle_i.getM();
-    auto cur_x_i = cur_particle_i.getX();
-    auto &cur_F_i = cur_particle_i.getF();
-    std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
-     // inner loop to calculate force between particle i and all particles j after i respectfully
-    for (iterator_j = iterator_i; iterator_j!=particles.end(); iterator_j++) {
-      auto &cur_particle_j = *iterator_j;
-      auto m_j = cur_particle_j.getM();
-      auto cur_x_j = cur_particle_j.getX(); 
-      auto &cur_F_j = cur_particle_j.getF();
-      std::array<double, 3> cur_F_j_dummy = {cur_F_j[0], cur_F_j[1], cur_F_j[2]};
-      // calculating the cubed Euclidean distance between particle i and particle j
-      auto dividend = m_i * m_j/euclidean_norm_x_cubed(cur_particle_i, cur_particle_j);
-      // calculating the force components (along the x, y, z axes) between particle i and particle j
-      for(int k = 0; k<3; k++){
-        double force = dividend * (cur_x_j[k] - cur_x_i[k]);
-        cur_F_i_dummy[k] += force;
-        cur_F_j_dummy[k] -= force;
-      }
-      // update the force for particle i and particle j
-      cur_particle_i.setF(cur_F_i_dummy);
-      cur_particle_j.setF(cur_F_j_dummy);
-    }
-  }
-}
-
-double euclidean_norm_x_cubed(const Particle &particle1, const Particle &particle2){
-  double sum = 0.0; ///< A variable that is used for the sum of squared differences.
-  // iterate over the x, y, and z coordinates of the particles
-  for (int i = 0; i<3; i++){
-    // add the squared difference along each dimension to the sum
-    sum += pow(particle1.getX().at(i) - particle2.getX().at(i), 2);
-  }
-  // return the cubed square root of the sum to obtain the cubed Euclidean distance
-  return pow(sum, 1.5);
-}
 
 void calculateX() {
   // iterating over all particles to calculate new positions
-  for (auto &p : particles) {
-    auto m = p.getM(); ///< Mass of the particle.
-    auto cur_x = p.getX(); ///< Current position of the particle.
-    auto cur_v = p.getV(); ///< Current velocity of the particle.
-    auto cur_F = p.getF(); ///< Current force acting on the particle.
+  for (auto p = particles.begin(); p != particles.end(); p++){
+    auto m = p->getM(); ///< Mass of the particle.
+    auto cur_x = p->getX(); ///< Current position of the particle.
+    auto cur_v = p->getV(); ///< Current velocity of the particle.
+    auto cur_F = p->getF(); ///< Current force acting on the particle.
     std::array<double, 3> cur_x_dummy = {0,0,0}; ///< Dummy array to store new position components.
 
     // calculating new position components for each dimension (x, y, z)
@@ -275,24 +365,24 @@ void calculateX() {
       cur_x_dummy[i] = cur_x[i] + delta_t * cur_v[i] + delta_t * delta_t * cur_F[i] / (2*m); 
     }
     // set the new position for the particle
-    p.setX(cur_x_dummy);
+    p->setX(cur_x_dummy);
   }
 }
 
 void calculateV() {
   // iterating over all particles to calculate new positions
-  for (auto &p : particles) {
-    auto m = p.getM(); ///< Mass of the particle.
-    auto cur_v = p.getV(); ///< Current velocity of the particle.
-    auto cur_F = p.getF(); ///< Current force acting on the particle.
-    auto old_F = p.getOldF(); ///< Previous force acting on the particle.
+  for (auto p = particles.begin(); p != particles.end(); p++){
+    auto m = p->getM(); ///< Mass of the particle.
+    auto cur_v = p->getV(); ///< Current velocity of the particle.
+    auto cur_F = p->getF(); ///< Current force acting on the particle.
+    auto old_F = p->getOldF(); ///< Previous force acting on the particle.
     std::array<double, 3> cur_v_dummy = {0,0,0}; ///< Dummy array to store new velocity components.
     // calculating new velocity components for each dimension (x, y, z)
     for(int i = 0; i<3; i++){
       cur_v_dummy[i] = cur_v[i] + delta_t * (old_F[i] + cur_F[i]) / (2*m);
     }
     // set the new velocity for the particle
-    p.setV(cur_v_dummy);
+    p->setV(cur_v_dummy);
   }
 }
 
@@ -303,11 +393,17 @@ void plotParticles(int iteration) {
 
   outputWriter::VTKWriter writer; ///< The VTK writer object. 
   // initializing the VTK writer with the total number of particles.
-  writer.initializeOutput(particles.size()); 
+  writer.initializeOutput(particles.getParticles().size()); 
   // iterating over each particle to plot its position
-  for(auto &p : particles){
+  for(const auto& p : particles.getParticles()){
     writer.plotParticle(p);
   }
   // write the plotted particle positions to a VTK file
   writer.writeFile(out_name, iteration);
+}
+
+void logHelp(){
+  spdlog::info("Usage: \"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] --force char\"");
+  spdlog::info("For further information please read the README.md file at top level.");
+  spdlog::info("Terminating...");
 }
