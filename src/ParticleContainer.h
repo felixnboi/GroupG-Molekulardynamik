@@ -61,4 +61,10 @@ public:
  */
     ParticleIterator end();
 
+/**
+ * @brief Reserves a memory for a known number of particles.
+ * 
+ * This function allows to preallocate memory for a specified number of elements.
+ */
+    void reserve(size_t n);
 };

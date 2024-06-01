@@ -13,6 +13,8 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
   std::vector<Particle>::iterator particle_j; ///< Second iterator for nested loop over particles.
   double epsilon = 5;
   double sigma = 1;
+  double sigmaPow6 = pow(sigma,6);
+  double sigmaPow12 = pow(sigma,12);
   // reset the force for each particle and store the old force
   for (particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
     particle_i->setOldF(particle_i->getF());
@@ -22,8 +24,11 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
   // iterate over all pairs of particles to calculate forces
   for (particle_i = particles.begin(); particle_i != particles.end(); particle_i++) {
     auto cur_x_i = particle_i->getX();
-    auto &cur_F_i = particle_i->getF();
-    std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
+    // auto cur_F_i_dummy = particle_i->getF(); would create a reference
+    std::array<double, 3> cur_F_i_dummy = particle_i->getF();
+    //our previous code:
+    //auto &cur_F_i = particle_i->getF();
+    //std::array<double, 3> cur_F_i_dummy = {cur_F_i[0], cur_F_i[1], cur_F_i[2]};
 
      // inner loop to calculate force between particle i and all particles j after i respectfully
     for (particle_j = std::next(particle_i); particle_j!=particles.end(); particle_j++) {
@@ -34,8 +39,8 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles) {
       // calculating the Euclidean distance between particle i and particle j
       auto norm = ArrayUtils::L2Norm(particle_i->getX() - particle_j->getX());
 
-      // calulating everything for the force exept for the dircetion
-      double directionlessForce = -24*epsilon/pow(norm,2)*(pow(sigma/norm,6)-2*pow(sigma/norm,12));
+      // calculating everything for the force except for the direction
+      double directionlessForce = -24*epsilon/pow(norm,2)*(sigmaPow6/pow(norm,6)-2*sigmaPow12/pow(norm,12));
 
       // calculating the force components (along the x, y, z axes) between particle i and particle j
       for(int k = 0; k<3; k++){

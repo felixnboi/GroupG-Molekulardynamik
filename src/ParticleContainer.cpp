@@ -7,20 +7,24 @@
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);
     spdlog::debug("Added a particle to the container");
-    //spdlog::trace("A particle with type {}", particle.getType());
 }
 
 const std::vector<Particle>& ParticleContainer::getParticles() {
-    return particles;
     spdlog::debug("Retrieved particles from the container");
+    return particles;
 }
 
 ParticleIterator ParticleContainer::begin(){
-    return particles.begin();
     spdlog::debug("Returned iterator to the beginning of particles");
+    return particles.begin();
 }
 
 ParticleIterator ParticleContainer::end() {
-    return particles.end();
     spdlog::debug("Returned iterator to the end of particles");
+    return particles.end();
+}
+
+void ParticleContainer::reserve(size_t n) {
+    particles.reserve(n);
+    spdlog::debug("Reserved space for {} particles", n);
 }
