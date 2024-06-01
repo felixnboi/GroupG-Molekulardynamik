@@ -26,15 +26,6 @@ public:
     ParticleContainer(){}
 
 /**
- * @brief Allocate space in the vector.
- * 
- * This function allocates the specified amount of space in the vector.
- * 
- * @param size Amount to be allocated.
- */
-    void allocate(size_t size);
-
-/**
  * @brief Add a particle to the container.
  * 
  * This function adds a particle to the container.
@@ -70,4 +61,10 @@ public:
  */
     ParticleIterator end();
 
+/**
+ * @brief Reserves a memory for a known number of particles.
+ * 
+ * This function allows to preallocate memory for a specified number of elements.
+ */
+    void reserve(size_t n);
 };

@@ -37,6 +37,7 @@ target_compile_features(MolSim
 target_include_directories(MolSim
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/spdlog-1.14.1
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
@@ -71,7 +72,8 @@ include(CTest)
 # Add the sanitize address flag
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 
-add_subdirectory(spdlog-1.14.1)
+add_subdirectory(libs/spdlog-1.14.1)
+add_subdirectory(libs/googletest-1.14.0)
 
 #This part is for our Particle Generator
 

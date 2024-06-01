@@ -26,7 +26,7 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
     getline(input_file, tmp_string);
     spdlog::info("Read line: {}", tmp_string);
 
-    while (tmp_string.empty() or tmp_string[0] == '#') {
+    while (tmp_string.empty() || tmp_string[0] == '#') {
       spdlog::warn("Empty line or comment found: {}", tmp_string);
       getline(input_file, tmp_string);
       spdlog::info("Read line: {}", tmp_string);
@@ -34,18 +34,22 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
 
     std::istringstream numstream(tmp_string);
     numstream >> num_particles;
-    if(num_particles == 0)
-    {
+    if(num_particles <= 0){
       spdlog::error("Error: Particle file contains no praticles\n");
       exit(-1);
     }
     spdlog::info("Reading {} particles.", num_particles);
-    getline(input_file, tmp_string);
-    spdlog::info("Read line: {}", tmp_string);
+
+    particles.reserve(num_particles);
 
     for (int i = 0; i < num_particles; i++) {
-      std::istringstream datastream(tmp_string);
+      if (!getline(input_file, tmp_string)) {
+            spdlog::error("Error reading file: unexpected end of file at line {}", i);
+            exit(-1);
+        }
+        spdlog::info("Read line: {}", tmp_string);
 
+      std::istringstream datastream(tmp_string);
       for (auto &xj : x) {
         datastream >> xj;
       }
@@ -57,11 +61,17 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
         exit(-1);
       }
       datastream >> m;
+      if (datastream.fail()) {
+                spdlog::error("Error reading file: failed to parse line {}", i);
+                exit(-1);
+            }
+
       Particle tmp{x,v,m};
       particles.addParticle(tmp);
 
-      getline(input_file, tmp_string);
-      spdlog::info("Read line: {}", tmp_string);
+      spdlog::info("Particle generated with position ({}, {}, {}) and velocity ({}, {}, {}) and mass {}", x[0], x[1], x[2], v[0], v[1], v[2], m);
+      //getline(input_file, tmp_string);
+      //spdlog::info("Read line: {}", tmp_string);
     }
   } else {
     spdlog::error("Error: could not open file {}", filename);

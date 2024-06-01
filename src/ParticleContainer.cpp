@@ -5,10 +5,6 @@
  * @brief This file contains a ParticleContainer class and its functions.
  */
 
-void ParticleContainer::allocate(size_t size){
-    particles.reserve(size);
-}
-
 
 void ParticleContainer::addParticle(const Particle& particle) {
     particles.push_back(particle);
@@ -28,4 +24,9 @@ ParticleIterator ParticleContainer::begin(){
 ParticleIterator ParticleContainer::end() {
     spdlog::debug("Returned iterator to the end of particles");
     return particles.end();
+}
+
+void ParticleContainer::reserve(size_t n) {
+    particles.reserve(n);
+    spdlog::debug("Reserved space for {} particles", n);
 }

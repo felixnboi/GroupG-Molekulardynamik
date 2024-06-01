@@ -12,12 +12,14 @@ add_executable(tests
 
 target_link_libraries(tests gtest_main)
 
-target_include_directories(tests PRIVATE ../spdlog-1.14.1/include)
+target_include_directories(tests PRIVATE ../libs/spdlog-1.14.1/include)
 
 enable_testing()
 
 add_test(NAME tests COMMAND tests)
 
-add_subdirectory(googletest-1.14.0)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+
+
 
 
