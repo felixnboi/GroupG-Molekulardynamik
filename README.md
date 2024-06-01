@@ -53,7 +53,7 @@ If none of both are set the *"eingabe-sonne.txt"* file at path */input* is used.
 >Usage: *"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double"*
 
 >*"--help"*: **optional** If set a usage message is logged and program terminates.  
->*"-s"*: **optional** If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well. Please be sure that a *generated-input.txt* file has already been created when setting this option.
+>*"-s"*: **optional** If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well. Please be sure that a *generated-input.txt* file has already been created when setting this option.  
 >*"-m double"*: **mandatory.** Defines the mass of each particle in the cuboid.  
 >*"-d double"*: **mandatory.** Defines the distance between the particles.  
 >*"-x double"*: **mandatory.** Defines x-coordinate of the lower left front side corner of the cuboid.  

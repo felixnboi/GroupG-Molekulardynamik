@@ -6,12 +6,12 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
     
     spdlog::info("Generating cuboid with parameters: x={}, y={}, z={}, sizeX={}, sizeY={}, sizeZ={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ);
     input_file.open(filename,std::ios::in|std::ios::out);
-    std::streampos curent = input_file.tellp();
+    std::streampos current = input_file.tellp();
     while (tmp_string.empty() or tmp_string[0] == '#') {
-        curent = input_file.tellp();
+        current = input_file.tellp();
         getline(input_file, tmp_string);
     }
-    input_file.seekp(curent);
+    input_file.seekp(current);
     int numParticles = std::stoi(tmp_string)+sizeX*sizeY*sizeZ;
     input_file << numParticles;
     input_file.close();

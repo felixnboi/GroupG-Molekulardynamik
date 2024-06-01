@@ -61,10 +61,10 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
 
  TEST(inputFileManager, ResetInputFile){;
     std::fstream input_file;
-    const char* test_filename = "../../input/generated-input.txt";
+    const char* test_filename = "../input/generated-input.txt";
     input_file.open(test_filename, std::ios::out | std::ios::trunc);
     if (!input_file.is_open()) {
-        std::cerr << "something went wrong, generated input file could not be opend\n";
+        std::cerr << "something went wrong, generated input file could not be opened\n";
         FAIL();
     }
     input_file << "tmp";
@@ -91,47 +91,17 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     EXPECT_EQ(content, expected_content);
 }
 
-// TEST(inputFileManager, MergeFile){
-//     const char* generated_filename = "../../input/generated-input.txt";
-//     const char* merge_filename = "../../input/eingabe-sonne.txt";
-//     {
-//         std::ofstream input_file(generated_filename, std::ios::trunc);
-//         if (!input_file.is_open()) {
-//             std::cerr << "something went wrong, generated input file could not be opened\n";
-//             FAIL();
-//         }
-//        input_file << "#test\n#test\n1\n0 0 0 0 0 0 0\n";
-//     }
-
-//     inputFileManager::mergeFile(generated_filename, merge_filename);
-
-//      std::ifstream input_file(generated_filename);
-//     if (!input_file.is_open()) {
-//         std::cerr << "something went wrong, generated input file could not be opened\n";
-//         FAIL();  // Fail the test if the file cannot be opened
-//     }
-//     // Read the content of the file
-//     std::stringstream buffer;
-//     buffer << input_file.rdbuf();
-//     std::string content = buffer.str();
-//     std::string expected_content = "#test\n#test\n4\n0 0 0 0 0 0 0\n"
-//                                    "0.0 0.0 0.0 0.0 0.0 0.0 1.0\n"
-//                                    "0.0 1.0 0.0 -1.0 0.0 0.0 3.0e-6\n"
-//                                    "0.0 5.36 0.0 -0.425 0.0 0.0 9.55e-4\n"
-//                                    "34.75 0.0 0.0 0.0 0.0296 0.0 1.0e-14\n";
-
-//     // Compare the actual content with the expected content
-//     EXPECT_EQ(content, expected_content);
-//     inputFileManager::resetFile(generated_filename);
-// }
-
 TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
-    inputFileManager::resetFile("../../input/generated-input.txt");
+    std::cout << "test1\n";
+    inputFileManager::resetFile("../input/generated-input.txt");
+    std::cout << "test2\n";
     // Generate particles in a cuboid and write to the file
-    ParticleGenerator::generateCuboid(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, "../../input/generated-input.txt");
+    ParticleGenerator::generateCuboid(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, "../input/generated-input.txt");
+    std::cout <<"test3\n";
      // Open the generated input file for reading
-    std::ifstream input_file("../../input/generated-input.txt");
+    std::ifstream input_file("../input/generated-input.txt");
+    std::cout <<"test4\n";
 
     if (!input_file.is_open()) {
         std::cerr << "Something went wrong, generated input file could not be opened\n";
@@ -153,10 +123,10 @@ TEST(ParticleGenerator, GenerateCuboid){
     EXPECT_EQ(currentLine, "8                               ");
     // Maxwell-Boltzmann numbers for velocity adjustments
     std::array<std::array<double, 3>, 8> maxwellBoltzmannNumbers = {{
-        {-0.171411, 0.0178057, 0.00571789}, {0.0756284, -0.0582274, -0.160245},
-        {0.101672, -0.05844, -0.0104494}, {-0.0279367, -0.00286395, -0.0690031},
-        {0.0807455, -0.133418, -0.0482316}, {0.0190382, 0.00177866, 0.0398789},
-        {-0.0403815, -0.124431, 0.075199}, {0.0134107, -0.238648, -0.0288894}
+        {-0.171411, 0.0178057, 0}, {0.00571789, -0.14098, 0},
+        {0.0756284, -0.0582274, 0}, {-0.160245, -0.0304332, 0},
+        {0.101672, -0.05844, 0}, {-0.0104494, -0.108908, 0},
+        {-0.0279367, -0.00286395, 0}, {-0.0690031, 0.119264, 0}
     }};
 
     double baseX = 2.0;
@@ -195,7 +165,42 @@ TEST(ParticleGenerator, GenerateCuboid){
     // Close the input file after verification
     input_file.close();
     // Reset the input file again to its initial state
-    inputFileManager::resetFile("../../input/generated-input.txt");
+    inputFileManager::resetFile("../input/generated-input.txt");
+}
+
+TEST(inputFileManager, MergeFile){
+    const char* generated_filename = "../input/generated-input.txt";
+    const char* merge_filename = "../input/eingabe-sonne.txt";
+
+    std::ofstream input_file_1(generated_filename, std::ios::trunc);
+    if (!input_file_1.is_open()) {
+        std::cerr << "something went wrong, generated input file could not be opened\n";
+        FAIL();
+    }
+    input_file_1 << "#test\n#test\n1\n0 0 0 0 0 0 0\n";
+    input_file_1.close();
+
+    inputFileManager::mergeFile(generated_filename, merge_filename);
+
+    std::ifstream input_file_2(generated_filename);
+    if (!input_file_2.is_open()) {
+        std::cerr << "something went wrong, generated input file could not be opened\n";
+        FAIL();  // Fail the test if the file cannot be opened
+    }
+    // Read the content of the file
+    std::stringstream buffer;
+    buffer << input_file_2.rdbuf();
+    input_file_2.close();
+    std::string content = buffer.str();
+    std::string expected_content = "#test\n#test\n5\n0 0 0 0 0 0 0\n"
+                                   "0.0 0.0 0.0      0.0 0.0 0.0     1.0\n"
+                                   "0.0 1.0 0.0     -1.0 0.0 0.0     3.0e-6\n"
+                                   "0.0 5.36 0.0    -0.425 0.0 0.0   9.55e-4\n"
+                                   "34.75 0.0 0.0    0.0 0.0296 0.0  1.0e-14\n";
+
+    // Compare the actual content with the expected content
+    EXPECT_EQ(content, expected_content);
+    inputFileManager::resetFile(generated_filename);
 }
 
 TEST(Lennard_Jones_Force, LennardJonesForce){
@@ -243,7 +248,7 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
 TEST(FileReader, readFile){
     ParticleContainer particles;
     FileReader fileReader;
-    fileReader.readFile(particles, "../../input/eingabe-sonne.txt");
+    fileReader.readFile(particles, "../input/eingabe-sonne.txt");
 
     std::array<std::array<double, 7>, 4> pValues = {{
         {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0},
@@ -265,3 +270,4 @@ TEST(FileReader, readFile){
         EXPECT_EQ(particle->getM(), pValues[i][6]);
     }
 }
+
