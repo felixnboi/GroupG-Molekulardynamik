@@ -38,6 +38,21 @@ namespace ParticleGenerator{
  */     
 void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename);
 
+/**
+ * Generates a disc of particles and writes to the specified file.
+ *
+ * @param x x-coordinate of the center of the disc.
+ * @param y y-coordinate of the center of the disc.
+ * @param z z-coordinate of the center of the disc.
+ * @param radius Radius of the disc in terms of the number of molecules.
+ * @param MoleculesPerRadius Number of molecules along the radius.
+ * @param distance Distance (mesh width) between the molecules.
+ * @param mass Mass of each molecule.
+ * @param velocityX Initial velocity along the x-axis for the whole disc.
+ * @param velocityY Initial velocity along the y-axis for the whole disc.
+ * @param velocityZ Initial velocity along the z-axis for the whole disc.
+ * @param filename File to which the particles will be written.
+ */
 void ParticleGenerator::generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename);
 /**
  * @brief Logs a usage message.
