@@ -1,5 +1,7 @@
 #pragma once
-#include "../ParticleContainers/ParticleContainerOld.h"
+#include "../utils/ArrayUtils.h"
+#include "../ParticleContainers/ParticleContainer.h"
+#include "spdlog/spdlog.h"
 
 /**
  * @brief This abstract class serves as an interface for calculating forces acting on particles.
@@ -8,10 +10,12 @@
 class Force
 {
 public:
+
+    virtual ~Force() = default;
+
     /**
      * @brief Calculates the forces acting on particles.
      * @param particles The ParticleContainerOld containing the particles on which forces are to be calculated.
      */
-    virtual void calculateF(ParticleContainerOld &particles){};
-    virtual ~Force() {}
+    virtual void calculateF(ParticleContainer &particles) = 0;
 };

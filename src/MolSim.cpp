@@ -13,6 +13,7 @@
 #include "Forces/Lennard_Jones_Force.h"
 #include "inputFileManager.h"
 #include "spdlog/spdlog.h"
+#include "ParticleContainers/ParticleContainer.h"
 
 #include <iostream>
 #include <list>
@@ -66,7 +67,7 @@ double start_time = 0;       ///< The default start time of the simulation.
 double end_time = 1000;      ///< The default end time of the simulation. 
 double delta_t = 0.014;      ///< The default time step of the simulation.
 
-ParticleContainer particles; ///< The container of the particles.
+ParticleContainer* particles; ///< The container of the particles.
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.
@@ -287,10 +288,10 @@ int main(int argc, char *argsv[]) {
   }
   
   FileReader fileReader;
-  fileReader.readFile(particles, input_file.c_str());
+  fileReader.readFile(*particles, input_file.c_str());
 
   // checking if there are particles in the simulation
-  if(particles.getParticles().empty()){
+  if(particles->getParticles().empty()){
     spdlog::error("Failed to read Particles from input file!");
     return EXIT_FAILURE;
   }
@@ -303,7 +304,7 @@ int main(int argc, char *argsv[]) {
   // Advance simulation time to start_time
   while (current_time < start_time){
     calculateX();
-    force->calculateF(particles);
+    force->calculateF(*particles);
     calculateV();
     current_time += delta_t;
     iteration++;
@@ -313,7 +314,7 @@ int main(int argc, char *argsv[]) {
   if(t_flag){
     while (current_time < end_time) {
       calculateX();
-      force->calculateF(particles);
+      force->calculateF(*particles);
       calculateV();
       iteration++;
       current_time += delta_t;
@@ -321,7 +322,7 @@ int main(int argc, char *argsv[]) {
   }else{
     while (current_time < end_time) {
       calculateX();
-      force->calculateF(particles);
+      force->calculateF(*particles);
       calculateV();
       iteration++;
 
@@ -353,7 +354,7 @@ int main(int argc, char *argsv[]) {
 
 void calculateX() {
   // iterating over all particles to calculate new positions
-  for (auto p = particles.begin(); p != particles.end(); p++){
+  for (auto p = particles->begin(); p != particles->end(); p++){
     auto m = p->getM(); ///< Mass of the particle.
     auto cur_x = p->getX(); ///< Current position of the particle.
     auto cur_v = p->getV(); ///< Current velocity of the particle.
@@ -371,7 +372,7 @@ void calculateX() {
 
 void calculateV() {
   // iterating over all particles to calculate new positions
-  for (auto p = particles.begin(); p != particles.end(); p++){
+  for (auto p = particles->begin(); p != particles->end(); p++){
     auto m = p->getM(); ///< Mass of the particle.
     auto cur_v = p->getV(); ///< Current velocity of the particle.
     auto cur_F = p->getF(); ///< Current force acting on the particle.
@@ -393,9 +394,9 @@ void plotParticles(int iteration) {
 
   outputWriter::VTKWriter writer; ///< The VTK writer object. 
   // initializing the VTK writer with the total number of particles.
-  writer.initializeOutput(particles.getParticles().size()); 
+  writer.initializeOutput(particles->getParticles().size()); 
   // iterating over each particle to plot its position
-  for(const auto& p : particles.getParticles()){
+  for(const auto& p : particles->getParticles()){
     writer.plotParticle(p);
   }
   // write the plotted particle positions to a VTK file

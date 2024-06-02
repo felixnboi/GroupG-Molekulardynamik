@@ -1,13 +1,39 @@
 #include "ParticleContainerLinkedCell.h"
 
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(size_t sizeX, size_t sizeY, size_t sizeZ, size_t radius){
+    cellSizeX = (sizeX+radius+1)/radius;
+    cellSizeY = (sizeY+radius+1)/radius;
+    cellSizeZ = (sizeZ+radius+1)/radius;
+    this->radius = radius;
+    arraylenght = cellSizeX*cellSizeY*cellSizeZ;
+    linkedCells = new std::vector<Particle>[arraylenght];
+    spdlog::info("Linked cells particlecontainer created.");
+}
 
-void ParticleContainerLinkedCell::addParticle(const Particle& particle) {
+ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
+    delete[] linkedCells;
+    spdlog::info("Linked cells particlecontainer destructed.");
+};
+
+void ParticleContainerLinkedCell::reserve(size_t size){
+    //TODO
+}
+
+void ParticleContainerLinkedCell::addParticle(const Particle& particle){
     particles.push_back(particle);
     size_t index = particle.getX()[0]/radius+(particle.getX()[1]/radius)*cellSizeX+(particle.getX()[2]/radius)*cellSizeX*cellSizeY;
     linkedCells[index].push_back(particle);
 }
 
-const std::vector<Particle>& ParticleContainerLinkedCell::getParticles() {
+ParticleIterator ParticleContainerLinkedCell::begin(){
+    return particles.begin();
+}
+
+ParticleIterator ParticleContainerLinkedCell::end(){
+    return particles.end();
+}
+
+const std::vector<Particle>& ParticleContainerLinkedCell::getParticles(){
     return particles;
 }
 
@@ -33,25 +59,18 @@ std::vector<std::array<Particle,2>> ParticleContainerLinkedCell::getParticlePair
     return particlePairs;
 }
 
-std::vector<Particle> ParticleContainerLinkedCell::getBoundery()
-{
-    std::vector<Particle> boundery;
+std::vector<Particle> ParticleContainerLinkedCell::getBoundary(){
+    std::vector<Particle> boundary;
     for (size_t i = 0; i < arraylenght; i++){
         size_t positionX = i%cellSizeX;
         size_t positionY = i/cellSizeX%cellSizeY;
         size_t positionZ = i/cellSizeX/cellSizeY;
         if(positionX%(cellSizeX-1)*(positionY%(cellSizeY-1))*(positionX%(cellSizeX-1))){
             for(auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
-                boundery.push_back(*particle_i);
+                boundary.push_back(*particle_i);
             }
         }
     }
+    return boundary;
 }
 
-ParticleIterator ParticleContainerLinkedCell::begin(){
-    return particles.begin();
-}
-
-ParticleIterator ParticleContainerLinkedCell::end() {
-    return particles.end();
-}

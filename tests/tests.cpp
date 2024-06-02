@@ -4,6 +4,9 @@
 #include "../src/inputFileManager.h"
 #include "../src/particlegen/ParticleGenerator.h"
 #include "../src/FileReader.h"
+#include "../src/ParticleContainers/ParticleContainerOld.h"
+#include "../src/ParticleContainers/ParticleContainer.h"
+#include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -13,7 +16,7 @@ bool areDoublesEqual(double a, double b, double epsilon = EPSILON) {
 
 // Test case for adding particles and getting particles
 TEST(ParticleContainerTest, AddAndGetParticles) {
-    ParticleContainer pc;
+    ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
     Particle p1({1.0, 2.0, 3.0}, {0.1, 0.2, 0.3}, 1.0, 0);
@@ -21,12 +24,12 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
     Particle p3({3.0, 4.0, 5.0}, {0.3, 0.4, 0.5}, 2.0, 0);
     
     // Add particles to the container
-    pc.addParticle(p1);
-    pc.addParticle(p2);
-    pc.addParticle(p3);
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle>& particles = pc.getParticles();
+    const std::vector<Particle>& particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -36,27 +39,29 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
     EXPECT_TRUE(particles[0]==p1);
     EXPECT_TRUE(particles[1]==p2);
     EXPECT_TRUE(particles[2]==p3);
+    delete pc;
 }
 
 // Test case for iterators
 TEST(ParticleContainerTest, IteratorBeginEnd) {
-    ParticleContainer pc;
+    ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
     Particle p1({1.0, 2.0, 3.0}, {0.1, 0.2, 0.3}, 1.0, 0);
     Particle p2({2.0, 3.0, 4.0}, {0.2, 0.3, 0.4}, 1.5, 1);
     
     // Add particles to the container
-    pc.addParticle(p1);
-    pc.addParticle(p2);
+    pc->addParticle(p1);
+    pc->addParticle(p2);
     
     // Test begin iterator
-    ParticleIterator beginIter = pc.begin();
+    ParticleIterator beginIter = pc->begin();
     EXPECT_TRUE(*beginIter==p1);
     
     // Test end iterator
-    ParticleIterator endIter = pc.end();
+    ParticleIterator endIter = pc->end();
     EXPECT_NE(beginIter, endIter); 
+    delete pc;
 }
 
  TEST(inputFileManager, ResetInputFile){;
@@ -200,18 +205,18 @@ TEST(inputFileManager, MergeFile){
 }
 
 TEST(Lennard_Jones_Force, LennardJonesForce){
-    ParticleContainer particles {};
+    ParticleContainer* particles = new ParticleContainerOld();
     Particle p1 {{0,0,0},{0,0,0},1};
     Particle p2 {{1,0,0},{0,0,0},1};
     Particle p3 {{0,1,0},{0,0,0},1};
-    particles.addParticle(p1);
-    particles.addParticle(p2);
-    particles.addParticle(p3);
+    particles->addParticle(p1);
+    particles->addParticle(p2);
+    particles->addParticle(p3);
 
-    Lennard_Jones_Force lJForce {};
-    lJForce.calculateF(particles);
+    Lennard_Jones_Force LJForce {};
+    LJForce.calculateF(*particles);
 
-    const auto& updatedParticles = particles.getParticles();
+    const auto& updatedParticles = particles->getParticles();
 
     // Verify forces on each particle
     const auto& p1_updated = updatedParticles[0];
@@ -239,12 +244,14 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     EXPECT_NEAR(p3_updated.getF()[0], expectedF3[0], EPSILON);
     EXPECT_NEAR(p3_updated.getF()[1], expectedF3[1], EPSILON);
     EXPECT_NEAR(p3_updated.getF()[2], expectedF3[2], EPSILON);
+
+    delete particles;
 }
 
 TEST(FileReader, readFile){
-    ParticleContainer particles;
+    ParticleContainer* particles = new ParticleContainerOld();
     FileReader fileReader;
-    fileReader.readFile(particles, "../input/eingabe-sonne.txt");
+    fileReader.readFile(*particles, "../input/eingabe-sonne.txt");
 
     std::array<std::array<double, 7>, 4> pValues = {{
         {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0},
@@ -253,10 +260,10 @@ TEST(FileReader, readFile){
         {34.75, 0.0, 0.0, 0.0, 0.0296, 0.0, 1.0e-14}
     }};
     
-    ASSERT_EQ(particles.getParticles().size(), 4); // Ensure we have the expected number of particles
+    ASSERT_EQ(particles->getParticles().size(), 4); // Ensure we have the expected number of particles
 
     int i = 0;
-    for(auto particle = particles.begin(); particle != particles.end(); ++particle, ++i){
+    for(auto particle = particles->begin(); particle != particles->end(); ++particle, ++i){
         EXPECT_EQ(particle->getX()[0], pValues[i][0]);
         EXPECT_EQ(particle->getX()[1], pValues[i][1]);
         EXPECT_EQ(particle->getX()[2], pValues[i][2]);
@@ -265,5 +272,7 @@ TEST(FileReader, readFile){
         EXPECT_EQ(particle->getV()[2], pValues[i][5]);
         EXPECT_EQ(particle->getM(), pValues[i][6]);
     }
+
+    delete particles;
 }
 

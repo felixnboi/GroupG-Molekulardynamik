@@ -1,5 +1,7 @@
 #pragma once
-#include "Particle.h"
+#include "../Particle.h"
+#include "spdlog/spdlog.h"
+
 #include <vector>
 #include <iostream>
 
@@ -11,15 +13,14 @@ class ParticleContainer
         std::vector<Particle> particles; ///< Vector to store the particles.
     public:
 
-    /**
-     * @brief Returns the pairs of all particles to iterate over.
-     * 
-     * This function returns each pair of particles for which the force should be calculated.
-     * 
-     * @return A vector of the pairs of all particles to iterate over.
-     */
-        virtual std::vector<std::array<Particle,2>> getParticlePairs();
+        virtual ~ParticleContainer() = default;
 
+    /**
+     * @brief Reserves a memory for a known number of particles.
+     * 
+     * This function allows to preallocate memory for a specified number of elements.
+     */
+        virtual void reserve(size_t size) = 0;
             
     /**
      * @brief Add a particle to the container.
@@ -28,16 +29,7 @@ class ParticleContainer
      * 
      * @param particle The handed over particle that needs to be added.
      */
-        virtual void addParticle(const Particle& particle);
-
-    /**
-     * @brief Get the vector of particles.
-     * 
-     * This function returns a constant reference to the vector of particles.
-     * 
-     * @return A constant reference to the vector of particles.
-     */
-    virtual const std::vector<Particle>& getParticles();
+        virtual void addParticle(const Particle& particle) = 0;
 
     /**
      * @brief Get the iterator to the beginning of the particle container.
@@ -46,7 +38,7 @@ class ParticleContainer
      * 
      * @return An iterator to the beginning of the particle container.
      */
-        virtual ParticleIterator begin();
+        virtual ParticleIterator begin() = 0;
 
     /**
      * @brief Get the iterator to the end of the particle container.
@@ -55,5 +47,23 @@ class ParticleContainer
      * 
      * @return An iterator to the end of the particle container.
      */
-        virtual ParticleIterator end();
+        virtual ParticleIterator end() = 0;
+
+    /**
+     * @brief Get the vector of particles.
+     * 
+     * This function returns a constant reference to the vector of particles.
+     * 
+     * @return A constant reference to the vector of particles.
+     */
+        virtual const std::vector<Particle>& getParticles() = 0;
+
+    /**
+     * @brief Returns the pairs of all particles to iterate over.
+     * 
+     * This function returns each pair of particles for which the force should be calculated.
+     * 
+     * @return A vector of the pairs of all particles to iterate over.
+     */
+        virtual std::vector<std::array<Particle,2>> getParticlePairs() = 0;
 };
