@@ -8,6 +8,16 @@
 #pragma once
 
 #include "Particle.h"
+<<<<<<< HEAD
+=======
+#include "ParticleContainers/ParticleContainer.h"
+#include "spdlog/spdlog.h"
+
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+>>>>>>> assignment2
 
 #include <list>
 

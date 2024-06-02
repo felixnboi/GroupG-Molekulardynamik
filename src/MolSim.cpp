@@ -4,6 +4,7 @@
  * Contains methods for calculating the changing parameters of the particles as well as methods for plotting them.
  */
 
+<<<<<<< HEAD
 #include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "utils/ArrayUtils.h"
@@ -89,6 +90,12 @@ double end_time; ///< The end time of the simulation.
 double delta_t; ///< The time step of the simulation.
 
 std::list<Particle> particles; ///< The list of particles.
+=======
+#include <iostream>
+#include <chrono>
+
+#include <Simulation.h>
+>>>>>>> assignment2
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.
@@ -112,6 +119,7 @@ std::list<Particle> particles; ///< The list of particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
+<<<<<<< HEAD
   std::cout << "Hello from MolSim for PSE!" << std::endl;
 
   if(argc==2){
@@ -311,3 +319,22 @@ void plotParticles(int iteration) {
   // write the plotted particle positions to a VTK file
   writer.writeFile(out_name, iteration);
 }
+=======
+    auto start = std::chrono::high_resolution_clock::now();
+
+    Simulation simulation;
+    if (!simulation.initialize(argc, argsv)) {
+      return EXIT_FAILURE;
+    }
+
+    simulation.run();
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    if (simulation.isTimingEnabled()) {
+      std::cout << "Execution time: " << elapsed.count() << " seconds" << std::endl;
+    }
+
+    return 0;
+}
+>>>>>>> assignment2
