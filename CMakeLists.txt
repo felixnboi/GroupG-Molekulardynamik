@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
@@ -18,6 +18,12 @@ file(GLOB_RECURSE MY_SRC
     # header don't need to be included but this might be necessary for some IDEs
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
+
+set(EXCLUDE_FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp"
+)
+
+list(REMOVE_ITEM MY_SRC ${EXCLUDE_FILES})
 
 # create make target
 add_executable(MolSim ${MY_SRC})

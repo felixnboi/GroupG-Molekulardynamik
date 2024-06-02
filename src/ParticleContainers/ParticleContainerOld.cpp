@@ -24,18 +24,18 @@ void ParticleContainerOld::addParticle(const Particle& particle) {
 }
 
 ParticleIterator ParticleContainerOld::begin(){
-    return particles.begin();
     spdlog::debug("Returned iterator to the beginning of particles");
+    return particles.begin();
 }
 
 ParticleIterator ParticleContainerOld::end() {
-    return particles.end();
     spdlog::debug("Returned iterator to the end of particles");
+    return particles.end();
 }
 
 const std::vector<Particle>& ParticleContainerOld::getParticles() {
-    return particles;
     spdlog::debug("Retrieved particles from the container");
+    return particles;
 }
 
 std::vector<std::array<Particle,2>> ParticleContainerOld::getParticlePairs(){
