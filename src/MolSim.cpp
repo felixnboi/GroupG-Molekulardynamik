@@ -3,25 +3,10 @@
  * @brief Main file for Molecular Simulation for PSE. 
  * Contains methods for calculating the changing parameters of the particles as well as methods for plotting them.
  */
-
-#include "FileReader.h"
-#include "outputWriter/VTKWriter.h"
-#include "utils/ArrayUtils.h"
-#include "utils/NumericalUtils.h"
-
-#include "Forces/Gravitational_Force.h"
-#include "Forces/Lennard_Jones_Force.h"
-#include "inputFileManager.h"
-#include "spdlog/spdlog.h"
-#include "ParticleContainers/ParticleContainer.h"
-
 #include <iostream>
-#include <list>
-#include <math.h>
-#include <getopt.h>
-#include <string>
 #include <chrono>
 
+<<<<<<< HEAD
 
 /**
  * @brief Calculate the position for all particles.
@@ -70,6 +55,9 @@ double delta_t = 0.014;      ///< The default time step of the simulation.
 ParticleContainer* particles; ///< The container of the particles.
   bool linkedCellsFlag = false;
   std::array<bool,6> outflowFlag;
+=======
+#include <Simulation.h>
+>>>>>>> f2f4e26ebf7387149824bb027964e026adb889a5
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.
@@ -91,15 +79,9 @@ ParticleContainer* particles; ///< The container of the particles.
  * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
-  auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
-  // Set default loglevel to INFO
-  spdlog::set_level(spdlog::level::info);
-  
-  std::string input_file_user;
-
-  std::string input_file;
-
+<<<<<<< HEAD
   bool g_flag = false;
   bool i_flag = false;
   bool f_flag = false;
@@ -184,177 +166,16 @@ int main(int argc, char *argsv[]) {
         }
         spdlog::error("Invalid logging level: {}", optarg);
         logHelp();
+=======
+    Simulation simulation;
+    if (!simulation.initialize(argc, argsv)) {
+>>>>>>> f2f4e26ebf7387149824bb027964e026adb889a5
         return EXIT_FAILURE;
-      }
-
-      case 'g':{
-        g_flag = true;
-        break;
-      }
-
-      case 'd':{
-        if(isDouble(optarg)){
-          delta_t = atof(optarg);
-          break;
-        }else{
-          spdlog::error("Invalid argument for delta_t");
-          logHelp();
-          return EXIT_FAILURE;
-        }
-      }
-
-      case 'e':{
-        if(isDouble(optarg)){
-          end_time = atof(optarg);
-          break;
-        }else{
-          spdlog::error("Invalid argument for end_time");
-          logHelp();
-          return EXIT_FAILURE;
-        }
-      }
-
-      case 's':{
-        if(isDouble(optarg)){
-          start_time = atof(optarg);
-          break;
-        }else{
-          spdlog::error("Invalid argument for start_time");
-          logHelp();
-          return EXIT_FAILURE;
-        }
-      }
-      
-      case 'i':{
-        i_flag = true;
-        input_file_user = optarg;
-        break;
-      }
-
-      case 'f':{
-        f_flag = true;
-        if(*optarg == 'g'){
-          force = new Gravitational_Force();
-          spdlog::info("Force set to Gravitational_Force");
-          break;
-        }
-        if(*optarg == 'l'){
-          force = new Lennard_Jones_Force();
-          spdlog::info("Force set to Lennard_Jones_Force");
-          break;
-        }
-        spdlog::error("Invalid argument for force");
-        logHelp();
-        return EXIT_FAILURE;
-      }
-
-      case '?':{
-        spdlog::error("Invalid option");
-        logHelp();
-        return EXIT_FAILURE;
-      }
     }
-  }
-  spdlog::info("Hello from MolSim for PSE!");
-  if(!f_flag){
-    spdlog::error("Didn't specify force. Terminating");
-    logHelp();
-    return EXIT_FAILURE;
-  }
 
-  if(!g_flag && i_flag){
-    input_file = input_file_user;
-    spdlog::info("Using user defined input file");
-  }
+    simulation.run();
 
-  if(g_flag && i_flag){
-    inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
-    spdlog::info("File {} merged into generated input file", input_file_user);
-    input_file = "../input/generated-input.txt";
-  }
-
-  if(g_flag && !i_flag){
-    input_file = "../input/generated-input.txt";
-    spdlog::info("Using \"generated-inout.txt\"");
-  }
-
-  if(!g_flag && !i_flag){
-    input_file = "../input/eingabe-sonne.txt";
-    spdlog::info("Using \"eingabe-sonne.txt\"");
-  }
-  
-
-  // Check if start_time is after end_time
-  if(start_time > end_time){
-    spdlog::error("Error: start_time should not be after end_time!");
-    return EXIT_FAILURE;
-  }
-  
-  FileReader fileReader;
-  fileReader.readFile(*particles, input_file.c_str());
-
-  // checking if there are particles in the simulation
-  if(particles->getParticles().empty()){
-    spdlog::error("Failed to read Particles from input file!");
-    return EXIT_FAILURE;
-  }
-
-  spdlog::info("end_time:{}, delta_t:{}, start_time:{}", end_time, delta_t, start_time);
-
-  double current_time = 0;
-  int iteration = 0;
-
-  // Advance simulation time to start_time
-  while (current_time < start_time){
-    calculateX();
-    force->calculateF(*particles);
-    calculateV();
-    current_time += delta_t;
-    iteration++;
-  }
-
-  //simulation loop
-  if(t_flag){
-    while (current_time < end_time) {
-      calculateX();
-      force->calculateF(*particles);
-      calculateV();
-      iteration++;
-      current_time += delta_t;
-    }
-  }else{
-    while (current_time < end_time) {
-      calculateX();
-      force->calculateF(*particles);
-      calculateV();
-      iteration++;
-
-      // plotting particle positions only at intervals of iterations
-      if (iteration % vtk_iteration == 0) {
-        plotParticles(iteration);
-      }
-      // printing simulation progress
-      spdlog::info("Iteration {} finished", iteration);
-      // update simulation time
-      current_time += delta_t;
-    }
-  }
-  
-  // display output message and terminate the program
-  spdlog::info("Output written. Terminating...");
-
-  delete force;
-
-  auto end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> elapsed =  end - start;
-  if(t_flag){
-    std::cout << "Execution time: " << elapsed.count() << " seconds" << std::endl;
-  }
-
-  return 0;
-}
-
-
+<<<<<<< HEAD
 void calculateX() {
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
@@ -387,30 +208,13 @@ void calculateV() {
     // calculating new velocity components for each dimension (x, y, z)
     for(int i = 0; i<3; i++){
       cur_v_dummy[i] = cur_v[i] + delta_t * (old_F[i] + cur_F[i]) / (2*m);
+=======
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    if (simulation.isTimingEnabled()) {
+        std::cout << "Execution time: " << elapsed.count() << " seconds" << std::endl;
+>>>>>>> f2f4e26ebf7387149824bb027964e026adb889a5
     }
-    // set the new velocity for the particle
-    p->setV(cur_v_dummy);
-  }
-}
 
-
-void plotParticles(int iteration) {
-
-  std::string out_name("MD_vtk"); ///< The base name of the VTK file to be written.
-
-  outputWriter::VTKWriter writer; ///< The VTK writer object. 
-  // initializing the VTK writer with the total number of particles.
-  writer.initializeOutput(particles->getParticles().size()); 
-  // iterating over each particle to plot its position
-  for(const auto& p : particles->getParticles()){
-    writer.plotParticle(p);
-  }
-  // write the plotted particle positions to a VTK file
-  writer.writeFile(out_name, iteration);
-}
-
-void logHelp(){
-  spdlog::info("Usage: \"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] --force char\"");
-  spdlog::info("For further information please read the README.md file at top level.");
-  spdlog::info("Terminating...");
+    return 0;
 }

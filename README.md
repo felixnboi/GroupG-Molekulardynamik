@@ -75,6 +75,4 @@ If none of both are set the *"eingabe-sonne.txt"* file at path */input* is used.
 
 ## Running Tests:
     
->After building run *ctest* in the build folder or navigate to the tests folder in the build folder and execute with *./tests*. 
-
-
+>After building run *ctest* or *./tests/tests* in the build folder. 

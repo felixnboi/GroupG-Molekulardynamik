@@ -78,4 +78,3 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
     exit(-1);
   }
 }
-
