@@ -68,6 +68,8 @@ double end_time = 1000;      ///< The default end time of the simulation.
 double delta_t = 0.014;      ///< The default time step of the simulation.
 
 ParticleContainer* particles; ///< The container of the particles.
+  bool linkedCellsFlag = false;
+  std::array<bool,6> outflowFlag;
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.
@@ -102,6 +104,7 @@ int main(int argc, char *argsv[]) {
   bool i_flag = false;
   bool f_flag = false;
   bool t_flag = false;
+
 
   // Default value for vtk output. Every tenth iteration a output is generated.
   int vtk_iteration = 10;
@@ -367,6 +370,9 @@ void calculateX() {
     }
     // set the new position for the particle
     p->setX(cur_x_dummy);
+  }
+  if(linkedCellsFlag){
+    ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles);
   }
 }
 

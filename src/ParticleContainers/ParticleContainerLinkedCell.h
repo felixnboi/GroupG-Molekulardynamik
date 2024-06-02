@@ -6,9 +6,8 @@ class ParticleContainerLinkedCell : public ParticleContainer{
 
 private:
     std::vector<Particle>* linkedCells;
-    size_t cellSizeX;
-    size_t cellSizeY;
-    size_t cellSizeZ;
+    std::array<size_t, 3> size;
+    std::array<size_t, 3>  cellSize;
     size_t radius;
     std::vector<Particle> halo;
     size_t arraylenght;
@@ -28,9 +27,20 @@ public:
 
     ParticleIterator end() override;
 
+    void updateLoctions(std::array<bool,6> outflowflag);
+
     const std::vector<Particle>& getParticles() override;
 
+    const std::array<size_t, 3> getSize();
+
+    const std::array<size_t, 3> getCellSize();
+
+    const std::vector<Particle>& getParticles() override;
+
+
     std::vector<std::array<Particle,2>> getParticlePairs() override;
+
+    void ParticleContainerLinkedCell::reserve(size_t size);
 
     std::vector<Particle> getBoundary();
 };
