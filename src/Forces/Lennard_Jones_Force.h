@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../utils/ArrayUtils.h"
-#include "../ParticleContainer.h"
+#include "../ParticleContainers/ParticleContainer.h"
 #include "Force.h"
 #include "spdlog/spdlog.h"
 
