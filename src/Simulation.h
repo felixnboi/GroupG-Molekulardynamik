@@ -50,6 +50,9 @@ private:
     bool i_flag;
     bool f_flag;
     bool t_flag;
+    std::array<bool,6> lenJonesBouneryFlags;
+    std::array<bool,6> outflowFlags;
+    bool linkedCellsFlag;
     /**
      * @brief Calculate the position for all particles.
      * 

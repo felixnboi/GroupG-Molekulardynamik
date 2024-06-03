@@ -38,7 +38,7 @@ namespace ParticleGenerator{
  */     
 void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename);
 
-void ParticleGenerator::generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename);
+void generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename);
 /**
  * @brief Logs a usage message.
  */

@@ -214,7 +214,7 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     particles->addParticle(p3);
 
     Lennard_Jones_Force LJForce {};
-    LJForce.calculateF(*particles);
+    LJForce.calculateF(*particles, {false, false, false, false, false, false});
 
     const auto& updatedParticles = particles->getParticles();
 

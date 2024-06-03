@@ -1,11 +1,12 @@
 #include <Simulation.h>
 
 Simulation::Simulation()
-    : start_time(0), end_time(1000), delta_t(0.014), vtk_iteration(10),
-      timing_enabled(false), force(nullptr), g_flag(false), i_flag(false), f_flag(false), t_flag(false) {}
+    : start_time(0), end_time(1000), delta_t(0.014), vtk_iteration(10), outflowFlags({false,false,false,false,false,false}), lenJonesBouneryFlags({true,true,true,true,true,true}),
+      timing_enabled(false), force(nullptr), g_flag(false), i_flag(false), f_flag(false), t_flag(false), linkedCellsFlag(true) {}
 
 Simulation::~Simulation() {}
 
+//TODO inizialization of outflowFlags, lenJonesBouneryFlags and linkedCellsFlag
 
 bool Simulation::initialize(int argc, char* argv[]) {
     spdlog::set_level(spdlog::level::info);
@@ -198,7 +199,7 @@ void Simulation::run() {
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles);
+        force->calculateF(*particles, lenJonesBouneryFlags);
         calculateV();
         current_time += delta_t;
         iteration++;
@@ -208,7 +209,7 @@ void Simulation::run() {
     if (t_flag) {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles);
+            force->calculateF(*particles, lenJonesBouneryFlags);
             calculateV();
             iteration++;
             current_time += delta_t;
@@ -216,7 +217,7 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles);
+            force->calculateF(*particles, lenJonesBouneryFlags);
             calculateV();
             iteration++;
 
@@ -259,6 +260,11 @@ void Simulation::calculateX() {
     // set the new position for the particle
     p->setX(cur_x_dummy);
   }
+  if(linkedCellsFlag){
+    ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles);
+    LCContainer->updateLoctions(outflowFlags);
+  }
+
 }
 
 void Simulation::calculateV() {

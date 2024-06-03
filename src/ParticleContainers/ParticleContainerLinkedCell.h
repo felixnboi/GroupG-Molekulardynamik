@@ -35,12 +35,7 @@ public:
 
     const std::array<size_t, 3> getCellSize();
 
-    const std::vector<Particle>& getParticles() override;
-
-
     std::vector<std::array<Particle,2>> getParticlePairs() override;
-
-    void ParticleContainerLinkedCell::reserve(size_t size);
 
     std::vector<Particle> getBoundary();
 };
