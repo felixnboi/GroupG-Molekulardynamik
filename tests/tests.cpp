@@ -169,6 +169,72 @@ TEST(ParticleGenerator, GenerateCuboid){
     inputFileManager::resetFile("../input/generated-input.txt");
 }
 
+TEST(ParticleGenerator, GenerateDisc) {
+    // Reset the input file before starting the test
+    inputFileManager::resetFile("../input/generated-input.txt");
+
+    // Generate particles in a disc and write to the file
+    ParticleGenerator::generateDisc(5.0, 5.0, 5.0, 5, 1.0, 2.0, 1.0, 1.0, 1.0, "../input/generated-input.txt");
+
+    // Open the generated input file for reading
+    std::ifstream input_file("../input/generated-input.txt");
+
+    if (!input_file.is_open()) {
+        std::cerr << "Something went wrong, generated input file could not be opened\n";
+        exit(-1);
+    }
+
+    std::string currentLine;
+    // Verify the header lines in the file
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# Inputfile where all used particles will be stored.");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# there have to follow the exact quantity of spaces so that the number of chars in the line");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# adds up to 32 (not counting the \"\\n\" at the end)");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "79                              "); // Adjust this based on MoleculesPerRadius
+
+    double baseX = 5.0;
+    double baseY = 5.0;
+    double baseZ = 5.0;
+    double distance = 1.0;
+
+    // Verifying each particle's data in the file
+    for (size_t i = 0; i < 5; ++i) {
+        for (size_t j = 0; j < 5; ++j) {
+            std::getline(input_file, currentLine);
+            std::istringstream lineStream(currentLine);
+
+            double x, y, z, vx, vy, vz, mass;
+            lineStream >> x >> y >> z >> vx >> vy >> vz >> mass;
+
+            // Calculate expected position and velocity based on input parameters
+            double expectedX = baseX + i * distance - 2.5;
+            double expectedY = baseY + j * distance - 2.5;
+            double expectedZ = baseZ;
+            double expectedVx = 1.0;
+            double expectedVy = 1.0;
+            double expectedVz = 1.0;
+
+            // Verify that the generated values match the expected values with the specified tolerance
+            EXPECT_TRUE(areDoublesEqual(x, expectedX));
+            EXPECT_TRUE(areDoublesEqual(y, expectedY));
+            EXPECT_TRUE(areDoublesEqual(z, expectedZ));
+            EXPECT_TRUE(areDoublesEqual(vx, expectedVx));
+            EXPECT_TRUE(areDoublesEqual(vy, expectedVy));
+            EXPECT_TRUE(areDoublesEqual(vz, expectedVz));
+            EXPECT_EQ(mass, 2.0);
+        }
+    }
+    // Close the input file after verification
+    input_file.close();
+    // Reset the input file again to its initial state
+    inputFileManager::resetFile("../input/generated-input.txt");
+}
+
 TEST(inputFileManager, MergeFile){
     const char* generated_filename = "../input/generated-input.txt";
     const char* merge_filename = "../input/eingabe-sonne.txt";
