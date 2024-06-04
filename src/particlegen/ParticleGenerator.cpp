@@ -42,24 +42,26 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
 void ParticleGenerator::generateDisc(double x, double y, double z, int MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename) {
     spdlog::info("Generating disc with parameters: x={}, y={}, z={}, MoleculesPerRadius={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, MoleculesPerRadius, distance, mass, velocityX, velocityY, velocityZ);
 
+    std::fstream input_file;
+    std::string tmp_string;
     double radius = MoleculesPerRadius * distance;
     
-    std::fstream input_file(filename, std::ios::in | std::ios::out | std::ios::app);
+    input_file.open(filename, std::ios::in | std::ios::out);
     if (!input_file.is_open()) {
         spdlog::error("Failed to open file {}", filename);
         return;
     }
     // skipping comments and getting the number of particles
-    std::string tmp_string;
     std::streampos current = input_file.tellp();
     while (tmp_string.empty() || tmp_string[0] == '#') {
         current = input_file.tellp();
         getline(input_file, tmp_string);
     }
-    
+
     input_file.seekp(current);
-    int numParticles = std::stoi(tmp_string) + static_cast<int>(M_PI * radius * radius / (distance * distance));
+    int numParticles = std::stoi(tmp_string)+static_cast<int>(M_PI*radius*radius/(distance*distance));
     input_file << numParticles;
+    std::cout << "numParticles hat den Wert " << numParticles << std::endl;
     input_file.close();
 
     input_file.open(filename, std::ios::in | std::ios::out | std::ios::app);
@@ -82,6 +84,8 @@ void ParticleGenerator::generateDisc(double x, double y, double z, int Molecules
                 input_file << particleX << " " << particleY << " " << particleZ << " "
                            << velocityX << " " << velocityY << " " << velocityZ << " "
                            << mass << "\n";
+                           
+                std::cout << "particle hat die Werte " << particleX << " "<<particleY << " "<<particleZ << std::endl;
             }
         }
     }

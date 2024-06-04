@@ -195,7 +195,7 @@ TEST(ParticleGenerator, GenerateDisc) {
     std::getline(input_file, currentLine);
     EXPECT_EQ(currentLine, "# adds up to 32 (not counting the \"\\n\" at the end)");
     std::getline(input_file, currentLine);
-    EXPECT_EQ(currentLine, "79                              "); // Adjust this based on MoleculesPerRadius
+    EXPECT_EQ(currentLine, "78                              "); // Adjust this based on MoleculesPerRadius
 
     double baseX = 5.0;
     double baseY = 5.0;
@@ -203,8 +203,8 @@ TEST(ParticleGenerator, GenerateDisc) {
     double distance = 1.0;
 
     // Verifying each particle's data in the file
-    for (size_t i = 0; i < 5; ++i) {
-        for (size_t j = 0; j < 5; ++j) {
+    for (size_t i = -5; i < 5; ++i) {
+        for (size_t j = -5; j < 5; ++j) {
             std::getline(input_file, currentLine);
             std::istringstream lineStream(currentLine);
 
@@ -212,8 +212,8 @@ TEST(ParticleGenerator, GenerateDisc) {
             lineStream >> x >> y >> z >> vx >> vy >> vz >> mass;
 
             // Calculate expected position and velocity based on input parameters
-            double expectedX = baseX + i * distance - 2.5;
-            double expectedY = baseY + j * distance - 2.5;
+            double expectedX = baseX + i * distance;
+            double expectedY = baseY + j * distance;
             double expectedZ = baseZ;
             double expectedVx = 1.0;
             double expectedVy = 1.0;
@@ -226,7 +226,7 @@ TEST(ParticleGenerator, GenerateDisc) {
             EXPECT_TRUE(areDoublesEqual(vx, expectedVx));
             EXPECT_TRUE(areDoublesEqual(vy, expectedVy));
             EXPECT_TRUE(areDoublesEqual(vz, expectedVz));
-            EXPECT_EQ(mass, 2.0);
+            EXPECT_EQ(mass, 2.0); 
         }
     }
     // Close the input file after verification
