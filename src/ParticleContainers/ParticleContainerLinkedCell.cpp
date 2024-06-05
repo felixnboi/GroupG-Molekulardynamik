@@ -53,6 +53,7 @@ const std::vector<std::shared_ptr<Particle>>& ParticleContainerLinkedCell::getPa
     return particles;
 }
 
+
 std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairs(){
     std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
     for (size_t i = 0; i < arraylenght; i++){
@@ -90,6 +91,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
             }
         }
     }
+    std::cout << "ppairs size" << particlePairs.size() << std::endl;
     return particlePairs;
 }
 
