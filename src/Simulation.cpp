@@ -1,11 +1,40 @@
 #include "Simulation.h"
 #include <chrono>
 
-Simulation::Simulation()
-    : start_time(0), end_time(1000), delta_t(0.014), write_frequency(10), particles(nullptr), force(nullptr), timing_enabled(false), 
-    xml_flag(false), generate_flag(false), input_flag(false), force_flag(false), time_flag(false), cli_flag(false), 
-    linkedcell_flag(false), lenJonesBoundaryFlags({true,true,true,true,false,false}), outflowFlags({false,false,false,false,false,false}), 
-    baseName("MD_vtk") {}
+Simulation::Simulation(){
+    start_time = 0;
+    end_time = 1000;
+    delta_t = 0.014;
+    write_frequency = 10;
+    particles = nullptr;
+    force = nullptr;
+    
+    timing_enabled = false;
+    xml_flag = false;
+    generate_flag = false;
+    input_flag = false;
+    force_flag = false;
+    time_flag = false;
+    cli_flag = false;
+    linkedcell_flag = false;
+
+    lenJonesBoundaryFlags = {true, true, true, true, true, true}; //links,rechts,unten,oben,hinten,vorne
+    outflowFlags = {false, false, false, false, false, false};
+
+    baseName = "MD_vtk";
+    input_file = "";
+    input_file_user = "";
+
+    force_str = "";
+    algorithm = "default";
+    loglevel = "INFO";
+
+    boundary = {};
+
+    cutoff_radius = 3;
+
+    domain = {};
+}
 
 Simulation::~Simulation() {}
 
@@ -13,7 +42,7 @@ Simulation::~Simulation() {}
 
 bool Simulation::initialize(int argc, char* argv[]) {
     spdlog::set_level(spdlog::level::info);
-    const char* const short_ops = "v:i:gtc";
+    const char* const short_ops = "v:i:gt";
     const option long_opts[] = {
         {"help", no_argument, nullptr, 'h'},
         {"xml", required_argument, nullptr, 'x'},
@@ -27,17 +56,11 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
     int opt;
 
-    particles = std::make_unique<ParticleContainerLinkedCell>(180, 90, 1, 3);
-
     const char* xml_file = "";
 
     // Parsing command line arguments
     while ((opt = getopt_long(argc, argv, short_ops, long_opts, nullptr)) != -1) {
         switch (opt) {
-            case 'c':{
-                linkedcell_flag = true;
-                break;
-            }
             case 'x':{
                 xml_file = optarg;
                 xml_flag = true;
@@ -173,37 +196,87 @@ bool Simulation::initialize(int argc, char* argv[]) {
     }
 
     spdlog::info("Hello from MolSim for PSE!");
-    if (!force_flag) {
-        spdlog::error("Didn't specify force. Terminating");
-        logHelp();
-        return false;
-    }
-
-    if (!generate_flag && input_flag) {
-        input_file = input_file_user;
-        spdlog::info("Using user defined input file");
-    }
-    if (generate_flag && input_flag) {
-        inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
-        spdlog::info("File {} merged into generated input file", input_file_user);
-        input_file = "../input/generated-input.txt";
-    }
-    if (generate_flag && !input_flag) {
-        input_file = "../input/generated-input.txt";
-        spdlog::info("Using \"generated-input.txt\"");
-    }
-    if (!generate_flag && !input_flag) {
-        input_file = "../input/eingabe-sonne.txt";
-        spdlog::info("Using \"eingabe-sonne.txt\"");
-    }
-    // if(xml_flag && cli_flag){
-    //     spdlog::error("Please use either cli or xml!");
-    //     return false;
-    // }
 
     if(xml_flag){
+
+        if(xml_flag && cli_flag){
+            spdlog::error("Please use either cli or xml!");
+            logHelp();
+            return false;
+        }
+
         XMLReader xmlreader;
-        xmlreader.readSimulation(xml_file, baseName, write_frequency, start_time, end_time, delta_t);
+        xmlreader.readSimulation(xml_file, generate_flag, input_file, baseName, write_frequency, start_time, end_time, delta_t, 
+        force_str, algorithm, loglevel, boundary, cutoff_radius, domain);
+
+        if(loglevel == "OFF"){spdlog::set_level(spdlog::level::off);}
+        if(loglevel == "ERROR"){spdlog::set_level(spdlog::level::err);}
+        if(loglevel == "WARN"){spdlog::set_level(spdlog::level::warn);}
+        if(loglevel == "INFO"){spdlog::set_level(spdlog::level::info);}
+        if(loglevel == "DEBUG"){spdlog::set_level(spdlog::level::debug);}
+        if(loglevel == "TRACE"){spdlog::set_level(spdlog::level::trace);}
+
+        for(int i = 0; i<6; i++){
+            if(boundary[i] == "outflow"){
+                outflowFlags[i] = true;
+                lenJonesBoundaryFlags[i] = false;
+            }
+            if(boundary[i] == "lennardJones"){
+                outflowFlags[i] = false;
+                lenJonesBoundaryFlags[i] = true;
+            }
+            if(boundary[i] == "reflecting"){
+                outflowFlags[i] = false;
+                lenJonesBoundaryFlags[i] = false;
+            }
+        }
+
+        if(algorithm == "linkedcell"){
+            particles = std::make_unique<ParticleContainerLinkedCell>(domain[0], domain[1], domain[2], cutoff_radius);
+        }
+
+        if(algorithm == "default"){
+            particles = std::make_unique<ParticleContainerOld>();
+        }
+
+        if(force_str == "gravitationalForce"){
+            force = std::make_unique<Gravitational_Force>();
+        }
+
+        if(force_str == "lennardJonesForce"){
+            force = std::make_unique<Lennard_Jones_Force>();
+        }
+
+    }else{
+
+        particles = std::make_unique<ParticleContainerOld>();
+
+        if (!force_flag) {
+            spdlog::error("Didn't specify force. Terminating");
+            logHelp();
+            return false;
+        }
+
+        if (!generate_flag && input_flag) {
+            input_file = input_file_user;
+            spdlog::info("Using user defined input file");
+        }
+
+        if (generate_flag && input_flag) {
+            inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
+            spdlog::info("File {} merged into generated input file", input_file_user);
+            input_file = "../input/generated-input.txt";
+        }
+
+        if (generate_flag && !input_flag) {
+            input_file = "../input/generated-input.txt";
+            spdlog::info("Using \"generated-input.txt\"");
+        }
+
+        if (!generate_flag && !input_flag) {
+            input_file = "../input/eingabe-sonne.txt";
+            spdlog::info("Using \"eingabe-sonne.txt\"");
+        }
     }
 
 
@@ -294,7 +367,6 @@ void Simulation::calculateX() {
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());
     LCContainer->updateLoctions(outflowFlags);
   }
-
 }
 
 void Simulation::calculateV() {

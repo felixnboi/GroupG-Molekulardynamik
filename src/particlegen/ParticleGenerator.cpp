@@ -107,7 +107,7 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
 }
 
 void ParticleGenerator::logHelp(){
-    spdlog::info("Usage: \"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double\"");
+    spdlog::info("Usage: \"[./ParticleGenerator --xml string [--help]] | [./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double]\"");
     spdlog::info("For further information please read the README.md file at top level.");
     spdlog::info("Terminating...");
 }

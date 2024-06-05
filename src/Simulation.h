@@ -93,7 +93,15 @@ private:
     std::string input_file;
     std::string input_file_user;
 
-    
+    std::string force_str;
+    std::string algorithm;
+    std::string loglevel;
+
+    std::array<std::string, 6> boundary;
+
+    double cutoff_radius;
+
+    std::array<double, 3> domain;
 
     /**
      * @brief Calculate the position for all particles.

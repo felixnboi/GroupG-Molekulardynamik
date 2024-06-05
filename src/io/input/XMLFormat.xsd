@@ -39,14 +39,7 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="generate_flag">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="true"/>
-            <xs:enumeration value="false"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="logLevel">
+    <xs:simpleType name="loglevels">
         <xs:restriction base="xs:string">
             <xs:enumeration value="OFF"/>
             <xs:enumeration value="ERROR"/>
@@ -58,7 +51,6 @@
     </xs:simpleType>
 
 
-
     <!-- Root element -->
     <xs:element name="simulation">
         <xs:complexType>
@@ -67,22 +59,21 @@
             <xs:element name="boundaries">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="front" type="boundaryBehavior"/>
-                        <xs:element name="rear" type="boundaryBehavior"/>
                         <xs:element name="left" type="boundaryBehavior"/>
                         <xs:element name="right" type="boundaryBehavior"/>
-                        <xs:element name="top" type="boundaryBehavior"/>
                         <xs:element name="bottom" type="boundaryBehavior"/>
+                        <xs:element name="top" type="boundaryBehavior"/>
+                        <xs:element name="rear" type="boundaryBehavior"/>
+                        <xs:element name="front" type="boundaryBehavior"/>
                     </xs:sequence>
                 </xs:complexType>
-            <xs:element>
+            </xs:element>
 
             <!-- Input settings -->
             <xs:element name="inputSettings">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="inputFile" type="xs:string"/>
-                        <xs:element name="generateFlag" type="generate_flag"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -108,7 +99,10 @@
                         <xs:element name="sigma" type="xs:double"/>
                         <xs:element name="average_brownian_motion" type="xs:double"/>
                         <xs:element name="force" type="forces"/>
-                        <xs:element name="algorithm" type="algorithms"/>                        
+                        <xs:element name="algorithm" type="algorithms"/>  
+                        <xs:element name="loglevel" type="loglevels"/>  
+                        <xs:element name="domain" type="double_vector"/>
+                        <xs:element name="cutoff-radius" type="xs:double"/>                    
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

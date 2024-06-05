@@ -156,8 +156,236 @@ z (const z_type& x)
 }
 
 
+// boundaryBehavior
+// 
+
+boundaryBehavior::
+boundaryBehavior (value v)
+: ::xml_schema::string (_xsd_boundaryBehavior_literals_[v])
+{
+}
+
+boundaryBehavior::
+boundaryBehavior (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+boundaryBehavior::
+boundaryBehavior (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+boundaryBehavior::
+boundaryBehavior (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+boundaryBehavior::
+boundaryBehavior (const boundaryBehavior& v,
+                  ::xml_schema::flags f,
+                  ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+boundaryBehavior& boundaryBehavior::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_boundaryBehavior_literals_[v]);
+
+  return *this;
+}
+
+
+// forces
+// 
+
+forces::
+forces (value v)
+: ::xml_schema::string (_xsd_forces_literals_[v])
+{
+}
+
+forces::
+forces (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+forces::
+forces (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+forces::
+forces (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+forces::
+forces (const forces& v,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+forces& forces::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_forces_literals_[v]);
+
+  return *this;
+}
+
+
+// algorithms
+// 
+
+algorithms::
+algorithms (value v)
+: ::xml_schema::string (_xsd_algorithms_literals_[v])
+{
+}
+
+algorithms::
+algorithms (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+algorithms::
+algorithms (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+algorithms::
+algorithms (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+algorithms::
+algorithms (const algorithms& v,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+algorithms& algorithms::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_algorithms_literals_[v]);
+
+  return *this;
+}
+
+
+// loglevels
+// 
+
+loglevels::
+loglevels (value v)
+: ::xml_schema::string (_xsd_loglevels_literals_[v])
+{
+}
+
+loglevels::
+loglevels (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+loglevels::
+loglevels (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+loglevels::
+loglevels (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+loglevels::
+loglevels (const loglevels& v,
+           ::xml_schema::flags f,
+           ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+loglevels& loglevels::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_loglevels_literals_[v]);
+
+  return *this;
+}
+
+
 // simulation
 // 
+
+const simulation::boundaries_type& simulation::
+boundaries () const
+{
+  return this->boundaries_.get ();
+}
+
+simulation::boundaries_type& simulation::
+boundaries ()
+{
+  return this->boundaries_.get ();
+}
+
+void simulation::
+boundaries (const boundaries_type& x)
+{
+  this->boundaries_.set (x);
+}
+
+void simulation::
+boundaries (::std::unique_ptr< boundaries_type > x)
+{
+  this->boundaries_.set (std::move (x));
+}
+
+const simulation::inputSettings_type& simulation::
+inputSettings () const
+{
+  return this->inputSettings_.get ();
+}
+
+simulation::inputSettings_type& simulation::
+inputSettings ()
+{
+  return this->inputSettings_.get ();
+}
+
+void simulation::
+inputSettings (const inputSettings_type& x)
+{
+  this->inputSettings_.set (x);
+}
+
+void simulation::
+inputSettings (::std::unique_ptr< inputSettings_type > x)
+{
+  this->inputSettings_.set (std::move (x));
+}
 
 const simulation::outputSettings_type& simulation::
 outputSettings () const
@@ -223,6 +451,200 @@ void simulation::
 cuboid (const cuboid_sequence& s)
 {
   this->cuboid_ = s;
+}
+
+const simulation::disc_sequence& simulation::
+disc () const
+{
+  return this->disc_;
+}
+
+simulation::disc_sequence& simulation::
+disc ()
+{
+  return this->disc_;
+}
+
+void simulation::
+disc (const disc_sequence& s)
+{
+  this->disc_ = s;
+}
+
+
+// boundaries
+// 
+
+const boundaries::left_type& boundaries::
+left () const
+{
+  return this->left_.get ();
+}
+
+boundaries::left_type& boundaries::
+left ()
+{
+  return this->left_.get ();
+}
+
+void boundaries::
+left (const left_type& x)
+{
+  this->left_.set (x);
+}
+
+void boundaries::
+left (::std::unique_ptr< left_type > x)
+{
+  this->left_.set (std::move (x));
+}
+
+const boundaries::right_type& boundaries::
+right () const
+{
+  return this->right_.get ();
+}
+
+boundaries::right_type& boundaries::
+right ()
+{
+  return this->right_.get ();
+}
+
+void boundaries::
+right (const right_type& x)
+{
+  this->right_.set (x);
+}
+
+void boundaries::
+right (::std::unique_ptr< right_type > x)
+{
+  this->right_.set (std::move (x));
+}
+
+const boundaries::bottom_type& boundaries::
+bottom () const
+{
+  return this->bottom_.get ();
+}
+
+boundaries::bottom_type& boundaries::
+bottom ()
+{
+  return this->bottom_.get ();
+}
+
+void boundaries::
+bottom (const bottom_type& x)
+{
+  this->bottom_.set (x);
+}
+
+void boundaries::
+bottom (::std::unique_ptr< bottom_type > x)
+{
+  this->bottom_.set (std::move (x));
+}
+
+const boundaries::top_type& boundaries::
+top () const
+{
+  return this->top_.get ();
+}
+
+boundaries::top_type& boundaries::
+top ()
+{
+  return this->top_.get ();
+}
+
+void boundaries::
+top (const top_type& x)
+{
+  this->top_.set (x);
+}
+
+void boundaries::
+top (::std::unique_ptr< top_type > x)
+{
+  this->top_.set (std::move (x));
+}
+
+const boundaries::rear_type& boundaries::
+rear () const
+{
+  return this->rear_.get ();
+}
+
+boundaries::rear_type& boundaries::
+rear ()
+{
+  return this->rear_.get ();
+}
+
+void boundaries::
+rear (const rear_type& x)
+{
+  this->rear_.set (x);
+}
+
+void boundaries::
+rear (::std::unique_ptr< rear_type > x)
+{
+  this->rear_.set (std::move (x));
+}
+
+const boundaries::front_type& boundaries::
+front () const
+{
+  return this->front_.get ();
+}
+
+boundaries::front_type& boundaries::
+front ()
+{
+  return this->front_.get ();
+}
+
+void boundaries::
+front (const front_type& x)
+{
+  this->front_.set (x);
+}
+
+void boundaries::
+front (::std::unique_ptr< front_type > x)
+{
+  this->front_.set (std::move (x));
+}
+
+
+// inputSettings
+// 
+
+const inputSettings::inputFile_type& inputSettings::
+inputFile () const
+{
+  return this->inputFile_.get ();
+}
+
+inputSettings::inputFile_type& inputSettings::
+inputFile ()
+{
+  return this->inputFile_.get ();
+}
+
+void inputSettings::
+inputFile (const inputFile_type& x)
+{
+  this->inputFile_.set (x);
+}
+
+void inputSettings::
+inputFile (::std::unique_ptr< inputFile_type > x)
+{
+  this->inputFile_.set (std::move (x));
 }
 
 
@@ -327,6 +749,174 @@ void simulationParameters::
 start_t (const start_t_type& x)
 {
   this->start_t_.set (x);
+}
+
+const simulationParameters::epsilon_type& simulationParameters::
+epsilon () const
+{
+  return this->epsilon_.get ();
+}
+
+simulationParameters::epsilon_type& simulationParameters::
+epsilon ()
+{
+  return this->epsilon_.get ();
+}
+
+void simulationParameters::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+const simulationParameters::sigma_type& simulationParameters::
+sigma () const
+{
+  return this->sigma_.get ();
+}
+
+simulationParameters::sigma_type& simulationParameters::
+sigma ()
+{
+  return this->sigma_.get ();
+}
+
+void simulationParameters::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
+const simulationParameters::average_brownian_motion_type& simulationParameters::
+average_brownian_motion () const
+{
+  return this->average_brownian_motion_.get ();
+}
+
+simulationParameters::average_brownian_motion_type& simulationParameters::
+average_brownian_motion ()
+{
+  return this->average_brownian_motion_.get ();
+}
+
+void simulationParameters::
+average_brownian_motion (const average_brownian_motion_type& x)
+{
+  this->average_brownian_motion_.set (x);
+}
+
+const simulationParameters::force_type& simulationParameters::
+force () const
+{
+  return this->force_.get ();
+}
+
+simulationParameters::force_type& simulationParameters::
+force ()
+{
+  return this->force_.get ();
+}
+
+void simulationParameters::
+force (const force_type& x)
+{
+  this->force_.set (x);
+}
+
+void simulationParameters::
+force (::std::unique_ptr< force_type > x)
+{
+  this->force_.set (std::move (x));
+}
+
+const simulationParameters::algorithm_type& simulationParameters::
+algorithm () const
+{
+  return this->algorithm_.get ();
+}
+
+simulationParameters::algorithm_type& simulationParameters::
+algorithm ()
+{
+  return this->algorithm_.get ();
+}
+
+void simulationParameters::
+algorithm (const algorithm_type& x)
+{
+  this->algorithm_.set (x);
+}
+
+void simulationParameters::
+algorithm (::std::unique_ptr< algorithm_type > x)
+{
+  this->algorithm_.set (std::move (x));
+}
+
+const simulationParameters::loglevel_type& simulationParameters::
+loglevel () const
+{
+  return this->loglevel_.get ();
+}
+
+simulationParameters::loglevel_type& simulationParameters::
+loglevel ()
+{
+  return this->loglevel_.get ();
+}
+
+void simulationParameters::
+loglevel (const loglevel_type& x)
+{
+  this->loglevel_.set (x);
+}
+
+void simulationParameters::
+loglevel (::std::unique_ptr< loglevel_type > x)
+{
+  this->loglevel_.set (std::move (x));
+}
+
+const simulationParameters::domain_type& simulationParameters::
+domain () const
+{
+  return this->domain_.get ();
+}
+
+simulationParameters::domain_type& simulationParameters::
+domain ()
+{
+  return this->domain_.get ();
+}
+
+void simulationParameters::
+domain (const domain_type& x)
+{
+  this->domain_.set (x);
+}
+
+void simulationParameters::
+domain (::std::unique_ptr< domain_type > x)
+{
+  this->domain_.set (std::move (x));
+}
+
+const simulationParameters::cutoff_radius_type& simulationParameters::
+cutoff_radius () const
+{
+  return this->cutoff_radius_.get ();
+}
+
+simulationParameters::cutoff_radius_type& simulationParameters::
+cutoff_radius ()
+{
+  return this->cutoff_radius_.get ();
+}
+
+void simulationParameters::
+cutoff_radius (const cutoff_radius_type& x)
+{
+  this->cutoff_radius_.set (x);
 }
 
 
@@ -436,6 +1026,112 @@ mass ()
 }
 
 void cuboid::
+mass (const mass_type& x)
+{
+  this->mass_.set (x);
+}
+
+
+// disc
+// 
+
+const disc::position_type& disc::
+position () const
+{
+  return this->position_.get ();
+}
+
+disc::position_type& disc::
+position ()
+{
+  return this->position_.get ();
+}
+
+void disc::
+position (const position_type& x)
+{
+  this->position_.set (x);
+}
+
+void disc::
+position (::std::unique_ptr< position_type > x)
+{
+  this->position_.set (std::move (x));
+}
+
+const disc::velocity_type& disc::
+velocity () const
+{
+  return this->velocity_.get ();
+}
+
+disc::velocity_type& disc::
+velocity ()
+{
+  return this->velocity_.get ();
+}
+
+void disc::
+velocity (const velocity_type& x)
+{
+  this->velocity_.set (x);
+}
+
+void disc::
+velocity (::std::unique_ptr< velocity_type > x)
+{
+  this->velocity_.set (std::move (x));
+}
+
+const disc::radius_type& disc::
+radius () const
+{
+  return this->radius_.get ();
+}
+
+disc::radius_type& disc::
+radius ()
+{
+  return this->radius_.get ();
+}
+
+void disc::
+radius (const radius_type& x)
+{
+  this->radius_.set (x);
+}
+
+const disc::distance_type& disc::
+distance () const
+{
+  return this->distance_.get ();
+}
+
+disc::distance_type& disc::
+distance ()
+{
+  return this->distance_.get ();
+}
+
+void disc::
+distance (const distance_type& x)
+{
+  this->distance_.set (x);
+}
+
+const disc::mass_type& disc::
+mass () const
+{
+  return this->mass_.get ();
+}
+
+disc::mass_type& disc::
+mass ()
+{
+  return this->mass_.get ();
+}
+
+void disc::
 mass (const mass_type& x)
 {
   this->mass_.set (x);
@@ -714,26 +1410,326 @@ unsigned_vector::
 {
 }
 
+// boundaryBehavior
+//
+
+boundaryBehavior::
+boundaryBehavior (const ::xercesc::DOMElement& e,
+                  ::xml_schema::flags f,
+                  ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_boundaryBehavior_convert ();
+}
+
+boundaryBehavior::
+boundaryBehavior (const ::xercesc::DOMAttr& a,
+                  ::xml_schema::flags f,
+                  ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_boundaryBehavior_convert ();
+}
+
+boundaryBehavior::
+boundaryBehavior (const ::std::string& s,
+                  const ::xercesc::DOMElement* e,
+                  ::xml_schema::flags f,
+                  ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_boundaryBehavior_convert ();
+}
+
+boundaryBehavior* boundaryBehavior::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class boundaryBehavior (*this, f, c);
+}
+
+boundaryBehavior::value boundaryBehavior::
+_xsd_boundaryBehavior_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_boundaryBehavior_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_boundaryBehavior_indexes_,
+                    _xsd_boundaryBehavior_indexes_ + 3,
+                    *this,
+                    c));
+
+  if (i == _xsd_boundaryBehavior_indexes_ + 3 || _xsd_boundaryBehavior_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const boundaryBehavior::
+_xsd_boundaryBehavior_literals_[3] =
+{
+  "outflow",
+  "reflecting",
+  "lennardJones"
+};
+
+const boundaryBehavior::value boundaryBehavior::
+_xsd_boundaryBehavior_indexes_[3] =
+{
+  ::boundaryBehavior::lennardJones,
+  ::boundaryBehavior::outflow,
+  ::boundaryBehavior::reflecting
+};
+
+// forces
+//
+
+forces::
+forces (const ::xercesc::DOMElement& e,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_forces_convert ();
+}
+
+forces::
+forces (const ::xercesc::DOMAttr& a,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_forces_convert ();
+}
+
+forces::
+forces (const ::std::string& s,
+        const ::xercesc::DOMElement* e,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_forces_convert ();
+}
+
+forces* forces::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class forces (*this, f, c);
+}
+
+forces::value forces::
+_xsd_forces_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_forces_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_forces_indexes_,
+                    _xsd_forces_indexes_ + 2,
+                    *this,
+                    c));
+
+  if (i == _xsd_forces_indexes_ + 2 || _xsd_forces_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const forces::
+_xsd_forces_literals_[2] =
+{
+  "gravitationalForce",
+  "lennardJonesForce"
+};
+
+const forces::value forces::
+_xsd_forces_indexes_[2] =
+{
+  ::forces::gravitationalForce,
+  ::forces::lennardJonesForce
+};
+
+// algorithms
+//
+
+algorithms::
+algorithms (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_algorithms_convert ();
+}
+
+algorithms::
+algorithms (const ::xercesc::DOMAttr& a,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_algorithms_convert ();
+}
+
+algorithms::
+algorithms (const ::std::string& s,
+            const ::xercesc::DOMElement* e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_algorithms_convert ();
+}
+
+algorithms* algorithms::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class algorithms (*this, f, c);
+}
+
+algorithms::value algorithms::
+_xsd_algorithms_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_algorithms_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_algorithms_indexes_,
+                    _xsd_algorithms_indexes_ + 2,
+                    *this,
+                    c));
+
+  if (i == _xsd_algorithms_indexes_ + 2 || _xsd_algorithms_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const algorithms::
+_xsd_algorithms_literals_[2] =
+{
+  "linkedcell",
+  "default"
+};
+
+const algorithms::value algorithms::
+_xsd_algorithms_indexes_[2] =
+{
+  ::algorithms::default_,
+  ::algorithms::linkedcell
+};
+
+// loglevels
+//
+
+loglevels::
+loglevels (const ::xercesc::DOMElement& e,
+           ::xml_schema::flags f,
+           ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_loglevels_convert ();
+}
+
+loglevels::
+loglevels (const ::xercesc::DOMAttr& a,
+           ::xml_schema::flags f,
+           ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_loglevels_convert ();
+}
+
+loglevels::
+loglevels (const ::std::string& s,
+           const ::xercesc::DOMElement* e,
+           ::xml_schema::flags f,
+           ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_loglevels_convert ();
+}
+
+loglevels* loglevels::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class loglevels (*this, f, c);
+}
+
+loglevels::value loglevels::
+_xsd_loglevels_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_loglevels_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_loglevels_indexes_,
+                    _xsd_loglevels_indexes_ + 6,
+                    *this,
+                    c));
+
+  if (i == _xsd_loglevels_indexes_ + 6 || _xsd_loglevels_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const loglevels::
+_xsd_loglevels_literals_[6] =
+{
+  "OFF",
+  "ERROR",
+  "WARN",
+  "INFO",
+  "DEBUG",
+  "TRACE"
+};
+
+const loglevels::value loglevels::
+_xsd_loglevels_indexes_[6] =
+{
+  ::loglevels::DEBUG,
+  ::loglevels::ERROR,
+  ::loglevels::INFO,
+  ::loglevels::OFF,
+  ::loglevels::TRACE,
+  ::loglevels::WARN
+};
+
 // simulation
 //
 
 simulation::
-simulation (const outputSettings_type& outputSettings,
+simulation (const boundaries_type& boundaries,
+            const inputSettings_type& inputSettings,
+            const outputSettings_type& outputSettings,
             const simulationParameters_type& simulationParameters)
 : ::xml_schema::type (),
+  boundaries_ (boundaries, this),
+  inputSettings_ (inputSettings, this),
   outputSettings_ (outputSettings, this),
   simulationParameters_ (simulationParameters, this),
-  cuboid_ (this)
+  cuboid_ (this),
+  disc_ (this)
 {
 }
 
 simulation::
-simulation (::std::unique_ptr< outputSettings_type > outputSettings,
+simulation (::std::unique_ptr< boundaries_type > boundaries,
+            ::std::unique_ptr< inputSettings_type > inputSettings,
+            ::std::unique_ptr< outputSettings_type > outputSettings,
             ::std::unique_ptr< simulationParameters_type > simulationParameters)
 : ::xml_schema::type (),
+  boundaries_ (std::move (boundaries), this),
+  inputSettings_ (std::move (inputSettings), this),
   outputSettings_ (std::move (outputSettings), this),
   simulationParameters_ (std::move (simulationParameters), this),
-  cuboid_ (this)
+  cuboid_ (this),
+  disc_ (this)
 {
 }
 
@@ -742,9 +1738,12 @@ simulation (const simulation& x,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
+  boundaries_ (x.boundaries_, f, this),
+  inputSettings_ (x.inputSettings_, f, this),
   outputSettings_ (x.outputSettings_, f, this),
   simulationParameters_ (x.simulationParameters_, f, this),
-  cuboid_ (x.cuboid_, f, this)
+  cuboid_ (x.cuboid_, f, this),
+  disc_ (x.disc_, f, this)
 {
 }
 
@@ -753,9 +1752,12 @@ simulation (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  boundaries_ (this),
+  inputSettings_ (this),
   outputSettings_ (this),
   simulationParameters_ (this),
-  cuboid_ (this)
+  cuboid_ (this),
+  disc_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -773,6 +1775,34 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xercesc::DOMElement& i (p.cur_element ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
+
+    // boundaries
+    //
+    if (n.name () == "boundaries" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundaries_type > r (
+        boundaries_traits::create (i, f, this));
+
+      if (!boundaries_.present ())
+      {
+        this->boundaries_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // inputSettings
+    //
+    if (n.name () == "inputSettings" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< inputSettings_type > r (
+        inputSettings_traits::create (i, f, this));
+
+      if (!inputSettings_.present ())
+      {
+        this->inputSettings_.set (::std::move (r));
+        continue;
+      }
+    }
 
     // outputSettings
     //
@@ -813,7 +1843,32 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
+    // disc
+    //
+    if (n.name () == "disc" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< disc_type > r (
+        disc_traits::create (i, f, this));
+
+      this->disc_.push_back (::std::move (r));
+      continue;
+    }
+
     break;
+  }
+
+  if (!boundaries_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundaries",
+      "");
+  }
+
+  if (!inputSettings_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "inputSettings",
+      "");
   }
 
   if (!outputSettings_.present ())
@@ -844,9 +1899,12 @@ operator= (const simulation& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
+    this->boundaries_ = x.boundaries_;
+    this->inputSettings_ = x.inputSettings_;
     this->outputSettings_ = x.outputSettings_;
     this->simulationParameters_ = x.simulationParameters_;
     this->cuboid_ = x.cuboid_;
+    this->disc_ = x.disc_;
   }
 
   return *this;
@@ -854,6 +1912,320 @@ operator= (const simulation& x)
 
 simulation::
 ~simulation ()
+{
+}
+
+// boundaries
+//
+
+boundaries::
+boundaries (const left_type& left,
+            const right_type& right,
+            const bottom_type& bottom,
+            const top_type& top,
+            const rear_type& rear,
+            const front_type& front)
+: ::xml_schema::type (),
+  left_ (left, this),
+  right_ (right, this),
+  bottom_ (bottom, this),
+  top_ (top, this),
+  rear_ (rear, this),
+  front_ (front, this)
+{
+}
+
+boundaries::
+boundaries (const boundaries& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  left_ (x.left_, f, this),
+  right_ (x.right_, f, this),
+  bottom_ (x.bottom_, f, this),
+  top_ (x.top_, f, this),
+  rear_ (x.rear_, f, this),
+  front_ (x.front_, f, this)
+{
+}
+
+boundaries::
+boundaries (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  left_ (this),
+  right_ (this),
+  bottom_ (this),
+  top_ (this),
+  rear_ (this),
+  front_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void boundaries::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // left
+    //
+    if (n.name () == "left" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< left_type > r (
+        left_traits::create (i, f, this));
+
+      if (!left_.present ())
+      {
+        this->left_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // right
+    //
+    if (n.name () == "right" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< right_type > r (
+        right_traits::create (i, f, this));
+
+      if (!right_.present ())
+      {
+        this->right_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // bottom
+    //
+    if (n.name () == "bottom" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< bottom_type > r (
+        bottom_traits::create (i, f, this));
+
+      if (!bottom_.present ())
+      {
+        this->bottom_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // top
+    //
+    if (n.name () == "top" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< top_type > r (
+        top_traits::create (i, f, this));
+
+      if (!top_.present ())
+      {
+        this->top_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // rear
+    //
+    if (n.name () == "rear" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< rear_type > r (
+        rear_traits::create (i, f, this));
+
+      if (!rear_.present ())
+      {
+        this->rear_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // front
+    //
+    if (n.name () == "front" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< front_type > r (
+        front_traits::create (i, f, this));
+
+      if (!front_.present ())
+      {
+        this->front_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!left_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "left",
+      "");
+  }
+
+  if (!right_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "right",
+      "");
+  }
+
+  if (!bottom_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "bottom",
+      "");
+  }
+
+  if (!top_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "top",
+      "");
+  }
+
+  if (!rear_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "rear",
+      "");
+  }
+
+  if (!front_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "front",
+      "");
+  }
+}
+
+boundaries* boundaries::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class boundaries (*this, f, c);
+}
+
+boundaries& boundaries::
+operator= (const boundaries& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->left_ = x.left_;
+    this->right_ = x.right_;
+    this->bottom_ = x.bottom_;
+    this->top_ = x.top_;
+    this->rear_ = x.rear_;
+    this->front_ = x.front_;
+  }
+
+  return *this;
+}
+
+boundaries::
+~boundaries ()
+{
+}
+
+// inputSettings
+//
+
+inputSettings::
+inputSettings (const inputFile_type& inputFile)
+: ::xml_schema::type (),
+  inputFile_ (inputFile, this)
+{
+}
+
+inputSettings::
+inputSettings (const inputSettings& x,
+               ::xml_schema::flags f,
+               ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  inputFile_ (x.inputFile_, f, this)
+{
+}
+
+inputSettings::
+inputSettings (const ::xercesc::DOMElement& e,
+               ::xml_schema::flags f,
+               ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  inputFile_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void inputSettings::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // inputFile
+    //
+    if (n.name () == "inputFile" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< inputFile_type > r (
+        inputFile_traits::create (i, f, this));
+
+      if (!inputFile_.present ())
+      {
+        this->inputFile_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!inputFile_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "inputFile",
+      "");
+  }
+}
+
+inputSettings* inputSettings::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class inputSettings (*this, f, c);
+}
+
+inputSettings& inputSettings::
+operator= (const inputSettings& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->inputFile_ = x.inputFile_;
+  }
+
+  return *this;
+}
+
+inputSettings::
+~inputSettings ()
 {
 }
 
@@ -978,11 +2350,54 @@ outputSettings::
 simulationParameters::
 simulationParameters (const end_t_type& end_t,
                       const delta_t_type& delta_t,
-                      const start_t_type& start_t)
+                      const start_t_type& start_t,
+                      const epsilon_type& epsilon,
+                      const sigma_type& sigma,
+                      const average_brownian_motion_type& average_brownian_motion,
+                      const force_type& force,
+                      const algorithm_type& algorithm,
+                      const loglevel_type& loglevel,
+                      const domain_type& domain,
+                      const cutoff_radius_type& cutoff_radius)
 : ::xml_schema::type (),
   end_t_ (end_t, this),
   delta_t_ (delta_t, this),
-  start_t_ (start_t, this)
+  start_t_ (start_t, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this),
+  average_brownian_motion_ (average_brownian_motion, this),
+  force_ (force, this),
+  algorithm_ (algorithm, this),
+  loglevel_ (loglevel, this),
+  domain_ (domain, this),
+  cutoff_radius_ (cutoff_radius, this)
+{
+}
+
+simulationParameters::
+simulationParameters (const end_t_type& end_t,
+                      const delta_t_type& delta_t,
+                      const start_t_type& start_t,
+                      const epsilon_type& epsilon,
+                      const sigma_type& sigma,
+                      const average_brownian_motion_type& average_brownian_motion,
+                      const force_type& force,
+                      const algorithm_type& algorithm,
+                      const loglevel_type& loglevel,
+                      ::std::unique_ptr< domain_type > domain,
+                      const cutoff_radius_type& cutoff_radius)
+: ::xml_schema::type (),
+  end_t_ (end_t, this),
+  delta_t_ (delta_t, this),
+  start_t_ (start_t, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this),
+  average_brownian_motion_ (average_brownian_motion, this),
+  force_ (force, this),
+  algorithm_ (algorithm, this),
+  loglevel_ (loglevel, this),
+  domain_ (std::move (domain), this),
+  cutoff_radius_ (cutoff_radius, this)
 {
 }
 
@@ -993,7 +2408,15 @@ simulationParameters (const simulationParameters& x,
 : ::xml_schema::type (x, f, c),
   end_t_ (x.end_t_, f, this),
   delta_t_ (x.delta_t_, f, this),
-  start_t_ (x.start_t_, f, this)
+  start_t_ (x.start_t_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this),
+  average_brownian_motion_ (x.average_brownian_motion_, f, this),
+  force_ (x.force_, f, this),
+  algorithm_ (x.algorithm_, f, this),
+  loglevel_ (x.loglevel_, f, this),
+  domain_ (x.domain_, f, this),
+  cutoff_radius_ (x.cutoff_radius_, f, this)
 {
 }
 
@@ -1004,7 +2427,15 @@ simulationParameters (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   end_t_ (this),
   delta_t_ (this),
-  start_t_ (this)
+  start_t_ (this),
+  epsilon_ (this),
+  sigma_ (this),
+  average_brownian_motion_ (this),
+  force_ (this),
+  algorithm_ (this),
+  loglevel_ (this),
+  domain_ (this),
+  cutoff_radius_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1056,6 +2487,106 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!epsilon_.present ())
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!sigma_.present ())
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // average_brownian_motion
+    //
+    if (n.name () == "average_brownian_motion" && n.namespace_ ().empty ())
+    {
+      if (!average_brownian_motion_.present ())
+      {
+        this->average_brownian_motion_.set (average_brownian_motion_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // force
+    //
+    if (n.name () == "force" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< force_type > r (
+        force_traits::create (i, f, this));
+
+      if (!force_.present ())
+      {
+        this->force_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // algorithm
+    //
+    if (n.name () == "algorithm" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< algorithm_type > r (
+        algorithm_traits::create (i, f, this));
+
+      if (!algorithm_.present ())
+      {
+        this->algorithm_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // loglevel
+    //
+    if (n.name () == "loglevel" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< loglevel_type > r (
+        loglevel_traits::create (i, f, this));
+
+      if (!loglevel_.present ())
+      {
+        this->loglevel_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // domain
+    //
+    if (n.name () == "domain" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< domain_type > r (
+        domain_traits::create (i, f, this));
+
+      if (!domain_.present ())
+      {
+        this->domain_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // cutoff-radius
+    //
+    if (n.name () == "cutoff-radius" && n.namespace_ ().empty ())
+    {
+      if (!cutoff_radius_.present ())
+      {
+        this->cutoff_radius_.set (cutoff_radius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1079,6 +2610,62 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "start_t",
       "");
   }
+
+  if (!epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "epsilon",
+      "");
+  }
+
+  if (!sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "sigma",
+      "");
+  }
+
+  if (!average_brownian_motion_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "average_brownian_motion",
+      "");
+  }
+
+  if (!force_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "force",
+      "");
+  }
+
+  if (!algorithm_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "algorithm",
+      "");
+  }
+
+  if (!loglevel_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "loglevel",
+      "");
+  }
+
+  if (!domain_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "domain",
+      "");
+  }
+
+  if (!cutoff_radius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "cutoff-radius",
+      "");
+  }
 }
 
 simulationParameters* simulationParameters::
@@ -1097,6 +2684,14 @@ operator= (const simulationParameters& x)
     this->end_t_ = x.end_t_;
     this->delta_t_ = x.delta_t_;
     this->start_t_ = x.start_t_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
+    this->average_brownian_motion_ = x.average_brownian_motion_;
+    this->force_ = x.force_;
+    this->algorithm_ = x.algorithm_;
+    this->loglevel_ = x.loglevel_;
+    this->domain_ = x.domain_;
+    this->cutoff_radius_ = x.cutoff_radius_;
   }
 
   return *this;
@@ -1309,6 +2904,208 @@ operator= (const cuboid& x)
 
 cuboid::
 ~cuboid ()
+{
+}
+
+// disc
+//
+
+disc::
+disc (const position_type& position,
+      const velocity_type& velocity,
+      const radius_type& radius,
+      const distance_type& distance,
+      const mass_type& mass)
+: ::xml_schema::type (),
+  position_ (position, this),
+  velocity_ (velocity, this),
+  radius_ (radius, this),
+  distance_ (distance, this),
+  mass_ (mass, this)
+{
+}
+
+disc::
+disc (::std::unique_ptr< position_type > position,
+      ::std::unique_ptr< velocity_type > velocity,
+      const radius_type& radius,
+      const distance_type& distance,
+      const mass_type& mass)
+: ::xml_schema::type (),
+  position_ (std::move (position), this),
+  velocity_ (std::move (velocity), this),
+  radius_ (radius, this),
+  distance_ (distance, this),
+  mass_ (mass, this)
+{
+}
+
+disc::
+disc (const disc& x,
+      ::xml_schema::flags f,
+      ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  position_ (x.position_, f, this),
+  velocity_ (x.velocity_, f, this),
+  radius_ (x.radius_, f, this),
+  distance_ (x.distance_, f, this),
+  mass_ (x.mass_, f, this)
+{
+}
+
+disc::
+disc (const ::xercesc::DOMElement& e,
+      ::xml_schema::flags f,
+      ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  position_ (this),
+  velocity_ (this),
+  radius_ (this),
+  distance_ (this),
+  mass_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void disc::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // position
+    //
+    if (n.name () == "position" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< position_type > r (
+        position_traits::create (i, f, this));
+
+      if (!position_.present ())
+      {
+        this->position_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // velocity
+    //
+    if (n.name () == "velocity" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< velocity_type > r (
+        velocity_traits::create (i, f, this));
+
+      if (!velocity_.present ())
+      {
+        this->velocity_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // radius
+    //
+    if (n.name () == "radius" && n.namespace_ ().empty ())
+    {
+      if (!radius_.present ())
+      {
+        this->radius_.set (radius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // distance
+    //
+    if (n.name () == "distance" && n.namespace_ ().empty ())
+    {
+      if (!distance_.present ())
+      {
+        this->distance_.set (distance_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // mass
+    //
+    if (n.name () == "mass" && n.namespace_ ().empty ())
+    {
+      if (!mass_.present ())
+      {
+        this->mass_.set (mass_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!position_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "position",
+      "");
+  }
+
+  if (!velocity_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "velocity",
+      "");
+  }
+
+  if (!radius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "radius",
+      "");
+  }
+
+  if (!distance_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "distance",
+      "");
+  }
+
+  if (!mass_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "mass",
+      "");
+  }
+}
+
+disc* disc::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class disc (*this, f, c);
+}
+
+disc& disc::
+operator= (const disc& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->position_ = x.position_;
+    this->velocity_ = x.velocity_;
+    this->radius_ = x.radius_;
+    this->distance_ = x.distance_;
+    this->mass_ = x.mass_;
+  }
+
+  return *this;
+}
+
+disc::
+~disc ()
 {
 }
 

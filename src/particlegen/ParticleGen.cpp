@@ -23,6 +23,7 @@ int main(int argc, char *argsv[]){
     int opt;
 
     bool xml_flag = false;
+    bool cli_flag = false;
 
     bool save_flag = false;
     bool xpos_flag = false;
@@ -38,6 +39,7 @@ int main(int argc, char *argsv[]){
     bool mass_flag = false;
 
     std::vector<Cuboid> cuboids;
+    std::vector<Disc> discs;
 
     const char* xml_file = "";
 
@@ -56,6 +58,7 @@ int main(int argc, char *argsv[]){
                 break;
             }
             case 'l':{
+                cli_flag = true;
                 //parsing logging level
                 if(std::string(optarg) == std::string("OFF")){
                     spdlog::set_level(spdlog::level::off);
@@ -92,6 +95,7 @@ int main(int argc, char *argsv[]){
                 return EXIT_FAILURE;
             }
             case 'a':{
+                cli_flag = true;
                 xvel_flag = true;
                 if(isDouble(optarg)){
                     velocity[0] = std::atof(optarg);
@@ -103,6 +107,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'b':{
+                cli_flag = true;
                 yvel_flag = true;
                 if(isDouble(optarg)){
                     velocity[1] = std::atof(optarg);
@@ -114,6 +119,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'c':{
+                cli_flag = true;
                 zvel_flag = true;
                 if(isDouble(optarg)){
                     velocity[2] = std::atof(optarg);
@@ -125,6 +131,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'x':{
+                cli_flag = true;
                 xpos_flag = true;
                 if(isDouble(optarg)){
                     position[0] = std::atof(optarg);
@@ -136,6 +143,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'y':{
+                cli_flag = true;
                 ypos_flag = true;
                 if(isDouble(optarg)){
                     position[1] = std::atof(optarg);
@@ -147,6 +155,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'z':{
+                cli_flag = true;
                 zpos_flag = true;
                 if(isDouble(optarg)){
                     position[2] = std::atof(optarg);
@@ -158,6 +167,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'X':{
+                cli_flag = true;
                 xsize_flag = true;
                 if(isInteger(optarg)){
                     dimensions[0] = std::atof(optarg);
@@ -169,6 +179,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'Y':{
+                cli_flag = true;
                 ysize_flag = true;
                 if(isInteger(optarg)){
                     dimensions[1] = std::atof(optarg);
@@ -180,6 +191,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'Z':{
+                cli_flag = true;
                 zsize_flag = true;
                 if(isInteger(optarg)){
                     dimensions[2] = std::atof(optarg);
@@ -191,6 +203,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'd':{
+                cli_flag = true;
                 dist_flag = true;
                 if(isDouble(optarg)){
                     distance = std::atof(optarg);
@@ -202,6 +215,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'm':{
+                cli_flag = true;
                 mass_flag = true;
                 if(isDouble(optarg)){
                     mass = std::atof(optarg);
@@ -213,6 +227,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 's':{
+                cli_flag = true;
                 save_flag = true;
                 break;
             }
@@ -231,27 +246,46 @@ int main(int argc, char *argsv[]){
 
     spdlog::info("Starting ParticleGenerator application");
 
-    if(!save_flag){
-        spdlog::warn("No '-s' flag provided. File was overwritten.");
-        inputFileManager::resetFile("../input/generated-input.txt");
-    }
-
-    if((!xml_flag) && (!(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag))){
-        spdlog::error("Fail! Required arguments are missing.");
-        ParticleGenerator::logHelp();
-        return EXIT_FAILURE;
-    }
-    if(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag){
-        cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass));
-    }
-
     if(xml_flag){
+        if(cli_flag){
+            spdlog::error("Please use either xml or cli.");
+            ParticleGenerator::logHelp();
+            return EXIT_FAILURE;
+        }
         XMLReader xmlreader;
         xmlreader.readCuboids(xml_file, cuboids);
+        xmlreader.readDiscs(xml_file, discs);
+
+    }else{
+        if(!cli_flag){
+            spdlog::error("Fail! Required command line arguments are missing.");
+            ParticleGenerator::logHelp();
+            return EXIT_FAILURE;
+        }
+        if(!save_flag){
+        spdlog::warn("No '-s' flag provided. File was overwritten.");
+        inputFileManager::resetFile("../input/generated-input.txt");
+        }
+
+        if(!(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag)){
+            spdlog::error("Fail! Required command line arguments are missing.");
+            ParticleGenerator::logHelp();
+            return EXIT_FAILURE;
+        }
+
+        if(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag){
+            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass));
+        }
+        
     }
+
 
     for(const auto& cuboid : cuboids){
         ParticleGenerator::generateCuboid(cuboid, "../input/generated-input.txt");
+    }
+
+    for(const auto& disc : discs){
+        ParticleGenerator::generateDisc(disc, "../input/generated-input.txt");
     }
     spdlog::info("ParticleGenerator application finished successfully.");
 }
