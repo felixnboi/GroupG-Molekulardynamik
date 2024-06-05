@@ -15,7 +15,7 @@ ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
 };
 
 void ParticleContainerLinkedCell::reserve(size_t size){
-    //TODO
+    particles.reserve(size);
 }
 
 const std::array<double, 3> ParticleContainerLinkedCell::getSize()

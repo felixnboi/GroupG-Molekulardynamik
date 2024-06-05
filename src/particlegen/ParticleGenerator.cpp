@@ -39,23 +39,27 @@ void ParticleGenerator::generateCuboid(double x, double y, double z, size_t size
     input_file.close();
 }
 
-void ParticleGenerator::generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename) {
-    spdlog::info("Generating disc with parameters: x={}, y={}, z={}, radius={}, MoleculesPerRadius={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, radius, MoleculesPerRadius, distance, mass, velocityX, velocityY, velocityZ);
+void ParticleGenerator::generateDisc(double x, double y, double z, int MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename) {
+    spdlog::info("Generating disc with parameters: x={}, y={}, z={}, MoleculesPerRadius={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, MoleculesPerRadius, distance, mass, velocityX, velocityY, velocityZ);
+
+    std::fstream input_file;
+    std::string tmp_string;
+    double radius = MoleculesPerRadius * distance;
     
-    std::fstream input_file(filename, std::ios::in | std::ios::out | std::ios::app);
+    input_file.open(filename, std::ios::in | std::ios::out);
     if (!input_file.is_open()) {
         spdlog::error("Failed to open file {}", filename);
         return;
     }
     // skipping comments and getting the number of particles
-    std::string tmp_string;
     std::streampos current = input_file.tellp();
     while (tmp_string.empty() || tmp_string[0] == '#') {
         current = input_file.tellp();
         getline(input_file, tmp_string);
     }
+
     input_file.seekp(current);
-    int numParticles = std::stoi(tmp_string) + MoleculesPerRadius * MoleculesPerRadius;
+    int numParticles = std::stoi(tmp_string)+static_cast<int>(M_PI*radius*radius/(distance*distance));
     input_file << numParticles;
     input_file.close();
 
@@ -65,15 +69,15 @@ void ParticleGenerator::generateDisc(double x, double y, double z, double radius
         return;
     }
     // Generate particles within the specified radius
-    for (size_t i = 0; i < MoleculesPerRadius; ++i) {
-        for (size_t j = 0; j < MoleculesPerRadius; ++j) {
+    for (int i = -MoleculesPerRadius; i < MoleculesPerRadius; ++i) {
+        for (int j = -MoleculesPerRadius; j < MoleculesPerRadius; ++j) {
             double size_x = i * distance;
             double size_y = j * distance;
             double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
 
             if (distanceFromCenter <= radius) {
-                double particleX = x + size_x - radius;
-                double particleY = y + size_y - radius;
+                double particleX = x + size_x;
+                double particleY = y + size_y;
                 double particleZ = z;
 
                 input_file << particleX << " " << particleY << " " << particleZ << " "
@@ -82,7 +86,6 @@ void ParticleGenerator::generateDisc(double x, double y, double z, double radius
             }
         }
     }
-
     input_file.close();
 }
 
