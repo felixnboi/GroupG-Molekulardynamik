@@ -61,7 +61,6 @@ void ParticleGenerator::generateDisc(double x, double y, double z, int Molecules
     input_file.seekp(current);
     int numParticles = std::stoi(tmp_string)+static_cast<int>(M_PI*radius*radius/(distance*distance));
     input_file << numParticles;
-    std::cout << "numParticles hat den Wert " << numParticles << std::endl;
     input_file.close();
 
     input_file.open(filename, std::ios::in | std::ios::out | std::ios::app);
@@ -84,12 +83,9 @@ void ParticleGenerator::generateDisc(double x, double y, double z, int Molecules
                 input_file << particleX << " " << particleY << " " << particleZ << " "
                            << velocityX << " " << velocityY << " " << velocityZ << " "
                            << mass << "\n";
-                           
-                std::cout << "particle hat die Werte " << particleX << " "<<particleY << " "<<particleZ << std::endl;
             }
         }
     }
-
     input_file.close();
 }
 

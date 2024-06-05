@@ -16,7 +16,7 @@ ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
 };
 
 void ParticleContainerLinkedCell::reserve(size_t size){
-    //TODO
+    particles.reserve(size);
 }
 
 void ParticleContainerLinkedCell::addParticle(const Particle& particle){

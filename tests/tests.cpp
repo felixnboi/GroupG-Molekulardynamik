@@ -15,7 +15,7 @@ bool areDoublesEqual(double a, double b, double epsilon = EPSILON) {
 }
 
 // Test case for adding particles and getting particles
-TEST(ParticleContainerTest, AddAndGetParticles) {
+TEST(ParticleContainerOld, AddAndGetParticles) {
     ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
@@ -43,7 +43,7 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
 }
 
 // Test case for iterators
-TEST(ParticleContainerTest, IteratorBeginEnd) {
+TEST(ParticleContainerOld, IteratorBeginEnd) {
     ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
