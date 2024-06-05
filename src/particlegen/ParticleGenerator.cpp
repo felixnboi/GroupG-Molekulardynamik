@@ -51,7 +51,8 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
     input_file.close();
 }
 
-void ParticleGenerator::generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename) {
+void ParticleGenerator::generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, 
+double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename) {
     spdlog::info("Generating disc with parameters: x={}, y={}, z={}, radius={}, MoleculesPerRadius={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, radius, MoleculesPerRadius, distance, mass, velocityX, velocityY, velocityZ);
     
     std::fstream input_file(filename, std::ios::in | std::ios::out | std::ios::app);

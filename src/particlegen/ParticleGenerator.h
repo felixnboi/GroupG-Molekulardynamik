@@ -44,7 +44,8 @@ void generateCuboid(const Cuboid& cuboid, const char *filename);
  * @param velocityZ Initial velocity along the z-axis for the whole disc.
  * @param filename File to which the particles will be written.
  */
-void ParticleGenerator::generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename);
+void generateDisc(double x, double y, double z, double radius, size_t MoleculesPerRadius, 
+double distance, double mass, double velocityX, double velocityY, double velocityZ, const char* filename);
 /**
  * @brief Logs a usage message.
  */
