@@ -2,11 +2,13 @@
 
 #include "../data/Particle.h"
 #include "../data/Cuboid.h"
+#include "../data/Disc.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 #include "../inputFileManager.h"
 #include "spdlog/spdlog.h"
 
 #include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -43,8 +45,7 @@ void generateCuboid(const Cuboid& cuboid, const char *filename);
  * @param velocityZ Initial velocity along the z-axis for the whole disc.
  * @param filename File to which the particles will be written.
  */
-void generateDisc(double x, double y, double z, int MoleculesPerRadius, double distance, double mass, 
-double velocityX, double velocityY, double velocityZ, const char* filename);
+void generateDisc(const Disc& disc, const char* filename);
 
 /**
  * @brief Logs a usage message.

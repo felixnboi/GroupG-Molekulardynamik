@@ -8,6 +8,7 @@
 #include "../src/ParticleContainers/ParticleContainer.h"
 #include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
 #include "../src/data/Cuboid.h"
+#include "../src/data/Disc.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -175,7 +176,7 @@ TEST(ParticleGenerator, GenerateDisc) {
     inputFileManager::resetFile("../input/generated-input.txt");
 
     // Generate particles in a disc and write to the file
-    ParticleGenerator::generateDisc(5.0, 5.0, 5.0, 5, 1.0, 2.0, 1.0, 1.0, 1.0, "../input/generated-input.txt");
+    ParticleGenerator::generateDisc(Disc({5.0, 5.0, 5.0},{1.0, 1.0, 1.0}, 5, 1.0, 2.0), "../input/generated-input.txt");
 
     // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");

@@ -39,6 +39,25 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="generate_flag">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="logLevel">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OFF"/>
+            <xs:enumeration value="ERROR"/>
+            <xs:enumeration value="WARN"/>
+            <xs:enumeration value="INFO"/>
+            <xs:enumeration value="DEBUG"/>
+            <xs:enumeration value="TRACE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
 
     <!-- Root element -->
     <xs:element name="simulation">
@@ -57,6 +76,16 @@
                     </xs:sequence>
                 </xs:complexType>
             <xs:element>
+
+            <!-- Input settings -->
+            <xs:element name="inputSettings">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="inputFile" type="xs:string"/>
+                        <xs:element name="generateFlag" type="generate_flag"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
 
             <!-- Output settings -->
             <xs:element name="outputSettings">
@@ -91,6 +120,19 @@
                         <xs:element name="position" type="double_vector"/>
                         <xs:element name="velocity" type="double_vector"/>
                         <xs:element name="dimensions" type="unsigned_vector"/>
+                        <xs:element name="distance" type="xs:double"/>
+                        <xs:element name="mass" type="xs:double"/>                        
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- Discs -->
+            <xs:element name="disc" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="position" type="double_vector"/>
+                        <xs:element name="velocity" type="double_vector"/>
+                        <xs:element name="radius" type="xs:int"/>
                         <xs:element name="distance" type="xs:double"/>
                         <xs:element name="mass" type="xs:double"/>                        
                     </xs:sequence>

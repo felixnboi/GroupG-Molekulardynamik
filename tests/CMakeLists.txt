@@ -11,6 +11,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/FileReader.cpp
     ${PROJECT_SOURCE_DIR}/src/data/Cuboid.cpp    
+    ${PROJECT_SOURCE_DIR}/src/data/Disc.cpp    
 )
 
 target_link_libraries(tests gtest_main)

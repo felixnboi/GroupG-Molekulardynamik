@@ -1,5 +1,4 @@
 #include "ParticleGenerator.h"
-#include <cmath>
 
 void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filename) {
     std::fstream input_file;
@@ -11,9 +10,7 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
     double mass = cuboid.getMass();
     double distance = cuboid.getDistance();
     
-    // spdlog::info("Generating cuboid with parameters: x={}, y={}, z={}, sizeX={}, sizeY={}, sizeZ={}, distance={}, mass={},
-    //  velocityX={}, velocityY={}, velocityZ={}", position[0], position[1], position[2], dimensions[0], dimensions[1], dimensions[2], 
-    //  distance, mass, velocity[0], velocity[1], velocity[2]);
+    spdlog::info("Generating cuboid");
     
     input_file.open(filename,std::ios::in|std::ios::out);
     std::streampos current = input_file.tellp();
@@ -52,9 +49,14 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
 }
 
 
-void ParticleGenerator::generateDisc(double x, double y, double z, int MoleculesPerRadius, double distance, double mass, 
-double velocityX, double velocityY, double velocityZ, const char* filename) {
-    spdlog::info("Generating disc with parameters: x={}, y={}, z={}, MoleculesPerRadius={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, MoleculesPerRadius, distance, mass, velocityX, velocityY, velocityZ);
+void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
+    std::array<double ,3> position = disc.getPosition();
+    std::array<double ,3> velocity = disc.getVelocity();
+    int MoleculesPerRadius = disc.getRadius();
+    double distance = disc.getDistance();
+    double mass = disc.getMass();
+
+    spdlog::info("Generating disc");
 
     std::fstream input_file;
     std::string tmp_string;
@@ -91,12 +93,12 @@ double velocityX, double velocityY, double velocityZ, const char* filename) {
             double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
 
             if (distanceFromCenter <= radius) {
-                double particleX = x + size_x;
-                double particleY = y + size_y;
-                double particleZ = z;
+                double particleX = position[0] + size_x;
+                double particleY = position[1] + size_y;
+                double particleZ = position[2];
 
                 input_file << particleX << " " << particleY << " " << particleZ << " "
-                           << velocityX << " " << velocityY << " " << velocityZ << " "
+                           << velocity[0] << " " << velocity[1] << " " << velocity[2] << " "
                            << mass << "\n";
             }
         }
