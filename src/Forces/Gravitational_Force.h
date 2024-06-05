@@ -27,5 +27,5 @@ public:
      * 
      * @param particles The ParticleContainer containing the particles for which gravitational forces are to be calculated.
      */
-    void calculateF(ParticleContainer &particles) override;
+    void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag) override;
 };

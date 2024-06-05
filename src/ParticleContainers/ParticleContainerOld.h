@@ -21,13 +21,13 @@ public:
 
     void reserve(size_t size) override;
 
-    void addParticle(const Particle& particle) override;
+    void addParticle(const std::shared_ptr<Particle> particle) override;
     
     ParticleIterator begin() override;
 
     ParticleIterator end() override;
 
-    const std::vector<Particle>& getParticles() override;
+    const std::vector<std::shared_ptr<Particle>>& getParticles() override;
 
-    std::vector<std::array<Particle,2>> getParticlePairs() override;
+    std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
 };

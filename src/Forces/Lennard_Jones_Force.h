@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Force.h"
-
+#include "../ParticleContainers/ParticleContainerLinkedCell.h"
 #include <math.h>
 
 
@@ -27,5 +27,5 @@ public:
      * 
      * @param particles The container of particles for which to calculate the forces.
      */
-    void calculateF(ParticleContainer &particles) override;
+    void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag) override;
 };

@@ -3,10 +3,12 @@
 Simulation::Simulation()
     : start_time(0), end_time(1000), delta_t(0.014), write_frequency(10), particles(nullptr), force(nullptr), timing_enabled(false), 
     xml_flag(false), generate_flag(false), input_flag(false), force_flag(false), time_flag(false), cli_flag(false), 
-    linkedcell_flag(false), baseName("MD_vtk") {}
+    linkedcell_flag(false), outflowFlags({false,false,false,false,false,false}), lenJonesBoundaryFlags({true,true,true,true,true,true}), 
+    baseName("MD_vtk") {}
 
 Simulation::~Simulation() {}
 
+//TODO inizialization of outflowFlags, lenJonesBoundaryFlags and linkedcell_flag
 
 bool Simulation::initialize(int argc, char* argv[]) {
     spdlog::set_level(spdlog::level::info);
@@ -24,7 +26,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
     int opt;
 
-    particles = new ParticleContainerOld();
+    particles = std::make_unique<ParticleContainerLinkedCell>(10000,10000,10000, 1000);
 
     const char* xml_file = "";
 
@@ -148,11 +150,11 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 cli_flag = true;
                 force_flag = true;
                 if (*optarg == 'g') {
-                    force = new Gravitational_Force();
+                    force = std::make_unique<Gravitational_Force>();
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } if (*optarg == 'l') {
-                    force = new Lennard_Jones_Force();
+                    force = std::make_unique<Lennard_Jones_Force>();
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -198,13 +200,11 @@ bool Simulation::initialize(int argc, char* argv[]) {
     //     return false;
     // }
 
-    std::cout << "test1\n";
     if(xml_flag){
         XMLReader xmlreader;
         xmlreader.readSimulation(xml_file, baseName, write_frequency, start_time, end_time, delta_t);
     }
 
-    std::cout << "test2\n";
 
     // Check if start_time is after end_time
     if (start_time > end_time) {
@@ -233,7 +233,7 @@ void Simulation::run() {
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles);
+        force->calculateF(*particles, lenJonesBouneryFlags);
         calculateV();
         current_time += delta_t;
         iteration++;
@@ -243,7 +243,7 @@ void Simulation::run() {
     if (time_flag) {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles);
+            force->calculateF(*particles, lenJonesBouneryFlags);
             calculateV();
             iteration++;
             current_time += delta_t;
@@ -251,7 +251,7 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles);
+            force->calculateF(*particles, lenJonesBouneryFlags);
             calculateV();
             iteration++;
 
@@ -274,17 +274,15 @@ bool Simulation::isTimingEnabled() const {
 }
 
 void Simulation::cleanup(){
-    delete force;
-    delete particles;
 }
 
 void Simulation::calculateX() {
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
-    auto m = p->getM(); ///< Mass of the particle.
-    auto cur_x = p->getX(); ///< Current position of the particle.
-    auto cur_v = p->getV(); ///< Current velocity of the particle.
-    auto cur_F = p->getF(); ///< Current force acting on the particle.
+    auto m = (*p)->getM(); ///< Mass of the particle.
+    auto cur_x = (*p)->getX(); ///< Current position of the particle.
+    auto cur_v = (*p)->getV(); ///< Current velocity of the particle.
+    auto cur_F = (*p)->getF(); ///< Current force acting on the particle.
     std::array<double, 3> cur_x_dummy = {0,0,0}; ///< Dummy array to store new position components.
 
     // calculating new position components for each dimension (x, y, z)
@@ -292,24 +290,29 @@ void Simulation::calculateX() {
       cur_x_dummy[i] = cur_x[i] + delta_t * cur_v[i] + delta_t * delta_t * cur_F[i] / (2*m); 
     }
     // set the new position for the particle
-    p->setX(cur_x_dummy);
+    (*p)->setX(cur_x_dummy);
   }
+  if(linkedCellsFlag){
+    ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());
+    LCContainer->updateLoctions(outflowFlags);
+  }
+
 }
 
 void Simulation::calculateV() {
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
-    auto m = p->getM(); ///< Mass of the particle.
-    auto cur_v = p->getV(); ///< Current velocity of the particle.
-    auto cur_F = p->getF(); ///< Current force acting on the particle.
-    auto old_F = p->getOldF(); ///< Previous force acting on the particle.
+    auto m = (*p)->getM(); ///< Mass of the particle.
+    auto cur_v = (*p)->getV(); ///< Current velocity of the particle.
+    auto cur_F = (*p)->getF(); ///< Current force acting on the particle.
+    auto old_F = (*p)->getOldF(); ///< Previous force acting on the particle.
     std::array<double, 3> cur_v_dummy = {0,0,0}; ///< Dummy array to store new velocity components.
     // calculating new velocity components for each dimension (x, y, z)
     for(int i = 0; i<3; i++){
       cur_v_dummy[i] = cur_v[i] + delta_t * (old_F[i] + cur_F[i]) / (2*m);
     }
     // set the new velocity for the particle
-    p->setV(cur_v_dummy);
+    (*p)->setV(cur_v_dummy);
   }
 }
 
@@ -320,7 +323,7 @@ void Simulation::plotParticles(int iteration) {
   writer.initializeOutput(particles->getParticles().size()); 
   // iterating over each particle to plot its position
   for(const auto& p : particles->getParticles()){
-    writer.plotParticle(p);
+    writer.plotParticle(*p);
   }
   // write the plotted particle positions to a VTK file
   writer.writeFile(baseName, iteration);

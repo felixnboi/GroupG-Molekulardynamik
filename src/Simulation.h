@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <string>
 #include <chrono>
+#include <array>
 
 #include "io/input/FileReader.h"
 #include "io/input/XMLReader.h"
@@ -79,8 +80,8 @@ private:
     double end_time;
     double delta_t;
     unsigned write_frequency;
-    ParticleContainer* particles;
-    Force* force;
+    std::unique_ptr<ParticleContainer> particles;
+    std::unique_ptr<Force> force;
 
     bool timing_enabled;
     bool xml_flag;
@@ -91,9 +92,14 @@ private:
     bool cli_flag;
     bool linkedcell_flag;
 
+    std::array<bool,6> lenJonesBoundaryFlags;
+    std::array<bool,6> outflowFlags;
+
     std::string baseName;
     std::string input_file;
     std::string input_file_user;
+
+    
 
     /**
      * @brief Calculate the position for all particles.
