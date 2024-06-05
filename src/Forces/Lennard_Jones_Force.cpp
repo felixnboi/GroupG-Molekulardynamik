@@ -8,55 +8,53 @@ Lennard_Jones_Force::~Lennard_Jones_Force() {
 };
 
 void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag) {
-  std::vector<std::array<Particle,2>> particlePairs = particles.getParticlePairs();
-  std::vector<Particle>::iterator particle_i; ///< Iterator for iterating over particles.
-  std::vector<Particle>::iterator particle_j; ///< Second iterator for nested loop over particles.
+  std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs = particles.getParticlePairs();
+  std::shared_ptr<Particle> particle_i;
+  std::shared_ptr<Particle> particle_j;
   double epsilon = 5;
   double sigma = 1;
   double sigmaPow6 = pow(sigma,6);
   double sigmaPow12 = pow(sigma,12);
   // reset the force for each particle and store the old force
   for (auto pair = particlePairs.begin(); pair != particlePairs.end(); pair++){
-    *particle_i = (*pair)[0];
-    particle_i->setOldF(particle_i->getF());
-    particle_i->setF({0,0,0});
+  std::shared_ptr<Particle> particle = (*pair)[0];
+    particle->setOldF(particle->getF());
+    particle->setF({0,0,0});
   }
-
-  if(reflectLenJonesFlag[0]||reflectLenJonesFlag[1]||reflectLenJonesFlag[2]||reflectLenJonesFlag[3]||reflectLenJonesFlag[4]||reflectLenJonesFlag[5])
-  {
+  if(reflectLenJonesFlag[0]||reflectLenJonesFlag[1]||reflectLenJonesFlag[2]||reflectLenJonesFlag[3]||reflectLenJonesFlag[4]||reflectLenJonesFlag[5])  {
     ParticleContainerLinkedCell &LCContainer = dynamic_cast<ParticleContainerLinkedCell&>(particles);
-    std::vector<Particle> boundery = LCContainer.getBoundary();
+    std::vector<std::shared_ptr<Particle>> boundery = LCContainer.getBoundary();
     for(auto particle = boundery.begin(); particle != boundery.end(); particle++){
-      std::array<double, 3> cur_F_dummy = particle->getF();
+      std::array<double, 3> cur_F_dummy = (*particle)->getF();
       for(int i = 0; i < 3; i++){
-        if(reflectLenJonesFlag[2*i]||particle->getX()[i]< LCContainer.getCellSize()[i]){
-          auto norm_squared = pow(2*particle->getX()[i], 2);
+        if(reflectLenJonesFlag[2*i]||(*particle)->getX()[i]< LCContainer.getCellSize()[i]){
+          auto norm_squared = pow(2*(*particle)->getX()[i], 2);
           auto norm_pow6 = pow(norm_squared, 3);
 
           double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
           if(directionlessForce>0){
-            cur_F_dummy[i] += directionlessForce *2*particle->getX()[i];
+            cur_F_dummy[i] += directionlessForce *2*(*particle)->getX()[i];
           }
         }
-        if(reflectLenJonesFlag[2*i+1]||particle->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]){
-          auto norm_squared = pow(2*particle->getX()[i], 2);
+        if(reflectLenJonesFlag[2*i+1]||(*particle)->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]){
+          auto norm_squared = pow(2*(*particle)->getX()[i], 2);
           auto norm_pow6 = pow(norm_squared, 3);
 
           double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
 
           if(directionlessForce>0){
-            cur_F_dummy[i] += directionlessForce *2*(particle->getX()[i]-LCContainer.getSize()[i]);
+            cur_F_dummy[i] += directionlessForce *2*((*particle)->getX()[i]-LCContainer.getSize()[i]);
           }
         }
       }
-      particle->setF(cur_F_dummy);
+      (*particle)->setF(cur_F_dummy);
     }
   }
 
   // iterate over all pairs of particles to calculate forces
   for (auto pair = particlePairs.begin(); pair != particlePairs.end(); pair++){
-    *particle_i = (*pair)[0];
-    *particle_j = (*pair)[1];
+    particle_i = (*pair)[0];
+    particle_j = (*pair)[1];
     auto cur_x_i = particle_i->getX();
 
     std::array<double, 3> cur_F_i_dummy = particle_i->getF();

@@ -5,23 +5,24 @@
 class ParticleContainerLinkedCell : public ParticleContainer{
 
 private:
-    std::vector<Particle>* linkedCells;
-    std::array<size_t, 3> size;
-    std::array<size_t, 3>  cellSize;
+    std::unique_ptr<std::list<std::shared_ptr<Particle>>[]> linkedCells;
+    std::array<double, 3> size;
+    std::array<double, 3>  cellSize;
+    std::array<size_t, 3>  cellCount;
     size_t radius;
-    std::vector<Particle> halo;
+    std::vector<std::shared_ptr<Particle>> halo;
     size_t arraylenght;
 public:
 /**
  * @brief Constructor for ParticleContainerLinkedCell
 */
-    ParticleContainerLinkedCell(size_t sizeX, size_t sizeY, size_t sizeZ, size_t radius);
+    ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius);
 
     ~ParticleContainerLinkedCell();
 
     void reserve(size_t size) override;
 
-    void addParticle(const Particle& particle) override;
+    void addParticle(const std::shared_ptr<Particle> particle) override;
 
     ParticleIterator begin() override;
 
@@ -29,13 +30,13 @@ public:
 
     void updateLoctions(std::array<bool,6> outflowflag);
 
-    const std::vector<Particle>& getParticles() override;
+    const std::vector<std::shared_ptr<Particle>>& getParticles() override;
 
-    const std::array<size_t, 3> getSize();
+    const std::array<double, 3> getSize();
 
-    const std::array<size_t, 3> getCellSize();
+    const std::array<double, 3> getCellSize();
 
-    std::vector<std::array<Particle,2>> getParticlePairs() override;
+    std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
 
-    std::vector<Particle> getBoundary();
+    std::vector<std::shared_ptr<Particle>> getBoundary();
 };

@@ -65,9 +65,8 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
                 spdlog::error("Error reading file: failed to parse line {}", i);
                 exit(-1);
             }
-
-      Particle tmp{x,v,m};
-      particles.addParticle(tmp);
+            
+      particles.addParticle(std::make_shared<Particle> (x,v,m));
 
       spdlog::info("Particle generated with position ({}, {}, {}) and velocity ({}, {}, {}) and mass {}", x[0], x[1], x[2], v[0], v[1], v[2], m);
       //getline(input_file, tmp_string);

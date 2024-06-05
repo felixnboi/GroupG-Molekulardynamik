@@ -42,8 +42,8 @@ private:
     int vtk_iteration;
     bool timing_enabled;
 
-    ParticleContainer* particles;
-    Force* force;
+    std::unique_ptr<ParticleContainer> particles;
+    std::unique_ptr<Force> force;
     std::string input_file;
     std::string input_file_user;
     bool g_flag;

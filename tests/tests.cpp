@@ -19,9 +19,9 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
     ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
-    Particle p1({1.0, 2.0, 3.0}, {0.1, 0.2, 0.3}, 1.0, 0);
-    Particle p2({2.0, 3.0, 4.0}, {0.2, 0.3, 0.4}, 1.5, 1);
-    Particle p3({3.0, 4.0, 5.0}, {0.3, 0.4, 0.5}, 2.0, 0);
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle> ((std::array<double, 3>){3.0, 4.0, 5.0}, (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0);
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -29,7 +29,7 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
     pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle>& particles = pc->getParticles();
+    const std::vector<std::shared_ptr<Particle>>& particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -47,8 +47,8 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
-    Particle p1({1.0, 2.0, 3.0}, {0.1, 0.2, 0.3}, 1.0, 0);
-    Particle p2({2.0, 3.0, 4.0}, {0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -206,9 +206,9 @@ TEST(inputFileManager, MergeFile){
 
 TEST(Lennard_Jones_Force, LennardJonesForce){
     ParticleContainer* particles = new ParticleContainerOld();
-    Particle p1 {{0,0,0},{0,0,0},1};
-    Particle p2 {{1,0,0},{0,0,0},1};
-    Particle p3 {{0,1,0},{0,0,0},1};
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){0,0,0},(std::array<double, 3>){0,0,0},1);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){1,0,0},(std::array<double, 3>){0,0,0},1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle> ((std::array<double, 3>){0,1,0},(std::array<double, 3>){0,0,0},1);
     particles->addParticle(p1);
     particles->addParticle(p2);
     particles->addParticle(p3);
@@ -228,22 +228,22 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     std::array<double, 3> expectedF2 = {114.375, 5.625, 0};
     std::array<double, 3> expectedF3 = {5.625, 114.375, 0};
 
-    spdlog::info("p1 force: ({}, {}, {})", p1_updated.getF()[0], p1_updated.getF()[1], p1_updated.getF()[2]);
-    spdlog::info("p2 force: ({}, {}, {})", p2_updated.getF()[0], p2_updated.getF()[1], p2_updated.getF()[2]);
-    spdlog::info("p3 force: ({}, {}, {})", p3_updated.getF()[0], p3_updated.getF()[1], p3_updated.getF()[2]);
+    spdlog::info("p1 force: ({}, {}, {})", p1_updated->getF()[0], p1_updated->getF()[1], p1_updated->getF()[2]);
+    spdlog::info("p2 force: ({}, {}, {})", p2_updated->getF()[0], p2_updated->getF()[1], p2_updated->getF()[2]);
+    spdlog::info("p3 force: ({}, {}, {})", p3_updated->getF()[0], p3_updated->getF()[1], p3_updated->getF()[2]);
 
     // Check if the calculated forces are as expected
-    EXPECT_NEAR(p1_updated.getF()[0], expectedF1[0], EPSILON);
-    EXPECT_NEAR(p1_updated.getF()[1], expectedF1[1], EPSILON);
-    EXPECT_NEAR(p1_updated.getF()[2], expectedF1[2], EPSILON);
+    EXPECT_NEAR(p1_updated->getF()[0], expectedF1[0], EPSILON);
+    EXPECT_NEAR(p1_updated->getF()[1], expectedF1[1], EPSILON);
+    EXPECT_NEAR(p1_updated->getF()[2], expectedF1[2], EPSILON);
 
-    EXPECT_NEAR(p2_updated.getF()[0], expectedF2[0], EPSILON);
-    EXPECT_NEAR(p2_updated.getF()[1], expectedF2[1], EPSILON);
-    EXPECT_NEAR(p2_updated.getF()[2], expectedF2[2], EPSILON);
+    EXPECT_NEAR(p2_updated->getF()[0], expectedF2[0], EPSILON);
+    EXPECT_NEAR(p2_updated->getF()[1], expectedF2[1], EPSILON);
+    EXPECT_NEAR(p2_updated->getF()[2], expectedF2[2], EPSILON);
 
-    EXPECT_NEAR(p3_updated.getF()[0], expectedF3[0], EPSILON);
-    EXPECT_NEAR(p3_updated.getF()[1], expectedF3[1], EPSILON);
-    EXPECT_NEAR(p3_updated.getF()[2], expectedF3[2], EPSILON);
+    EXPECT_NEAR(p3_updated->getF()[0], expectedF3[0], EPSILON);
+    EXPECT_NEAR(p3_updated->getF()[1], expectedF3[1], EPSILON);
+    EXPECT_NEAR(p3_updated->getF()[2], expectedF3[2], EPSILON);
 
     delete particles;
 }
@@ -264,13 +264,13 @@ TEST(FileReader, readFile){
 
     int i = 0;
     for(auto particle = particles->begin(); particle != particles->end(); ++particle, ++i){
-        EXPECT_EQ(particle->getX()[0], pValues[i][0]);
-        EXPECT_EQ(particle->getX()[1], pValues[i][1]);
-        EXPECT_EQ(particle->getX()[2], pValues[i][2]);
-        EXPECT_EQ(particle->getV()[0], pValues[i][3]);
-        EXPECT_EQ(particle->getV()[1], pValues[i][4]);
-        EXPECT_EQ(particle->getV()[2], pValues[i][5]);
-        EXPECT_EQ(particle->getM(), pValues[i][6]);
+        EXPECT_EQ((*particle)->getX()[0], pValues[i][0]);
+        EXPECT_EQ((*particle)->getX()[1], pValues[i][1]);
+        EXPECT_EQ((*particle)->getX()[2], pValues[i][2]);
+        EXPECT_EQ((*particle)->getV()[0], pValues[i][3]);
+        EXPECT_EQ((*particle)->getV()[1], pValues[i][4]);
+        EXPECT_EQ((*particle)->getV()[2], pValues[i][5]);
+        EXPECT_EQ((*particle)->getM(), pValues[i][6]);
     }
 
     delete particles;
