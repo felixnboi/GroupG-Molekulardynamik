@@ -68,12 +68,6 @@ public:
      * @return True if timing is enabled, otherwise false.
      */
     bool isTimingEnabled() const;
-    /**
-     * @brief Cleans up resources after the simulation ends.
-     * 
-     * This method releases any resources allocated during the simulation.
-     */
-    void cleanup();
 
 private:
     double start_time;

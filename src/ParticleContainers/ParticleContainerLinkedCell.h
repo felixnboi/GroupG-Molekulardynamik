@@ -7,8 +7,8 @@ class ParticleContainerLinkedCell : public ParticleContainer{
 private:
     std::unique_ptr<std::list<std::shared_ptr<Particle>>[]> linkedCells;
     std::array<double, 3> size;
-    std::array<double, 3>  cellSize;
-    std::array<size_t, 3>  cellCount;
+    std::array<double, 3> cellSize;
+    std::array<size_t, 3> cellCount;
     size_t radius;
     std::vector<std::shared_ptr<Particle>> halo;
     size_t arraylenght;

@@ -1,4 +1,12 @@
 #include "Lennard_Jones_Force.h"
+#include <chrono>
+#include <iostream>
+
+#define MEASURE_TIME_START start = std::chrono::high_resolution_clock::now();
+#define MEASURE_TIME_END \
+    end = std::chrono::high_resolution_clock::now(); \
+    duration = end - start; \
+    
 
 Lennard_Jones_Force::Lennard_Jones_Force() {
   spdlog::info("Lennard_Jones_Force object constructed");
@@ -8,7 +16,14 @@ Lennard_Jones_Force::~Lennard_Jones_Force() {
 };
 
 void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag) {
+  auto start = std::chrono::high_resolution_clock::now();
   std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs = particles.getParticlePairs();
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> duration = end - start;
+  std::cout << "GetParticlePairs: " << duration.count() << std::endl;
+
+  MEASURE_TIME_START
+
   std::shared_ptr<Particle> particle_i;
   std::shared_ptr<Particle> particle_j;
   double epsilon = 5;
@@ -81,4 +96,6 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
     particle_i->setF(cur_F_i_dummy);
     particle_j->setF(cur_F_j_dummy);
   }
+  MEASURE_TIME_END
+  std::cout <<"rest:"<< duration.count() << std::endl;
 }

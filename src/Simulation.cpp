@@ -1,9 +1,10 @@
 #include "Simulation.h"
+#include <chrono>
 
 Simulation::Simulation()
     : start_time(0), end_time(1000), delta_t(0.014), write_frequency(10), particles(nullptr), force(nullptr), timing_enabled(false), 
     xml_flag(false), generate_flag(false), input_flag(false), force_flag(false), time_flag(false), cli_flag(false), 
-    linkedcell_flag(false), outflowFlags({false,false,false,false,false,false}), lenJonesBoundaryFlags({true,true,true,true,true,true}), 
+    linkedcell_flag(false), lenJonesBoundaryFlags({true,true,true,true,false,false}), outflowFlags({false,false,false,false,false,false}), 
     baseName("MD_vtk") {}
 
 Simulation::~Simulation() {}
@@ -26,7 +27,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
     int opt;
 
-    particles = std::make_unique<ParticleContainerLinkedCell>(10000,10000,10000, 1000);
+    particles = std::make_unique<ParticleContainerLinkedCell>(180, 90, 10, 3);
 
     const char* xml_file = "";
 
@@ -233,7 +234,7 @@ void Simulation::run() {
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles, lenJonesBouneryFlags);
+        force->calculateF(*particles, lenJonesBoundaryFlags);
         calculateV();
         current_time += delta_t;
         iteration++;
@@ -243,7 +244,7 @@ void Simulation::run() {
     if (time_flag) {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBouneryFlags);
+            force->calculateF(*particles, lenJonesBoundaryFlags);
             calculateV();
             iteration++;
             current_time += delta_t;
@@ -251,7 +252,7 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBouneryFlags);
+            force->calculateF(*particles, lenJonesBoundaryFlags);
             calculateV();
             iteration++;
 
@@ -273,9 +274,6 @@ bool Simulation::isTimingEnabled() const {
     return timing_enabled;
 }
 
-void Simulation::cleanup(){
-}
-
 void Simulation::calculateX() {
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
@@ -292,7 +290,7 @@ void Simulation::calculateX() {
     // set the new position for the particle
     (*p)->setX(cur_x_dummy);
   }
-  if(linkedCellsFlag){
+  if(linkedcell_flag){
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());
     LCContainer->updateLoctions(outflowFlags);
   }
