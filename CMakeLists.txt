@@ -75,6 +75,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 add_subdirectory(libs/spdlog-1.14.1)
 add_subdirectory(libs/googletest-1.14.0)
 
+###############################################################################################################################
+
 #This part is for our Particle Generator
 
 # file(GLOB_RECURSE MY_SRC_PARTICLEGEN
@@ -84,13 +86,13 @@ add_subdirectory(libs/googletest-1.14.0)
 
 add_executable(ParticleGenerator 
     ${MY_SRC_PARTICLEGEN}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/inputFileManager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/inputFileManager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Particle.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Particle.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Particle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Cuboid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLReader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
 )
 
 target_compile_features(ParticleGenerator
@@ -121,3 +123,5 @@ target_compile_options(ParticleGenerator
             # disable some spam warnings for icpc...
             $<$<CXX_COMPILER_ID:Intel>:-w3 -wd383,981,1418,1572,2259>
 )
+
+######################################################################################################################

@@ -5,8 +5,9 @@
 #include <string>
 #include <chrono>
 
-#include "FileReader.h"
-#include "outputWriter/VTKWriter.h"
+#include "io/input/FileReader.h"
+#include "io/input/XMLReader.h"
+#include "io/output/VTKWriter.h"
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 
@@ -17,6 +18,8 @@
 #include "ParticleContainers/ParticleContainerLinkedCell.h"
 #include "ParticleContainers/ParticleContainerOld.h"
 #include "spdlog/spdlog.h"
+#include "io/input/XMLReader.h"
+#include "io/input/XMLFormat.h"
 
 class Simulation{
 public:
@@ -39,17 +42,25 @@ private:
     double start_time;
     double end_time;
     double delta_t;
-    int vtk_iteration;
-    bool timing_enabled;
-
+    unsigned write_frequency;
     ParticleContainer* particles;
     Force* force;
+
+    bool timing_enabled;
+    bool xml_flag;
+    bool generate_flag;
+    bool input_flag;
+    bool force_flag;
+    bool time_flag;
+    bool cli_flag;
+    bool linkedcell_flag;
+
+    std::string baseName;
     std::string input_file;
     std::string input_file_user;
-    bool g_flag;
-    bool i_flag;
-    bool f_flag;
-    bool t_flag;
+
+    
+
     /**
      * @brief Calculate the position for all particles.
      * 

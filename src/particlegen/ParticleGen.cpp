@@ -1,5 +1,7 @@
 #include "ParticleGenerator.h"
 #include "../utils/NumericalUtils.h"
+#include "../io/input/XMLReader.h"
+
 
 
 int main(int argc, char *argsv[]){
@@ -7,6 +9,7 @@ int main(int argc, char *argsv[]){
 
     const char* const short_ops = "sx:y:z:m:d:";
     const option long_opts[] = {
+        {"xml", required_argument, nullptr, 'p'},
         {"help", no_argument, nullptr, 'h'},
         {"log", required_argument, nullptr, 'l'},
         {"sizeX", required_argument, nullptr, 'X'},
@@ -19,64 +22,79 @@ int main(int argc, char *argsv[]){
     };
     int opt;
 
-    bool s_flag = false;
-    bool x_flag = false;
-    bool y_flag = false;
-    bool z_flag = false;
-    bool X_flag = false;
-    bool Y_flag = false;
-    bool Z_flag = false;
-    bool a_flag = false;
-    bool b_flag = false;
-    bool c_flag = false;
-    bool d_flag = false;
-    bool m_flag = false;
+    bool xml_flag = false;
 
-    double x = 0; double y = 0; double z = 0; double distance = 0; double mass = 0; double velocityX = 0; double velocityY = 0; double velocityZ = 0;
-    size_t sizeX = 0; size_t sizeY = 0; size_t sizeZ = 0;
+    bool save_flag = false;
+    bool xpos_flag = false;
+    bool ypos_flag = false;
+    bool zpos_flag = false;
+    bool xsize_flag = false;
+    bool ysize_flag = false;
+    bool zsize_flag = false;
+    bool xvel_flag = false;
+    bool yvel_flag = false;
+    bool zvel_flag = false;
+    bool dist_flag = false;
+    bool mass_flag = false;
+
+    std::vector<Cuboid> cuboids;
+
+    const char* xml_file = "";
+
+    std::array<double, 3> position{};
+    std::array<double, 3> velocity{}; 
+    std::array<unsigned, 3> dimensions{}; 
+
+    double distance = 0;
+    double mass = 0;
 
     while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
         switch(opt){
+            case 'p':{
+                xml_file = optarg;
+                xml_flag = true;
+                break;
+            }
             case 'l':{
-            //parsing logging level
-            if(std::string(optarg) == std::string("OFF")){
-                spdlog::set_level(spdlog::level::off);
-                spdlog::info("Logging level set to OFF");
-                break;
-            }
-            if(std::string(optarg) == std::string("ERROR")){
-                spdlog::set_level(spdlog::level::err);
-                spdlog::info("Logging level set to ERROR");
-                break;
-            }
-            if(std::string(optarg) == std::string("WARN")){
-                spdlog::set_level(spdlog::level::warn);
-                spdlog::info("Logging level set to WARN");
-                break;
-            }
-            if(std::string(optarg) == std::string("INFO")){
-                spdlog::set_level(spdlog::level::info);
-                spdlog::info("Logging level set to INFO");
-                break;
-            }
-            if(std::string(optarg) == std::string("DEBUG")){
-                spdlog::set_level(spdlog::level::debug);
-                spdlog::info("Logging level set to DEBUG");
-                break;
-            }
-            if(std::string(optarg) == std::string("TRACE")){
-                spdlog::set_level(spdlog::level::trace);
-                spdlog::info("Logging level set to TRACE");
-                break;
-            }
-            spdlog::error("Invalid logging level: {}", optarg);
-            ParticleGenerator::logHelp();
-            return EXIT_FAILURE;
+                //parsing logging level
+                if(std::string(optarg) == std::string("OFF")){
+                    spdlog::set_level(spdlog::level::off);
+                    spdlog::info("Logging level set to OFF");
+                    break;
+                }
+                if(std::string(optarg) == std::string("ERROR")){
+                    spdlog::set_level(spdlog::level::err);
+                    spdlog::info("Logging level set to ERROR");
+                    break;
+                }
+                if(std::string(optarg) == std::string("WARN")){
+                    spdlog::set_level(spdlog::level::warn);
+                    spdlog::info("Logging level set to WARN");
+                    break;
+                }
+                if(std::string(optarg) == std::string("INFO")){
+                    spdlog::set_level(spdlog::level::info);
+                    spdlog::info("Logging level set to INFO");
+                    break;
+                }
+                if(std::string(optarg) == std::string("DEBUG")){
+                    spdlog::set_level(spdlog::level::debug);
+                    spdlog::info("Logging level set to DEBUG");
+                    break;
+                }
+                if(std::string(optarg) == std::string("TRACE")){
+                    spdlog::set_level(spdlog::level::trace);
+                    spdlog::info("Logging level set to TRACE");
+                    break;
+                }
+                spdlog::error("Invalid logging level: {}", optarg);
+                ParticleGenerator::logHelp();
+                return EXIT_FAILURE;
             }
             case 'a':{
-                a_flag = true;
+                xvel_flag = true;
                 if(isDouble(optarg)){
-                    velocityX = std::atof(optarg);
+                    velocity[0] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for velocityX");
@@ -85,9 +103,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'b':{
-                b_flag = true;
+                yvel_flag = true;
                 if(isDouble(optarg)){
-                    velocityY = std::atof(optarg);
+                    velocity[1] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for velocityY");
@@ -96,9 +114,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'c':{
-                c_flag = true;
+                zvel_flag = true;
                 if(isDouble(optarg)){
-                    velocityZ = std::atof(optarg);
+                    velocity[2] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for velocityZ");
@@ -107,9 +125,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'x':{
-                x_flag = true;
+                xpos_flag = true;
                 if(isDouble(optarg)){
-                    x = std::atof(optarg);
+                    position[0] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for x");
@@ -118,9 +136,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'y':{
-                y_flag = true;
+                ypos_flag = true;
                 if(isDouble(optarg)){
-                    y = std::atof(optarg);
+                    position[1] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for y");
@@ -129,9 +147,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'z':{
-                z_flag = true;
+                zpos_flag = true;
                 if(isDouble(optarg)){
-                    z = std::atof(optarg);
+                    position[2] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for z");
@@ -140,9 +158,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'X':{
-                X_flag = true;
+                xsize_flag = true;
                 if(isInteger(optarg)){
-                    sizeX = std::atof(optarg);
+                    dimensions[0] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for sizeX");
@@ -151,9 +169,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'Y':{
-                Y_flag = true;
+                ysize_flag = true;
                 if(isInteger(optarg)){
-                    sizeY = std::atof(optarg);
+                    dimensions[1] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for sizeY");
@@ -162,9 +180,9 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'Z':{
-                Z_flag = true;
+                zsize_flag = true;
                 if(isInteger(optarg)){
-                    sizeZ = std::atof(optarg);
+                    dimensions[2] = std::atof(optarg);
                     break;
                 }else{
                     spdlog::error("Invalid argument for sizeZ");
@@ -173,7 +191,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'd':{
-                d_flag = true;
+                dist_flag = true;
                 if(isDouble(optarg)){
                     distance = std::atof(optarg);
                     break;
@@ -184,7 +202,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 'm':{
-                m_flag = true;
+                mass_flag = true;
                 if(isDouble(optarg)){
                     mass = std::atof(optarg);
                     break;
@@ -195,7 +213,7 @@ int main(int argc, char *argsv[]){
                 }
             }
             case 's':{
-                s_flag = true;
+                save_flag = true;
                 break;
             }
             case 'h':{
@@ -213,17 +231,27 @@ int main(int argc, char *argsv[]){
 
     spdlog::info("Starting ParticleGenerator application");
 
-    if(!s_flag){
+    if(!save_flag){
         spdlog::warn("No '-s' flag provided. File was overwritten.");
         inputFileManager::resetFile("../input/generated-input.txt");
     }
 
-    if(!(a_flag&&b_flag&&c_flag&&x_flag&&y_flag&&z_flag&&X_flag&&Y_flag&&Z_flag&&d_flag&&m_flag)){
+    if((!xml_flag) && (!(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag))){
         spdlog::error("Fail! Required arguments are missing.");
         ParticleGenerator::logHelp();
         return EXIT_FAILURE;
     }
+    if(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag){
+        cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass));
+    }
 
-    ParticleGenerator::generateCuboid(x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ, "../input/generated-input.txt");
+    if(xml_flag){
+        XMLReader xmlreader;
+        xmlreader.readCuboids(xml_file, cuboids);
+    }
+
+    for(const auto& cuboid : cuboids){
+        ParticleGenerator::generateCuboid(cuboid, "../input/generated-input.txt");
+    }
     spdlog::info("ParticleGenerator application finished successfully.");
 }

@@ -1,38 +1,50 @@
 #include "ParticleGenerator.h"
 
-void ParticleGenerator::generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename) {
+void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filename) {
     std::fstream input_file;
     std::string tmp_string;
+
+    std::array<double, 3> position = cuboid.getPosition();
+    std::array<double, 3> velocity = cuboid.getVelocity();
+    std::array<unsigned, 3> dimensions = cuboid.getDimensions();
+    double mass = cuboid.getMass();
+    double distance = cuboid.getDistance();
     
-    spdlog::info("Generating cuboid with parameters: x={}, y={}, z={}, sizeX={}, sizeY={}, sizeZ={}, distance={}, mass={}, velocityX={}, velocityY={}, velocityZ={}", x, y, z, sizeX, sizeY, sizeZ, distance, mass, velocityX, velocityY, velocityZ);
+    // spdlog::info("Generating cuboid with parameters: x={}, y={}, z={}, sizeX={}, sizeY={}, sizeZ={}, distance={}, mass={},
+    //  velocityX={}, velocityY={}, velocityZ={}", position[0], position[1], position[2], dimensions[0], dimensions[1], dimensions[2], 
+    //  distance, mass, velocity[0], velocity[1], velocity[2]);
+    
     input_file.open(filename,std::ios::in|std::ios::out);
     std::streampos current = input_file.tellp();
+
     while (tmp_string.empty() or tmp_string[0] == '#') {
         current = input_file.tellp();
         getline(input_file, tmp_string);
     }
+
     input_file.seekp(current);
-    int numParticles = std::stoi(tmp_string)+sizeX*sizeY*sizeZ;
+    int numParticles = std::stoi(tmp_string)+dimensions[0]*dimensions[1]*dimensions[2];
     input_file << numParticles;
     input_file.close();
-    double yClone = y;
-    double zClone = z;
+    
+    double yClone = position[1];
+    double zClone = position[2];
     double averageBrownianMotion = 0.1;
     input_file.open(filename,std::ios::in|std::ios::out|std::ios::app);
-    for (size_t i = 0; i < sizeX; i++)
+    for (size_t i = 0; i < dimensions[0]; i++)
     {
-        for (size_t j = 0; j < sizeY; j++)
+        for (size_t j = 0; j < dimensions[1]; j++)
         {
-            for (size_t k = 0; k < sizeZ; k++) {
+            for (size_t k = 0; k < dimensions[2]; k++) {
                 std::array<double, 3> brownianMotion = maxwellBoltzmannDistributedVelocity(averageBrownianMotion, 2);
-                input_file << x << " " << y << " " << z << " " << velocityX + brownianMotion[0] << " " << velocityY + brownianMotion[1] << " " << velocityZ + brownianMotion[2] << " " << mass << "\n";         
-                z += distance;
+                input_file << position[0] << " " << position[1] << " " << position[2] << " " << velocity[0] + brownianMotion[0] << " " << velocity[1] + brownianMotion[1] << " " << velocity[2] + brownianMotion[2] << " " << mass << "\n";         
+                position[2] += distance;
             }
-            z = zClone;
-            y += distance;
+            position[2] = zClone;
+            position[1] += distance;
         }
-        y = yClone;
-        x += distance;
+        position[1] = yClone;
+        position[0] += distance;
     }
     input_file.close();
 }

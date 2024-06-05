@@ -32,10 +32,12 @@ int main(int argc, char *argsv[]) {
 
     Simulation simulation;
     if (!simulation.initialize(argc, argsv)) {
+        simulation.cleanup();
         return EXIT_FAILURE;
     }
 
     simulation.run();
+    simulation.cleanup();
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;

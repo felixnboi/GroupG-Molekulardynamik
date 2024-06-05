@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Particle.h"
-#include "ParticleContainers/ParticleContainer.h"
+#include "../../data/Particle.h"
+#include "../../ParticleContainers/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
 #include <cstdlib>

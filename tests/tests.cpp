@@ -3,10 +3,11 @@
 #include "../src/Forces/Lennard_Jones_Force.h"
 #include "../src/inputFileManager.h"
 #include "../src/particlegen/ParticleGenerator.h"
-#include "../src/FileReader.h"
+#include "../src/io/input/FileReader.h"
 #include "../src/ParticleContainers/ParticleContainerOld.h"
 #include "../src/ParticleContainers/ParticleContainer.h"
 #include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
+#include "../src/data/Cuboid.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -100,7 +101,7 @@ TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
     inputFileManager::resetFile("../input/generated-input.txt");
     // Generate particles in a cuboid and write to the file
-    ParticleGenerator::generateCuboid(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, "../input/generated-input.txt");
+    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2), "../input/generated-input.txt");
      // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
 

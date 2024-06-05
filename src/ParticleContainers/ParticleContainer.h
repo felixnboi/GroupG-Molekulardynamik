@@ -1,5 +1,5 @@
 #pragma once
-#include "../Particle.h"
+#include "../data/Particle.h"
 #include "spdlog/spdlog.h"
 
 #include <vector>

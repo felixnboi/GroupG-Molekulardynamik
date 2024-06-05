@@ -1,17 +1,19 @@
-#include <Simulation.h>
+#include "Simulation.h"
 
 Simulation::Simulation()
-    : start_time(0), end_time(1000), delta_t(0.014), vtk_iteration(10),
-      timing_enabled(false), force(nullptr), g_flag(false), i_flag(false), f_flag(false), t_flag(false) {}
+    : start_time(0), end_time(1000), delta_t(0.014), write_frequency(10), particles(nullptr), force(nullptr), timing_enabled(false), 
+    xml_flag(false), generate_flag(false), input_flag(false), force_flag(false), time_flag(false), cli_flag(false), 
+    linkedcell_flag(false), baseName("MD_vtk") {}
 
 Simulation::~Simulation() {}
 
 
 bool Simulation::initialize(int argc, char* argv[]) {
     spdlog::set_level(spdlog::level::info);
-    const char* const short_ops = "v:i:gt";
+    const char* const short_ops = "v:i:gtc";
     const option long_opts[] = {
         {"help", no_argument, nullptr, 'h'},
+        {"xml", required_argument, nullptr, 'x'},
         {"end", required_argument, nullptr, 'e'},
         {"start", required_argument, nullptr, 's'},
         {"log", required_argument, nullptr, 'l'},
@@ -21,31 +23,46 @@ bool Simulation::initialize(int argc, char* argv[]) {
     };
 
     int opt;
+
     particles = new ParticleContainerOld();
+
+    const char* xml_file = "";
 
     // Parsing command line arguments
     while ((opt = getopt_long(argc, argv, short_ops, long_opts, nullptr)) != -1) {
         switch (opt) {
+            case 'c':{
+                linkedcell_flag = true;
+                break;
+            }
+            case 'x':{
+                xml_file = optarg;
+                xml_flag = true;
+                break;
+            }
             case 't':{
                 spdlog::set_level(spdlog::level::off);
-                t_flag = true;
+                time_flag = true;
+                cli_flag = true;
                 break;
             }
             case 'h':{
                 logHelp();
-                return EXIT_SUCCESS;
+                return false;
             }
             case 'v':{
-                // parsing vtk iteration
+                cli_flag = true;
                 if (isUnsignedInt(optarg)) {
-                    vtk_iteration = std::stoul(optarg);
+                    write_frequency = std::stoul(optarg);
+                    break;
                 } else {
                     spdlog::error("Invalid value for vtk iteration: {}", optarg);
                     logHelp();
-                    return EXIT_FAILURE;
+                    return false;
                 }
               }
             case 'l':{
+                cli_flag = true;
                 // Parse logging level
                 std::string tmp(optarg);
                 if (tmp == std::string("OFF")) {
@@ -75,55 +92,61 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 }
                 spdlog::error("Invalid logging level: {}", optarg);
                 logHelp();
-                return EXIT_FAILURE;
+                return false;
                 }
 
             case 'g':{
-                g_flag = true;
+                cli_flag = true;
+                generate_flag = true;
                 break;
             }
 
             case 'd':{
+                cli_flag = true;
                 if (isDouble(optarg)) {
                     delta_t = atof(optarg);
                     break;
                 } else {
                     spdlog::error("Invalid argument for delta_t");
                     logHelp();
-                    return EXIT_FAILURE;
+                    return false;
                 }
             }
 
             case 'e':{
+                cli_flag = true;
                 if (isDouble(optarg)) {
                     end_time = atof(optarg);
                     break;
                 } else {
                     spdlog::error("Invalid argument for end_time");
                     logHelp();
-                    return EXIT_FAILURE;
+                    return false;
                 }
             }
 
             case 's':{
+                cli_flag = true;
                 if (isDouble(optarg)) {
                     start_time = atof(optarg);
                     break;
                 } else {
                     spdlog::error("Invalid argument for start_time");
                     logHelp();
-                    return EXIT_FAILURE;
+                    return false;
                 }
             }
 
             case 'i':{
-                i_flag = true;
+                cli_flag = true;
+                input_flag = true;
                 input_file_user = optarg;
                 break;
             }
 
             case 'f':{
-                f_flag = true;
+                cli_flag = true;
+                force_flag = true;
                 if (*optarg == 'g') {
                     force = new Gravitational_Force();
                     spdlog::info("Force set to Gravitational_Force");
@@ -135,46 +158,58 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 } 
                     spdlog::error("Invalid argument for force");
                     logHelp();
-                    return EXIT_FAILURE;
+                    return false;
             }
 
             case '?':{
                 spdlog::error("Invalid option");
                 logHelp();
-                return EXIT_FAILURE;
+                return false;
             }
         }
     }
 
     spdlog::info("Hello from MolSim for PSE!");
-    if (!f_flag) {
+    if (!force_flag) {
         spdlog::error("Didn't specify force. Terminating");
         logHelp();
-        return EXIT_FAILURE;
+        return false;
     }
 
-    if (!g_flag && i_flag) {
+    if (!generate_flag && input_flag) {
         input_file = input_file_user;
         spdlog::info("Using user defined input file");
-    } 
-    if (g_flag && i_flag) {
+    }
+    if (generate_flag && input_flag) {
         inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
         spdlog::info("File {} merged into generated input file", input_file_user);
         input_file = "../input/generated-input.txt";
     }
-    if (g_flag && !i_flag) {
+    if (generate_flag && !input_flag) {
         input_file = "../input/generated-input.txt";
         spdlog::info("Using \"generated-input.txt\"");
     }
-    if (!g_flag && !i_flag) {
+    if (!generate_flag && !input_flag) {
         input_file = "../input/eingabe-sonne.txt";
         spdlog::info("Using \"eingabe-sonne.txt\"");
     }
+    // if(xml_flag && cli_flag){
+    //     spdlog::error("Please use either cli or xml!");
+    //     return false;
+    // }
+
+    std::cout << "test1\n";
+    if(xml_flag){
+        XMLReader xmlreader;
+        xmlreader.readSimulation(xml_file, baseName, write_frequency, start_time, end_time, delta_t);
+    }
+
+    std::cout << "test2\n";
 
     // Check if start_time is after end_time
     if (start_time > end_time) {
         spdlog::error("Error: start_time should not be after end_time!");
-        return EXIT_FAILURE;
+        return false;
     }
 
     FileReader fileReader;
@@ -182,8 +217,8 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
     // checking if there are particles in the simulation
     if (particles->getParticles().empty()) {
-        spdlog::error("Failed to read Particles from input file!");
-        return EXIT_FAILURE;
+        spdlog::error("Read zero particles from input file!");
+        return false;
     }
 
     spdlog::info("end_time:{}, delta_t:{}, start_time:{}", end_time, delta_t, start_time);
@@ -205,7 +240,7 @@ void Simulation::run() {
     }
 
     // Simulation loop
-    if (t_flag) {
+    if (time_flag) {
         while (current_time < end_time) {
             calculateX();
             force->calculateF(*particles);
@@ -221,7 +256,7 @@ void Simulation::run() {
             iteration++;
 
             // plotting particle positions only at intervals of iterations
-            if (iteration % vtk_iteration == 0) {
+            if (iteration % write_frequency == 0) {
                 plotParticles(iteration);
             }
             // printing simulation progress
@@ -280,9 +315,6 @@ void Simulation::calculateV() {
 
 
 void Simulation::plotParticles(int iteration) {
-
-  std::string out_name("MD_vtk"); ///< The base name of the VTK file to be written.
-
   outputWriter::VTKWriter writer; ///< The VTK writer object. 
   // initializing the VTK writer with the total number of particles.
   writer.initializeOutput(particles->getParticles().size()); 
@@ -291,7 +323,7 @@ void Simulation::plotParticles(int iteration) {
     writer.plotParticle(p);
   }
   // write the plotted particle positions to a VTK file
-  writer.writeFile(out_name, iteration);
+  writer.writeFile(baseName, iteration);
 }
 
 void Simulation::logHelp(){
