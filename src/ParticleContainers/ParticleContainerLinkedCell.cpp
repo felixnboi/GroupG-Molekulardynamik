@@ -29,8 +29,16 @@ const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
 
 void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> particle){
     particles.push_back(particle);
-    size_t index = (size_t)(particle->getX()[0]/cellSize[0])+(particle->getX()[1]/cellSize[1])*cellCount[0]+(particle->getX()[2]/cellSize[2])*cellCount[0]*cellCount[1];
-    linkedCells[index].push_back(particle);
+    auto cords = particle->getX();
+    if(cords[0]<0||cords[0]>size[0]||cords[1]<0||cords[1]>size[0]||cords[2]<0||cords[2]>size[0]){
+        halo.push_back(particle);
+        spdlog::warn("Added Particle is not inside of the calculated area\n");
+
+    }
+    else{
+        size_t index = (size_t)(particle->getX()[0]/cellSize[0])+(particle->getX()[1]/cellSize[1])*cellCount[0]+(particle->getX()[2]/cellSize[2])*cellCount[0]*cellCount[1];
+        linkedCells[index].push_back(particle);
+    }
 }
 
 ParticleIterator ParticleContainerLinkedCell::begin(){
@@ -125,9 +133,9 @@ std::vector<std::shared_ptr<Particle>> ParticleContainerLinkedCell::getBoundary(
     std::vector<std::shared_ptr<Particle>> boundary;
     for (size_t i = 0; i < arraylenght; i++){
         size_t positionX = i%cellCount[0];
-        size_t positionY = ((size_t)(i/cellCount[0]))%cellCount[1];
-        size_t positionZ = ((size_t)(i/cellCount[0]))/cellCount[1];
-        if(positionX%(cellCount[0]-1)*(positionY%(cellCount[1]-1))*(positionZ%(cellCount[2]-1))==0){
+        size_t positionY = i/cellCount[0]%cellCount[1];
+        size_t positionZ = i/cellCount[0]/cellCount[1];
+        if((positionX==0)||(positionY==0)||(positionZ=0)||(positionX==cellCount[0]-1)||(positionY==cellCount[1]-1)||(positionZ==cellCount[2]-1)){
             for(auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
                 boundary.push_back(*particle_i);
             }
