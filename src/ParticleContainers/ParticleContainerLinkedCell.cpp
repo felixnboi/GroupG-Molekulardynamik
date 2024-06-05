@@ -48,18 +48,32 @@ const std::vector<std::shared_ptr<Particle>>& ParticleContainerLinkedCell::getPa
 std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairs(){
     std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
     for (size_t i = 0; i < arraylenght; i++){
+        size_t nbrCount = 0;
+        size_t nbrs[13];
+        size_t indexi[3] = {i%cellCount[0],arraylenght/cellCount[0]%cellCount[1], arraylenght/cellCount[0]/cellCount[1]};
+        bool nbrExists[5] = {indexi[0]>0, indexi[0]+2<cellCount[0], indexi[1]>0, indexi[1]+2<cellCount[1], indexi[2]+2<cellCount[2]};
+
+        if(                            nbrExists[1]) nbrs[nbrCount++] = i                                       +1;
+        if(              nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i                          +cellCount[0]-1;
+        if(              nbrExists[3]              ) nbrs[nbrCount++] = i                          +cellCount[0]  ;
+        if(              nbrExists[3]&&nbrExists[1]) nbrs[nbrCount++] = i                          +cellCount[0]+1;
+        if(nbrExists[4]&&nbrExists[2]&&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]-1;
+        if(nbrExists[4]&&nbrExists[2]              ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]  ;
+        if(nbrExists[4]&&nbrExists[2]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]+1;
+        if(nbrExists[4]              &&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]             -1;
+        if(nbrExists[4])                             nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]               ;
+        if(nbrExists[4]              &&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]             +1;
+        if(nbrExists[4]&&nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]-1;
+        if(nbrExists[4]&&nbrExists[3])               nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]  ;
+        if(nbrExists[4]&&nbrExists[3]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]+1;
+
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
                 particlePairs.push_back({*particle_i, *particle_j});
             }
-            for (size_t j = i+1; j < arraylenght; j++){
-                int distanceX = fmod(j,cellSize[0])-fmod(i,cellSize[0]);
-                int distanceY = fmod(j/cellSize[0],cellSize[1])-fmod(i/cellSize[0],cellSize[1]);
-                int distanceZ = j/cellSize[0]/cellSize[1]-i/cellSize[0]/cellSize[1];
-                if(distanceX<2&&distanceX>-2&&distanceY<2&&distanceY>-2&&distanceZ<2&&distanceZ>-2){
-                    for (auto particle_j = linkedCells[j].begin(); particle_j != linkedCells[j].end(); particle_j++){
-                        particlePairs.push_back({*particle_i, *particle_j});
-                    }
+            for (size_t j = 0; j < nbrCount; j++){
+                for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
+                    particlePairs.push_back({*particle_i, *particle_j});
                 }
             }
         }
