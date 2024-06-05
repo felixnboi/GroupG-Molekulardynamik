@@ -21,21 +21,57 @@
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
 
+/**
+ * @class Simulation
+ * @brief Manages the simulation lifecycle including initialization, execution, and cleanup.
+ * 
+ * The Simulation class encapsulates all the necessary components and processes for 
+ * running a particle simulation. It handles the initialization of parameters, 
+ * execution of the simulation loop, timing control, and cleanup after the simulation ends.
+ */
 class Simulation{
 public:
     /**
-     * @brief Constructor for Simulation
+     * @brief Constructor for Simulation.
+     * 
+     * Initializes a new instance of the Simulation class with default settings.
      */
     Simulation();
-
+    /**
+     * @brief Destructor for Simulation.
+     * 
+     * Cleans up resources used by the Simulation instance.
+     */
     ~Simulation();
-
+    /**
+     * @brief Initializes the simulation with command-line arguments.
+     * 
+     * This method processes command-line arguments to set up simulation parameters 
+     * such as input file, timing flags, and other options.
+     * 
+     * @param argc The number of command-line arguments.
+     * @param argv The array of command-line argument strings.
+     * @return True if initialization is successful, otherwise false.
+     */
     bool initialize(int argc, char* argv[]);
-
+    /**
+     * @brief Runs the simulation.
+     * 
+     * Executes the main simulation loop, updating particle positions and velocities 
+     * over time and plotting the particle states at each iteration.
+     */
     void run();
-
+    /**
+     * @brief Checks whether timing should be enabled for the simulation.
+     * 
+     * @return True if timing is enabled, otherwise false.
+     */
     bool isTimingEnabled() const;
-
+    /**
+     * @brief Cleans up resources after the simulation ends.
+     * 
+     * This method releases any resources allocated during the simulation.
+     */
     void cleanup();
 
 private:
@@ -58,8 +94,6 @@ private:
     std::string baseName;
     std::string input_file;
     std::string input_file_user;
-
-    
 
     /**
      * @brief Calculate the position for all particles.
