@@ -20,7 +20,7 @@
         <position>
             <x>20.0</x>
             <y>20.0</y>
-            <z>5.0</z>
+            <z>0.0</z>
         </position>
         <velocity>
             <x>0.0</x>
@@ -40,7 +40,7 @@
         <position>
             <x>70.0</x>
             <y>60.0</y>
-            <z>5.0</z>
+            <z>0.0</z>
         </position>
         <velocity>
             <x>0.0</x>
@@ -57,3 +57,4 @@
     </cuboid>
 
 </simulation>
+

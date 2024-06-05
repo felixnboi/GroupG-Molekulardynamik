@@ -27,7 +27,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
     int opt;
 
-    particles = std::make_unique<ParticleContainerLinkedCell>(180, 90, 10, 3);
+    particles = std::make_unique<ParticleContainerLinkedCell>(180, 90, 1, 3);
 
     const char* xml_file = "";
 

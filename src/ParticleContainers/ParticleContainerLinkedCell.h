@@ -9,7 +9,7 @@ private:
     std::array<double, 3> size;
     std::array<double, 3> cellSize;
     std::array<size_t, 3> cellCount;
-    size_t radius;
+    double radius;
     std::vector<std::shared_ptr<Particle>> halo;
     size_t arraylenght;
 public:
