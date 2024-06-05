@@ -77,11 +77,15 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
 
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
-                particlePairs.push_back({*particle_i, *particle_j});
+                if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
+                    particlePairs.push_back({*particle_i, *particle_j});
+                }
             }
             for (size_t j = 0; j < nbrCount; j++){
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
-                    particlePairs.push_back({*particle_i, *particle_j});
+                    if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
+                        particlePairs.push_back({*particle_i, *particle_j});
+                    }
                 }
             }
         }

@@ -76,7 +76,7 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
 
     // calculating the force components (along the x, y, z axes) between particle i and particle j
     for(int k = 0; k<3; k++){
-      double force = directionlessForce*(cur_x_i[k]-cur_x_j[k]);
+      double force = directionlessForce*(cur_x_i[k]-cur_x_j[k]);  
       cur_F_i_dummy[k] += force;
       cur_F_j_dummy[k] -= force;
     }
