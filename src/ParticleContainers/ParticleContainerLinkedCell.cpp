@@ -36,8 +36,9 @@ void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> pa
 
     }
     else{
-        size_t index = (size_t)(particle->getX()[0]/cellSize[0])+(particle->getX()[1]/cellSize[1])*cellCount[0]+(particle->getX()[2]/cellSize[2])*cellCount[0]*cellCount[1];
+        size_t index = (size_t)(particle->getX()[0]/cellSize[0])+((size_t)(particle->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)(particle->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
         linkedCells[index].push_back(particle);
+        std::cout<<"added particle with cords x: "<<particle->getX()[0]<< " y: "<<particle->getX()[1]<< " z: "<<particle->getX()[2]<< " at index: "<<index<<"\n";
     }
 }
 
@@ -70,20 +71,24 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
         if(nbrExists[4]&&nbrExists[2]              ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]  ;
         if(nbrExists[4]&&nbrExists[2]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]+1;
         if(nbrExists[4]              &&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]             -1;
-        if(nbrExists[4])                             nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]               ;
+        if(nbrExists[4]                            ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]               ;
         if(nbrExists[4]              &&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]             +1;
         if(nbrExists[4]&&nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]-1;
-        if(nbrExists[4]&&nbrExists[3])               nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]  ;
+        if(nbrExists[4]&&nbrExists[3]              ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]  ;
         if(nbrExists[4]&&nbrExists[3]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]+1;
 
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
+            std::cout << "looking at a particle with cords: "<<(*particle_i)->getX()[0]<< " y: "<<(*particle_i)->getX()[1]<< " z: "<<(*particle_i)->getX()[2]<< "\n";
             for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
+                std::cout<<"\n\n\ntest1\n\n\n";
                 if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                     particlePairs.push_back({*particle_i, *particle_j});
                 }
             }
             for (size_t j = 0; j < nbrCount; j++){
+                    std::cout<<"\n\n\ntest3\n\n\n";
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
+                    std::cout<<"\n\n\ntest2\n\n\n";
                     if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                         particlePairs.push_back({*particle_i, *particle_j});
                     }
@@ -91,7 +96,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
             }
         }
     }
-    std::cout << "ppairs size" << particlePairs.size() << std::endl;
+    std::cout << "\n\n\npairs size: " << particlePairs.size() << "\n\n\n";
     return particlePairs;
 }
 
@@ -125,7 +130,7 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag)
                 }
                 (*particle_i)->setX(cords);
             }
-            newIndex = (size_t)((*particle_i)->getX()[0]/cellSize[0])+(size_t)((*particle_i)->getX()[1]/cellSize[1])*cellCount[0]+(size_t)((*particle_i)->getX()[2]/cellSize[2])*cellCount[0]*cellCount[1];
+            newIndex = (size_t)((*particle_i)->getX()[0]/cellSize[0])+((size_t)(*particle_i)->getX()[1]/cellSize[1])*cellCount[0]+((size_t)(*particle_i)->getX()[2]/cellSize[2])*cellCount[0]*cellCount[1];
             if(newIndex != i){
                 linkedCells[newIndex].push_back(*particle_i);
                 particle_i = --linkedCells[i].erase(particle_i);
