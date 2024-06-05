@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>MD_vtk</baseName>
-        <writeFrequency>200</writeFrequency>
+        <writeFrequency>10</writeFrequency>
     </outputSettings>
 
     <simulationParameters>

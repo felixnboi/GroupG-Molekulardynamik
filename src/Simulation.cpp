@@ -5,7 +5,7 @@ Simulation::Simulation(){
     start_time = 0;
     end_time = 1000;
     delta_t = 0.014;
-    write_frequency = 10;
+    write_frequency = 100;
     particles = nullptr;
     force = nullptr;
     
@@ -233,6 +233,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
         if(algorithm == "linkedcell"){
             particles = std::make_unique<ParticleContainerLinkedCell>(domain[0], domain[1], domain[2], cutoff_radius);
+            linkedcell_flag = true;
         }
 
         if(algorithm == "default"){
@@ -250,6 +251,8 @@ bool Simulation::initialize(int argc, char* argv[]) {
     }else{
 
         particles = std::make_unique<ParticleContainerOld>();
+
+        lenJonesBoundaryFlags = {false, false, false, false, false, false};
 
         if (!force_flag) {
             spdlog::error("Didn't specify force. Terminating");
@@ -327,7 +330,6 @@ void Simulation::run() {
             calculateX();
             force->calculateF(*particles, lenJonesBoundaryFlags);
             calculateV();
-            iteration++;
 
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {
@@ -337,10 +339,10 @@ void Simulation::run() {
             spdlog::info("Iteration {} finished", iteration);
             // update simulation time
             current_time += delta_t;
+            iteration++;
         }
     }
-// display output message and terminate the program
-spdlog::info("Output written. Terminating...");
+    spdlog::info("Output written. Terminating...");
 }
 
 bool Simulation::isTimingEnabled() const {
@@ -400,7 +402,7 @@ void Simulation::plotParticles(int iteration) {
 }
 
 void Simulation::logHelp(){
-  spdlog::info("Usage: \"./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] --force char\"");
+  spdlog::info("Usage: \"[./MolSim --xml string [--help]] | [./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] --force char]\"");
   spdlog::info("For further information please read the README.md file at top level.");
   spdlog::info("Terminating...");
 }

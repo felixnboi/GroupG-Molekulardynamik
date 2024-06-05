@@ -247,6 +247,7 @@ int main(int argc, char *argsv[]){
     spdlog::info("Starting ParticleGenerator application");
 
     if(xml_flag){
+        inputFileManager::resetFile("../input/generated-input.txt");
         if(cli_flag){
             spdlog::error("Please use either xml or cli.");
             ParticleGenerator::logHelp();
