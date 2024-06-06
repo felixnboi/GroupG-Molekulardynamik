@@ -81,7 +81,6 @@ private:
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;
 
-    bool timing_enabled;
     bool xml_flag;
     bool generate_flag;
     bool input_flag;

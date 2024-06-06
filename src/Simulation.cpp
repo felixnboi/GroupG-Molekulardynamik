@@ -9,7 +9,6 @@ Simulation::Simulation(){
     particles = nullptr;
     force = nullptr;
     
-    timing_enabled = false;
     xml_flag = false;
     generate_flag = false;
     input_flag = false;
@@ -336,7 +335,7 @@ void Simulation::run() {
 }
 
 bool Simulation::isTimingEnabled() const {
-    return timing_enabled;
+    return time_flag;
 }
 
 void Simulation::calculateX() {
