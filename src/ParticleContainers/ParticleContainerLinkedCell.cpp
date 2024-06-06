@@ -108,6 +108,8 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag)
                     if(outflowflag[2*j]){
                         halo.push_back(*particle_i);
                         particle_i = --linkedCells[i].erase(particle_i);
+                        (*particle_i)->setF({0,0,0});
+                        (*particle_i)->setOldF({0,0,0});
                         goto loopend;
                     }
                     cords[j] = -cords[j];
@@ -119,16 +121,21 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag)
                     if(outflowflag[2*j+1]){
                         halo.push_back(*particle_i);
                         particle_i = --linkedCells[i].erase(particle_i);
+                        (*particle_i)->setF({0,0,0});
+                        (*particle_i)->setOldF({0,0,0});
                         goto loopend;
                     }
                     cords[j] = fmod(cords[j],(2*size[j]));
                     if(cords[j]>size[j]){
-                    std::array<double, 3UL> speed = (*particle_i)->getV();
-                    speed[j] *= -1;
-                    (*particle_i)->setV(speed);
+                        std::array<double, 3UL> speed = (*particle_i)->getV();
+                        speed[j] *= -1;
+                        (*particle_i)->setV(speed);
                         cords[j] = 2*size[j]-cords[j];
                     }
                     if(cords[j]==size[j]) {
+                        std::array<double, 3UL> speed = (*particle_i)->getV();
+                        speed[j] *= -1;
+                        (*particle_i)->setV(speed);
                         cords[j] = nextafter(cords[j],0);
                     }
                 }
