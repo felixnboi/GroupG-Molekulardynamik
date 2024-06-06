@@ -43,8 +43,10 @@ Example: ./MolSim --xml ../input/Assignment2.xml
 
 Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
 For backwards compatability with assignment1 and assignment2 the second usage can be used:  
+
 <details>
-<summary> parameters </summary>
+<summary> parameters </summary>  
+
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
 *"-g"*: **optional** If set the program uses the *"generated-input.txt"* file in the */input* folder.  
 *"-t"*: **optional** If set the program execution time will be measured. Measurement takes place with no vtk-output and no logging.  
@@ -60,20 +62,24 @@ If both *"-i string"* and *"-g"* are set both the *"generated-input.txt"* and th
 If none of both are set the *"eingabe-sonne.txt"* file at path */input* is used.  
 
 Example: ./MolSim -g --force l --delta 0.0002 --end 5  
+
 </details>  
 
 
 #### ParticleGenerator:
-The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usage is as follows:  
+The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usages are as follows:  
 Usage: *"./ParticleGenerator --xml string [--help] [-t]"* or *"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double"*
 
 First usage:  
+
 <details>
-<summary> parameters </summary>
+<summary> parameters </summary>  
+
 *"--xml string"*: **mandatory** Give the path to the .xml-file to be used for parameter parsing.  
-*"--help"*: **optional** If set a usage message is logged and program terminates.   
+*"--help"*: **optional** If set a usage message is logged and program terminates.  
 
 Example: ./MolSim --xml ../input/Assignment2.xml  
+
 </details>  
 
 Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
@@ -81,6 +87,7 @@ For backwards compatability with assignment1 and assignment2 the second usage ca
 
 <details>
 <summary> parameters </summary>  
+
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
 *"-s"*: **optional** If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well. Please be sure that a *generated-input.txt* file has already been created when setting this option.  
 *"-m double"*: **mandatory.** Defines the mass of each particle in the cuboid.  
@@ -97,6 +104,7 @@ For backwards compatability with assignment1 and assignment2 the second usage ca
 *"--log string"*: **optional** Defines the loglevel of the program. *"OFF"*, *"ERROR"*, *"WARN"*, *"INFO"*, *"DEBUG"* and *"TRACE"* are valid arguments.  
 
 Example: ./ParticleGenerator -m 1 -d 1.1225 -x 0 -y 0 -z 0 --sizeX 40 --sizeY 8 --sizeZ 1 --velocityX 0 --velocityY 0 --velocityZ 0  
+
 </details>  
 
 ## Visualizing with paraview:
