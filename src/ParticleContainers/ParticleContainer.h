@@ -6,7 +6,9 @@
 #include <iostream>
 
 using ParticleIterator = std::vector<std::shared_ptr<Particle>>::iterator; /// Iterator type for iterating over a vector of particles.
-
+/**
+ * @brief This abstract class serves as an interface for particle containers holding particles.
+ */
 class ParticleContainer
 {
     protected:

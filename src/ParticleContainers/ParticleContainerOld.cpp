@@ -1,10 +1,5 @@
 #include "ParticleContainerOld.h"
 
-/**
- * @file ParticleContainerOld.cpp
- * @brief This file contains a ParticleContainerOld class and its functions.
- */
-
 ParticleContainerOld::ParticleContainerOld(){
     spdlog::info("Particlecontainer created.");
 }
