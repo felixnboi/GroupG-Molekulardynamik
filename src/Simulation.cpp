@@ -309,9 +309,24 @@ void Simulation::run() {
     // Simulation loop
     if (time_flag) {
         while (current_time < end_time) {
+            auto start = std::chrono::high_resolution_clock::now();
             calculateX();
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            std::cout << "calcx:" << elapsed.count() <<std::endl;
+
+            start = std::chrono::high_resolution_clock::now();
             force->calculateF(*particles, lenJonesBoundaryFlags);
+            end = std::chrono::high_resolution_clock::now();
+            elapsed = end - start;
+            std::cout << "calcf:" << elapsed.count() <<std::endl;
+
+            start = std::chrono::high_resolution_clock::now();
             calculateV();
+            end = std::chrono::high_resolution_clock::now();
+            elapsed = end - start;
+            std::cout << "calcv:" << elapsed.count() <<std::endl;
+
             iteration++;
             current_time += delta_t;
         }
