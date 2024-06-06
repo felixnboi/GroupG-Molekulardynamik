@@ -41,7 +41,7 @@ First usage:
 Example: ./MolSim --xml ../input/Assignment2.xml  
 </details>  
 
-Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
+Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
 For backwards compatability with assignment1 and assignment2 the second usage can be used:  
 <details>
 <summary> parameters </summary>
@@ -76,7 +76,7 @@ First usage:
 Example: ./MolSim --xml ../input/Assignment2.xml  
 </details>  
 
-Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
+Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
 For backwards compatability with assignment1 and assignment2 the second usage can be used:  
 
 <details>
