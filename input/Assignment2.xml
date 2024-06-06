@@ -75,6 +75,7 @@
         </dimensions>
         <distance>1.1225</distance>
         <mass>1.0</mass>
+        <brownian_motion>0.1</brownian_motion>
     </cuboid>
 
 </simulation>
