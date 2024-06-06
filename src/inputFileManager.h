@@ -6,10 +6,12 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+
 /**
  * @brief A namespace for managing input files.
  */
 namespace inputFileManager{
+
     /**
      * @brief Merges the contents of the specified file into the generated input file.
      * 
@@ -20,6 +22,7 @@ namespace inputFileManager{
      * @param filename2 The path of the file to be merged to filename1.
      */
     void mergeFile(const char *filename1, const char *filename2);
+
     /**
      * @brief Resets the generated input file to its initial state.
      * 
@@ -29,4 +32,5 @@ namespace inputFileManager{
      * @param filename The pah of file to be reset.
      */
     void resetFile(const char *filename);
+    
 };

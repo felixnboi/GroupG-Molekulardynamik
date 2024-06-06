@@ -62,6 +62,13 @@ public:
     double getMass() const;
 
     /**
+     * @brief Getter for the brownian motion of the Cuboid.
+     * 
+     * @return The brownian motion average velocity of the Cuboid.
+     */
+    double getBrownianMotion() const;
+
+    /**
      * @brief Setter for the position of the Cuboid.
      * 
      * @param new_position The new position to set for the Cuboid.
@@ -96,6 +103,19 @@ public:
      */
     void setMass(double new_mass);
 
+    /**
+     * @brief Setter for the brownian motion of the Cuboid.
+     * 
+     * @param new_brownian_motion The new brownian motion average velocity to set for the Cuboid.
+     */
+    void setBrownianMotion(double new_brownian_motion);
+
+    /**
+     * @brief Equality operator for Cuboid.
+     * 
+     * @param other The other Cuboid to compare with.
+     * @return True if the two Cuboids are equal, false otherwise.
+     */
     bool operator==(const Cuboid& other) const;
 
 private:
@@ -104,5 +124,5 @@ private:
     std::array<unsigned, 3> dimensions; ///< The dimensions of the Cuboid.
     double distance; ///< The distance between particles in the Cuboid.
     double mass; ///< The mass of each particle in the Cuboid.
-    double brownian_motion; ///<The brownian motion average velocity.
+    double brownian_motion; ///< The brownian motion average velocity.
 };

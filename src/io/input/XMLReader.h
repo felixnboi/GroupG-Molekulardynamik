@@ -15,6 +15,7 @@
  */
 class XMLReader{
     public:
+    
         /**
          * @brief Constructor for the XMLReader class.
          */

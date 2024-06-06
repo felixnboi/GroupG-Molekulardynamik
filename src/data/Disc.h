@@ -83,6 +83,12 @@ public:
      */
     void setRadius(int radius);
 
+    /**
+     * @brief Equality operator for disc.
+     * 
+     * @param other The other disc to compare with.
+     * @return True if the two discs are equal, false otherwise.
+     */
     bool operator==(const Disc& other) const;
 
 private:

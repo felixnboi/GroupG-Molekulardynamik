@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>ass3_task2</baseName>
-        <writeFrequency>500</writeFrequency>
+        <writeFrequency>100</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
@@ -75,6 +75,7 @@
         </dimensions>
         <distance>1.1225</distance>
         <mass>1.0</mass>
+        <brownian_motion>0.1</brownian_motion>
     </cuboid>
 
 </simulation>

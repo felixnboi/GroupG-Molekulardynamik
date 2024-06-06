@@ -24,7 +24,7 @@ namespace ParticleGenerator{
  * @brief Generates a cuboid of particles.
  * 
  * This function generates particles within a cuboid defined by its parameters.
- * The particles are written to an input file.
+ * The particles are written to a file.
  * 
  * @param cuboid The cuboid of particles to be generated.
  * @param filename Path of file to which particles are written.
@@ -32,23 +32,19 @@ namespace ParticleGenerator{
 void generateCuboid(const Cuboid& cuboid, const char *filename);
 
 /**
- * Generates a disc of particles and writes to the specified file.
- *
- * @param x x-coordinate of the center of the disc.
- * @param y y-coordinate of the center of the disc.
- * @param z z-coordinate of the center of the disc.
- * @param MoleculesPerRadius Number of molecules along the radius.
- * @param distance Distance (mesh width) between the molecules.
- * @param mass Mass of each molecule.
- * @param velocityX Initial velocity along the x-axis for the whole disc.
- * @param velocityY Initial velocity along the y-axis for the whole disc.
- * @param velocityZ Initial velocity along the z-axis for the whole disc.
- * @param filename File to which the particles will be written.
- */
+ * @brief Generates a disc of particles.
+ * 
+ * This function generates particles within a disc defined by its parameters.
+ * The particles are written to a file.
+ * 
+ * @param cuboid The disc of particles to be generated.
+ * @param filename Path of file to which particles are written.
+ */ 
 void generateDisc(const Disc& disc, const char* filename);
 
 /**
  * @brief Logs a usage message.
  */
 void logHelp();
+
 };

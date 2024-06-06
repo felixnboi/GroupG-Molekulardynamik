@@ -4,7 +4,7 @@ Cuboid::Cuboid(){}
 
 Cuboid::Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
 double distance, double mass, double brownian_motion)
-    : position(position), velocity(velocity), dimensions(dimensions), distance(distance), mass(mass)  {}
+    : position(position), velocity(velocity), dimensions(dimensions), distance(distance), mass(mass), brownian_motion(brownian_motion) {}
 
 std::array<double, 3> Cuboid::getPosition() const {
     return position;
@@ -24,6 +24,10 @@ double Cuboid::getDistance() const {
 
 double Cuboid::getMass() const {
     return mass;
+}
+
+double Cuboid::getBrownianMotion() const {
+    return brownian_motion;
 }
 
 void Cuboid::setPosition(const std::array<double, 3>& new_position) {
@@ -46,6 +50,11 @@ void Cuboid::setMass(double new_mass) {
     mass = new_mass;
 }
 
+void Cuboid::setBrownianMotion(double new_brownian_motion) {
+    brownian_motion = new_brownian_motion;
+}
+
 bool Cuboid::operator==(const Cuboid& other) const{
-    return position == other.position && velocity == other.velocity && dimensions == other.dimensions && distance == other.distance && mass == other.mass;
+    return position == other.position && velocity == other.velocity && dimensions == other.dimensions 
+        && distance == other.distance && mass == other.mass && brownian_motion == other.brownian_motion;
 }
