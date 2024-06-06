@@ -8,12 +8,17 @@
 >Robert Täger  
 >Maria Lelyukh  
 
+<details>
+<summary>click to expand/collapse</summary>
+test
+</details>
 
 ## Dependencies: 
 
 >gcc/g++ compiler: the default version under most linux distributions should be sufficient  
 >xerces library: to install run *sudo apt install libxerces-c-dev*  
->cmake: to install run *sudo apt install cmake*  
+>cmake: to install run *sudo apt install cmake*
+>xsdcxx compiler: to install run *sudo apt install xsdcxx*  
 >paraview (for visualizing): to install run *sudo apt install paraview*  
 
 ## Build instructions:
