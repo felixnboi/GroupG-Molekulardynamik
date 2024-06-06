@@ -21,8 +21,9 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
             const std::array<unsigned, 3> dimensions = {cuboid_xml.dimensions().x(), cuboid_xml.dimensions().y(), cuboid_xml.dimensions().z()};
             const double distance = cuboid_xml.distance();
             const double mass = cuboid_xml.mass();
+            const double brownian_motion = cuboid_xml.brownian_motion();
 
-            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass));
+            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion));
         }
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Cuboid-parsing.");
@@ -86,8 +87,7 @@ void XMLReader::readSimulation(const char* filename, SimData& simdata){
 
         simdata.setSigma(sim->simulationParameters().sigma());
         simdata.setEpsilon(sim->simulationParameters().epsilon());
-        simdata.setAverageBrownianMotion(sim->simulationParameters().average_brownian_motion());
-
+        
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Simulation-parsing.");
         spdlog::error(e.what());

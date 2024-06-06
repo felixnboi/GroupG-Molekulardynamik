@@ -4,7 +4,7 @@ SimData::SimData() = default;
 
 SimData::SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
     std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-    std::array<double, 3> domain, double sigma, double epsilon, double average_brownian_motion)
+    std::array<double, 3> domain, double sigma, double epsilon)
     : input_file(std::move(input_file)), 
       baseName(std::move(baseName)), 
       write_frequency(write_frequency), 
@@ -18,8 +18,7 @@ SimData::SimData(std::string input_file, std::string baseName, unsigned write_fr
       cutoff_radius(cutoff_radius), 
       domain(std::move(domain)), 
       sigma(sigma), 
-      epsilon(epsilon), 
-      average_brownian_motion(average_brownian_motion) {}
+      epsilon(epsilon) {}
 
 SimData::~SimData() = default;
 
@@ -37,7 +36,6 @@ double SimData::getCutoffRadius() const { return cutoff_radius; }
 std::array<double, 3> SimData::getDomain() const { return domain; }
 double SimData::getSigma() const { return sigma; }
 double SimData::getEpsilon() const { return epsilon; }
-double SimData::getAverageBrownianMotion() const { return average_brownian_motion; }
 
 void SimData::setInputFile(const std::string& new_input_file) { input_file = new_input_file; }
 void SimData::setBaseName(const std::string& new_base_name) { baseName = new_base_name; }
@@ -53,5 +51,4 @@ void SimData::setCutoffRadius(double new_cutoff_radius) { cutoff_radius = new_cu
 void SimData::setDomain(const std::array<double, 3>& new_domain) { domain = new_domain; }
 void SimData::setSigma(double new_sigma) { sigma = new_sigma; }
 void SimData::setEpsilon(double new_epsilon) { epsilon = new_epsilon; }
-void SimData::setAverageBrownianMotion(double new_average_brownian_motion) { average_brownian_motion = new_average_brownian_motion; }
 

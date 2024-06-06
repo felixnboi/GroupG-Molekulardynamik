@@ -3,11 +3,11 @@
 
     <boundaries>
         <left>outflow</left>
-        <right>reflecting</right>
-        <bottom>lennardJones</bottom>
+        <right>mirror</right>
+        <bottom>reflecting</bottom>
         <top>outflow</top>
-        <rear>reflecting</rear>
-        <front>lennardJones</front>
+        <rear>mirror</rear>
+        <front>reflecting</front>
     </boundaries>
 
     <inputSettings>
@@ -25,7 +25,6 @@
         <start_t>4</start_t>
         <epsilon>5</epsilon>
         <sigma>6</sigma>
-        <average_brownian_motion>7</average_brownian_motion>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
@@ -55,6 +54,7 @@
         </dimensions>
         <distance>21</distance>
         <mass>22</mass>
+        <brownian_motion>7</brownian_motion>
     </cuboid>
 
     <disc>

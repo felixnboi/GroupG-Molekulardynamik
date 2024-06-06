@@ -787,24 +787,6 @@ sigma (const sigma_type& x)
   this->sigma_.set (x);
 }
 
-const simulationParameters::average_brownian_motion_type& simulationParameters::
-average_brownian_motion () const
-{
-  return this->average_brownian_motion_.get ();
-}
-
-simulationParameters::average_brownian_motion_type& simulationParameters::
-average_brownian_motion ()
-{
-  return this->average_brownian_motion_.get ();
-}
-
-void simulationParameters::
-average_brownian_motion (const average_brownian_motion_type& x)
-{
-  this->average_brownian_motion_.set (x);
-}
-
 const simulationParameters::force_type& simulationParameters::
 force () const
 {
@@ -1029,6 +1011,24 @@ void cuboid::
 mass (const mass_type& x)
 {
   this->mass_.set (x);
+}
+
+const cuboid::brownian_motion_type& cuboid::
+brownian_motion () const
+{
+  return this->brownian_motion_.get ();
+}
+
+cuboid::brownian_motion_type& cuboid::
+brownian_motion ()
+{
+  return this->brownian_motion_.get ();
+}
+
+void cuboid::
+brownian_motion (const brownian_motion_type& x)
+{
+  this->brownian_motion_.set (x);
 }
 
 
@@ -1470,14 +1470,14 @@ const char* const boundaryBehavior::
 _xsd_boundaryBehavior_literals_[3] =
 {
   "outflow",
-  "reflecting",
-  "lennardJones"
+  "mirror",
+  "reflecting"
 };
 
 const boundaryBehavior::value boundaryBehavior::
 _xsd_boundaryBehavior_indexes_[3] =
 {
-  ::boundaryBehavior::lennardJones,
+  ::boundaryBehavior::mirror,
   ::boundaryBehavior::outflow,
   ::boundaryBehavior::reflecting
 };
@@ -2353,7 +2353,6 @@ simulationParameters (const end_t_type& end_t,
                       const start_t_type& start_t,
                       const epsilon_type& epsilon,
                       const sigma_type& sigma,
-                      const average_brownian_motion_type& average_brownian_motion,
                       const force_type& force,
                       const algorithm_type& algorithm,
                       const loglevel_type& loglevel,
@@ -2365,7 +2364,6 @@ simulationParameters (const end_t_type& end_t,
   start_t_ (start_t, this),
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
-  average_brownian_motion_ (average_brownian_motion, this),
   force_ (force, this),
   algorithm_ (algorithm, this),
   loglevel_ (loglevel, this),
@@ -2380,7 +2378,6 @@ simulationParameters (const end_t_type& end_t,
                       const start_t_type& start_t,
                       const epsilon_type& epsilon,
                       const sigma_type& sigma,
-                      const average_brownian_motion_type& average_brownian_motion,
                       const force_type& force,
                       const algorithm_type& algorithm,
                       const loglevel_type& loglevel,
@@ -2392,7 +2389,6 @@ simulationParameters (const end_t_type& end_t,
   start_t_ (start_t, this),
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
-  average_brownian_motion_ (average_brownian_motion, this),
   force_ (force, this),
   algorithm_ (algorithm, this),
   loglevel_ (loglevel, this),
@@ -2411,7 +2407,6 @@ simulationParameters (const simulationParameters& x,
   start_t_ (x.start_t_, f, this),
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
-  average_brownian_motion_ (x.average_brownian_motion_, f, this),
   force_ (x.force_, f, this),
   algorithm_ (x.algorithm_, f, this),
   loglevel_ (x.loglevel_, f, this),
@@ -2430,7 +2425,6 @@ simulationParameters (const ::xercesc::DOMElement& e,
   start_t_ (this),
   epsilon_ (this),
   sigma_ (this),
-  average_brownian_motion_ (this),
   force_ (this),
   algorithm_ (this),
   loglevel_ (this),
@@ -2505,17 +2499,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!sigma_.present ())
       {
         this->sigma_.set (sigma_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // average_brownian_motion
-    //
-    if (n.name () == "average_brownian_motion" && n.namespace_ ().empty ())
-    {
-      if (!average_brownian_motion_.present ())
-      {
-        this->average_brownian_motion_.set (average_brownian_motion_traits::create (i, f, this));
         continue;
       }
     }
@@ -2625,13 +2608,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!average_brownian_motion_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "average_brownian_motion",
-      "");
-  }
-
   if (!force_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -2686,7 +2662,6 @@ operator= (const simulationParameters& x)
     this->start_t_ = x.start_t_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
-    this->average_brownian_motion_ = x.average_brownian_motion_;
     this->force_ = x.force_;
     this->algorithm_ = x.algorithm_;
     this->loglevel_ = x.loglevel_;
@@ -2710,13 +2685,15 @@ cuboid (const position_type& position,
         const velocity_type& velocity,
         const dimensions_type& dimensions,
         const distance_type& distance,
-        const mass_type& mass)
+        const mass_type& mass,
+        const brownian_motion_type& brownian_motion)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
   dimensions_ (dimensions, this),
   distance_ (distance, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  brownian_motion_ (brownian_motion, this)
 {
 }
 
@@ -2725,13 +2702,15 @@ cuboid (::std::unique_ptr< position_type > position,
         ::std::unique_ptr< velocity_type > velocity,
         ::std::unique_ptr< dimensions_type > dimensions,
         const distance_type& distance,
-        const mass_type& mass)
+        const mass_type& mass,
+        const brownian_motion_type& brownian_motion)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
   dimensions_ (std::move (dimensions), this),
   distance_ (distance, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  brownian_motion_ (brownian_motion, this)
 {
 }
 
@@ -2744,7 +2723,8 @@ cuboid (const cuboid& x,
   velocity_ (x.velocity_, f, this),
   dimensions_ (x.dimensions_, f, this),
   distance_ (x.distance_, f, this),
-  mass_ (x.mass_, f, this)
+  mass_ (x.mass_, f, this),
+  brownian_motion_ (x.brownian_motion_, f, this)
 {
 }
 
@@ -2757,7 +2737,8 @@ cuboid (const ::xercesc::DOMElement& e,
   velocity_ (this),
   dimensions_ (this),
   distance_ (this),
-  mass_ (this)
+  mass_ (this),
+  brownian_motion_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2840,6 +2821,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // brownian_motion
+    //
+    if (n.name () == "brownian_motion" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_.present ())
+      {
+        this->brownian_motion_.set (brownian_motion_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2877,6 +2869,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "mass",
       "");
   }
+
+  if (!brownian_motion_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion",
+      "");
+  }
 }
 
 cuboid* cuboid::
@@ -2897,6 +2896,7 @@ operator= (const cuboid& x)
     this->dimensions_ = x.dimensions_;
     this->distance_ = x.distance_;
     this->mass_ = x.mass_;
+    this->brownian_motion_ = x.brownian_motion_;
   }
 
   return *this;

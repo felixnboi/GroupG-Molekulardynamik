@@ -2,8 +2,9 @@
 
 Cuboid::Cuboid(){}
 
-Cuboid::Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, double distance, double mass)
-    : position(position), velocity(velocity), dimensions(dimensions), distance(distance), mass(mass) {}
+Cuboid::Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
+double distance, double mass, double brownian_motion)
+    : position(position), velocity(velocity), dimensions(dimensions), distance(distance), mass(mass)  {}
 
 std::array<double, 3> Cuboid::getPosition() const {
     return position;

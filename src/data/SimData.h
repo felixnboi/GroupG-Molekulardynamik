@@ -30,11 +30,10 @@ public:
      * @param domain Array containing domain information.
      * @param sigma Sigma parameter used in simulation.
      * @param epsilon Epsilon parameter used in simulation.
-     * @param average_brownian_motion Average brownian motion value used in simulation.
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            std::array<double, 3> domain, double sigma, double epsilon, double average_brownian_motion);
+            std::array<double, 3> domain, double sigma, double epsilon);
 
     /**
      * @brief Destructor.
@@ -141,13 +140,6 @@ public:
      */
     double getEpsilon() const;
 
-    /**
-     * @brief Getter for the average brownian motion value used in simulation.
-     * 
-     * @return The average brownian motion value used in simulation.
-     */
-    double getAverageBrownianMotion() const;
-
     // Setter functions...
 
     /**
@@ -248,13 +240,6 @@ public:
      */
     void setEpsilon(double new_epsilon);
 
-    /**
-     * @brief Setter for the average brownian motion value used in simulation.
-     * 
-     * @param new_average_brownian_motion The new average brownian motion value used in simulation.
-     */
-    void setAverageBrownianMotion(double new_average_brownian_motion);
-
 private:
     std::string input_file; ///< The input file name.
     std::string baseName; ///< The base name for simulation.
@@ -270,6 +255,5 @@ private:
     std::array<double, 3> domain; ///< Array containing domain information.
     double sigma; ///< Sigma parameter used in simulation.
     double epsilon; ///< Epsilon parameter used in simulation.
-    double average_brownian_motion; ///< Average brownian motion value used in simulation.
 };
 

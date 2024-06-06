@@ -59,8 +59,8 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
     for (size_t i = 0; i < arraylenght; i++){
         size_t nbrCount = 0;
         size_t nbrs[13];
-        size_t indexi[3] = {i%cellCount[0],arraylenght/cellCount[0]%cellCount[1], arraylenght/cellCount[0]/cellCount[1]};
-        bool nbrExists[5] = {indexi[0]>0, indexi[0]+2<cellCount[0], indexi[1]>0, indexi[1]+2<cellCount[1], indexi[2]+2<cellCount[2]};
+        size_t indexi[3] = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
+        bool nbrExists[5] = {indexi[0]>0, indexi[0]+1<cellCount[0], indexi[1]>0, indexi[1]+1<cellCount[1], indexi[2]+1<cellCount[2]};
 
         if(                            nbrExists[1]) nbrs[nbrCount++] = i                                       +1;
         if(              nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i                          +cellCount[0]-1;
@@ -134,7 +134,7 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag)
                 }
                 (*particle_i)->setX(cords);
             }
-            newIndex = (size_t)((*particle_i)->getX()[0]/cellSize[0])+((size_t)(*particle_i)->getX()[1]/cellSize[1])*cellCount[0]+((size_t)(*particle_i)->getX()[2]/cellSize[2])*cellCount[0]*cellCount[1];
+            newIndex = (size_t)((*particle_i)->getX()[0]/cellSize[0])+((size_t)((*particle_i)->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)((*particle_i)->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
             if(newIndex != i){
                 linkedCells[newIndex].push_back(*particle_i);
                 particle_i = --linkedCells[i].erase(particle_i);

@@ -8,7 +8,8 @@ Gravitational_Force::~Gravitational_Force() {
 };
 
 
-void Gravitational_Force::calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag) {
+void Gravitational_Force::calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
+    double epsilon, double sigma) {
   std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs = particles.getParticlePairs();
   std::vector<std::shared_ptr<Particle>>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<std::shared_ptr<Particle>>::iterator particle_j; ///< Second iterator for nested loop over particles.

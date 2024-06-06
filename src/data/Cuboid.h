@@ -21,8 +21,10 @@ public:
      * @param dimensions Number of particles along each dimension in 3D space.
      * @param distance The distance between the particles.
      * @param mass The mass of each particle.
+     * @param brownian_motion The brownian motion average velocity.
      */
-    Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, double distance, double mass);
+    Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
+    double distance, double mass, double brownian_motion);
 
     /**
      * @brief Getter for the position of the Cuboid.
@@ -102,4 +104,5 @@ private:
     std::array<unsigned, 3> dimensions; ///< The dimensions of the Cuboid.
     double distance; ///< The distance between particles in the Cuboid.
     double mass; ///< The mass of each particle in the Cuboid.
+    double brownian_motion; ///<The brownian motion average velocity.
 };

@@ -13,7 +13,7 @@ TEST(XMLReader, parseXMLFile){
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
 
-    Cuboid cuboid({12,13,14},{15,16,17},{18,19,20},21,22);
+    Cuboid cuboid({12,13,14},{15,16,17},{18,19,20},21,22,7);
     Disc disc({23,24,25},{26,27,28},29,30,31);
 
     SimData simdata;
@@ -40,10 +40,9 @@ TEST(XMLReader, parseXMLFile){
     EXPECT_TRUE(simdata.getForceStr()=="lennardJonesForce");
     EXPECT_TRUE(simdata.getAlgorithm()=="linkedcell");
     EXPECT_TRUE(simdata.getLoglevel()=="INFO");
-    EXPECT_TRUE((simdata.getBoundary()==std::array<std::string, 6>{"outflow", "reflecting", "lennardJones", "outflow", "reflecting", "lennardJones"}));
+    EXPECT_TRUE((simdata.getBoundary()==std::array<std::string, 6>{"outflow", "mirror", "reflecting", "outflow", "mirror", "reflecting"}));
     EXPECT_TRUE(simdata.getCutoffRadius()==11);
     EXPECT_TRUE((simdata.getDomain()==std::array<double, 3>{8, 9, 10}));
     EXPECT_TRUE(simdata.getSigma()==6);
     EXPECT_TRUE(simdata.getEpsilon()==5);
-    EXPECT_TRUE(simdata.getAverageBrownianMotion()==7);
 }

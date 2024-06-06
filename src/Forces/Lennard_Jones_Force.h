@@ -27,5 +27,6 @@ public:
      * 
      * @param particles The container of particles for which to calculate the forces.
      */
-    void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag) override;
+    void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
+    double epsilon, double sigma) override;
 };

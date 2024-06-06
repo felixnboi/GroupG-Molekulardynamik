@@ -4,7 +4,7 @@ Simulation::Simulation(){
     std::array<std::string, 6> boundary = {};
     std::array<double, 3> domain = {};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, domain, 1, 5, 0.1);
+    std::string("INFO"), boundary, 3, domain, 1, 5);
 
     particles = nullptr;
     force = nullptr;
@@ -207,11 +207,11 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 outflowFlags[i] = true;
                 lenJonesBoundaryFlags[i] = false;
             }
-            if(simdata.getBoundary()[i] == "lennardJones"){
+            if(simdata.getBoundary()[i] == "reflecting"){
                 outflowFlags[i] = false;
                 lenJonesBoundaryFlags[i] = true;
             }
-            if(simdata.getBoundary()[i] == "reflecting"){
+            if(simdata.getBoundary()[i] == "mirror"){
                 outflowFlags[i] = false;
                 lenJonesBoundaryFlags[i] = false;
             }
@@ -225,7 +225,6 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
         if(simdata.getAlgorithm() == "default"){
             particles = std::make_unique<ParticleContainerOld>();
-            lenJonesBoundaryFlags = {false, false, false, false, false, false};
         }
 
         if(simdata.getForceStr() == "gravitationalForce"){
@@ -300,7 +299,7 @@ void Simulation::run() {
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles, lenJonesBoundaryFlags);
+        force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
         calculateV();
         current_time += delta_t;
         iteration++;
@@ -309,23 +308,9 @@ void Simulation::run() {
     // Simulation loop
     if (time_flag) {
         while (current_time < end_time) {
-            auto start = std::chrono::high_resolution_clock::now();
             calculateX();
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> elapsed = end - start;
-            std::cout << "calcx:" << elapsed.count() <<std::endl;
-
-            start = std::chrono::high_resolution_clock::now();
-            force->calculateF(*particles, lenJonesBoundaryFlags);
-            end = std::chrono::high_resolution_clock::now();
-            elapsed = end - start;
-            std::cout << "calcf:" << elapsed.count() <<std::endl;
-
-            start = std::chrono::high_resolution_clock::now();
+            force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
             calculateV();
-            end = std::chrono::high_resolution_clock::now();
-            elapsed = end - start;
-            std::cout << "calcv:" << elapsed.count() <<std::endl;
 
             iteration++;
             current_time += delta_t;
@@ -333,7 +318,7 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBoundaryFlags);
+            force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
             calculateV();
 
             // plotting particle positions only at intervals of iterations

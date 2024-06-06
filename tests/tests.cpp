@@ -276,7 +276,7 @@ TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
     inputFileManager::resetFile("../input/generated-input.txt");
     // Generate particles in a cuboid and write to the file
-    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2), "../input/generated-input.txt");
+    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2,0.1), "../input/generated-input.txt");
      // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
 
@@ -487,7 +487,7 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     particles->addParticle(p3);
 
     Lennard_Jones_Force LJForce {};
-    LJForce.calculateF(*particles, {false, false, false, false, false, false});
+    LJForce.calculateF(*particles, {false, false, false, false, false, false}, false, 5, 1);
 
     const auto& updatedParticles = particles->getParticles();
 

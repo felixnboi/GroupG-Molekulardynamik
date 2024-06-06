@@ -20,8 +20,8 @@
     <xs:simpleType name="boundaryBehavior">
         <xs:restriction base="xs:string">
             <xs:enumeration value="outflow"/>
+            <xs:enumeration value="mirror"/>
             <xs:enumeration value="reflecting"/>
-            <xs:enumeration value="lennardJones"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -97,7 +97,6 @@
                         <xs:element name="start_t" type="xs:double"/>
                         <xs:element name="epsilon" type="xs:double"/>
                         <xs:element name="sigma" type="xs:double"/>
-                        <xs:element name="average_brownian_motion" type="xs:double"/>
                         <xs:element name="force" type="forces"/>
                         <xs:element name="algorithm" type="algorithms"/>  
                         <xs:element name="loglevel" type="loglevels"/>  
@@ -115,7 +114,8 @@
                         <xs:element name="velocity" type="double_vector"/>
                         <xs:element name="dimensions" type="unsigned_vector"/>
                         <xs:element name="distance" type="xs:double"/>
-                        <xs:element name="mass" type="xs:double"/>                        
+                        <xs:element name="mass" type="xs:double"/>    
+                        <xs:element name="brownian_motion" type="xs:double"/>                    
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

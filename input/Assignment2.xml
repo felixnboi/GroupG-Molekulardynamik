@@ -25,7 +25,6 @@
         <start_t>0.0</start_t>
         <epsilon>5.0</epsilon>
         <sigma>1.0</sigma>
-        <average_brownian_motion>0.1</average_brownian_motion>
         <force>lennardJonesForce</force>
         <algorithm>default</algorithm>
         <loglevel>INFO</loglevel>
@@ -55,6 +54,7 @@
         </dimensions>
         <distance>1.1225</distance>
         <mass>1.0</mass>
+        <brownian_motion>0.1</brownian_motion>
     </cuboid>
 
     <cuboid>

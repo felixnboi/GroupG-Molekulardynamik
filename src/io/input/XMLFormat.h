@@ -1083,8 +1083,8 @@ class boundaryBehavior: public ::xml_schema::string
   enum value
   {
     outflow,
-    reflecting,
-    lennardJones
+    mirror,
+    reflecting
   };
 
   /**
@@ -3178,53 +3178,6 @@ class simulationParameters: public ::xml_schema::type
   //@}
 
   /**
-   * @name average_brownian_motion
-   *
-   * @brief Accessor and modifier functions for the %average_brownian_motion
-   * required element.
-   */
-  //@{
-
-  /**
-   * @brief Element type.
-   */
-  typedef ::xml_schema::double_ average_brownian_motion_type;
-
-  /**
-   * @brief Element traits type.
-   */
-  typedef ::xsd::cxx::tree::traits< average_brownian_motion_type, char, ::xsd::cxx::tree::schema_type::double_ > average_brownian_motion_traits;
-
-  /**
-   * @brief Return a read-only (constant) reference to the element.
-   *
-   * @return A constant reference to the element.
-   */
-  const average_brownian_motion_type&
-  average_brownian_motion () const;
-
-  /**
-   * @brief Return a read-write reference to the element.
-   *
-   * @return A reference to the element.
-   */
-  average_brownian_motion_type&
-  average_brownian_motion ();
-
-  /**
-   * @brief Set the element value.
-   *
-   * @param x A new value to set.
-   *
-   * This function makes a copy of its argument and sets it as
-   * the new value of the element.
-   */
-  void
-  average_brownian_motion (const average_brownian_motion_type& x);
-
-  //@}
-
-  /**
    * @name force
    *
    * @brief Accessor and modifier functions for the %force
@@ -3517,7 +3470,6 @@ class simulationParameters: public ::xml_schema::type
                         const start_t_type&,
                         const epsilon_type&,
                         const sigma_type&,
-                        const average_brownian_motion_type&,
                         const force_type&,
                         const algorithm_type&,
                         const loglevel_type&,
@@ -3537,7 +3489,6 @@ class simulationParameters: public ::xml_schema::type
                         const start_t_type&,
                         const epsilon_type&,
                         const sigma_type&,
-                        const average_brownian_motion_type&,
                         const force_type&,
                         const algorithm_type&,
                         const loglevel_type&,
@@ -3619,7 +3570,6 @@ class simulationParameters: public ::xml_schema::type
   ::xsd::cxx::tree::one< start_t_type > start_t_;
   ::xsd::cxx::tree::one< epsilon_type > epsilon_;
   ::xsd::cxx::tree::one< sigma_type > sigma_;
-  ::xsd::cxx::tree::one< average_brownian_motion_type > average_brownian_motion_;
   ::xsd::cxx::tree::one< force_type > force_;
   ::xsd::cxx::tree::one< algorithm_type > algorithm_;
   ::xsd::cxx::tree::one< loglevel_type > loglevel_;
@@ -3906,6 +3856,53 @@ class cuboid: public ::xml_schema::type
   //@}
 
   /**
+   * @name brownian_motion
+   *
+   * @brief Accessor and modifier functions for the %brownian_motion
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ brownian_motion_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< brownian_motion_type, char, ::xsd::cxx::tree::schema_type::double_ > brownian_motion_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const brownian_motion_type&
+  brownian_motion () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  brownian_motion_type&
+  brownian_motion ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  brownian_motion (const brownian_motion_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -3918,7 +3915,8 @@ class cuboid: public ::xml_schema::type
           const velocity_type&,
           const dimensions_type&,
           const distance_type&,
-          const mass_type&);
+          const mass_type&,
+          const brownian_motion_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -3932,7 +3930,8 @@ class cuboid: public ::xml_schema::type
           ::std::unique_ptr< velocity_type >,
           ::std::unique_ptr< dimensions_type >,
           const distance_type&,
-          const mass_type&);
+          const mass_type&,
+          const brownian_motion_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4009,6 +4008,7 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< dimensions_type > dimensions_;
   ::xsd::cxx::tree::one< distance_type > distance_;
   ::xsd::cxx::tree::one< mass_type > mass_;
+  ::xsd::cxx::tree::one< brownian_motion_type > brownian_motion_;
 
   //@endcond
 };
