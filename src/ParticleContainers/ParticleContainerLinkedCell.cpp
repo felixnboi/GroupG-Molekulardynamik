@@ -30,10 +30,9 @@ const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
 void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> particle){
     particles.push_back(particle);
     auto cords = particle->getX();
-    if(cords[0]<0||cords[0]>=size[0]||cords[1]<0||cords[1]>=size[0]||cords[2]<0||cords[2]>=size[0]){
+    if(cords[0]<0||cords[0]>=size[0]||cords[1]<0||cords[1]>=size[1]||cords[2]<0||cords[2]>=size[2]){
         halo.push_back(particle);
         spdlog::warn("Added Particle is not inside of the calculated area\n");
-
     }
     else{
         size_t index = (size_t)(particle->getX()[0]/cellSize[0])+((size_t)(particle->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)(particle->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
