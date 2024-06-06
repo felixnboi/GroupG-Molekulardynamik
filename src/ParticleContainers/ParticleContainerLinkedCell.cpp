@@ -1,9 +1,9 @@
 #include "ParticleContainerLinkedCell.h"
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius){
-    size = {sizeX, sizeY, sizeZ};
     cellCount = {(size_t)ceil(sizeX/radius), (size_t)ceil(sizeY/radius), (size_t)ceil(sizeZ/radius)};
     cellSize = {sizeX/cellCount[0], sizeY/cellCount[1],sizeZ/cellCount[2]};
+    size = {cellSize[0]*cellCount[0],cellSize[1]*cellCount[1],cellSize[2]*cellCount[2]};
     this->radius = radius;
     arraylenght = cellCount[0]*cellCount[1]*cellCount[2];
     linkedCells = std::make_unique<std::list<std::shared_ptr<Particle>>[]>(arraylenght);
@@ -30,7 +30,7 @@ const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
 void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> particle){
     particles.push_back(particle);
     auto cords = particle->getX();
-    if(cords[0]<0||cords[0]>size[0]||cords[1]<0||cords[1]>size[0]||cords[2]<0||cords[2]>size[0]){
+    if(cords[0]<0||cords[0]>=size[0]||cords[1]<0||cords[1]>=size[0]||cords[2]<0||cords[2]>=size[0]){
         halo.push_back(particle);
         spdlog::warn("Added Particle is not inside of the calculated area\n");
 
@@ -38,7 +38,6 @@ void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> pa
     else{
         size_t index = (size_t)(particle->getX()[0]/cellSize[0])+((size_t)(particle->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)(particle->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
         linkedCells[index].push_back(particle);
-        std::cout<<"added particle with cords x: "<<particle->getX()[0]<< " y: "<<particle->getX()[1]<< " z: "<<particle->getX()[2]<< " at index: "<<index<<"\n";
     }
 }
 
@@ -78,17 +77,13 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
         if(nbrExists[4]&&nbrExists[3]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]+1;
 
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
-            std::cout << "looking at a particle with cords: "<<(*particle_i)->getX()[0]<< " y: "<<(*particle_i)->getX()[1]<< " z: "<<(*particle_i)->getX()[2]<< "\n";
             for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
-                std::cout<<"\n\n\ntest1\n\n\n";
                 if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                     particlePairs.push_back({*particle_i, *particle_j});
                 }
             }
             for (size_t j = 0; j < nbrCount; j++){
-                    std::cout<<"\n\n\ntest3\n\n\n";
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
-                    std::cout<<"\n\n\ntest2\n\n\n";
                     if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                         particlePairs.push_back({*particle_i, *particle_j});
                     }
@@ -96,8 +91,11 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
             }
         }
     }
-    std::cout << "\n\n\npairs size: " << particlePairs.size() << "\n\n\n";
     return particlePairs;
+}
+
+std::vector<std::shared_ptr<Particle>> ParticleContainerLinkedCell::getHalo(){
+    return halo;
 }
 
 void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag){
@@ -117,7 +115,7 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag)
                     speed[j] *= -1;
                     (*particle_i)->setV(speed);
                 }
-                if(cords[j]>size[j]) {
+                if(cords[j]>=size[j]) {
                     if(outflowflag[2*j+1]){
                         halo.push_back(*particle_i);
                         particle_i = --linkedCells[i].erase(particle_i);
@@ -125,7 +123,13 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag)
                     }
                     cords[j] = fmod(cords[j],(2*size[j]));
                     if(cords[j]>size[j]){
+                    std::array<double, 3UL> speed = (*particle_i)->getV();
+                    speed[j] *= -1;
+                    (*particle_i)->setV(speed);
                         cords[j] = 2*size[j]-cords[j];
+                    }
+                    if(cords[j]==size[j]) {
+                        cords[j] = nextafter(cords[j],0);
                     }
                 }
                 (*particle_i)->setX(cords);

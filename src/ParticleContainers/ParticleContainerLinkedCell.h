@@ -39,4 +39,6 @@ public:
     std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
 
     std::vector<std::shared_ptr<Particle>> getBoundary();
+
+    std::vector<std::shared_ptr<Particle>> getHalo();
 };
