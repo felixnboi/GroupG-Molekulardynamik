@@ -549,13 +549,42 @@ TEST(FileReader, readFile){
     delete particles;
 }
 
-// TEST(Lennard_Jones_Force, LennardJonesReflection){
-//     ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+TEST(Lennard_Jones_Force, LennardJonesReflection){
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
         
-//     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){9.0,5.0,5.0},(std::array<double, 3>){0,0,0},1);
-//     particles.addParticle(p1);
-//     Lennard_Jones_Force force{};
-//     force.calculateF(particles, {false,true,false,false,false,false}, true, 5, 1);
-//     EXPECT_EQ(p1->getF()[1], -0.908203125);
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){9.75,7.0,5.0},(std::array<double, 3>){0,0,0},1);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){9.0,3.0,5.0},(std::array<double, 3>){0,0,0},1);
+    particles.addParticle(p1);
+    particles.addParticle(p2);
+    Lennard_Jones_Force force{};
+    force.calculateF(particles, {false,true,false,false,false,false}, true, 5, 1);
+    EXPECT_EQ(p1->getF()[0], -1950720); //test against manually calculated value
+    EXPECT_EQ(p2->getF()[0], 0);
+}
 
-// }
+TEST(ParticleContainerLinkedCell, MirrorBoundary){
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+        
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){5.0,5.0,5.0},(std::array<double, 3>){0,0,0},1);
+    particles.addParticle(p1);
+    p1->setX({11.0,3.0,3.0});
+    p1->setV({1.0,1.0,1.0});
+    particles.updateLoctions({true,false,true,true,true,true});
+    std::array<double, 3UL> positionAfterMirroring = {9.0,3.0,3.0};
+    std::array<double, 3UL> velocityAfterMirroring = {-1.0,1.0,1.0};
+    EXPECT_EQ(p1->getX(), positionAfterMirroring); 
+    EXPECT_EQ(p1->getV(), velocityAfterMirroring); 
+    EXPECT_EQ(particles.getHalo().size(),0);
+}
+
+TEST(ParticleContainerLinkedCell, OutflowBoundary){
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+        
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){5.0,5.0,5.0},(std::array<double, 3>){0,0,0},1);
+    particles.addParticle(p1);
+    p1->setX({11.0,3.0,3.0});
+    particles.updateLoctions({false,true,false,false,false,false});
+    std::array<double, 3UL> positionAfterMirroring = {11.0,3.0,3.0};
+    EXPECT_EQ(p1->getX(), positionAfterMirroring); 
+    EXPECT_EQ(particles.getHalo().size(),1);
+}

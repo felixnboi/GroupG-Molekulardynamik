@@ -43,11 +43,10 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
           }
         }
         if(reflectLenJonesFlag[2*i+1]&&(*particle)->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]){
-          auto norm_squared = pow(2*(*particle)->getX()[i], 2);
+          auto norm_squared = pow(2*(LCContainer.getSize()[i]-(*particle)->getX()[i]), 2);
           auto norm_pow6 = pow(norm_squared, 3);
 
           double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
-
           if(directionlessForce>0){
             cur_F_dummy[i] += directionlessForce *2*((*particle)->getX()[i]-LCContainer.getSize()[i]);
           }
