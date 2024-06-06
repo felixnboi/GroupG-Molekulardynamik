@@ -548,3 +548,14 @@ TEST(FileReader, readFile){
 
     delete particles;
 }
+
+// TEST(Lennard_Jones_Force, LennardJonesReflection){
+//     ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+        
+//     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){9.0,5.0,5.0},(std::array<double, 3>){0,0,0},1);
+//     particles.addParticle(p1);
+//     Lennard_Jones_Force force{};
+//     force.calculateF(particles, {false,true,false,false,false,false}, true, 5, 1);
+//     EXPECT_EQ(p1->getF()[1], -0.908203125);
+
+// }
