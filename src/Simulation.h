@@ -33,18 +33,21 @@
  */
 class Simulation{
 public:
+
     /**
      * @brief Constructor for Simulation.
      * 
      * Initializes a new instance of the Simulation class with default settings.
      */
     Simulation();
+
     /**
      * @brief Destructor for Simulation.
      * 
      * Cleans up resources used by the Simulation instance.
      */
     ~Simulation();
+
     /**
      * @brief Initializes the simulation with command-line arguments.
      * 
@@ -56,6 +59,7 @@ public:
      * @return True if initialization is successful, otherwise false.
      */
     bool initialize(int argc, char* argv[]);
+
     /**
      * @brief Runs the simulation.
      * 
@@ -63,6 +67,7 @@ public:
      * over time and plotting the particle states at each iteration.
      */
     void run();
+    
     /**
      * @brief Checks whether timing should be enabled for the simulation.
      * 
@@ -72,7 +77,7 @@ public:
 
 private:
     SimData simdata;
-    //other paramters for backwards compatability cli
+
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;
 
@@ -130,4 +135,5 @@ private:
      * @brief Logs a usage message.
      */
     void logHelp();
+
 };
