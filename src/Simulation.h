@@ -21,6 +21,7 @@
 #include "spdlog/spdlog.h"
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
+#include "data/SimData.h"
 
 /**
  * @class Simulation
@@ -70,10 +71,8 @@ public:
     bool isTimingEnabled() const;
 
 private:
-    double start_time;
-    double end_time;
-    double delta_t;
-    unsigned write_frequency;
+    SimData simdata;
+    //other paramters for backwards compatability cli
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;
 
@@ -89,19 +88,8 @@ private:
     std::array<bool,6> lenJonesBoundaryFlags;
     std::array<bool,6> outflowFlags;
 
-    std::string baseName;
-    std::string input_file;
     std::string input_file_user;
 
-    std::string force_str;
-    std::string algorithm;
-    std::string loglevel;
-
-    std::array<std::string, 6> boundary;
-
-    double cutoff_radius;
-
-    std::array<double, 3> domain;
 
     /**
      * @brief Calculate the position for all particles.

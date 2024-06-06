@@ -58,34 +58,35 @@ void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs){
     }
 }
 
-void XMLReader::readSimulation(const char* filename, bool& generate_flag, std::string& inputFile, std::string& baseName, 
-unsigned& writeFrequency, double& start_time, double& end_time, double& delta_t, std::string& force_str, std::string& algorithm, 
-std::string& loglevel, std::array<std::string, 6>& boundary, double& cutoff_radius, std::array<double, 3>& domain){    
+void XMLReader::readSimulation(const char* filename, SimData& simdata){    
     try{
         std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
 
-        inputFile = sim->inputSettings().inputFile();
-        baseName = sim->outputSettings().baseName();
-        writeFrequency = sim->outputSettings().writeFrequency();
-        start_time = sim->simulationParameters().start_t();
-        end_time = sim->simulationParameters().end_t();
-        delta_t = sim->simulationParameters().delta_t();
-        force_str = sim->simulationParameters().force();
-        algorithm = sim->simulationParameters().algorithm();
-        loglevel = sim->simulationParameters().loglevel();
+        simdata.setInputFile(sim->inputSettings().inputFile());
+        simdata.setBaseName(sim->outputSettings().baseName());
+        simdata.setWriteFrequency(sim->outputSettings().writeFrequency());
+        simdata.setStartTime(sim->simulationParameters().start_t());
+        simdata.setEndTime(sim->simulationParameters().end_t());
+        simdata.setDeltaT(sim->simulationParameters().delta_t());
+        simdata.setForceStr(sim->simulationParameters().force());
+        simdata.setAlgorithm(sim->simulationParameters().algorithm());
+        simdata.setLoglevel(sim->simulationParameters().loglevel());
 
-        boundary[0] = sim->boundaries().left();
-        boundary[1] = sim->boundaries().right();
-        boundary[2] = sim->boundaries().bottom();
-        boundary[3] = sim->boundaries().top();
-        boundary[4] = sim->boundaries().rear();
-        boundary[5] = sim->boundaries().front();
+        const std::array<std::string, 6> boundary = {sim->boundaries().left(), sim->boundaries().right(), sim->boundaries().bottom(), 
+        sim->boundaries().top(), sim->boundaries().rear(), sim->boundaries().front()};
 
-        cutoff_radius = sim->simulationParameters().cutoff_radius();        
+        simdata.setBoundary(boundary);
 
-        domain[0] = sim->simulationParameters().domain().x();
-        domain[1] = sim->simulationParameters().domain().y();
-        domain[2] = sim->simulationParameters().domain().z();
+        simdata.setCutoffRadius(sim->simulationParameters().cutoff_radius());
+
+        const std::array<double, 3> domain = {sim->simulationParameters().domain().x(), sim->simulationParameters().domain().y(), 
+        sim->simulationParameters().domain().z()};        
+
+        simdata.setDomain(domain);
+
+        simdata.setSigma(sim->simulationParameters().sigma());
+        simdata.setEpsilon(sim->simulationParameters().epsilon());
+        simdata.setAverageBrownianMotion(sim->simulationParameters().average_brownian_motion());
 
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Simulation-parsing.");

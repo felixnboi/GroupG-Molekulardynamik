@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
+
+    <boundaries>
+        <left>outflow</left>
+        <right>reflecting</right>
+        <bottom>lennardJones</bottom>
+        <top>outflow</top>
+        <rear>reflecting</rear>
+        <front>lennardJones</front>
+    </boundaries>
+
+    <inputSettings>
+        <inputFile>test1</inputFile>
+    </inputSettings>
+
+    <outputSettings>
+        <baseName>test2</baseName>
+        <writeFrequency>1</writeFrequency>
+    </outputSettings>
+
+    <simulationParameters>
+        <end_t>2</end_t>
+        <delta_t>3</delta_t>
+        <start_t>4</start_t>
+        <epsilon>5</epsilon>
+        <sigma>6</sigma>
+        <average_brownian_motion>7</average_brownian_motion>
+        <force>lennardJonesForce</force>
+        <algorithm>linkedcell</algorithm>
+        <loglevel>INFO</loglevel>
+        <domain>
+            <x>8</x>
+            <y>9</y>
+            <z>10</z>
+        </domain>
+        <cutoff-radius>11</cutoff-radius>
+    </simulationParameters>
+
+    <cuboid>
+        <position>
+            <x>12</x>
+            <y>13</y>
+            <z>14</z>
+        </position>
+        <velocity>
+            <x>15</x>
+            <y>16</y>
+            <z>17</z>
+        </velocity>
+        <dimensions>
+            <x>18</x>
+            <y>19</y>
+            <z>20</z>
+        </dimensions>
+        <distance>21</distance>
+        <mass>22</mass>
+    </cuboid>
+
+    <disc>
+        <position>
+            <x>23</x>
+            <y>24</y>
+            <z>25</z>
+        </position>
+        <velocity>
+            <x>26</x>
+            <y>27</y>
+            <z>28</z>
+        </velocity>
+        <radius>29</radius>
+        <distance>30</distance>
+        <mass>31</mass>
+    </disc>
+
+</simulation>

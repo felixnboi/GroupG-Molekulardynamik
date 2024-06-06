@@ -5,6 +5,7 @@
 #include "XMLFormat.h" 
 #include "../../data/Cuboid.h"
 #include "../../data/Disc.h"
+#include "../../data/SimData.h"
 #include "spdlog/spdlog.h"
 #include <memory>
 #include <string>
@@ -21,7 +22,5 @@ class XMLReader{
 
         void readDiscs(const char* filename, std::vector<Disc>& discs);
 
-        void readSimulation(const char* filename, bool& generate_flag, std::string& inputFile, std::string& baseName, 
-        unsigned& writeFrequency, double& start_time, double& end_time, double& delta_t, std::string& force, std::string& algorithm, 
-        std::string& loglevel, std::array<std::string, 6>& boundary, double& cutoff_radius, std::array<double, 3>& domain);
+        void readSimulation(const char* filename, SimData& simdata);
 };

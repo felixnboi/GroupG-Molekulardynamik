@@ -45,3 +45,7 @@ void Disc::setMass(double new_mass) {
 void Disc::setRadius(int new_radius) {
     radius = new_radius;
 }
+
+bool Disc::operator==(const Disc& other) const{
+    return position == other.position && velocity == other.velocity && radius == other.radius && distance == other.distance && mass == other.mass;
+}

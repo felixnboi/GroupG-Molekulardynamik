@@ -1,11 +1,11 @@
 #include "Simulation.h"
-#include <chrono>
 
 Simulation::Simulation(){
-    start_time = 0;
-    end_time = 1000;
-    delta_t = 0.014;
-    write_frequency = 100;
+    std::array<std::string, 6> boundary = {};
+    std::array<double, 3> domain = {};
+    simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
+    std::string("INFO"), boundary, 3, domain, 1, 5, 0.1);
+
     particles = nullptr;
     force = nullptr;
     
@@ -18,22 +18,10 @@ Simulation::Simulation(){
     cli_flag = false;
     linkedcell_flag = false;
 
-    lenJonesBoundaryFlags = {true, true, true, true, true, true}; //links,rechts,unten,oben,hinten,vorne
+    lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
 
-    baseName = "MD_vtk";
-    input_file = "";
     input_file_user = "";
-
-    force_str = "";
-    algorithm = "default";
-    loglevel = "INFO";
-
-    boundary = {};
-
-    cutoff_radius = 3;
-
-    domain = {};
 }
 
 Simulation::~Simulation() {}
@@ -69,7 +57,6 @@ bool Simulation::initialize(int argc, char* argv[]) {
             case 't':{
                 spdlog::set_level(spdlog::level::off);
                 time_flag = true;
-                cli_flag = true;
                 break;
             }
             case 'h':{
@@ -79,7 +66,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
             case 'v':{
                 cli_flag = true;
                 if (isUnsignedInt(optarg)) {
-                    write_frequency = std::stoul(optarg);
+                    simdata.setWriteFrequency(std::stoul(optarg));
                     break;
                 } else {
                     spdlog::error("Invalid value for vtk iteration: {}", optarg);
@@ -130,7 +117,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
             case 'd':{
                 cli_flag = true;
                 if (isDouble(optarg)) {
-                    delta_t = atof(optarg);
+                    simdata.setDeltaT(atof(optarg));
                     break;
                 } else {
                     spdlog::error("Invalid argument for delta_t");
@@ -142,7 +129,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
             case 'e':{
                 cli_flag = true;
                 if (isDouble(optarg)) {
-                    end_time = atof(optarg);
+                    simdata.setEndTime(atof(optarg));
                     break;
                 } else {
                     spdlog::error("Invalid argument for end_time");
@@ -154,7 +141,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
             case 's':{
                 cli_flag = true;
                 if (isDouble(optarg)) {
-                    start_time = atof(optarg);
+                    simdata.setStartTime(atof(optarg));
                     break;
                 } else {
                     spdlog::error("Invalid argument for start_time");
@@ -206,53 +193,52 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         XMLReader xmlreader;
-        xmlreader.readSimulation(xml_file, generate_flag, input_file, baseName, write_frequency, start_time, end_time, delta_t, 
-        force_str, algorithm, loglevel, boundary, cutoff_radius, domain);
+        xmlreader.readSimulation(xml_file, simdata);
 
-        if(loglevel == "OFF"){spdlog::set_level(spdlog::level::off);}
-        if(loglevel == "ERROR"){spdlog::set_level(spdlog::level::err);}
-        if(loglevel == "WARN"){spdlog::set_level(spdlog::level::warn);}
-        if(loglevel == "INFO"){spdlog::set_level(spdlog::level::info);}
-        if(loglevel == "DEBUG"){spdlog::set_level(spdlog::level::debug);}
-        if(loglevel == "TRACE"){spdlog::set_level(spdlog::level::trace);}
+        if(simdata.getLoglevel() == "OFF"){spdlog::set_level(spdlog::level::off);}
+        if(simdata.getLoglevel() == "ERROR"){spdlog::set_level(spdlog::level::err);}
+        if(simdata.getLoglevel() == "WARN"){spdlog::set_level(spdlog::level::warn);}
+        if(simdata.getLoglevel() == "INFO"){spdlog::set_level(spdlog::level::info);}
+        if(simdata.getLoglevel() == "DEBUG"){spdlog::set_level(spdlog::level::debug);}
+        if(simdata.getLoglevel() == "TRACE"){spdlog::set_level(spdlog::level::trace);}
 
         for(int i = 0; i<6; i++){
-            if(boundary[i] == "outflow"){
+            if(simdata.getBoundary()[i] == "outflow"){
                 outflowFlags[i] = true;
                 lenJonesBoundaryFlags[i] = false;
             }
-            if(boundary[i] == "lennardJones"){
+            if(simdata.getBoundary()[i] == "lennardJones"){
                 outflowFlags[i] = false;
                 lenJonesBoundaryFlags[i] = true;
             }
-            if(boundary[i] == "reflecting"){
+            if(simdata.getBoundary()[i] == "reflecting"){
                 outflowFlags[i] = false;
                 lenJonesBoundaryFlags[i] = false;
             }
         }
 
-        if(algorithm == "linkedcell"){
-            particles = std::make_unique<ParticleContainerLinkedCell>(domain[0], domain[1], domain[2], cutoff_radius);
+        if(simdata.getAlgorithm() == "linkedcell"){
+            particles = std::make_unique<ParticleContainerLinkedCell>(simdata.getDomain()[0], simdata.getDomain()[1], 
+            simdata.getDomain()[2], simdata.getCutoffRadius());
             linkedcell_flag = true;
         }
 
-        if(algorithm == "default"){
+        if(simdata.getAlgorithm() == "default"){
             particles = std::make_unique<ParticleContainerOld>();
+            lenJonesBoundaryFlags = {false, false, false, false, false, false};
         }
 
-        if(force_str == "gravitationalForce"){
+        if(simdata.getForceStr() == "gravitationalForce"){
             force = std::make_unique<Gravitational_Force>();
         }
 
-        if(force_str == "lennardJonesForce"){
+        if(simdata.getForceStr() == "lennardJonesForce"){
             force = std::make_unique<Lennard_Jones_Force>();
         }
 
     }else{
 
         particles = std::make_unique<ParticleContainerOld>();
-
-        lenJonesBoundaryFlags = {false, false, false, false, false, false};
 
         if (!force_flag) {
             spdlog::error("Didn't specify force. Terminating");
@@ -261,36 +247,36 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         if (!generate_flag && input_flag) {
-            input_file = input_file_user;
+            simdata.setInputFile(input_file_user);
             spdlog::info("Using user defined input file");
         }
 
         if (generate_flag && input_flag) {
             inputFileManager::mergeFile("../input/generated-input.txt", input_file_user.c_str());
             spdlog::info("File {} merged into generated input file", input_file_user);
-            input_file = "../input/generated-input.txt";
+            simdata.setInputFile("../input/generated-input.txt");
         }
 
         if (generate_flag && !input_flag) {
-            input_file = "../input/generated-input.txt";
+            simdata.setInputFile("../input/generated-input.txt");
             spdlog::info("Using \"generated-input.txt\"");
         }
 
         if (!generate_flag && !input_flag) {
-            input_file = "../input/eingabe-sonne.txt";
+            simdata.setInputFile("../input/eingabe-sonne.txt");
             spdlog::info("Using \"eingabe-sonne.txt\"");
         }
     }
 
 
     // Check if start_time is after end_time
-    if (start_time > end_time) {
+    if (simdata.getStartTime() > simdata.getEndTime()) {
         spdlog::error("Error: start_time should not be after end_time!");
         return false;
     }
 
     FileReader fileReader;
-    fileReader.readFile(*particles, input_file.c_str());
+    fileReader.readFile(*particles, simdata.getInputFile().c_str());
 
     // checking if there are particles in the simulation
     if (particles->getParticles().empty()) {
@@ -298,13 +284,17 @@ bool Simulation::initialize(int argc, char* argv[]) {
         return false;
     }
 
-    spdlog::info("end_time:{}, delta_t:{}, start_time:{}", end_time, delta_t, start_time);
+    spdlog::info("end_time:{}, delta_t:{}, start_time:{}", simdata.getEndTime(), simdata.getDeltaT(), simdata.getStartTime());
 
     return true;
 }
 
 void Simulation::run() {
     double current_time = 0;
+    double start_time = simdata.getStartTime();
+    double end_time = simdata.getEndTime();
+    double delta_t = simdata.getDeltaT();
+    unsigned write_frequency = simdata.getWriteFrequency();
     int iteration = 0;
 
     // Advance simulation time to start_time
@@ -350,6 +340,7 @@ bool Simulation::isTimingEnabled() const {
 }
 
 void Simulation::calculateX() {
+  double delta_t = simdata.getDeltaT();
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
     auto m = (*p)->getM(); ///< Mass of the particle.
@@ -372,6 +363,7 @@ void Simulation::calculateX() {
 }
 
 void Simulation::calculateV() {
+  double delta_t = simdata.getDeltaT();
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
     auto m = (*p)->getM(); ///< Mass of the particle.
@@ -390,19 +382,24 @@ void Simulation::calculateV() {
 
 
 void Simulation::plotParticles(int iteration) {
+  std::string baseName = simdata.getBaseName();
+
   outputWriter::VTKWriter writer; ///< The VTK writer object. 
+
   // initializing the VTK writer with the total number of particles.
   writer.initializeOutput(particles->getParticles().size()); 
+
   // iterating over each particle to plot its position
   for(const auto& p : particles->getParticles()){
     writer.plotParticle(*p);
   }
+
   // write the plotted particle positions to a VTK file
   writer.writeFile(baseName, iteration);
 }
 
 void Simulation::logHelp(){
-  spdlog::info("Usage: \"[./MolSim --xml string [--help]] | [./MolSim [--help] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] --force char]\"");
+  spdlog::info("Usage: \"[./MolSim --xml string [--help] [-t]] | [./MolSim [--help] [-t] [-g] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]\"");
   spdlog::info("For further information please read the README.md file at top level.");
   spdlog::info("Terminating...");
 }

@@ -44,3 +44,7 @@ void Cuboid::setDistance(double new_distance) {
 void Cuboid::setMass(double new_mass) {
     mass = new_mass;
 }
+
+bool Cuboid::operator==(const Cuboid& other) const{
+    return position == other.position && velocity == other.velocity && dimensions == other.dimensions && distance == other.distance && mass == other.mass;
+}

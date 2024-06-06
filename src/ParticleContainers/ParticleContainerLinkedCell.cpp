@@ -80,15 +80,12 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             std::cout << "looking at a particle with cords: "<<(*particle_i)->getX()[0]<< " y: "<<(*particle_i)->getX()[1]<< " z: "<<(*particle_i)->getX()[2]<< "\n";
             for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
-                std::cout<<"\n\n\ntest1\n\n\n";
                 if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                     particlePairs.push_back({*particle_i, *particle_j});
                 }
             }
             for (size_t j = 0; j < nbrCount; j++){
-                    std::cout<<"\n\n\ntest3\n\n\n";
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
-                    std::cout<<"\n\n\ntest2\n\n\n";
                     if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                         particlePairs.push_back({*particle_i, *particle_j});
                     }
@@ -96,7 +93,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
             }
         }
     }
-    std::cout << "\n\n\npairs size: " << particlePairs.size() << "\n\n\n";
+    //std::cout << "\n\n\npairs size: " << particlePairs.size() << "\n\n\n";
     return particlePairs;
 }
 

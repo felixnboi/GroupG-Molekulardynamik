@@ -83,7 +83,7 @@ public:
      */
     void setRadius(int radius);
 
-    
+    bool operator==(const Disc& other) const;
 
 private:
     std::array<double, 3> position; //<<< The position of the disc.

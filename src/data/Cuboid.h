@@ -94,6 +94,8 @@ public:
      */
     void setMass(double new_mass);
 
+    bool operator==(const Cuboid& other) const;
+
 private:
     std::array<double, 3> position; ///< The position of the Cuboid.
     std::array<double, 3> velocity; ///< The velocity of the Cuboid.

@@ -8,6 +8,7 @@
 #include "../src/ParticleContainers/ParticleContainer.h"
 #include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
 #include "../src/data/Cuboid.h"
+#include "../src/data/Disc.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function

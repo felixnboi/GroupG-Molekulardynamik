@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 add_executable(tests
+    xmltests.cpp
     tests.cpp
     ${PROJECT_SOURCE_DIR}/src/data/Particle.cpp
     ${PROJECT_SOURCE_DIR}/src/ParticleContainers/ParticleContainer.h
@@ -10,13 +11,23 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/inputFileManager.cpp
     ${PROJECT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/FileReader.cpp
+    ${PROJECT_SOURCE_DIR}/src/io/input/XMLReader.cpp
+    ${PROJECT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
     ${PROJECT_SOURCE_DIR}/src/data/Cuboid.cpp    
-    ${PROJECT_SOURCE_DIR}/src/data/Disc.cpp    
+    ${PROJECT_SOURCE_DIR}/src/data/Disc.cpp 
+    ${PROJECT_SOURCE_DIR}/src/data/SimData.cpp
 )
 
-target_link_libraries(tests gtest_main)
+target_link_libraries(tests 
+    PUBLIC
+        gtest_main 
+        xerces-c
+)
 
-target_include_directories(tests PRIVATE ../libs/spdlog-1.14.1/include)
+target_include_directories(tests 
+    PRIVATE 
+        ../libs/spdlog-1.14.1/include
+)
 
 enable_testing()
 

@@ -79,19 +79,14 @@ add_subdirectory(libs/googletest-1.14.0)
 
 #This part is for our Particle Generator
 
-# file(GLOB_RECURSE MY_SRC_PARTICLEGEN
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/*.cpp"
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/*.h"
-# )
-
 add_executable(ParticleGenerator 
-    ${MY_SRC_PARTICLEGEN}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/inputFileManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Particle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen/ParticleGen.cpp    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Cuboid.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Disc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/SimData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLReader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
 )
