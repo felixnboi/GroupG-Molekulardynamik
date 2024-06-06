@@ -19,10 +19,9 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
   double sigmaPow6 = pow(sigma,6);
   double sigmaPow12 = pow(sigma,12);
   // reset the force for each particle and store the old force
-  for (auto pair = particlePairs.begin(); pair != particlePairs.end(); pair++){
-  std::shared_ptr<Particle> particle = (*pair)[0];
-    particle->setOldF(particle->getF());
-    particle->setF({0,0,0});
+  for (auto particle = particles.begin(); particle != particles.end(); particle++){
+    (*particle)->setOldF((*particle)->getF());
+    (*particle)->setF({0,0,0});
   }
   if(reflectLenJonesFlag[0]||reflectLenJonesFlag[1]||reflectLenJonesFlag[2]||reflectLenJonesFlag[3]||reflectLenJonesFlag[4]||reflectLenJonesFlag[5])  {
     ParticleContainerLinkedCell &LCContainer = dynamic_cast<ParticleContainerLinkedCell&>(particles);
@@ -30,7 +29,7 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
     for(auto particle = boundery.begin(); particle != boundery.end(); particle++){
       std::array<double, 3> cur_F_dummy = (*particle)->getF();
       for(int i = 0; i < 3; i++){
-        if(reflectLenJonesFlag[2*i]||(*particle)->getX()[i]< LCContainer.getCellSize()[i]){
+        if(reflectLenJonesFlag[2*i]&&(*particle)->getX()[i]< LCContainer.getCellSize()[i]){
           auto norm_squared = pow(2*(*particle)->getX()[i], 2);
           auto norm_pow6 = pow(norm_squared, 3);
 
@@ -39,7 +38,7 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
             cur_F_dummy[i] += directionlessForce *2*(*particle)->getX()[i];
           }
         }
-        if(reflectLenJonesFlag[2*i+1]||(*particle)->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]){
+        if(reflectLenJonesFlag[2*i+1]&&(*particle)->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]){
           auto norm_squared = pow(2*(*particle)->getX()[i], 2);
           auto norm_pow6 = pow(norm_squared, 3);
 
@@ -75,13 +74,8 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bo
     double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
 
     // calculating the force components (along the x, y, z axes) between particle i and particle j
-    for(int k = 0; k<3; k++){
-      double force = directionlessForce*(cur_x_i[k]-cur_x_j[k]);  
-      cur_F_i_dummy[k] += force;
-      cur_F_j_dummy[k] -= force;
-    }
-    // update the force for particle i and particle j
-    particle_i->setF(cur_F_i_dummy);
-    particle_j->setF(cur_F_j_dummy);
+    auto force = directionlessForce*(cur_x_i-cur_x_j);  
+    particle_i->setF(cur_F_i_dummy+force);
+    particle_j->setF(cur_F_j_dummy-force);
   }
 }

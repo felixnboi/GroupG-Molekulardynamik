@@ -185,9 +185,9 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
     }
 
     // Check if all expected pairs are found
-    // EXPECT_TRUE(foundPair12);
-    // EXPECT_TRUE(foundPair13);
-    // EXPECT_TRUE(foundPair23);
+    EXPECT_TRUE(foundPair12);
+    EXPECT_TRUE(foundPair13);
+    EXPECT_TRUE(foundPair23);
 
     delete pc;
 }
@@ -220,52 +220,57 @@ TEST(ParticleContainerLinkedCell, GetCellSize) {
     EXPECT_EQ(cellSize[2], sizeZ / ceil(sizeZ / radius));
 }
 
-// Test case for updateLoctions method
-// TEST(ParticleContainerLinkedCell, UpdateLocations) {
-//     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-//     ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+//Test case for updateLoctions method
+TEST(ParticleContainerLinkedCell, UpdateLocations) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
 
-//     // Create a particle that will move outside the boundary
-//     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0);
+    // Create a particle that will move outside the boundary
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0);
     
-//     // Add the particle to the container
-//     pc.addParticle(p1);
+    // Add the particle to the container
+    pc.addParticle(p1);
+    p1->setX({11,2,3});
+    // Set the outflow flags
+    std::array<bool, 6> outflowFlag = {true, true, true, true, true, true};
 
-//     // Set the outflow flags
-//     std::array<bool, 6> outflowFlag = {true, true, true, true, true, true};
-
-//     // Update the locations
-//     pc.updateLoctions(outflowFlag);
+    // Update the locations
+    pc.updateLoctions(outflowFlag);
     
-//     // Check if the particle has been moved to the halo region
-//     std::vector<std::shared_ptr<Particle>> halo = pc.getBoundary();
-//     EXPECT_EQ(halo.size(), 1);
-//     EXPECT_TRUE(halo[0] == p1);
-// }
+    // Check if the particle has been moved to the halo region
+    std::vector<std::shared_ptr<Particle>> halo = pc.getHalo();
+    EXPECT_EQ(halo.size(), 1);
+    if(halo.size()>=1) {
+        EXPECT_TRUE(halo[0] == p1);
+    }
+}
 
 // Test case for getBoundary method
-// TEST(ParticleContainerLinkedCell, GetBoundary) {
-//     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-//     ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+TEST(ParticleContainerLinkedCell, GetBoundary) {
+    std::cout << "\n\n\ntest\n\n\n";
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
 
-//     // Create particles at the boundaries
-//     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.0, 0.0, 0.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0);
-//     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){10.0, 10.0, 10.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1);
-//     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){5.0, 5.0, 5.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 0);
+    // Create particles at the boundaries
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.0, 0.0, 0.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){9.0, 9.0, 9.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){5.0, 5.0, 5.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 0);
     
-//     // Add the particles to the container
-//     pc.addParticle(p1);
-//     pc.addParticle(p2);
-//     pc.addParticle(p3);
+    // Add the particles to the container
+    pc.addParticle(p1);
+    pc.addParticle(p2);
+    pc.addParticle(p3);
     
-//     // Get the boundary particles from the container
-//     std::vector<std::shared_ptr<Particle>> boundary = pc.getBoundary();
+    // Get the boundary particles from the container
+    std::vector<std::shared_ptr<Particle>> boundary = pc.getBoundary();
     
-//     // Check if the boundary particles match the expected values
-//     EXPECT_EQ(boundary.size(), 2);
-//     EXPECT_TRUE(boundary[0] == p1 || boundary[1] == p1);
-//     EXPECT_TRUE(boundary[0] == p2 || boundary[1] == p2);
-// }
+    // Check if the boundary particles match the expected values
+    EXPECT_EQ(boundary.size(), 2);
+    if(boundary.size()>=2) {
+        EXPECT_TRUE(boundary[0] == p1 || boundary[1] == p1);
+        EXPECT_TRUE(boundary[0] == p2 || boundary[1] == p2);
+    }
+}
 
 TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test

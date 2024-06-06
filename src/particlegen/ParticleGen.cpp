@@ -1,9 +1,17 @@
+/**
+ * @file ParticleGen.cpp
+ */
 #include "ParticleGenerator.h"
 #include "../utils/NumericalUtils.h"
 #include "../io/input/XMLReader.h"
 
 
-
+/**
+ * @brief Main function to generate particles using various input options.
+ * @param argc The number of command-line arguments.
+ * @param argsv The command-line arguments.
+ * @return An integer representing the exit status of the application.
+ */
 int main(int argc, char *argsv[]){
     spdlog::set_level(spdlog::level::info);
 
