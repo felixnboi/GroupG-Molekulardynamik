@@ -32,13 +32,16 @@ The MolSim executable uses the *getopt_long()* function of the standard library 
 Usage: *"./MolSim --xml string [-t] [--help]"* or *"./MolSim [--help] [-g] [-t] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]"*  
 
 First usage:  
+
 <details>
 <summary> parameters </summary>
+
 *"--xml string"*: **mandatory** Give the path to the .xml-file to be used for parameter parsing.  
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
 *"-t"*: **optional** If set the program execution time will be measured. Measurement takes place with no vtk-output and no logging.  
 
 Example: ./MolSim --xml ../input/Assignment2.xml  
+
 </details>  
 
 Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
