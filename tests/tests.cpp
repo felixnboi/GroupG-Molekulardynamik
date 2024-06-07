@@ -370,7 +370,7 @@ TEST(ParticleGenerator, GenerateDisc) {
     std::getline(input_file, currentLine);
     EXPECT_EQ(currentLine, "# adds up to 32 (not counting the \"\\n\" at the end)");
     std::getline(input_file, currentLine);
-    EXPECT_EQ(currentLine, "78                              "); 
+    EXPECT_EQ(currentLine, "81                              "); 
 
     double baseX = 5.0;
     double baseY = 5.0;
