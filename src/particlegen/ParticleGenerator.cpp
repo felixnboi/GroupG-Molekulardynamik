@@ -28,7 +28,7 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
     double yClone = position[1];
     double zClone = position[2];
     
-    double averageBrownianMotion = 0.1;
+    double averageBrownianMotion = cuboid.getBrownianMotion();
     input_file.open(filename,std::ios::in|std::ios::out|std::ios::app);
     for (size_t i = 0; i < dimensions[0]; i++)
     {
@@ -76,7 +76,19 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
     }
 
     input_file.seekp(current);
-    int numParticles = std::stoi(tmp_string)+static_cast<int>(M_PI*radius*radius/(distance*distance));
+    int numParticles = std::stoi(tmp_string);//+static_cast<int>(M_PI*radius*radius/(distance*distance));
+
+    for (int i = -MoleculesPerRadius; i <= MoleculesPerRadius; ++i) {
+        for (int j = -MoleculesPerRadius; j <= MoleculesPerRadius; ++j) {
+            double size_x = i * distance;
+            double size_y = j * distance;
+            double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
+            if (distanceFromCenter <= radius) {
+                numParticles++;
+            }
+        }
+    }
+
     input_file << numParticles;
     input_file.close();
 
@@ -86,8 +98,8 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
         return;
     }
     // Generate particles within the specified radius
-    for (int i = -MoleculesPerRadius; i < MoleculesPerRadius; ++i) {
-        for (int j = -MoleculesPerRadius; j < MoleculesPerRadius; ++j) {
+    for (int i = -MoleculesPerRadius; i <= MoleculesPerRadius; ++i) {
+        for (int j = -MoleculesPerRadius; j <= MoleculesPerRadius; ++j) {
             double size_x = i * distance;
             double size_y = j * distance;
             double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);

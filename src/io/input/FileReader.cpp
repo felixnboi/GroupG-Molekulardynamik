@@ -46,8 +46,8 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
       if (!getline(input_file, tmp_string)) {
             spdlog::error("Error reading file: unexpected end of file at line {}", i);
             exit(-1);
-        }
-        spdlog::info("Read line: {}", tmp_string);
+      }
+      spdlog::info("Read line: {}", tmp_string);
 
       std::istringstream datastream(tmp_string);
       for (auto &xj : x) {
@@ -64,13 +64,9 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
       if (datastream.fail()) {
                 spdlog::error("Error reading file: failed to parse line {}", i);
                 exit(-1);
-            }
+      }
             
-      particles.addParticle(std::make_shared<Particle> (x,v,m));
-
-      spdlog::info("Particle generated with position ({}, {}, {}) and velocity ({}, {}, {}) and mass {}", x[0], x[1], x[2], v[0], v[1], v[2], m);
-      //getline(input_file, tmp_string);
-      //spdlog::info("Read line: {}", tmp_string);
+      particles.addParticle(std::make_shared<Particle>(x,v,m));
     }
   } else {
     spdlog::error("Error: could not open file {}", filename);

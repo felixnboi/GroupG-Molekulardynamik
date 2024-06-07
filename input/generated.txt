@@ -1,5 +1,0 @@
-# Inputfile where all used particles will be stored.
-# Similar syntax to "eingabe-sonne.txt" with the exeption that after the number of particles
-# there have to follow the exact quantity of spaces so that the number of chars in the line
-# adds up to 32 (not counting the "\n" at the end)
-0                               
