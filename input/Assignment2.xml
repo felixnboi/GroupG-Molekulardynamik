@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
+
+    <boundaries>
+        <left>reflecting</left>
+        <right>reflecting</right>
+        <bottom>reflecting</bottom>
+        <top>reflecting</top>
+        <rear>reflecting</rear>
+        <front>reflecting</front>
+    </boundaries>
+
+    <inputSettings>
+        <inputFile>../input/generated-input.txt</inputFile>
+    </inputSettings>
+
+    <outputSettings>
+        <baseName>MD_vtk</baseName>
+        <writeFrequency>100</writeFrequency>
+    </outputSettings>
+
+    <simulationParameters>
+        <end_t>5.0</end_t>
+        <delta_t>0.0002</delta_t>
+        <start_t>0.0</start_t>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
+        <force>lennardJonesForce</force>
+        <algorithm>default</algorithm>
+        <loglevel>INFO</loglevel>
+        <domain>
+            <x>180.0</x>
+            <y>90.0</y>
+            <z>1.0</z>
+        </domain>
+        <cutoff-radius>3.0</cutoff-radius>
+    </simulationParameters>
+
+    <cuboid>
+        <position>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </position>
+        <velocity>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </velocity>
+        <dimensions>
+            <x>40</x>
+            <y>8</y>
+            <z>1</z>
+        </dimensions>
+        <distance>1.1225</distance>
+        <mass>1.0</mass>
+        <brownian_motion>0.1</brownian_motion>
+    </cuboid>
+
+    <cuboid>
+        <position>
+            <x>15.0</x>
+            <y>15.0</y>
+            <z>0.0</z>
+        </position>
+        <velocity>
+            <x>0.0</x>
+            <y>-10.0</y>
+            <z>0.0</z>
+        </velocity>
+        <dimensions>
+            <x>8</x>
+            <y>8</y>
+            <z>1</z>
+        </dimensions>
+        <distance>1.1225</distance>
+        <mass>1.0</mass>
+        <brownian_motion>0.1</brownian_motion>
+    </cuboid>
+
+</simulation>

@@ -1,10 +1,5 @@
 #include "ParticleContainerOld.h"
 
-/**
- * @file ParticleContainerOld.cpp
- * @brief This file contains a ParticleContainerOld class and its functions.
- */
-
 ParticleContainerOld::ParticleContainerOld(){
     spdlog::info("Particlecontainer created.");
 }
@@ -17,10 +12,10 @@ void ParticleContainerOld::reserve(size_t size){
     particles.reserve(size);
 }
 
-void ParticleContainerOld::addParticle(const Particle& particle) {
+void ParticleContainerOld::addParticle(const std::shared_ptr<Particle> particle) {
     particles.push_back(particle);
     spdlog::debug("Added a particle to the container");
-    spdlog::trace("A particle with type {}", particle.getType());
+    spdlog::trace("A particle with type {}", (*particle).getType());
 }
 
 ParticleIterator ParticleContainerOld::begin(){
@@ -33,13 +28,13 @@ ParticleIterator ParticleContainerOld::end() {
     return particles.end();
 }
 
-const std::vector<Particle>& ParticleContainerOld::getParticles() {
+const std::vector<std::shared_ptr<Particle>>& ParticleContainerOld::getParticles() {
     spdlog::debug("Retrieved particles from the container");
     return particles;
 }
 
-std::vector<std::array<Particle,2>> ParticleContainerOld::getParticlePairs(){
-    std::vector<std::array<Particle,2>> particlePairs;
+std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerOld::getParticlePairs(){
+    std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
     for (auto particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
         for (auto particle_j = std::next(particle_i); particle_j!=particles.end(); particle_j++){
             particlePairs.push_back({*particle_i, *particle_j});

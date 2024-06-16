@@ -1,11 +1,14 @@
 #pragma once
 
-#include "../Particle.h"
+#include "../data/Particle.h"
+#include "../data/Cuboid.h"
+#include "../data/Disc.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 #include "../inputFileManager.h"
 #include "spdlog/spdlog.h"
 
 #include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -18,28 +21,30 @@
 namespace ParticleGenerator{ 
 
 /**
- * @brief Generates a cuboid of particles with specified parameters.
+ * @brief Generates a cuboid of particles.
  * 
- * This function generates particles within a cuboid that is defined by the parameters.
- * The particles are written to an input file.
+ * This function generates particles within a cuboid defined by its parameters.
+ * The particles are written to a file.
  * 
- * @param x Initial x-coordinate of the lower left front-side corner of the cuboid.
- * @param y Initial y-coordinate of the lower left front-side corner of the cuboid.
- * @param z Initial z-coordinate of the lower left front-side corner of the cuboid.
- * @param sizeX Number of particles along the x-axis.
- * @param sizeY Number of particles along the y-axis.
- * @param sizeZ Number of particles along the z-axis.
- * @param distance Distance between particles.
- * @param mass Mass of one particle.
- * @param velocityX Initial velocity along the x-axis.
- * @param velocityY Initial velocity along the y-axis.
- * @param velocityZ Initial velocity along the z-axis.
+ * @param cuboid The cuboid of particles to be generated.
  * @param filename Path of file to which particles are written.
  */     
-void generateCuboid(double x, double y, double z, size_t sizeX, size_t sizeY, size_t sizeZ, double distance, double mass, double velocityX, double velocityY, double velocityZ, const char *filename);
+void generateCuboid(const Cuboid& cuboid, const char *filename);
+
+/**
+ * @brief Generates a disc of particles.
+ * 
+ * This function generates particles within a disc defined by its parameters.
+ * The particles are written to a file.
+ * 
+ * @param cuboid The disc of particles to be generated.
+ * @param filename Path of file to which particles are written.
+ */ 
+void generateDisc(const Disc& disc, const char* filename);
 
 /**
  * @brief Logs a usage message.
  */
 void logHelp();
+
 };

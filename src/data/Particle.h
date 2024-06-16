@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "utils/ArrayUtils.h"
+#include "../utils/ArrayUtils.h"
 #include "spdlog/spdlog.h"
 
 #include <array>

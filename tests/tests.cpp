@@ -3,10 +3,12 @@
 #include "../src/Forces/Lennard_Jones_Force.h"
 #include "../src/inputFileManager.h"
 #include "../src/particlegen/ParticleGenerator.h"
-#include "../src/FileReader.h"
+#include "../src/io/input/FileReader.h"
 #include "../src/ParticleContainers/ParticleContainerOld.h"
 #include "../src/ParticleContainers/ParticleContainer.h"
 #include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
+#include "../src/data/Cuboid.h"
+#include "../src/data/Disc.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -15,13 +17,13 @@ bool areDoublesEqual(double a, double b, double epsilon = EPSILON) {
 }
 
 // Test case for adding particles and getting particles
-TEST(ParticleContainerTest, AddAndGetParticles) {
+TEST(ParticleContainerOld, AddAndGetParticles) {
     ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
-    Particle p1({1.0, 2.0, 3.0}, {0.1, 0.2, 0.3}, 1.0, 0);
-    Particle p2({2.0, 3.0, 4.0}, {0.2, 0.3, 0.4}, 1.5, 1);
-    Particle p3({3.0, 4.0, 5.0}, {0.3, 0.4, 0.5}, 2.0, 0);
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle> ((std::array<double, 3>){3.0, 4.0, 5.0}, (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0);
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -29,7 +31,7 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
     pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle>& particles = pc->getParticles();
+    const std::vector<std::shared_ptr<Particle>>& particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -43,12 +45,12 @@ TEST(ParticleContainerTest, AddAndGetParticles) {
 }
 
 // Test case for iterators
-TEST(ParticleContainerTest, IteratorBeginEnd) {
+TEST(ParticleContainerOld, IteratorBeginEnd) {
     ParticleContainer* pc = new ParticleContainerOld();
     
     // Create some particles
-    Particle p1({1.0, 2.0, 3.0}, {0.1, 0.2, 0.3}, 1.0, 0);
-    Particle p2({2.0, 3.0, 4.0}, {0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -64,43 +66,217 @@ TEST(ParticleContainerTest, IteratorBeginEnd) {
     delete pc;
 }
 
- TEST(inputFileManager, ResetInputFile){;
-    std::fstream input_file;
-    const char* test_filename = "../input/generated-input.txt";
-    input_file.open(test_filename, std::ios::out | std::ios::trunc);
-    if (!input_file.is_open()) {
-        std::cerr << "something went wrong, generated input file could not be opened\n";
-        FAIL();
+// Test case for getParticlePairs
+TEST(ParticleContainerOld, GetParticlePairs) {
+    ParticleContainer* pc = new ParticleContainerOld();
+    
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0);
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+    
+    // Get particle pairs from the container
+    std::vector<std::array<std::shared_ptr<Particle>, 2>> particlePairs = pc->getParticlePairs();
+    
+    // Check if the number of pairs matches
+    EXPECT_EQ(particlePairs.size(), 3);
+    
+    // Check if the pairs are correct
+    EXPECT_TRUE((particlePairs[0][0] == p1 && particlePairs[0][1] == p2) ||
+                (particlePairs[0][0] == p2 && particlePairs[0][1] == p1));
+    EXPECT_TRUE((particlePairs[1][0] == p1 && particlePairs[1][1] == p3) ||
+                (particlePairs[1][0] == p3 && particlePairs[1][1] == p1));
+    EXPECT_TRUE((particlePairs[2][0] == p2 && particlePairs[2][1] == p3) ||
+                (particlePairs[2][0] == p3 && particlePairs[2][1] == p2));
+    
+    delete pc;
+}
+
+
+// Test case for addParticle and getParticles methods
+TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0);
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+    
+    // Get particles from the container
+    const std::vector<std::shared_ptr<Particle>>& particles = pc->getParticles();
+    
+    // Check if the number of particles matches
+    EXPECT_EQ(particles.size(), 3);
+    
+    // Check if the particles in the container match the added particles
+    EXPECT_TRUE(particles[0] == p1);
+    EXPECT_TRUE(particles[1] == p2);
+    EXPECT_TRUE(particles[2] == p3);
+    
+    delete pc;
+}
+
+// Test case for iterators
+TEST(ParticleContainerLinkedCell, IteratorBeginEnd) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    
+    // Test begin iterator
+    ParticleIterator beginIter = pc->begin();
+    EXPECT_TRUE(*beginIter == p1);
+    
+    // Test end iterator
+    ParticleIterator endIter = pc->end();
+    EXPECT_NE(beginIter, endIter); 
+    
+    delete pc;
+}
+
+// Test case for getParticlePairs
+TEST(ParticleContainerLinkedCell, GetParticlePairs) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.1}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.05, 3.05}, (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0);
+
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+
+    // Get particle pairs from the container
+    std::vector<std::array<std::shared_ptr<Particle>, 2>> particlePairs = pc->getParticlePairs();
+
+    // Check if the number of pairs matches
+    EXPECT_EQ(particlePairs.size(), 3); 
+
+    // Verify specific pairs
+    bool foundPair12 = false, foundPair13 = false, foundPair23 = false;
+    for (const auto& pair : particlePairs) {
+        if ((pair[0] == p1 && pair[1] == p2) || (pair[0] == p2 && pair[1] == p1)) {
+            foundPair12 = true;
+        } else if ((pair[0] == p1 && pair[1] == p3) || (pair[0] == p3 && pair[1] == p1)) {
+            foundPair13 = true;
+        } else if ((pair[0] == p2 && pair[1] == p3) || (pair[0] == p3 && pair[1] == p2)) {
+            foundPair23 = true;
+        }
     }
-    input_file << "tmp";
-    input_file.close();
-    inputFileManager::resetFile(test_filename);
 
-    input_file.open(test_filename, std::ios::in);
-    if (!input_file.is_open()) {
-        std::cerr << "something went wrong, generated input file could not be opened\n";
-        FAIL();  // Fail the test if the file cannot be opened
+    // Check if all expected pairs are found
+    EXPECT_TRUE(foundPair12);
+    EXPECT_TRUE(foundPair13);
+    EXPECT_TRUE(foundPair23);
+
+    delete pc;
+}
+
+// Test case for getSize method
+TEST(ParticleContainerLinkedCell, GetSize) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    
+    // Get the size of the container
+    std::array<double, 3> size = pc.getSize();
+    
+    // Check if the size matches the expected values
+    EXPECT_EQ(size[0], sizeX);
+    EXPECT_EQ(size[1], sizeY);
+    EXPECT_EQ(size[2], sizeZ);
+}
+
+// Test case for getCellSize method
+TEST(ParticleContainerLinkedCell, GetCellSize) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    
+    // Get the cell size of the container
+    std::array<double, 3> cellSize = pc.getCellSize();
+    
+    // Check if the cell size matches the expected values
+    EXPECT_EQ(cellSize[0], sizeX / ceil(sizeX / radius));
+    EXPECT_EQ(cellSize[1], sizeY / ceil(sizeY / radius));
+    EXPECT_EQ(cellSize[2], sizeZ / ceil(sizeZ / radius));
+}
+
+//Test case for updateLoctions method
+TEST(ParticleContainerLinkedCell, UpdateLocations) {
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+
+    // Create a particle that will move outside the boundary
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0);
+    
+    // Add the particle to the container
+    pc.addParticle(p1);
+    p1->setX({11,2,3});
+    // Set the outflow flags
+    std::array<bool, 6> outflowFlag = {true, true, true, true, true, true};
+
+    // Update the locations
+    pc.updateLoctions(outflowFlag);
+    
+    // Check if the particle has been moved to the halo region
+    std::vector<std::shared_ptr<Particle>> halo = pc.getHalo();
+    EXPECT_EQ(halo.size(), 1);
+    if(halo.size()>=1) {
+        EXPECT_TRUE(halo[0] == p1);
     }
+}
 
-    std::stringstream buffer;
-    buffer << input_file.rdbuf();
-    std::string content = buffer.str();
-    input_file.close();
+// Test case for getBoundary method
+TEST(ParticleContainerLinkedCell, GetBoundary) {
+    std::cout << "\n\n\ntest\n\n\n";
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
 
-    std::string expected_content = "# Inputfile where all used particles will be stored.\n"
-                                   "# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles\n"
-                                   "# there have to follow the exact quantity of spaces so that the number of chars in the line\n"
-                                   "# adds up to 32 (not counting the \"\\n\" at the end)\n"
-                                   "0                               \n";
-
-    EXPECT_EQ(content, expected_content);
+    // Create particles at the boundaries
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.0, 0.0, 0.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){9.0, 9.0, 9.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){5.0, 5.0, 5.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 0);
+    
+    // Add the particles to the container
+    pc.addParticle(p1);
+    pc.addParticle(p2);
+    pc.addParticle(p3);
+    
+    // Get the boundary particles from the container
+    std::vector<std::shared_ptr<Particle>> boundary = pc.getBoundary();
+    
+    // Check if the boundary particles match the expected values
+    EXPECT_EQ(boundary.size(), 2);
+    if(boundary.size()>=2) {
+        EXPECT_TRUE(boundary[0] == p1 || boundary[1] == p1);
+        EXPECT_TRUE(boundary[0] == p2 || boundary[1] == p2);
+    }
 }
 
 TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
     inputFileManager::resetFile("../input/generated-input.txt");
     // Generate particles in a cuboid and write to the file
-    ParticleGenerator::generateCuboid(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, "../input/generated-input.txt");
+    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2,0.1), "../input/generated-input.txt");
      // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
 
@@ -120,7 +296,6 @@ TEST(ParticleGenerator, GenerateCuboid){
     std::getline(input_file, currentLine);
     EXPECT_EQ(currentLine, "# adds up to 32 (not counting the \"\\n\" at the end)");
     std::getline(input_file, currentLine);
-    //EXPECT_TRUE(currentLine, "8                               \n");
     EXPECT_EQ(currentLine, "8                               ");
     // Maxwell-Boltzmann numbers for velocity adjustments
     std::array<std::array<double, 3>, 8> maxwellBoltzmannNumbers = {{
@@ -169,6 +344,104 @@ TEST(ParticleGenerator, GenerateCuboid){
     inputFileManager::resetFile("../input/generated-input.txt");
 }
 
+TEST(ParticleGenerator, GenerateDisc) {
+    // Reset the input file before starting the test
+    inputFileManager::resetFile("../input/generated-input.txt");
+
+    // Generate particles in a disc and write to the file
+    ParticleGenerator::generateDisc(Disc({5.0, 5.0, 5.0},{1.0, 1.0, 1.0}, 5, 1.0, 2.0), "../input/generated-input.txt");
+
+    // Open the generated input file for reading
+    std::ifstream input_file("../input/generated-input.txt");
+
+    if (!input_file.is_open()) {
+        std::cerr << "Something went wrong, generated input file could not be opened\n";
+        exit(-1);
+    }
+
+    std::string currentLine;
+    // Verify the header lines in the file
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# Inputfile where all used particles will be stored.");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# there have to follow the exact quantity of spaces so that the number of chars in the line");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "# adds up to 32 (not counting the \"\\n\" at the end)");
+    std::getline(input_file, currentLine);
+    EXPECT_EQ(currentLine, "81                              "); 
+
+    double baseX = 5.0;
+    double baseY = 5.0;
+    double baseZ = 5.0;
+    double distance = 1.0;
+
+    // Verifying each particle's data in the file
+    for (size_t i = -5; i < 5; ++i) {
+        for (size_t j = -5; j < 5; ++j) {
+            std::getline(input_file, currentLine);
+            std::istringstream lineStream(currentLine);
+
+            double x, y, z, vx, vy, vz, mass;
+            lineStream >> x >> y >> z >> vx >> vy >> vz >> mass;
+
+            // Calculate expected position and velocity based on input parameters
+            double expectedX = baseX + i * distance;
+            double expectedY = baseY + j * distance;
+            double expectedZ = baseZ;
+            double expectedVx = 1.0;
+            double expectedVy = 1.0;
+            double expectedVz = 1.0;
+
+            // Verify that the generated values match the expected values with the specified tolerance
+            EXPECT_TRUE(areDoublesEqual(x, expectedX));
+            EXPECT_TRUE(areDoublesEqual(y, expectedY));
+            EXPECT_TRUE(areDoublesEqual(z, expectedZ));
+            EXPECT_TRUE(areDoublesEqual(vx, expectedVx));
+            EXPECT_TRUE(areDoublesEqual(vy, expectedVy));
+            EXPECT_TRUE(areDoublesEqual(vz, expectedVz));
+            EXPECT_EQ(mass, 2.0); 
+        }
+    }
+    // Close the input file after verification
+    input_file.close();
+    // Reset the input file again to its initial state
+    inputFileManager::resetFile("../input/generated-input.txt");
+}
+
+ TEST(inputFileManager, ResetInputFile){;
+    std::fstream input_file;
+    const char* test_filename = "../input/generated-input.txt";
+    input_file.open(test_filename, std::ios::out | std::ios::trunc);
+    if (!input_file.is_open()) {
+        std::cerr << "something went wrong, generated input file could not be opened\n";
+        FAIL();
+    }
+    input_file << "tmp";
+    input_file.close();
+    inputFileManager::resetFile(test_filename);
+
+    input_file.open(test_filename, std::ios::in);
+    if (!input_file.is_open()) {
+        std::cerr << "something went wrong, generated input file could not be opened\n";
+        FAIL();  // Fail the test if the file cannot be opened
+    }
+
+    std::stringstream buffer;
+    buffer << input_file.rdbuf();
+    std::string content = buffer.str();
+    input_file.close();
+
+    std::string expected_content = "# Inputfile where all used particles will be stored.\n"
+                                   "# Similar syntax to \"eingabe-sonne.txt\" with the exeption that after the number of particles\n"
+                                   "# there have to follow the exact quantity of spaces so that the number of chars in the line\n"
+                                   "# adds up to 32 (not counting the \"\\n\" at the end)\n"
+                                   "0                               \n";
+
+    EXPECT_EQ(content, expected_content);
+}
+
 TEST(inputFileManager, MergeFile){
     const char* generated_filename = "../input/generated-input.txt";
     const char* merge_filename = "../input/eingabe-sonne.txt";
@@ -206,15 +479,15 @@ TEST(inputFileManager, MergeFile){
 
 TEST(Lennard_Jones_Force, LennardJonesForce){
     ParticleContainer* particles = new ParticleContainerOld();
-    Particle p1 {{0,0,0},{0,0,0},1};
-    Particle p2 {{1,0,0},{0,0,0},1};
-    Particle p3 {{0,1,0},{0,0,0},1};
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){0,0,0},(std::array<double, 3>){0,0,0},1);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){1,0,0},(std::array<double, 3>){0,0,0},1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle> ((std::array<double, 3>){0,1,0},(std::array<double, 3>){0,0,0},1);
     particles->addParticle(p1);
     particles->addParticle(p2);
     particles->addParticle(p3);
 
     Lennard_Jones_Force LJForce {};
-    LJForce.calculateF(*particles);
+    LJForce.calculateF(*particles, {false, false, false, false, false, false}, false, 5, 1);
 
     const auto& updatedParticles = particles->getParticles();
 
@@ -228,22 +501,22 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     std::array<double, 3> expectedF2 = {114.375, 5.625, 0};
     std::array<double, 3> expectedF3 = {5.625, 114.375, 0};
 
-    spdlog::info("p1 force: ({}, {}, {})", p1_updated.getF()[0], p1_updated.getF()[1], p1_updated.getF()[2]);
-    spdlog::info("p2 force: ({}, {}, {})", p2_updated.getF()[0], p2_updated.getF()[1], p2_updated.getF()[2]);
-    spdlog::info("p3 force: ({}, {}, {})", p3_updated.getF()[0], p3_updated.getF()[1], p3_updated.getF()[2]);
+    spdlog::info("p1 force: ({}, {}, {})", p1_updated->getF()[0], p1_updated->getF()[1], p1_updated->getF()[2]);
+    spdlog::info("p2 force: ({}, {}, {})", p2_updated->getF()[0], p2_updated->getF()[1], p2_updated->getF()[2]);
+    spdlog::info("p3 force: ({}, {}, {})", p3_updated->getF()[0], p3_updated->getF()[1], p3_updated->getF()[2]);
 
     // Check if the calculated forces are as expected
-    EXPECT_NEAR(p1_updated.getF()[0], expectedF1[0], EPSILON);
-    EXPECT_NEAR(p1_updated.getF()[1], expectedF1[1], EPSILON);
-    EXPECT_NEAR(p1_updated.getF()[2], expectedF1[2], EPSILON);
+    EXPECT_NEAR(p1_updated->getF()[0], expectedF1[0], EPSILON);
+    EXPECT_NEAR(p1_updated->getF()[1], expectedF1[1], EPSILON);
+    EXPECT_NEAR(p1_updated->getF()[2], expectedF1[2], EPSILON);
 
-    EXPECT_NEAR(p2_updated.getF()[0], expectedF2[0], EPSILON);
-    EXPECT_NEAR(p2_updated.getF()[1], expectedF2[1], EPSILON);
-    EXPECT_NEAR(p2_updated.getF()[2], expectedF2[2], EPSILON);
+    EXPECT_NEAR(p2_updated->getF()[0], expectedF2[0], EPSILON);
+    EXPECT_NEAR(p2_updated->getF()[1], expectedF2[1], EPSILON);
+    EXPECT_NEAR(p2_updated->getF()[2], expectedF2[2], EPSILON);
 
-    EXPECT_NEAR(p3_updated.getF()[0], expectedF3[0], EPSILON);
-    EXPECT_NEAR(p3_updated.getF()[1], expectedF3[1], EPSILON);
-    EXPECT_NEAR(p3_updated.getF()[2], expectedF3[2], EPSILON);
+    EXPECT_NEAR(p3_updated->getF()[0], expectedF3[0], EPSILON);
+    EXPECT_NEAR(p3_updated->getF()[1], expectedF3[1], EPSILON);
+    EXPECT_NEAR(p3_updated->getF()[2], expectedF3[2], EPSILON);
 
     delete particles;
 }
@@ -264,15 +537,54 @@ TEST(FileReader, readFile){
 
     int i = 0;
     for(auto particle = particles->begin(); particle != particles->end(); ++particle, ++i){
-        EXPECT_EQ(particle->getX()[0], pValues[i][0]);
-        EXPECT_EQ(particle->getX()[1], pValues[i][1]);
-        EXPECT_EQ(particle->getX()[2], pValues[i][2]);
-        EXPECT_EQ(particle->getV()[0], pValues[i][3]);
-        EXPECT_EQ(particle->getV()[1], pValues[i][4]);
-        EXPECT_EQ(particle->getV()[2], pValues[i][5]);
-        EXPECT_EQ(particle->getM(), pValues[i][6]);
+        EXPECT_EQ((*particle)->getX()[0], pValues[i][0]);
+        EXPECT_EQ((*particle)->getX()[1], pValues[i][1]);
+        EXPECT_EQ((*particle)->getX()[2], pValues[i][2]);
+        EXPECT_EQ((*particle)->getV()[0], pValues[i][3]);
+        EXPECT_EQ((*particle)->getV()[1], pValues[i][4]);
+        EXPECT_EQ((*particle)->getV()[2], pValues[i][5]);
+        EXPECT_EQ((*particle)->getM(), pValues[i][6]);
     }
 
     delete particles;
 }
 
+TEST(Lennard_Jones_Force, LennardJonesReflection){
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+        
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){9.75,7.0,5.0},(std::array<double, 3>){0,0,0},1);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){9.0,3.0,5.0},(std::array<double, 3>){0,0,0},1);
+    particles.addParticle(p1);
+    particles.addParticle(p2);
+    Lennard_Jones_Force force{};
+    force.calculateF(particles, {false,true,false,false,false,false}, true, 5, 1);
+    EXPECT_EQ(p1->getF()[0], -1950720); //test against manually calculated value
+    EXPECT_EQ(p2->getF()[0], 0);
+}
+
+TEST(ParticleContainerLinkedCell, MirrorBoundary){
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+        
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){5.0,5.0,5.0},(std::array<double, 3>){0,0,0},1);
+    particles.addParticle(p1);
+    p1->setX({11.0,3.0,3.0});
+    p1->setV({1.0,1.0,1.0});
+    particles.updateLoctions({true,false,true,true,true,true});
+    std::array<double, 3UL> positionAfterMirroring = {9.0,3.0,3.0};
+    std::array<double, 3UL> velocityAfterMirroring = {-1.0,1.0,1.0};
+    EXPECT_EQ(p1->getX(), positionAfterMirroring); 
+    EXPECT_EQ(p1->getV(), velocityAfterMirroring); 
+    EXPECT_EQ(particles.getHalo().size(),0);
+}
+
+TEST(ParticleContainerLinkedCell, OutflowBoundary){
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+        
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){5.0,5.0,5.0},(std::array<double, 3>){0,0,0},1);
+    particles.addParticle(p1);
+    p1->setX({11.0,3.0,3.0});
+    particles.updateLoctions({false,true,false,false,false,false});
+    std::array<double, 3UL> positionAfterMirroring = {11.0,3.0,3.0};
+    EXPECT_EQ(p1->getX(), positionAfterMirroring); 
+    EXPECT_EQ(particles.getHalo().size(),1);
+}

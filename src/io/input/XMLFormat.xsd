@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="double_vector">
+        <xs:sequence>
+            <xs:element name="x" type="xs:double"/>
+            <xs:element name="y" type="xs:double"/>
+            <xs:element name="z" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="unsigned_vector">
+        <xs:sequence>
+            <xs:element name="x" type="xs:unsignedInt"/>
+            <xs:element name="y" type="xs:unsignedInt"/>
+            <xs:element name="z" type="xs:unsignedInt"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="boundaryBehavior">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="outflow"/>
+            <xs:enumeration value="mirror"/>
+            <xs:enumeration value="reflecting"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="forces">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="gravitationalForce"/>
+            <xs:enumeration value="lennardJonesForce"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="algorithms">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="linkedcell"/>
+            <xs:enumeration value="default"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="loglevels">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OFF"/>
+            <xs:enumeration value="ERROR"/>
+            <xs:enumeration value="WARN"/>
+            <xs:enumeration value="INFO"/>
+            <xs:enumeration value="DEBUG"/>
+            <xs:enumeration value="TRACE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <!-- Root element -->
+    <xs:element name="simulation">
+        <xs:complexType>
+        <xs:sequence>
+
+            <xs:element name="boundaries">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="left" type="boundaryBehavior"/>
+                        <xs:element name="right" type="boundaryBehavior"/>
+                        <xs:element name="bottom" type="boundaryBehavior"/>
+                        <xs:element name="top" type="boundaryBehavior"/>
+                        <xs:element name="rear" type="boundaryBehavior"/>
+                        <xs:element name="front" type="boundaryBehavior"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- Input settings -->
+            <xs:element name="inputSettings">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="inputFile" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- Output settings -->
+            <xs:element name="outputSettings">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="baseName" type="xs:string"/>
+                        <xs:element name="writeFrequency" type="xs:unsignedInt"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- Simulation parameters -->
+            <xs:element name="simulationParameters">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="end_t" type="xs:double"/>
+                        <xs:element name="delta_t" type="xs:double"/>
+                        <xs:element name="start_t" type="xs:double"/>
+                        <xs:element name="epsilon" type="xs:double"/>
+                        <xs:element name="sigma" type="xs:double"/>
+                        <xs:element name="force" type="forces"/>
+                        <xs:element name="algorithm" type="algorithms"/>  
+                        <xs:element name="loglevel" type="loglevels"/>  
+                        <xs:element name="domain" type="double_vector"/>
+                        <xs:element name="cutoff-radius" type="xs:double"/>                    
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- Cuboids -->
+            <xs:element name="cuboid" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="position" type="double_vector"/>
+                        <xs:element name="velocity" type="double_vector"/>
+                        <xs:element name="dimensions" type="unsigned_vector"/>
+                        <xs:element name="distance" type="xs:double"/>
+                        <xs:element name="mass" type="xs:double"/>    
+                        <xs:element name="brownian_motion" type="xs:double"/>                    
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+            <!-- Discs -->
+            <xs:element name="disc" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="position" type="double_vector"/>
+                        <xs:element name="velocity" type="double_vector"/>
+                        <xs:element name="radius" type="xs:int"/>
+                        <xs:element name="distance" type="xs:double"/>
+                        <xs:element name="mass" type="xs:double"/>                        
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

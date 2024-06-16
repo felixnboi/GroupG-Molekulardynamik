@@ -7,10 +7,6 @@
 
 #include "Particle.h"
 
-#include <iostream>
-#include "utils/ArrayUtils.h"
-
-
 /**
  * @brief Constructs a particle with a specified type.
  * 
