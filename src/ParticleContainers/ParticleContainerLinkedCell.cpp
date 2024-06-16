@@ -58,8 +58,8 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
     for (size_t i = 0; i < arrayLength; i++){
         size_t nbrCount = 0;
         std::array<size_t,13> nbrs;
-        std::array<size_t,3> indexes = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
-        bool nbrExists[5] = {indexes[0]>0, indexes[0]+1<cellCount[0], indexes[1]>0, indexes[1]+1<cellCount[1], indexes[2]+1<cellCount[2]};
+        std::array<size_t,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
+        bool nbrExists[5] = {indices[0]>0, indices[0]+1<cellCount[0], indices[1]>0, indices[1]+1<cellCount[1], indices[2]+1<cellCount[2]};
 
         if(                            nbrExists[1]) nbrs[nbrCount++] = i                                       +1;
         if(              nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i                          +cellCount[0]-1;
