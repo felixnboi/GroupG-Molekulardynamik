@@ -95,5 +95,5 @@ private:
     std::array<size_t, 3> cellCount; ///< Number of cells in each dimension.
     double radius; ///< Cut-off radius.
     std::vector<std::shared_ptr<Particle>> halo; ///< Vector containing particles outside the calculated area.
-    size_t arraylenght; ///< Total number of cells in the container.
+    size_t arrayLength; ///< Total number of cells in the container.
 };
