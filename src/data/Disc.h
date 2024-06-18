@@ -20,7 +20,7 @@ public:
      * @param distance The distance between the partcles.
      * @param mass The mass of the particles.
      */
-    Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass);
+    Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass, double epsilon, double sigma);
 
     /**
      * @brief Getter for the position of the disc.
@@ -52,6 +52,20 @@ public:
      * @return The mass of the disc.
      */
     double getMass() const;
+
+    /**
+     * @brief Getter for the value of epsilon of each particle in the Cuboid.
+     * 
+     * @return The value of epsilon of each particle in the Cuboid.
+     */
+    double getEpsilon() const;
+
+    /**
+     * @brief Getter for the value of sigma of each particle in the Cuboid.
+     * 
+     * @return The value of sigma of each particle in the Cuboid.
+     */
+    double getSigma() const;
 
     /**
      * @brief Setter for the position of the disc.
@@ -97,4 +111,6 @@ private:
     int radius; //<<< The radius of the disc.
     double distance; //<<< The distance of the disc.
     double mass; //<<< The mass of the disc.
+    double epsilon;
+    double sigma;
 };

@@ -19,6 +19,8 @@ Simulation::Simulation(){
 
     lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
+    periodicFlag = {false, false, false};
+    gravConstant = 0;
 
     input_file_user = "";
 }
@@ -164,7 +166,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } if (*optarg == 'l') {
-                    force = std::make_unique<Lennard_Jones_Force>();
+                    force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlag);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -231,7 +233,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         if(simdata.getForceStr() == "lennardJonesForce"){
-            force = std::make_unique<Lennard_Jones_Force>();
+            force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlag);
         }
 
     }else{
@@ -274,7 +276,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
     }
 
     FileReader fileReader;
-    fileReader.readFile(*particles, simdata.getInputFile().c_str());
+    fileReader.readFile(*particles, simdata.getInputFile().c_str(), domainStart);
 
     // checking if there are particles in the simulation
     if (particles->getParticles().empty()) {
@@ -298,7 +300,7 @@ void Simulation::run() {
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
+        force->calculateF(*particles, linkedcell_flag, gravConstant);
         calculateV();
         current_time += delta_t;
         iteration++;
@@ -308,7 +310,7 @@ void Simulation::run() {
     if (time_flag) {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
+            force->calculateF(*particles, linkedcell_flag, gravConstant);
             calculateV();
 
             iteration++;
@@ -317,7 +319,7 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
+            force->calculateF(*particles, linkedcell_flag, gravConstant);
             calculateV();
 
             // plotting particle positions only at intervals of iterations
@@ -357,7 +359,7 @@ void Simulation::calculateX() {
   }
   if(linkedcell_flag){
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());
-    LCContainer->updateLoctions(outflowFlags);
+    LCContainer->updateLoctions(outflowFlags, periodicFlag);
   }
 }
 

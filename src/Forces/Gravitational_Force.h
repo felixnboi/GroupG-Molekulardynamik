@@ -34,6 +34,5 @@ public:
      * @param epsilon Not relevant for this method.
      * @param sigma Not relevant for this method.
      */
-    void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
-    double epsilon, double sigma) override;
+    void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) override;
 };

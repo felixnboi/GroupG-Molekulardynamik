@@ -12,10 +12,12 @@ FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
 
-void FileReader::readFile(ParticleContainer &particles, const char *filename){
+void FileReader::readFile(ParticleContainer &particles, const char *filename, std::array<double,3> domainStart){
   std::array<double, 3> x;
   std::array<double, 3> v;
   double m;
+  double epsilon;
+  double sigma;
   int num_particles = 0;
 
   std::ifstream input_file(filename);
@@ -65,8 +67,18 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename){
                 spdlog::error("Error reading file: failed to parse line {}", i);
                 exit(-1);
       }
+      datastream >> epsilon;
+      if (datastream.fail()) {
+                spdlog::error("Error reading file: failed to parse line {}", i);
+                exit(-1);
+      }
+      datastream >> sigma;
+      if (datastream.fail()) {
+                spdlog::error("Error reading file: failed to parse line {}", i);
+                exit(-1);
+      }
             
-      particles.addParticle(std::make_shared<Particle>(x,v,m));
+      particles.addParticle(std::make_shared<Particle>(x,v,m,0,epsilon,sigma,domainStart));
     }
   } else {
     spdlog::error("Error: could not open file {}", filename);

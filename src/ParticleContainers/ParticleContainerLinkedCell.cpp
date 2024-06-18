@@ -54,26 +54,47 @@ const std::vector<std::shared_ptr<Particle>>& ParticleContainerLinkedCell::getPa
 
 
 std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairs(){
+    return getParticlePairsPeriodic({false,false,false});
+}
+
+std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
     std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
     for (size_t i = 0; i < arrayLength; i++){
         size_t nbrCount = 0;
         std::array<size_t,13> nbrs;
         std::array<size_t,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
-        bool nbrExists[5] = {indices[0]>0, indices[0]+1<cellCount[0], indices[1]>0, indices[1]+1<cellCount[1], indices[2]+1<cellCount[2]};
+        std::array<size_t,5> nbrIndices = {indices[0]-1,indices[0]+1, indices[1]-1, indices[1]+1, indices[2]+1};
+        if(pFlag[0]){
+            nbrIndices[0] += cellCount[0];
+            nbrIndices[1] -= cellCount[0];
+        }
+        if(pFlag[1]){
+            nbrIndices[2] += cellCount[1];
+            nbrIndices[3] -= cellCount[1];
+        }
+        if(pFlag[2]){
+            nbrIndices[4] -= cellCount[2];
+        }
+        std::array<bool, 5> nbrExists = {nbrIndices[0]>=0, nbrIndices[1]<cellCount[0], nbrIndices[2]>=0, nbrIndices[3]<cellCount[1], nbrIndices[4]<cellCount[2]};
+        indices[1] *= cellCount[0];
+        indices[2] *= cellCount[0]*cellCount[1];
+        nbrIndices[2] *= cellCount[0];
+        nbrIndices[3] *= cellCount[0];
+        nbrIndices[4] *= cellCount[0]*cellCount[1];
 
-        if(                            nbrExists[1]) nbrs[nbrCount++] = i                                       +1;
-        if(              nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i                          +cellCount[0]-1;
-        if(              nbrExists[3]              ) nbrs[nbrCount++] = i                          +cellCount[0]  ;
-        if(              nbrExists[3]&&nbrExists[1]) nbrs[nbrCount++] = i                          +cellCount[0]+1;
-        if(nbrExists[4]&&nbrExists[2]&&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]-1;
-        if(nbrExists[4]&&nbrExists[2]              ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]  ;
-        if(nbrExists[4]&&nbrExists[2]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]-cellCount[0]+1;
-        if(nbrExists[4]              &&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]             -1;
-        if(nbrExists[4]                            ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]               ;
-        if(nbrExists[4]              &&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]             +1;
-        if(nbrExists[4]&&nbrExists[3]&&nbrExists[0]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]-1;
-        if(nbrExists[4]&&nbrExists[3]              ) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]  ;
-        if(nbrExists[4]&&nbrExists[3]&&nbrExists[1]) nbrs[nbrCount++] = i+cellCount[0]*cellCount[1]+cellCount[0]+1;
+        if(nbrExists[1]                            ) nbrs[nbrCount++] = nbrIndices[1]+indices[1]   +indices[2]   ; 
+        if(nbrExists[0]&&nbrExists[3]              ) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[3]+indices[2]   ; 
+        if(              nbrExists[3]              ) nbrs[nbrCount++] = indices[0]   +nbrIndices[3]+indices[2]   ; 
+        if(nbrExists[1]&&nbrExists[3]              ) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[3]+indices[2]   ; 
+        if(nbrExists[0]&&nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[2]+nbrIndices[4]; 
+        if(              nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[2]+nbrIndices[4]; 
+        if(nbrExists[1]&&nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[2]+nbrIndices[4]; 
+        if(nbrExists[0]              &&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+indices[1]   +nbrIndices[4]; 
+        if(                            nbrExists[4]) nbrs[nbrCount++] = indices[0]   +indices[1]   +nbrIndices[4]; 
+        if(nbrExists[1]              &&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+indices[1]   +nbrIndices[4]; 
+        if(nbrExists[0]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[3]+nbrIndices[4]; 
+        if(              nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[3]+nbrIndices[4]; 
+        if(nbrExists[1]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[3]+nbrIndices[4]; 
 
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
@@ -97,12 +118,16 @@ std::vector<std::shared_ptr<Particle>> ParticleContainerLinkedCell::getHalo(){
     return halo;
 }
 
-void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag){
+void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> peridicflag){
     size_t newIndex;
     for (size_t i = 0; i < arrayLength; i++){
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             std::array<double, 3UL> cords = (*particle_i)->getX();
             for (size_t j = 0; j < 3; j++){
+                if(peridicflag[j]){
+                    cords[j] = fmod(cords[j],(size[j]));
+                    if(cords[j]<0) cords[j]+=size[j];
+                }
                 if(cords[j]<0) {
                     if(outflowflag[2*j]){
                         halo.push_back(*particle_i); 

@@ -3,8 +3,8 @@
 Disc::Disc()
     : position({0.0, 0.0, 0.0}), velocity({0.0, 0.0, 0.0}), radius(0), distance(0.0), mass(0.0) {}
 
-Disc::Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass)
-    : position(position), velocity(velocity), radius(radius), distance(distance), mass(mass) {}
+Disc::Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass, double epsilon, double sigma)
+    : position(position), velocity(velocity), radius(radius), distance(distance), mass(mass), epsilon(epsilon), sigma(sigma) {}
 
 const std::array<double, 3>& Disc::getPosition() const {
     return position;
@@ -24,6 +24,14 @@ double Disc::getDistance() const {
 
 double Disc::getMass() const {
     return mass;
+}
+
+double Disc::getEpsilon() const{
+    return epsilon;
+}
+
+double Disc::getSigma() const{
+    return sigma;
 }
 
 void Disc::setPosition(const std::array<double, 3>& new_position) {

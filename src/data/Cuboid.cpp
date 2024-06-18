@@ -3,8 +3,8 @@
 Cuboid::Cuboid(){}
 
 Cuboid::Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-double distance, double mass, double brownian_motion)
-    : position(position), velocity(velocity), dimensions(dimensions), distance(distance), mass(mass), brownian_motion(brownian_motion) {}
+double distance, double mass, double brownian_motion, double epsilon, double sigma)
+    : position(position), velocity(velocity), dimensions(dimensions), distance(distance), mass(mass), brownian_motion(brownian_motion), epsilon(epsilon), sigma(sigma) {}
 
 std::array<double, 3> Cuboid::getPosition() const {
     return position;
@@ -24,6 +24,14 @@ double Cuboid::getDistance() const {
 
 double Cuboid::getMass() const {
     return mass;
+}
+
+double Cuboid::getEpsilon() const{
+    return epsilon;
+}
+
+double Cuboid::getSigma() const{
+    return sigma;
 }
 
 double Cuboid::getBrownianMotion() const {

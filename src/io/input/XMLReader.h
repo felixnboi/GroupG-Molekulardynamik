@@ -31,7 +31,7 @@ class XMLReader{
          * @param filename The name of the XML file to read from.
          * @param cuboids A reference to a vector where the cuboid data will be stored.
          */
-        void readCuboids(const char* filename, std::vector<Cuboid>& cuboids);
+        void readCuboids(const char* filename, std::vector<Cuboid>& cuboids, double epsilon, double sigma);
 
 
         /**
@@ -39,7 +39,7 @@ class XMLReader{
          * @param filename The name of the XML file to read from.
          * @param discs A reference to a vector where the disc data will be stored.
          */
-        void readDiscs(const char* filename, std::vector<Disc>& discs);
+        void readDiscs(const char* filename, std::vector<Disc>& discs, double epsilon, double sigma);
 
         /**
          * @brief Reads simulation data from an XML file and saves it in a simdata object.

@@ -6,7 +6,7 @@ XMLReader::XMLReader() = default;
 
 XMLReader::~XMLReader() = default;
 
-void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
+void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids, double epsilon, double sigma){
     try{
         std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
 
@@ -23,7 +23,7 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
             const double mass = cuboid_xml.mass();
             const double brownian_motion = cuboid_xml.brownian_motion();
 
-            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion));
+            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion, epsilon, sigma));
         }
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Cuboid-parsing.");
@@ -32,7 +32,7 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
     }
 }
 
-void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs){
+void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs, double epsilon, double sigma){
     try{
         std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
 
@@ -49,7 +49,7 @@ void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs){
             const double distance = disc_xml.distance();
             const double mass = disc_xml.mass();
 
-            discs.push_back(Disc(position, velocity, radius, distance, mass));
+            discs.push_back(Disc(position, velocity, radius, distance, mass, epsilon, sigma));
         }
 
     }catch(const xml_schema::exception& e){

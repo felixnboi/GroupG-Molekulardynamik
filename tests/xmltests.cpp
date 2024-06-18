@@ -13,13 +13,13 @@ TEST(XMLReader, parseXMLFile){
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
 
-    Cuboid cuboid({12,13,14},{15,16,17},{18,19,20},21,22,7);
-    Disc disc({23,24,25},{26,27,28},29,30,31);
+    Cuboid cuboid({12,13,14},{15,16,17},{18,19,20},21,22,7, 5, 1);
+    Disc disc({23,24,25},{26,27,28},29,30,31, 5, 1);
 
     SimData simdata;
 
-    xmlreader.readCuboids("../input/test.xml", cuboids);
-    xmlreader.readDiscs("../input/test.xml", discs);
+    xmlreader.readCuboids("../input/test.xml", cuboids, 5, 1);
+    xmlreader.readDiscs("../input/test.xml", discs, 5, 1);
 
     xmlreader.readSimulation("../input/test.xml", simdata);
 

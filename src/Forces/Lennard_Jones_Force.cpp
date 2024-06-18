@@ -3,82 +3,102 @@
 #include <iostream>
     
 
-Lennard_Jones_Force::Lennard_Jones_Force() {
+Lennard_Jones_Force::Lennard_Jones_Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag) {
+  this->reflectLenJonesFlag = reflectLenJonesFlag;
+  this->periodicFlag = periodicFlag;
   spdlog::info("Lennard_Jones_Force object constructed");
 };
 Lennard_Jones_Force::~Lennard_Jones_Force() {
   spdlog::info("Lennard_Jones_Force object destructed");
 };
 
-void Lennard_Jones_Force::calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
-    double epsilon, double sigma) {
+void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) {
 
   std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs = particles.getParticlePairs();
-
-  std::shared_ptr<Particle> particle_i;
-  std::shared_ptr<Particle> particle_j;
-
-  double sigmaPow6 = pow(sigma,6);
-  double sigmaPow12 = pow(sigma,12);
-  // reset the force for each particle and store the old force
-
-  for (auto particle = particles.begin(); particle != particles.end(); particle++){
-    (*particle)->setOldF((*particle)->getF());
-    (*particle)->setF({0,0,0});
+  
+  // reset the force for each particle, store the old force and claculate the GravitationalForce
+  for(auto particle : particles.getParticles()){
+    particle->setOldF(particle->getF());
+    std::array<double,3> gravForce = {0, particle->getM()*gravConstant,0};
+    particle->setF(gravForce);
   }
   
   if(linkedcells){
     ParticleContainerLinkedCell &LCContainer = dynamic_cast<ParticleContainerLinkedCell&>(particles);
+    double twoRoot6 = pow(2, 1/6);
     std::vector<std::shared_ptr<Particle>> boundery = LCContainer.getBoundary();
-    for(auto particle = boundery.begin(); particle != boundery.end(); particle++){
-      std::array<double, 3> cur_F_dummy = (*particle)->getF();
-      for(int i = 0; i < 3; i++){
-        if(reflectLenJonesFlag[2*i]&&(*particle)->getX()[i]< LCContainer.getCellSize()[i]){
-          auto norm_squared = pow(2*(*particle)->getX()[i], 2);
-          auto norm_pow6 = pow(norm_squared, 3);
+    for(int i = 0; i < 2; i++){
+      for(int j = 0; j < 2; j++){
+        for(int k = 0; k < 2; k++){
+          if(i+j+k==0||(i==1&&!periodicFlag[0])||(j==1&&!periodicFlag[1])||(k==1&&!periodicFlag[2])) continue;
+          auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
+          for(auto pair : pairs){
+            auto particle_i = pair[0];
+            auto particle_j = pair[1];
+            double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
+            double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
 
-          double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
-          if(directionlessForce>0){
-            cur_F_dummy[i] += directionlessForce *2*(*particle)->getX()[i];
-          }
-        }
-        if(reflectLenJonesFlag[2*i+1]&&(*particle)->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]){
-          auto norm_squared = pow(2*(LCContainer.getSize()[i]-(*particle)->getX()[i]), 2);
-          auto norm_pow6 = pow(norm_squared, 3);
+            auto direction = particle_i->getX()-particle_j->getX();
+            for(auto d = 0; d < 3; d++){
+              if(periodicFlag[d]){
+                if(direction[d]<0) direction[d] += LCContainer.getSize()[d];
+                else direction[d] -= LCContainer.getSize()[d];
+              }
+            }
 
-          double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
-          if(directionlessForce>0){
-            cur_F_dummy[i] += directionlessForce *2*((*particle)->getX()[i]-LCContainer.getSize()[i]);
+            auto force = calculateLennardJonesForce(direction, epsilon, sigma);
+            
+            particle_i->setF(particle_i->getF()+force);
+            particle_j->setF(particle_j->getF()-force);
           }
         }
       }
-      (*particle)->setF(cur_F_dummy);
+    }
+    for(auto particle : boundery){
+      std::array<double, 3> cur_F_dummy = particle->getF();
+      for(int i = 0; i < 3; i++){
+        if(reflectLenJonesFlag[2*i]&&particle->getX()[i]< LCContainer.getCellSize()[i]&&particle->getX()[i]< particle->getSigma()*twoRoot6){
+          std::array<double, 3> direction = {0,0,0};
+          direction[i] = 2*particle->getX()[i];
+          cur_F_dummy[i] += calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma())[i];
+        }
+        if(reflectLenJonesFlag[2*i+1]&&particle->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&particle->getX()[i]> LCContainer.getSize()[i]-particle->getSigma()*twoRoot6){
+          std::array<double, 3> direction = {0,0,0};
+          direction[i] = 2*(LCContainer.getSize()[i]-particle->getX()[i]);
+          cur_F_dummy[i] += calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma())[i];
+        }
+      }
+      particle->setF(cur_F_dummy);
     }
   }
+  calculateFPairs(particlePairs);
+}
 
+void Lennard_Jones_Force::calculateFPairs(std::vector<std::array<std::shared_ptr<Particle>, 2UL>> pairs){
   // iterate over all pairs of particles to calculate forces
-  for (auto pair = particlePairs.begin(); pair != particlePairs.end(); pair++){
-    particle_i = (*pair)[0];
-    particle_j = (*pair)[1];
-    auto cur_x_i = particle_i->getX();
+  for (auto pair = pairs.begin(); pair != pairs.end(); pair++){
+    std::shared_ptr<Particle> particle_i = (*pair)[0];
+    std::shared_ptr<Particle> particle_j = (*pair)[1];
+    double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
+    double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
 
-    std::array<double, 3> cur_F_i_dummy = particle_i->getF();
+    auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma);
+     
+    particle_i->setF(particle_i->getF()+force);
+    particle_j->setF(particle_j->getF()-force);
+  }
+}
 
-    // inner loop to calculate force between particle i and all particles j after i respectfully
-    auto cur_x_j = particle_j->getX();
-    std::array<double, 3> cur_F_j_dummy = particle_j->getF();
-
-    // calculating the Euclidean distance between particle i and particle j
-    auto norm = ArrayUtils::L2Norm(cur_x_i - cur_x_j);
+std::array<double,3> Lennard_Jones_Force::calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma){
+  // calculating the Euclidean distance between particle i and particle j
+    auto norm = ArrayUtils::L2Norm(direction);
     auto norm_squared = pow(norm, 2);
     auto norm_pow6 = pow(norm_squared, 3);
+    auto sigmaPow6 = pow(sigma,6);
 
     // calculating everything for the force except for the direction
-    double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*sigmaPow12/pow(norm_pow6,2));
+    double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*pow(sigmaPow6/norm_pow6,2));
 
     // calculating the force components (along the x, y, z axes) between particle i and particle j
-    auto force = directionlessForce*(cur_x_i-cur_x_j);  
-    particle_i->setF(cur_F_i_dummy+force);
-    particle_j->setF(cur_F_j_dummy-force);
-  }
+    std::array<double,3> force = directionlessForce*direction; 
 }

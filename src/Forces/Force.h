@@ -23,6 +23,5 @@ public:
      * @param epsilon A constant important for calculating Lennardjones-Force.
      * @param sigma A constant important for calculating Lennardjones-Force.
      */
-    virtual void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
-    double epsilon, double sigma) = 0;
+    virtual void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) = 0;
 };

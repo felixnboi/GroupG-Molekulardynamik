@@ -52,6 +52,11 @@ private:
    */
   int type;
 
+  double sigma;
+  double epsilon;
+  std::array<double, 3> domainStart;
+
+
 public:
   /**
    * @brief Constructs a particle with a given type.
@@ -79,7 +84,7 @@ public:
       // for visualization, we need always 3 coordinates
       // -> in case of 2d, we use only the first and the second
       std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
-      int type_arg = 0);
+      int type_arg, double epsilon, double sigma, std::array<double, 3> domainStart);
 
   /**
    * @brief Destructor.
@@ -114,6 +119,12 @@ public:
    */
   const std::array<double, 3> &getOldF() const;
 
+  const double getEpsilon() const;
+
+  const double getSigma() const;
+
+  const std::array<double, 3> &getDomainStart() const;
+
    /**
    * @brief Sets the position of the particle.
    * 
@@ -135,6 +146,7 @@ public:
    */
   void setF(const std::array<double, 3>& newF);
 
+  void applyF(std::array<double, 3>& force);
   /**
    * @brief Sets the old force on this particle.
    * 

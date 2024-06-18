@@ -23,6 +23,9 @@
  * @param argc The number of command-line arguments.
  * @param argsv An array of pointers to the command-line arguments.
  * @return The exit status of the program.
+ * @see calculateX() To calculate the position for all particles.
+ * @see calculateF() To calculate the force for all particles.
+ * @see plotParticles() To plot the particles to a VTK file.
  */
 int main(int argc, char *argsv[]) {
     auto start = std::chrono::high_resolution_clock::now();

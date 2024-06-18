@@ -50,7 +50,7 @@ public:
      * @brief Updates the locations of particles and handles outflow.
      * @param outflowflag Flags indicating whether outflow is allowed in each direction.
      */
-    void updateLoctions(std::array<bool,6> outflowflag);
+    void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> peridicflag);
 
     /**
      * @brief Gets the particles in the container.
@@ -75,6 +75,9 @@ public:
      * @return A vector of pairs of particles.
      */
     std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
+
+    
+    std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 
     /**
      * @brief Gets the particles located at the boundary of the container.

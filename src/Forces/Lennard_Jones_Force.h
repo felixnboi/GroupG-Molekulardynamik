@@ -10,12 +10,15 @@
  */
 class Lennard_Jones_Force : public Force
 {
+private:
+    std::array<bool,6> reflectLenJonesFlag;
+    std::array<bool,3> periodicFlag;
 public:
 
     /**
      * @brief Default constructor for Lenard_Jones_Force.
      */
-    Lennard_Jones_Force();
+    Lennard_Jones_Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag);
 
     /**
      * @brief Default destructor for Lenard_Jones_Force.
@@ -34,6 +37,9 @@ public:
      * @param epsilon A constant important for calculating Lennardjones-Force.
      * @param sigma A constant important for calculating Lennardjones-Force.
      */
-    void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
-    double epsilon, double sigma) override;
+    void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) override;
+
+    void calculateFPairs(std::vector<std::array<std::shared_ptr<Particle>, 2UL>> pairs);
+
+    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma);
 };

@@ -24,7 +24,7 @@ public:
      * @param brownian_motion The brownian motion average velocity.
      */
     Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-    double distance, double mass, double brownian_motion);
+    double distance, double mass, double brownian_motion, double epsilon, double sigma);
 
     /**
      * @brief Getter for the position of the Cuboid.
@@ -60,6 +60,20 @@ public:
      * @return The mass of each particle in the Cuboid.
      */
     double getMass() const;
+
+    /**
+     * @brief Getter for the value of epsilon of each particle in the Cuboid.
+     * 
+     * @return The value of epsilon of each particle in the Cuboid.
+     */
+    double getEpsilon() const;
+
+    /**
+     * @brief Getter for the value of sigma of each particle in the Cuboid.
+     * 
+     * @return The value of sigma of each particle in the Cuboid.
+     */
+    double getSigma() const;
 
     /**
      * @brief Getter for the brownian motion of the Cuboid.
@@ -125,4 +139,6 @@ private:
     double distance; ///< The distance between particles in the Cuboid.
     double mass; ///< The mass of each particle in the Cuboid.
     double brownian_motion; ///< The brownian motion average velocity.
+    double epsilon;
+    double sigma;
 };
