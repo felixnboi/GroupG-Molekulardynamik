@@ -20,14 +20,12 @@ Simulation::Simulation(){
 
     lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
-    periodicFlag = {false, false, false};
+    periodicFlags = {false, false, false}; //links-rechts, oben-unten, vorne-hinten
 
     input_file_user = "";
 }
 
 Simulation::~Simulation() {}
-
-//TODO inizialization of outflowFlags, lenJonesBoundaryFlags and linkedcell_flag
 
 bool Simulation::initialize(int argc, char* argv[]) {
     spdlog::set_level(spdlog::level::info);
@@ -166,7 +164,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } if (*optarg == 'l') {
-                    force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlag);
+                    force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlags);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -218,6 +216,33 @@ bool Simulation::initialize(int argc, char* argv[]) {
             }
         }
 
+        for(int i = 0; i<6 ; i+=2){
+            if(simdata.getBoundary()[i] == "periodic"){
+                if(simdata.getBoundary()[i+1] == "periodic"){
+                    periodicFlags[i/2] = true;
+                    outflowFlags[i] = false;
+                    lenJonesBoundaryFlags[i] = false;
+                    outflowFlags[i+1] = false;
+                    lenJonesBoundaryFlags[i+1] = false;
+                }else{
+                    spdlog::error("Please make sure that parallel boundaries are either periodic or non-periodic");
+                    return false;
+                }
+            }
+            if(simdata.getBoundary()[i+1] == "periodic"){
+                if(simdata.getBoundary()[i] == "periodic"){
+                    periodicFlags[i/2] = true;
+                    outflowFlags[i] = false;
+                    lenJonesBoundaryFlags[i] = false;
+                    outflowFlags[i+1] = false;
+                    lenJonesBoundaryFlags[i+1] = false;
+                }else{
+                    spdlog::error("Please make sure that parallel boundaries are either periodic or non-periodic");
+                    return false;
+                }
+            }
+        }
+
         if(simdata.getAlgorithm() == "linkedcell"){
             particles = std::make_unique<ParticleContainerLinkedCell>(simdata.getDomain()[0], simdata.getDomain()[1], 
             simdata.getDomain()[2], simdata.getCutoffRadius());
@@ -233,7 +258,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         if(simdata.getForceStr() == "lennardJonesForce"){
-            force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlag);
+            force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlags);
         }
 
     }else{
@@ -360,7 +385,7 @@ void Simulation::calculateX() {
   }
   if(linkedcell_flag){
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());
-    LCContainer->updateLoctions(outflowFlags, periodicFlag);
+    LCContainer->updateLoctions(outflowFlags, periodicFlags);
   }
 }
 

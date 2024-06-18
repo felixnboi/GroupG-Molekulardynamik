@@ -91,7 +91,7 @@ private:
 
     std::array<bool,6> lenJonesBoundaryFlags;
     std::array<bool,6> outflowFlags;
-    std::array<bool,3> periodicFlag;
+    std::array<bool,3> periodicFlags;
 
     std::string input_file_user;
 

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
+
+    <boundaries>
+        <left>periodic</left>
+        <right>periodic</right>
+        <bottom>reflecting</bottom>
+        <top>reflecting</top>
+        <rear>periodic</rear>
+        <front>periodic</front>
+    </boundaries>
+
+    <inputSettings>
+        <inputFile>../input/generated-input.txt</inputFile>
+    </inputSettings>
+
+    <outputSettings>
+        <baseName>MD_vtk</baseName>
+        <writeFrequency>100</writeFrequency>
+    </outputSettings>
+
+    <simulationParameters>
+        <end_t>25.0</end_t>
+        <delta_t>0.0005</delta_t>
+        <start_t>0.0</start_t>
+        <force>lennardJonesForce</force>
+        <algorithm>default</algorithm>
+        <loglevel>INFO</loglevel>
+        <domain>
+            <x>63.0</x>
+            <y>36.0</y>
+            <z>1.0</z>
+        </domain>
+        <domain_start>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </domain_start>
+        <cutoff_radius>2.5</cutoff_radius>
+        <grav_constant>-12.44</grav_constant>
+    </simulationParameters>
+
+    <cuboid>
+        <position>
+            <x>0.6</x>
+            <y>2.0</y>
+            <z>0.0</z>
+        </position>
+        <velocity>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </velocity>
+        <dimensions>
+            <x>50</x>
+            <y>14</y>
+            <z>1</z>
+        </dimensions>
+        <distance>1.2</distance>
+        <mass>1.0</mass>
+        <brownian_motion>0.1</brownian_motion>
+        <epsilon>1.0</epsilon>
+        <sigma>1.0</sigma>
+    </cuboid>
+
+    <cuboid>
+        <position>
+            <x>0.6</x>
+            <y>19.0</y>
+            <z>0.0</z>
+        </position>
+        <velocity>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </velocity>
+        <dimensions>
+            <x>50</x>
+            <y>14</y>
+            <z>1</z>
+        </dimensions>
+        <distance>1.2</distance>
+        <mass>2.0</mass>
+        <brownian_motion>0.1</brownian_motion>
+        <epsilon>1.0</epsilon>
+        <sigma>0.9412</sigma>
+    </cuboid>
+
+</simulation>
