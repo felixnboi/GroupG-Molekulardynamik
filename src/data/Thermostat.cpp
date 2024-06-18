@@ -1,7 +1,7 @@
 #include "Thermostat.h"
 
 Thermostat::Thermostat() 
-    : targetTemp(0), maxDeltaTemp(0), nThermostat(0), dimensions(2) {
+    : targetTemp(0), maxDeltaTemp(0), nThermostat(1000), dimensions(2) {
 }
 
 Thermostat::Thermostat(double targetTemp, double maxDeltaTemp, size_t nThermostat, size_t dimensions)
@@ -68,8 +68,6 @@ void Thermostat::initSystemTemperature(double new_initialTemp, std::unique_ptr<P
         (it)->setV(maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (it)->getM()), dimensions));
         //(*it)->setV(maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (*it)->getM()), dimensions));
     }
-
-    
 }
 
 double Thermostat::getTargetTemp() const { return targetTemp; }
@@ -79,3 +77,11 @@ double Thermostat::getMaxDeltaTemp() const { return maxDeltaTemp; }
 size_t Thermostat::getNThermostat() const { return nThermostat; }
 
 size_t Thermostat::getDimensions() const { return dimensions; }
+
+void Thermostat::setTargetTemp(double new_targetTemp) { targetTemp = new_targetTemp; }
+
+void Thermostat::setMaxDeltaTemp(double new_maxDeltaTemp) { maxDeltaTemp = new_maxDeltaTemp; }
+
+void Thermostat::setNThermostat(size_t new_NThermostat) {nThermostat = new_NThermostat; }
+
+void Thermostat::setDimensions(size_t new_dimensions) {dimensions = new_dimensions;}

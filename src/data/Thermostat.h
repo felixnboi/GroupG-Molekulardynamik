@@ -107,4 +107,9 @@ public:
      * @return size_t The number of dimensions of expected to be used.
      */
     size_t getDimensions() const;
+
+    void setTargetTemp(double new_targetTemp);
+    void setMaxDeltaTemp(double new_maxDeltaTemp);
+    void setNThermostat(size_t new_NThermostat);
+    void setDimensions(size_t new_dimensions);
 };

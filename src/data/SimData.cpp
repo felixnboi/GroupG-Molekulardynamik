@@ -4,8 +4,7 @@ SimData::SimData() = default;
 
 SimData::SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
     std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, size_t dimensions,
-    std::array<double, 3> domain, double sigma, double epsilon, double initialTemp, double targetTemp,
-            double maxDeltaTemp, size_t nThermostat)
+    std::array<double, 3> domain, double sigma, double epsilon, double initialTemp)
     : input_file(std::move(input_file)), 
       baseName(std::move(baseName)), 
       write_frequency(write_frequency), 
@@ -21,10 +20,7 @@ SimData::SimData(std::string input_file, std::string baseName, unsigned write_fr
       domain(std::move(domain)), 
       sigma(sigma), 
       epsilon(epsilon),
-      initialTemp(initialTemp),
-      targetTemp(targetTemp),
-      maxDeltaTemp(maxDeltaTemp),
-      nThermostat(nThermostat) {}
+      initialTemp(initialTemp) {}
 
 SimData::~SimData() = default;
 
@@ -44,9 +40,6 @@ std::array<double, 3> SimData::getDomain() const { return domain; }
 double SimData::getSigma() const { return sigma; }
 double SimData::getEpsilon() const { return epsilon; }
 double SimData::getInitialTemp() const { return initialTemp; }
-double SimData::getTargetTemp() const { return targetTemp; }
-double SimData::getMaxDeltaTemp() const { return maxDeltaTemp; }
-size_t SimData::getNThermostat() const { return nThermostat; }
 
 
 void SimData::setInputFile(const std::string& new_input_file) { input_file = new_input_file; }
@@ -65,7 +58,4 @@ void SimData::setDomain(const std::array<double, 3>& new_domain) { domain = new_
 void SimData::setSigma(double new_sigma) { sigma = new_sigma; }
 void SimData::setEpsilon(double new_epsilon) { epsilon = new_epsilon; }
 void SimData::setInitialTemp(double new_initialTemp) { initialTemp = new_initialTemp; }
-void SimData::setTargetTemp(double new_targetTemp) { targetTemp = new_targetTemp; }
-void SimData::setMaxDeltaTemp(double new_maxDeltaTemp) { maxDeltaTemp = new_maxDeltaTemp; }
-void SimData::setNThermostat(size_t new_nThermostat) { nThermostat = new_nThermostat; }
 

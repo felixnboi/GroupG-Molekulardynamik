@@ -90,6 +90,7 @@ private:
     bool time_flag;
     bool cli_flag;
     bool linkedcell_flag;
+    bool thermostat_flag;
 
     std::array<bool,6> lenJonesBoundaryFlags;
     std::array<bool,6> outflowFlags;
