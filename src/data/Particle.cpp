@@ -41,7 +41,8 @@ Particle::Particle(const Particle &other){
 }
 
 // Todo: maybe use initializater list instead of copy?
-Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, int type_arg, double epsilon, double sigma, std::array<double,3> domainStart){
+Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, int type_arg, double epsilon, double sigma, 
+std::array<double,3> domainStart){
   this->sigma = sigma;
   this->epsilon = epsilon;
   this->domainStart = domainStart;

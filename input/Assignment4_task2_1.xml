@@ -20,11 +20,11 @@
     </outputSettings>
 
     <simulationParameters>
-        <end_t>25.0</end_t>
+        <end_t>0.0005</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
-        <algorithm>default</algorithm>
+        <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
         <domain>
             <x>63.0</x>

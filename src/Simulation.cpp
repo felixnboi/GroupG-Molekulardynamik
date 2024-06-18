@@ -5,7 +5,9 @@ Simulation::Simulation(){
     std::array<double, 3> domain = {};
     std::array<double, 3> domain_start = {0, 0, 0};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, domain, domain_start, 0);
+    std::string("INFO"), boundary, 3, 2, domain, domain_start, 0, 0);
+
+    thermostat = Thermostat();
 
     particles = nullptr;
     force = nullptr;
@@ -17,6 +19,8 @@ Simulation::Simulation(){
     time_flag = false;
     cli_flag = false;
     linkedcell_flag = false;
+    thermostat_flag = false;
+    target_temp_flag = false;
 
     lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
@@ -38,6 +42,13 @@ bool Simulation::initialize(int argc, char* argv[]) {
         {"log", required_argument, nullptr, 'l'},
         {"delta", required_argument, nullptr, 'd'},
         {"force", required_argument, nullptr, 'f'},
+        {"dimensions", required_argument, nullptr, 'z'},
+
+        {"initT", required_argument, nullptr, 'p'},
+        {"targetT", required_argument, nullptr, 'q'},
+        {"maxDT", required_argument, nullptr, 'm'},
+        {"nThermo", required_argument, nullptr, 'n'},
+
         {nullptr, no_argument, nullptr, 0}
     };
 
@@ -48,6 +59,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
     // Parsing command line arguments
     while ((opt = getopt_long(argc, argv, short_ops, long_opts, nullptr)) != -1) {
         switch (opt) {
+            
             case 'x':{
                 xml_file = optarg;
                 xml_flag = true;
@@ -171,6 +183,61 @@ bool Simulation::initialize(int argc, char* argv[]) {
                     spdlog::error("Invalid argument for force");
                     logHelp();
                     return false;
+            }
+
+            case 'z':{
+                if(isDouble(optarg)){
+                    simdata.setDimensions(atof(optarg));
+                    thermostat.setDimensions(atof(optarg));
+                    break;
+                } else {
+                    spdlog::error("Invalid argument for initial_Temp");
+                    logHelp();
+                    return false;
+                }
+            }
+            case 'p':{
+                thermostat_flag = true;
+                if(isDouble(optarg)){
+                    simdata.setInitialTemp(atof(optarg));
+                    break;
+                } else {
+                    spdlog::error("Invalid argument for initial_Temp");
+                    logHelp();
+                    return false;
+                }
+            }
+            case 'q':{
+                target_temp_flag = true;
+                thermostat_flag = true;
+                if(isDouble(optarg)){
+                    thermostat.setTargetTemp(atof(optarg));
+                    break;
+                } else {
+                    spdlog::error("Invalid argument for target_Temp");
+                    logHelp();
+                    return false;
+                }
+            }
+            case 'm':{
+                if(isDouble(optarg)){
+                    thermostat.setMaxDeltaTemp(atof(optarg));
+                    break;
+                } else {
+                    spdlog::error("Invalid argument for max_delta_Temp");
+                    logHelp();
+                    return false;
+                }
+            }
+            case 'n':{
+                if(isUnsignedInt(optarg)){
+                    thermostat.setNThermostat(atof(optarg));
+                    break;
+                } else {
+                    spdlog::error("Invalid argument for n_Thermostat");
+                    logHelp();
+                    return false;
+                }
             }
 
             case '?':{
@@ -322,6 +389,13 @@ void Simulation::run() {
     unsigned write_frequency = simdata.getWriteFrequency();
     double gravConstant = simdata.getGravConstant();
     int iteration = 0;
+    double initialTemp = simdata.getInitialTemp();
+    size_t nThermostat = thermostat.getNThermostat();
+
+    if(initialTemp != 0.0){
+        std::cout << "thermostat\n";
+        thermostat.initSystemTemperature(initialTemp, particles);
+    }
 
     // Advance simulation time to start_time
     while (current_time < start_time) {
@@ -332,12 +406,17 @@ void Simulation::run() {
         iteration++;
     }
 
+
     // Simulation loop
     if (time_flag) {
         while (current_time < end_time) {
             calculateX();
             force->calculateF(*particles, linkedcell_flag, gravConstant);
             calculateV();
+            if(target_temp_flag && thermostat_flag && (iteration % nThermostat == 0)){
+                std::cout << "thermostat\n";
+                thermostat.scaleWithBeta(particles);
+            }
 
             iteration++;
             current_time += delta_t;
@@ -347,6 +426,9 @@ void Simulation::run() {
             calculateX();
             force->calculateF(*particles, linkedcell_flag, gravConstant);
             calculateV();
+            if(target_temp_flag && thermostat_flag && (iteration % nThermostat == 0)){
+                thermostat.scaleWithBeta(particles);
+            }
 
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {

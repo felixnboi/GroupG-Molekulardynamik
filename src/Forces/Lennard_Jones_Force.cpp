@@ -86,6 +86,10 @@ void Lennard_Jones_Force::calculateFPairs(std::vector<std::array<std::shared_ptr
      
     particle_i->setF(particle_i->getF()+force);
     particle_j->setF(particle_j->getF()-force);
+    if(force[0]+force[1]+force[2] > 10000){
+      auto d = particle_i->getX()-particle_j->getX();
+      std::cout <<"calculateF_x: " << force[0] << " y: " << force[1] << " z: " << force[2] << " distancex: " <<  d[0] << " y: " << d[1] << " z: " << d[2] << std::endl;
+    }
   }
 }
 

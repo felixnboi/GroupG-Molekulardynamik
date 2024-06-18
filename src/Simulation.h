@@ -22,6 +22,7 @@
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
 #include "data/SimData.h"
+#include "data/Thermostat.h"
 
 /**
  * @class Simulation
@@ -77,6 +78,7 @@ public:
 
 private:
     SimData simdata;
+    Thermostat thermostat;
 
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;
@@ -88,6 +90,8 @@ private:
     bool time_flag;
     bool cli_flag;
     bool linkedcell_flag;
+    bool thermostat_flag;
+    bool target_temp_flag;
 
     std::array<bool,6> lenJonesBoundaryFlags;
     std::array<bool,6> outflowFlags;

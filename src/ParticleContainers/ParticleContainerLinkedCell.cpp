@@ -62,8 +62,8 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
     for (size_t i = 0; i < arrayLength; i++){
         size_t nbrCount = 0;
         std::array<size_t,13> nbrs;
-        std::array<size_t,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
-        std::array<size_t,5> nbrIndices = {indices[0]-1,indices[0]+1, indices[1]-1, indices[1]+1, indices[2]+1};
+        std::array<int,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
+        std::array<int,5> nbrIndices = {indices[0]-1,indices[0]+1, indices[1]-1, indices[1]+1, indices[2]+1};
         if(pFlag[0]){
             nbrIndices[0] += cellCount[0];
             nbrIndices[1] -= cellCount[0];
@@ -75,7 +75,10 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
         if(pFlag[2]){
             nbrIndices[4] -= cellCount[2];
         }
-        std::array<bool, 5> nbrExists = {nbrIndices[0]>=0, nbrIndices[1]<cellCount[0], nbrIndices[2]>=0, nbrIndices[3]<cellCount[1], nbrIndices[4]<cellCount[2]};
+        std::array<bool, 5> nbrExists = {nbrIndices[0]>=0 && nbrIndices[0] < cellCount[0], 
+        nbrIndices[1]<cellCount[0] && nbrIndices[1] >= 0, nbrIndices[2]>=0 && nbrIndices[2]<cellCount[1], 
+        nbrIndices[3]>=0 && nbrIndices[3]<cellCount[1], nbrIndices[4]>=0 && nbrIndices[4]<cellCount[2]};
+
         indices[1] *= cellCount[0];
         indices[2] *= cellCount[0]*cellCount[1];
         nbrIndices[2] *= cellCount[0];

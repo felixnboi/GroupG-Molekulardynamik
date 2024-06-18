@@ -27,11 +27,15 @@ public:
      * @param loglevel The level of logging for simulation.
      * @param boundary Array containing boundary information.
      * @param cutoff_radius The cutoff radius used in simulation.
+     * @param dimensions The number of dimensions of simulation (could be 2 or 3).
      * @param domain Array containing domain information.
+     * @param domain_start Array containing the starting position of the domain.
+     * @param gravConstant The gravitational constant.
+     * @param initialTemp Initial temperature of the simulation.
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant);
+            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant, double initialTemp);
 
     /**
      * @brief Destructor.
@@ -118,6 +122,13 @@ public:
     double getCutoffRadius() const;
 
     /**
+     * @brief Getter for the array containing number of dimensions.
+     * 
+     * @return The array containing dimensions information.
+     */
+    double getDimensions() const;
+
+    /**
      * @brief Getter for the array containing domain information.
      * 
      * @return The array containing domain information.
@@ -137,6 +148,13 @@ public:
      * @return The gravitational constant used in the simulation.
      */
     double getGravConstant() const;
+
+    /**
+     * @brief Getter for the Initial temperature parameter used in simulation.
+     * 
+     * @return The Initial temperature parameter used in simulation.
+     */
+    double getInitialTemp() const;
 
     // Setter functions...
 
@@ -218,6 +236,13 @@ public:
     void setCutoffRadius(double new_cutoff_radius);
 
     /**
+     * @brief Setter for the number of dimensions used in simulation.
+     * 
+     * @param new_dimensions The new number of dimensions used in simulation.
+     */
+    void setDimensions(double new_dimensions);
+
+    /**
      * @brief Setter for the array containing domain information.
      * 
      * @param new_domain The new array containing domain information.
@@ -238,6 +263,14 @@ public:
      */
     void setGravConstant(double new_grav_constant);
 
+     /**
+     * @brief Setter for the Initial temperature parameter used in simulation.
+     * 
+     * @param new_initialTemp The new Initial temperature parameter used in simulation.
+     */
+    void setInitialTemp(double new_initialTemp);
+
+
 private:
     std::string input_file; ///< The input file name.
     std::string baseName; ///< The base name for simulation.
@@ -250,8 +283,10 @@ private:
     std::string loglevel; ///< The level of logging for simulation.
     std::array<std::string, 6> boundary; ///< Array containing boundary information.
     double cutoff_radius; ///< The cutoff radius used in simulation.
+    size_t dimensions; ///<  Number of dimensions used in simulation.
     std::array<double, 3> domain; ///< Array containing domain information.
     std::array<double, 3> domain_start; ///< Array containing the starting position of the domain.
     double gravConstant; ///< Gravitational constant for the Simulation.
+    double initialTemp; ///< Initial temperature of the simulation.
 };
 
