@@ -4,7 +4,8 @@ Simulation::Simulation(){
     std::array<std::string, 6> boundary = {};
     std::array<double, 3> domain = {};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, domain, 1, 5);
+    std::string("INFO"), boundary, 3, 2, domain, 1, 5, 0, 0, 0, 1000);
+    thermostat = Thermostat(simdata.getInitialTemp(), simdata.getTargetTemp(), simdata.getMaxDeltaTemp(), simdata.getNThermostat(), simdata.getDimensions());
 
     particles = nullptr;
     force = nullptr;
@@ -294,6 +295,7 @@ void Simulation::run() {
     double delta_t = simdata.getDeltaT();
     unsigned write_frequency = simdata.getWriteFrequency();
     int iteration = 0;
+    double initialTemp = simdata.getInitialTemp();
 
     // Advance simulation time to start_time
     while (current_time < start_time) {
@@ -302,6 +304,10 @@ void Simulation::run() {
         calculateV();
         current_time += delta_t;
         iteration++;
+    }
+
+    if(initialTemp != 0.0){
+        thermostat.initSystemTemperature(initialTemp, particles);
     }
 
     // Simulation loop

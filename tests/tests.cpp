@@ -9,6 +9,7 @@
 #include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
 #include "../src/data/Cuboid.h"
 #include "../src/data/Disc.h"
+#include "../src/data/Thermostat.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -587,4 +588,82 @@ TEST(ParticleContainerLinkedCell, OutflowBoundary){
     std::array<double, 3UL> positionAfterMirroring = {11.0,3.0,3.0};
     EXPECT_EQ(p1->getX(), positionAfterMirroring); 
     EXPECT_EQ(particles.getHalo().size(),1);
+}
+
+// Constants for the tests
+const double INITIAL_TEMP = 1.0;
+const double TARGET_TEMP = 2.0;
+const double MAX_DELTA_TEMP = 0.5;
+const size_t N_THERMOSTAT = 100;
+const size_t DIMENSIONS = 3;
+
+// Helper function to create a particle container with some particles
+std::unique_ptr<ParticleContainer> createParticleContainer(double sizeX, double sizeY, double sizeZ, double radius) {
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(sizeX, sizeY, sizeZ, radius);
+
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0);
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+
+    return pc;
+}
+
+// Test case for heating
+TEST(Thermostat, Heating) {
+    auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
+    Thermostat thermostat(INITIAL_TEMP, TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+
+    double initialTemp = thermostat.getCurrentTemperature(pc);
+    thermostat.scaleWithBeta(pc);
+
+    double newTemp = thermostat.getCurrentTemperature(pc);
+
+    EXPECT_GT(newTemp, initialTemp);
+    EXPECT_LE(newTemp, initialTemp + MAX_DELTA_TEMP);
+}
+
+// Test case for cooling
+TEST(Thermostat, Cooling) {
+    auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
+    Thermostat thermostat(TARGET_TEMP, INITIAL_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+
+    double initialTemp = thermostat.getCurrentTemperature(pc);
+    thermostat.scaleWithBeta(pc);
+
+    double newTemp = thermostat.getCurrentTemperature(pc);
+
+    EXPECT_LT(newTemp, initialTemp);
+    EXPECT_GE(newTemp, initialTemp - MAX_DELTA_TEMP);
+}
+
+// Test case for holding a temperature
+TEST(Thermostat, HoldTemperature) {
+    auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
+    Thermostat thermostat(INITIAL_TEMP, INITIAL_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+
+    double initialTemp = thermostat.getCurrentTemperature(pc);
+    thermostat.scaleWithBeta(pc);
+
+    double newTemp = thermostat.getCurrentTemperature(pc);
+
+    EXPECT_NEAR(newTemp, initialTemp, EPSILON);
+}
+
+// Test case for initializing system temperature
+TEST(Thermostat, InitSystemTemperature) {
+    auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
+    Thermostat thermostat(INITIAL_TEMP, TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+
+    double newInitialTemp = 3.0;
+    thermostat.initSystemTemperature(newInitialTemp, pc);
+
+    double newTemp = thermostat.getCurrentTemperature(pc);
+
+    EXPECT_NEAR(newTemp, newInitialTemp, EPSILON);
 }

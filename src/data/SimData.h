@@ -27,13 +27,19 @@ public:
      * @param loglevel The level of logging for simulation.
      * @param boundary Array containing boundary information.
      * @param cutoff_radius The cutoff radius used in simulation.
+     * @param dimensions The number of dimensions of simulation (could be 2 or 3).
      * @param domain Array containing domain information.
      * @param sigma Sigma parameter used in simulation.
      * @param epsilon Epsilon parameter used in simulation.
+     * @param initialTemp Initial temperature of the simulation.
+     * @param targetTemp Target temperature of the simulation.
+     * @param maxDeltaTemp Maximum temperature step of the thermostat.
+     * @param nThermostat Number of stepd between uses of the thermostat.
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            std::array<double, 3> domain, double sigma, double epsilon);
+            size_t dimensions, std::array<double, 3> domain, double sigma, double epsilon, double initialTemp, double targetTemp,
+            double maxDeltaTemp, size_t nThermostat);
 
     /**
      * @brief Destructor.
@@ -120,6 +126,13 @@ public:
     double getCutoffRadius() const;
 
     /**
+     * @brief Getter for the array containing number of dimensions.
+     * 
+     * @return The array containing dimensions information.
+     */
+    double getDimensions() const;
+
+    /**
      * @brief Getter for the array containing domain information.
      * 
      * @return The array containing domain information.
@@ -139,6 +152,34 @@ public:
      * @return The Epsilon parameter used in simulation.
      */
     double getEpsilon() const;
+
+    /**
+     * @brief Getter for the Initial temperature parameter used in simulation.
+     * 
+     * @return The Initial temperature parameter used in simulation.
+     */
+    double getInitialTemp() const;
+
+    /**
+     * @brief Getter for the Target temperature parameter used in simulation.
+     * 
+     * @return The Target temperature parameter used in simulation.
+     */
+    double getTargetTemp() const;
+
+    /**
+     * @brief Getter for the Maximal delta temperature parameter used in simulation.
+     * 
+     * @return The maximal delta temperature parameter used in simulation.
+     */
+    double getMaxDeltaTemp() const;
+
+    /**
+     * @brief Getter for the N thermostat parameter used in simulation.
+     * 
+     * @return The N thermostat parameter used in simulation.
+     */
+    size_t getNThermostat() const;
 
     // Setter functions...
 
@@ -220,6 +261,13 @@ public:
     void setCutoffRadius(double new_cutoff_radius);
 
     /**
+     * @brief Setter for the number of dimensions used in simulation.
+     * 
+     * @param new_dimensions_number The new number of dimensions used in simulation.
+     */
+    void setDimensions(double new_dimensions_number);
+
+    /**
      * @brief Setter for the array containing domain information.
      * 
      * @param new_domain The new array containing domain information.
@@ -240,6 +288,35 @@ public:
      */
     void setEpsilon(double new_epsilon);
 
+     /**
+     * @brief Setter for the Initial temperature parameter used in simulation.
+     * 
+     * @param new_initialTemp The new Initial temperature parameter used in simulation.
+     */
+    void setInitialTemp(double new_initialTemp);
+
+    /**
+     * @brief Setter for the Target temperature parameter used in simulation.
+     * 
+     * @param new_targetTemp The new Target temperature parameter used in simulation.
+     */
+    void setTargetTemp(double new_targetTemp);
+
+    /**
+     * @brief Setter for the Maximal delta temperature parameter used in simulation.
+     * 
+     * @param new_maxDeltaTemp The new maximal delta temperature parameter used in simulation.
+     */
+    void setMaxDeltaTemp(double new_maxDeltaTemp);
+
+    /**
+     * @brief Setter for the N thermostat parameter used in simulation.
+     * 
+     * @param new_nThermostat The new N thermostat parameter used in simulation.
+     */
+    void setNThermostat(size_t new_nThermostat);
+
+
 private:
     std::string input_file; ///< The input file name.
     std::string baseName; ///< The base name for simulation.
@@ -252,8 +329,14 @@ private:
     std::string loglevel; ///< The level of logging for simulation.
     std::array<std::string, 6> boundary; ///< Array containing boundary information.
     double cutoff_radius; ///< The cutoff radius used in simulation.
+    double dimensions; ///<  Number of dimwnsions used in simulation.
     std::array<double, 3> domain; ///< Array containing domain information.
     double sigma; ///< Sigma parameter used in simulation.
     double epsilon; ///< Epsilon parameter used in simulation.
+    double initialTemp; ///< Initial temperature of the simulation.
+    double targetTemp; ///< Target temperature of the simulation.
+    double maxDeltaTemp; ///< Max delta temperature of the theremostat.
+    size_t nThermostat; ///< Number of steps between uses of thermostat.
+
 };
 

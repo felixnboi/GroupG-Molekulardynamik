@@ -6,6 +6,7 @@
 #include "../data/Disc.h"
 #include "../utils/MaxwellBoltzmannDistribution.h"
 #include "../inputFileManager.h"
+#include "../utils/ArrayUtils.h"
 #include "spdlog/spdlog.h"
 
 #include <cstdlib>
@@ -23,25 +24,34 @@
 class Thermostat {
     private:
     /**The number of iterations between thermostat applications.*/
-    size_t thermostatInterval;
+    size_t nThermostat;
     /**Thermostat needs to know the number of dimenions for the temperature-computation*/
     size_t dimensions;
     /**Target temperature that the Thermostat tries to reach*/
     double targetTemp;
     /**determines the maximum temperature manipulation in one iteration step*/
     double maxDeltaTemp;
+    /**Initial temperature of the system*/
+    double initialTemp;
 
 
 public:
+
+    /**
+     * @brief Default constructor.
+     */
+    Thermostat();
     /**
      * @brief Constructor for Thermostat.
      *
+     * @param initialTemp The initial temperature for thermostat applications.
      * @param targetTemp The target temperature for thermostat applications.
      * @param maxDeltaTemp The maximum temperature change allowed per thermostat application.
-     * @param third_dimension True if the thermostat applies to a 3-dimensional domain, false for 2 dimensions.
+     * @param nThermostat The step size of the thermostat.
+     * @param dimensions The number of dimensons of the simulation.
      */
-    Thermostat(double targetTemp, double maxDeltaTemp = std::numeric_limits<double>::max(),
-               size_t thermostatInterval = 1000, size_t dimensions);
+    Thermostat(double initialTemp, double targetTemp, double maxDeltaTemp = std::numeric_limits<double>::max(),
+               size_t nThermostat = 1000, size_t dimensions=2);
 
     /**
      * @brief Destructor for Thermostat.
@@ -71,9 +81,16 @@ public:
      * @param new_initialTemp The initial temperature used to set the initial velocity of the particles.
      * @param pc The particle container to set the initial temperature of.
      */
-    void InitSystemTemperature(double new_initialTemp, std::unique_ptr<ParticleContainer>& pc);
+    void initSystemTemperature(double new_initialTemp, std::unique_ptr<ParticleContainer>& pc);
 
 
+    /**
+     * @brief Get the initial temperature of the system.
+     *
+     * @return double The initial temperature of the system.
+     */
+    double getInitialTemp() const;
+    
     /**
      * @brief Get the target temperature of the thermostat.
      *
@@ -93,7 +110,7 @@ public:
      *
      * @return size_t The number of iterations between thermostat applications.
      */
-    size_t getThermostatInterval() const;
+    size_t getNThermostat() const;
 
     /**
      * @brief Get the number of dimensions of expected to be used.

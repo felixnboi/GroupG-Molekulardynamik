@@ -22,6 +22,7 @@
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
 #include "data/SimData.h"
+#include "data/Thermostat.h"
 
 /**
  * @class Simulation
@@ -77,6 +78,7 @@ public:
 
 private:
     SimData simdata;
+    Thermostat thermostat;
 
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;

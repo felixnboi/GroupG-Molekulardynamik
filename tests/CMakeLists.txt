@@ -16,6 +16,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/data/Cuboid.cpp    
     ${PROJECT_SOURCE_DIR}/src/data/Disc.cpp 
     ${PROJECT_SOURCE_DIR}/src/data/SimData.cpp
+    ${PROJECT_SOURCE_DIR}/src/data/Thermostat.cpp
 )
 
 target_link_libraries(tests 
