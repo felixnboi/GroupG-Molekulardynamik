@@ -64,7 +64,7 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
         }
         if(reflectLenJonesFlag[2*i+1]&&particle->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&particle->getX()[i]> LCContainer.getSize()[i]-particle->getSigma()*twoRoot6){
           std::array<double, 3> direction = {0,0,0};
-          direction[i] = 2*(LCContainer.getSize()[i]-particle->getX()[i]);
+          direction[i] = 2*(particle->getX()[i]-LCContainer.getSize()[i]);
           cur_F_dummy[i] += calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma())[i];
         }
       }
@@ -100,5 +100,6 @@ std::array<double,3> Lennard_Jones_Force::calculateLennardJonesForce(std::array<
     double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*pow(sigmaPow6/norm_pow6,2));
 
     // calculating the force components (along the x, y, z axes) between particle i and particle j
-    std::array<double,3> force = directionlessForce*direction; 
+    std::array<double,3> force = directionlessForce*direction;
+    return force;
 }

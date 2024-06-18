@@ -248,7 +248,6 @@ TEST(ParticleContainerLinkedCell, UpdateLocations) {
 
 // Test case for getBoundary method
 TEST(ParticleContainerLinkedCell, GetBoundary) {
-    std::cout << "\n\n\ntest\n\n\n";
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
     ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
 
