@@ -3,8 +3,9 @@
 Simulation::Simulation(){
     std::array<std::string, 6> boundary = {};
     std::array<double, 3> domain = {};
+    std::array<double, 3> domain_start = {0, 0, 0};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, domain, 1, 5);
+    std::string("INFO"), boundary, 3, domain, domain_start, 0);
 
     particles = nullptr;
     force = nullptr;
@@ -20,7 +21,6 @@ Simulation::Simulation(){
     lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
     periodicFlag = {false, false, false};
-    gravConstant = 0;
 
     input_file_user = "";
 }
@@ -276,7 +276,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
     }
 
     FileReader fileReader;
-    fileReader.readFile(*particles, simdata.getInputFile().c_str(), domainStart);
+    fileReader.readFile(*particles, simdata.getInputFile().c_str(), simdata.getDomainStart());
 
     // checking if there are particles in the simulation
     if (particles->getParticles().empty()) {
@@ -295,6 +295,7 @@ void Simulation::run() {
     double end_time = simdata.getEndTime();
     double delta_t = simdata.getDeltaT();
     unsigned write_frequency = simdata.getWriteFrequency();
+    double gravConstant = simdata.getGravConstant();
     int iteration = 0;
 
     // Advance simulation time to start_time

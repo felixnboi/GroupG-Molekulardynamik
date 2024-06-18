@@ -23,8 +23,6 @@
         <end_t>0.005</end_t>
         <delta_t>0.0005s</delta_t>
         <start_t>0.0</start_t>
-        <epsilon>5.0</epsilon>
-        <sigma>1.0</sigma>
         <force>lennardJonesForce</force>
         <algorithm>default</algorithm>
         <loglevel>INFO</loglevel>
@@ -33,7 +31,13 @@
             <y>90.0</y>
             <z>1.0</z>
         </domain>
-        <cutoff-radius>3.0</cutoff-radius>
+        <domain_start>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </domain_start>
+        <cutoff_radius>3.0</cutoff_radius>
+        <grav_constant>0</grav_constant>
     </simulationParameters>
 
     <cuboid>
@@ -55,6 +59,8 @@
         <distance>1.1225</distance>
         <mass>1.0</mass>
         <brownian_motion>0.1</brownian_motion>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
     </cuboid>
 
 </simulation>

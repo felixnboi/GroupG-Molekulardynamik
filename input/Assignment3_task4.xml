@@ -23,8 +23,6 @@
         <end_t>10.0</end_t>
         <delta_t>0.00005</delta_t>
         <start_t>0.0</start_t>
-        <epsilon>5.0</epsilon>
-        <sigma>1.0</sigma>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
@@ -33,7 +31,13 @@
             <y>50.0</y>
             <z>1.0</z>
         </domain>
-        <cutoff-radius>3.0</cutoff-radius>
+        <domain_start>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </domain_start>
+        <cutoff_radius>3.0</cutoff_radius>
+        <grav_constant>0</grav_constant>
     </simulationParameters>
 
     <disc>
@@ -50,6 +54,8 @@
         <radius>15</radius>
         <distance>1.1225</distance>
         <mass>1.0</mass>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
     </disc>
 
 </simulation>

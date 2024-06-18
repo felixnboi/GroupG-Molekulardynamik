@@ -1084,7 +1084,8 @@ class boundaryBehavior: public ::xml_schema::string
   {
     outflow,
     mirror,
-    reflecting
+    reflecting,
+    periodic
   };
 
   /**
@@ -1209,8 +1210,8 @@ class boundaryBehavior: public ::xml_schema::string
   _xsd_boundaryBehavior_convert () const;
 
   public:
-  static const char* const _xsd_boundaryBehavior_literals_[3];
-  static const value _xsd_boundaryBehavior_indexes_[3];
+  static const char* const _xsd_boundaryBehavior_literals_[4];
+  static const value _xsd_boundaryBehavior_indexes_[4];
 
   //@endcond
 };
@@ -3084,100 +3085,6 @@ class simulationParameters: public ::xml_schema::type
   //@}
 
   /**
-   * @name epsilon
-   *
-   * @brief Accessor and modifier functions for the %epsilon
-   * required element.
-   */
-  //@{
-
-  /**
-   * @brief Element type.
-   */
-  typedef ::xml_schema::double_ epsilon_type;
-
-  /**
-   * @brief Element traits type.
-   */
-  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
-
-  /**
-   * @brief Return a read-only (constant) reference to the element.
-   *
-   * @return A constant reference to the element.
-   */
-  const epsilon_type&
-  epsilon () const;
-
-  /**
-   * @brief Return a read-write reference to the element.
-   *
-   * @return A reference to the element.
-   */
-  epsilon_type&
-  epsilon ();
-
-  /**
-   * @brief Set the element value.
-   *
-   * @param x A new value to set.
-   *
-   * This function makes a copy of its argument and sets it as
-   * the new value of the element.
-   */
-  void
-  epsilon (const epsilon_type& x);
-
-  //@}
-
-  /**
-   * @name sigma
-   *
-   * @brief Accessor and modifier functions for the %sigma
-   * required element.
-   */
-  //@{
-
-  /**
-   * @brief Element type.
-   */
-  typedef ::xml_schema::double_ sigma_type;
-
-  /**
-   * @brief Element traits type.
-   */
-  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
-
-  /**
-   * @brief Return a read-only (constant) reference to the element.
-   *
-   * @return A constant reference to the element.
-   */
-  const sigma_type&
-  sigma () const;
-
-  /**
-   * @brief Return a read-write reference to the element.
-   *
-   * @return A reference to the element.
-   */
-  sigma_type&
-  sigma ();
-
-  /**
-   * @brief Set the element value.
-   *
-   * @param x A new value to set.
-   *
-   * This function makes a copy of its argument and sets it as
-   * the new value of the element.
-   */
-  void
-  sigma (const sigma_type& x);
-
-  //@}
-
-  /**
    * @name force
    *
    * @brief Accessor and modifier functions for the %force
@@ -3410,9 +3317,67 @@ class simulationParameters: public ::xml_schema::type
   //@}
 
   /**
-   * @name cutoff-radius
+   * @name domain_start
    *
-   * @brief Accessor and modifier functions for the %cutoff-radius
+   * @brief Accessor and modifier functions for the %domain_start
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::double_vector domain_start_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< domain_start_type, char > domain_start_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const domain_start_type&
+  domain_start () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  domain_start_type&
+  domain_start ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  domain_start (const domain_start_type& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly
+   * instead of making a copy.
+   */
+  void
+  domain_start (::std::unique_ptr< domain_start_type > p);
+
+  //@}
+
+  /**
+   * @name cutoff_radius
+   *
+   * @brief Accessor and modifier functions for the %cutoff_radius
    * required element.
    */
   //@{
@@ -3457,6 +3422,53 @@ class simulationParameters: public ::xml_schema::type
   //@}
 
   /**
+   * @name grav_constant
+   *
+   * @brief Accessor and modifier functions for the %grav_constant
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ grav_constant_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< grav_constant_type, char, ::xsd::cxx::tree::schema_type::double_ > grav_constant_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const grav_constant_type&
+  grav_constant () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  grav_constant_type&
+  grav_constant ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  grav_constant (const grav_constant_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -3468,13 +3480,13 @@ class simulationParameters: public ::xml_schema::type
   simulationParameters (const end_t_type&,
                         const delta_t_type&,
                         const start_t_type&,
-                        const epsilon_type&,
-                        const sigma_type&,
                         const force_type&,
                         const algorithm_type&,
                         const loglevel_type&,
                         const domain_type&,
-                        const cutoff_radius_type&);
+                        const domain_start_type&,
+                        const cutoff_radius_type&,
+                        const grav_constant_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -3487,13 +3499,13 @@ class simulationParameters: public ::xml_schema::type
   simulationParameters (const end_t_type&,
                         const delta_t_type&,
                         const start_t_type&,
-                        const epsilon_type&,
-                        const sigma_type&,
                         const force_type&,
                         const algorithm_type&,
                         const loglevel_type&,
                         ::std::unique_ptr< domain_type >,
-                        const cutoff_radius_type&);
+                        ::std::unique_ptr< domain_start_type >,
+                        const cutoff_radius_type&,
+                        const grav_constant_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -3568,13 +3580,13 @@ class simulationParameters: public ::xml_schema::type
   ::xsd::cxx::tree::one< end_t_type > end_t_;
   ::xsd::cxx::tree::one< delta_t_type > delta_t_;
   ::xsd::cxx::tree::one< start_t_type > start_t_;
-  ::xsd::cxx::tree::one< epsilon_type > epsilon_;
-  ::xsd::cxx::tree::one< sigma_type > sigma_;
   ::xsd::cxx::tree::one< force_type > force_;
   ::xsd::cxx::tree::one< algorithm_type > algorithm_;
   ::xsd::cxx::tree::one< loglevel_type > loglevel_;
   ::xsd::cxx::tree::one< domain_type > domain_;
+  ::xsd::cxx::tree::one< domain_start_type > domain_start_;
   ::xsd::cxx::tree::one< cutoff_radius_type > cutoff_radius_;
+  ::xsd::cxx::tree::one< grav_constant_type > grav_constant_;
 
   //@endcond
 };
@@ -3903,6 +3915,100 @@ class cuboid: public ::xml_schema::type
   //@}
 
   /**
+   * @name epsilon
+   *
+   * @brief Accessor and modifier functions for the %epsilon
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ epsilon_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const epsilon_type&
+  epsilon () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  epsilon_type&
+  epsilon ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  epsilon (const epsilon_type& x);
+
+  //@}
+
+  /**
+   * @name sigma
+   *
+   * @brief Accessor and modifier functions for the %sigma
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ sigma_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const sigma_type&
+  sigma () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  sigma_type&
+  sigma ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  sigma (const sigma_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -3916,7 +4022,9 @@ class cuboid: public ::xml_schema::type
           const dimensions_type&,
           const distance_type&,
           const mass_type&,
-          const brownian_motion_type&);
+          const brownian_motion_type&,
+          const epsilon_type&,
+          const sigma_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -3931,7 +4039,9 @@ class cuboid: public ::xml_schema::type
           ::std::unique_ptr< dimensions_type >,
           const distance_type&,
           const mass_type&,
-          const brownian_motion_type&);
+          const brownian_motion_type&,
+          const epsilon_type&,
+          const sigma_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4009,6 +4119,8 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< distance_type > distance_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< brownian_motion_type > brownian_motion_;
+  ::xsd::cxx::tree::one< epsilon_type > epsilon_;
+  ::xsd::cxx::tree::one< sigma_type > sigma_;
 
   //@endcond
 };
@@ -4279,6 +4391,100 @@ class disc: public ::xml_schema::type
   //@}
 
   /**
+   * @name epsilon
+   *
+   * @brief Accessor and modifier functions for the %epsilon
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ epsilon_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const epsilon_type&
+  epsilon () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  epsilon_type&
+  epsilon ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  epsilon (const epsilon_type& x);
+
+  //@}
+
+  /**
+   * @name sigma
+   *
+   * @brief Accessor and modifier functions for the %sigma
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ sigma_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const sigma_type&
+  sigma () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  sigma_type&
+  sigma ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  sigma (const sigma_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -4291,7 +4497,9 @@ class disc: public ::xml_schema::type
         const velocity_type&,
         const radius_type&,
         const distance_type&,
-        const mass_type&);
+        const mass_type&,
+        const epsilon_type&,
+        const sigma_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -4305,7 +4513,9 @@ class disc: public ::xml_schema::type
         ::std::unique_ptr< velocity_type >,
         const radius_type&,
         const distance_type&,
-        const mass_type&);
+        const mass_type&,
+        const epsilon_type&,
+        const sigma_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4382,6 +4592,8 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< radius_type > radius_;
   ::xsd::cxx::tree::one< distance_type > distance_;
   ::xsd::cxx::tree::one< mass_type > mass_;
+  ::xsd::cxx::tree::one< epsilon_type > epsilon_;
+  ::xsd::cxx::tree::one< sigma_type > sigma_;
 
   //@endcond
 };

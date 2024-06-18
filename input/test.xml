@@ -23,8 +23,6 @@
         <end_t>2</end_t>
         <delta_t>3</delta_t>
         <start_t>4</start_t>
-        <epsilon>5</epsilon>
-        <sigma>6</sigma>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
@@ -33,7 +31,13 @@
             <y>9</y>
             <z>10</z>
         </domain>
-        <cutoff-radius>11</cutoff-radius>
+        <domain_start>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </domain_start>
+        <cutoff_radius>11.0</cutoff_radius>
+        <grav_constant>0</grav_constant>
     </simulationParameters>
 
     <cuboid>
@@ -55,6 +59,8 @@
         <distance>21</distance>
         <mass>22</mass>
         <brownian_motion>7</brownian_motion>
+        <epsilon>5</epsilon>
+        <sigma>6</sigma>
     </cuboid>
 
     <disc>
@@ -71,6 +77,8 @@
         <radius>29</radius>
         <distance>30</distance>
         <mass>31</mass>
+        <epsilon>5</epsilon>
+        <sigma>6</sigma>
     </disc>
 
 </simulation>

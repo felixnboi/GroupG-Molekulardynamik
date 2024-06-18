@@ -22,6 +22,8 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids, 
             const double distance = cuboid_xml.distance();
             const double mass = cuboid_xml.mass();
             const double brownian_motion = cuboid_xml.brownian_motion();
+            const double epsilon = cuboid_xml.epsilon();
+            const double sigma = cuboid_xml.sigma();
 
             cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion, epsilon, sigma));
         }
@@ -48,6 +50,8 @@ void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs, double
             const int radius = disc_xml.radius();
             const double distance = disc_xml.distance();
             const double mass = disc_xml.mass();
+            const double epsilon = disc_xml.epsilon();
+            const double sigma = disc_xml.sigma();
 
             discs.push_back(Disc(position, velocity, radius, distance, mass, epsilon, sigma));
         }
@@ -85,9 +89,13 @@ void XMLReader::readSimulation(const char* filename, SimData& simdata){
 
         simdata.setDomain(domain);
 
-        simdata.setSigma(sim->simulationParameters().sigma());
-        simdata.setEpsilon(sim->simulationParameters().epsilon());
+        const std::array<double , 3> domain_start = {sim->simulationParameters().domain_start().x(), sim->simulationParameters().domain_start().y(), 
+        sim->simulationParameters().domain_start().z()};
         
+        simdata.setDomainStart(domain_start);
+
+        simdata.setGravConstant(sim->simulationParameters().grav_constant());
+
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Simulation-parsing.");
         spdlog::error(e.what());
