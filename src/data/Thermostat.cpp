@@ -1,10 +1,10 @@
 #include "Thermostat.h"
 
 Thermostat::Thermostat() 
-    : initialTemp(0), targetTemp(0), maxDeltaTemp(0), nThermostat(0), dimensions(2) {
+    : targetTemp(0), maxDeltaTemp(0), nThermostat(0), dimensions(2) {
 }
 
-Thermostat::Thermostat(double initialTemp, double targetTemp, double maxDeltaTemp, size_t nThermostat, size_t dimensions)
+Thermostat::Thermostat(double targetTemp, double maxDeltaTemp, size_t nThermostat, size_t dimensions)
     : targetTemp(targetTemp),
       maxDeltaTemp(maxDeltaTemp == 0 ? std::numeric_limits<double>::infinity() : maxDeltaTemp),
       nThermostat(nThermostat),
@@ -20,8 +20,12 @@ double Thermostat::getCurrentTemperature(const std::unique_ptr<ParticleContainer
         return 0.0;
     }
     for (auto it = pc->begin(); it != pc->end(); ++it) {
-        std::array<double, 3> v = (*it)->getV();
-        doubledKinEnergy += (*it)->getM() * (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+        auto v = (*it)->getV();
+        doubledKinEnergy = 0;
+        for (size_t d = 0; d < dimensions; ++d) {
+            doubledKinEnergy += (v[d] * v[d]);
+        }
+        doubledKinEnergy = doubledKinEnergy * (*it)->getM();
     }
     return doubledKinEnergy / (dimensions * particleCount);
 }
@@ -44,7 +48,11 @@ void Thermostat::scaleWithBeta(std::unique_ptr<ParticleContainer>& pc) {
     const double beta = std::sqrt(new_temperature / currTemp);
 
     for (auto it = pc->begin(); it != pc->end(); ++it) {
-        (*it)->setV(beta * (*it)->getV());
+         auto v = (*it)->getV();
+        for (size_t d = 0; d < dimensions; ++d) {
+            v[d] *= beta;
+        }
+        (*it)->setV(v);
     }
 }
 
@@ -54,12 +62,15 @@ void Thermostat::initSystemTemperature(double new_initialTemp, std::unique_ptr<P
         exit(-1);
     }
 
-    for (auto it = pc->begin(); it != pc->end(); ++it) {
-        (*it)->setV(maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (*it)->getM()), dimensions));
+    for(auto& it : *pc){
+    //for (auto it = pc->begin(); it != pc->end(); ++it) {
+        //(*it)->setV(std::sqrt(new_initialTemp / (*it)->getM()) * maxwellBoltzmannDistributedVelocity(0.1, dimensions));
+        (it)->setV(maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (it)->getM()), dimensions));
+        //(*it)->setV(maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (*it)->getM()), dimensions));
     }
-}
 
-double Thermostat::getInitialTemp() const { return initialTemp; }
+    
+}
 
 double Thermostat::getTargetTemp() const { return targetTemp; }
 

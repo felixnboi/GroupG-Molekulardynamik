@@ -5,7 +5,7 @@ Simulation::Simulation(){
     std::array<double, 3> domain = {};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
     std::string("INFO"), boundary, 3, 2, domain, 1, 5, 0, 0, 0, 1000);
-    thermostat = Thermostat(simdata.getInitialTemp(), simdata.getTargetTemp(), simdata.getMaxDeltaTemp(), simdata.getNThermostat(), simdata.getDimensions());
+    thermostat = Thermostat(simdata.getTargetTemp(), simdata.getMaxDeltaTemp(), simdata.getNThermostat(), simdata.getDimensions());
 
     particles = nullptr;
     force = nullptr;

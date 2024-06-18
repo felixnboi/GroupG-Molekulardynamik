@@ -593,6 +593,7 @@ TEST(ParticleContainerLinkedCell, OutflowBoundary){
 // Constants for the tests
 const double INITIAL_TEMP = 1.0;
 const double TARGET_TEMP = 2.0;
+const double TARGET_TEMP_2 = 0.05;
 const double MAX_DELTA_TEMP = 0.5;
 const size_t N_THERMOSTAT = 100;
 const size_t DIMENSIONS = 3;
@@ -617,7 +618,7 @@ std::unique_ptr<ParticleContainer> createParticleContainer(double sizeX, double 
 // Test case for heating
 TEST(Thermostat, Heating) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(INITIAL_TEMP, TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    Thermostat thermostat(TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
     thermostat.scaleWithBeta(pc);
@@ -631,7 +632,7 @@ TEST(Thermostat, Heating) {
 // Test case for cooling
 TEST(Thermostat, Cooling) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(TARGET_TEMP, INITIAL_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    Thermostat thermostat(TARGET_TEMP_2, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
     thermostat.scaleWithBeta(pc);
@@ -645,7 +646,7 @@ TEST(Thermostat, Cooling) {
 // Test case for holding a temperature
 TEST(Thermostat, HoldTemperature) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(INITIAL_TEMP, INITIAL_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    Thermostat thermostat(0.1111111111111111, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
     thermostat.scaleWithBeta(pc);
@@ -657,8 +658,22 @@ TEST(Thermostat, HoldTemperature) {
 
 // Test case for initializing system temperature
 TEST(Thermostat, InitSystemTemperature) {
-    auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(INITIAL_TEMP, TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    //auto pc = std::unique_ptr<ParticleContainer>(10.0, 10.0, 10.0, 1.0);
+
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0);
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 1);
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, (std::array<double, 3>){0.0, 0.0, 0.0}, 2.0, 0);
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+
+    Thermostat thermostat(TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+
+    spdlog::info("initial Temp:{}", thermostat.getCurrentTemperature(pc));
 
     double newInitialTemp = 3.0;
     thermostat.initSystemTemperature(newInitialTemp, pc);

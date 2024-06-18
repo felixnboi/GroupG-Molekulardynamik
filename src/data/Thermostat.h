@@ -31,8 +31,6 @@ class Thermostat {
     double targetTemp;
     /**determines the maximum temperature manipulation in one iteration step*/
     double maxDeltaTemp;
-    /**Initial temperature of the system*/
-    double initialTemp;
 
 
 public:
@@ -43,14 +41,13 @@ public:
     Thermostat();
     /**
      * @brief Constructor for Thermostat.
-     *
-     * @param initialTemp The initial temperature for thermostat applications.
+     * 
      * @param targetTemp The target temperature for thermostat applications.
      * @param maxDeltaTemp The maximum temperature change allowed per thermostat application.
      * @param nThermostat The step size of the thermostat.
      * @param dimensions The number of dimensons of the simulation.
      */
-    Thermostat(double initialTemp, double targetTemp, double maxDeltaTemp = std::numeric_limits<double>::max(),
+    Thermostat(double targetTemp, double maxDeltaTemp = std::numeric_limits<double>::max(),
                size_t nThermostat = 1000, size_t dimensions=2);
 
     /**
@@ -82,14 +79,6 @@ public:
      * @param pc The particle container to set the initial temperature of.
      */
     void initSystemTemperature(double new_initialTemp, std::unique_ptr<ParticleContainer>& pc);
-
-
-    /**
-     * @brief Get the initial temperature of the system.
-     *
-     * @return double The initial temperature of the system.
-     */
-    double getInitialTemp() const;
     
     /**
      * @brief Get the target temperature of the thermostat.
