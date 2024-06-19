@@ -107,6 +107,18 @@
                 </xs:complexType>
             </xs:element>
 
+            <xs:element name="thermostat" minOccurs="0">
+                <xs:complexType >
+                    <xs:sequence>
+                        <xs:element name="T_init" type="xs:double" minOccurs="0"/>        
+                        <xs:element name="T_target" type="xs:double" minOccurs="0"/>        
+                        <xs:element name="T_diff" type="xs:double" minOccurs="0"/>
+                        <xs:element name="n_thermostat" type="xs:unsignedInt"/>
+                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>                
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
             <!-- Cuboids -->
             <xs:element name="cuboid" maxOccurs="unbounded">
                 <xs:complexType>
@@ -119,6 +131,7 @@
                         <xs:element name="brownian_motion" type="xs:double"/>                
                         <xs:element name="epsilon" type="xs:double"/>                
                         <xs:element name="sigma" type="xs:double"/>                
+                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>                
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -134,6 +147,7 @@
                         <xs:element name="mass" type="xs:double"/>                      
                         <xs:element name="epsilon" type="xs:double"/>                      
                         <xs:element name="sigma" type="xs:double"/>                      
+                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>                
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

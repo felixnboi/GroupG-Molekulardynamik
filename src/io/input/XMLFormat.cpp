@@ -435,6 +435,36 @@ simulationParameters (::std::unique_ptr< simulationParameters_type > x)
   this->simulationParameters_.set (std::move (x));
 }
 
+const simulation::thermostat_optional& simulation::
+thermostat () const
+{
+  return this->thermostat_;
+}
+
+simulation::thermostat_optional& simulation::
+thermostat ()
+{
+  return this->thermostat_;
+}
+
+void simulation::
+thermostat (const thermostat_type& x)
+{
+  this->thermostat_.set (x);
+}
+
+void simulation::
+thermostat (const thermostat_optional& x)
+{
+  this->thermostat_ = x;
+}
+
+void simulation::
+thermostat (::std::unique_ptr< thermostat_type > x)
+{
+  this->thermostat_.set (std::move (x));
+}
+
 const simulation::cuboid_sequence& simulation::
 cuboid () const
 {
@@ -908,6 +938,118 @@ grav_constant (const grav_constant_type& x)
 }
 
 
+// thermostat
+// 
+
+const thermostat::T_init_optional& thermostat::
+T_init () const
+{
+  return this->T_init_;
+}
+
+thermostat::T_init_optional& thermostat::
+T_init ()
+{
+  return this->T_init_;
+}
+
+void thermostat::
+T_init (const T_init_type& x)
+{
+  this->T_init_.set (x);
+}
+
+void thermostat::
+T_init (const T_init_optional& x)
+{
+  this->T_init_ = x;
+}
+
+const thermostat::T_target_optional& thermostat::
+T_target () const
+{
+  return this->T_target_;
+}
+
+thermostat::T_target_optional& thermostat::
+T_target ()
+{
+  return this->T_target_;
+}
+
+void thermostat::
+T_target (const T_target_type& x)
+{
+  this->T_target_.set (x);
+}
+
+void thermostat::
+T_target (const T_target_optional& x)
+{
+  this->T_target_ = x;
+}
+
+const thermostat::T_diff_optional& thermostat::
+T_diff () const
+{
+  return this->T_diff_;
+}
+
+thermostat::T_diff_optional& thermostat::
+T_diff ()
+{
+  return this->T_diff_;
+}
+
+void thermostat::
+T_diff (const T_diff_type& x)
+{
+  this->T_diff_.set (x);
+}
+
+void thermostat::
+T_diff (const T_diff_optional& x)
+{
+  this->T_diff_ = x;
+}
+
+const thermostat::n_thermostat_type& thermostat::
+n_thermostat () const
+{
+  return this->n_thermostat_.get ();
+}
+
+thermostat::n_thermostat_type& thermostat::
+n_thermostat ()
+{
+  return this->n_thermostat_.get ();
+}
+
+void thermostat::
+n_thermostat (const n_thermostat_type& x)
+{
+  this->n_thermostat_.set (x);
+}
+
+const thermostat::brownian_motion_dimension_type& thermostat::
+brownian_motion_dimension () const
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+thermostat::brownian_motion_dimension_type& thermostat::
+brownian_motion_dimension ()
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+void thermostat::
+brownian_motion_dimension (const brownian_motion_dimension_type& x)
+{
+  this->brownian_motion_dimension_.set (x);
+}
+
+
 // cuboid
 // 
 
@@ -1073,6 +1215,24 @@ sigma (const sigma_type& x)
   this->sigma_.set (x);
 }
 
+const cuboid::brownian_motion_dimension_type& cuboid::
+brownian_motion_dimension () const
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+cuboid::brownian_motion_dimension_type& cuboid::
+brownian_motion_dimension ()
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+void cuboid::
+brownian_motion_dimension (const brownian_motion_dimension_type& x)
+{
+  this->brownian_motion_dimension_.set (x);
+}
+
 
 // disc
 // 
@@ -1213,6 +1373,24 @@ void disc::
 sigma (const sigma_type& x)
 {
   this->sigma_.set (x);
+}
+
+const disc::brownian_motion_dimension_type& disc::
+brownian_motion_dimension () const
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+disc::brownian_motion_dimension_type& disc::
+brownian_motion_dimension ()
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+void disc::
+brownian_motion_dimension (const brownian_motion_dimension_type& x)
+{
+  this->brownian_motion_dimension_.set (x);
 }
 
 
@@ -1793,6 +1971,7 @@ simulation (const boundaries_type& boundaries,
   inputSettings_ (inputSettings, this),
   outputSettings_ (outputSettings, this),
   simulationParameters_ (simulationParameters, this),
+  thermostat_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -1808,6 +1987,7 @@ simulation (::std::unique_ptr< boundaries_type > boundaries,
   inputSettings_ (std::move (inputSettings), this),
   outputSettings_ (std::move (outputSettings), this),
   simulationParameters_ (std::move (simulationParameters), this),
+  thermostat_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -1822,6 +2002,7 @@ simulation (const simulation& x,
   inputSettings_ (x.inputSettings_, f, this),
   outputSettings_ (x.outputSettings_, f, this),
   simulationParameters_ (x.simulationParameters_, f, this),
+  thermostat_ (x.thermostat_, f, this),
   cuboid_ (x.cuboid_, f, this),
   disc_ (x.disc_, f, this)
 {
@@ -1836,6 +2017,7 @@ simulation (const ::xercesc::DOMElement& e,
   inputSettings_ (this),
   outputSettings_ (this),
   simulationParameters_ (this),
+  thermostat_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -1912,6 +2094,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // thermostat
+    //
+    if (n.name () == "thermostat" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< thermostat_type > r (
+        thermostat_traits::create (i, f, this));
+
+      if (!this->thermostat_)
+      {
+        this->thermostat_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // cuboid
     //
     if (n.name () == "cuboid" && n.namespace_ ().empty ())
@@ -1983,6 +2179,7 @@ operator= (const simulation& x)
     this->inputSettings_ = x.inputSettings_;
     this->outputSettings_ = x.outputSettings_;
     this->simulationParameters_ = x.simulationParameters_;
+    this->thermostat_ = x.thermostat_;
     this->cuboid_ = x.cuboid_;
     this->disc_ = x.disc_;
   }
@@ -2760,6 +2957,163 @@ simulationParameters::
 {
 }
 
+// thermostat
+//
+
+thermostat::
+thermostat (const n_thermostat_type& n_thermostat,
+            const brownian_motion_dimension_type& brownian_motion_dimension)
+: ::xml_schema::type (),
+  T_init_ (this),
+  T_target_ (this),
+  T_diff_ (this),
+  n_thermostat_ (n_thermostat, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this)
+{
+}
+
+thermostat::
+thermostat (const thermostat& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  T_init_ (x.T_init_, f, this),
+  T_target_ (x.T_target_, f, this),
+  T_diff_ (x.T_diff_, f, this),
+  n_thermostat_ (x.n_thermostat_, f, this),
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this)
+{
+}
+
+thermostat::
+thermostat (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  T_init_ (this),
+  T_target_ (this),
+  T_diff_ (this),
+  n_thermostat_ (this),
+  brownian_motion_dimension_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void thermostat::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // T_init
+    //
+    if (n.name () == "T_init" && n.namespace_ ().empty ())
+    {
+      if (!this->T_init_)
+      {
+        this->T_init_.set (T_init_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // T_target
+    //
+    if (n.name () == "T_target" && n.namespace_ ().empty ())
+    {
+      if (!this->T_target_)
+      {
+        this->T_target_.set (T_target_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // T_diff
+    //
+    if (n.name () == "T_diff" && n.namespace_ ().empty ())
+    {
+      if (!this->T_diff_)
+      {
+        this->T_diff_.set (T_diff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n_thermostat
+    //
+    if (n.name () == "n_thermostat" && n.namespace_ ().empty ())
+    {
+      if (!n_thermostat_.present ())
+      {
+        this->n_thermostat_.set (n_thermostat_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // brownian_motion_dimension
+    //
+    if (n.name () == "brownian_motion_dimension" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_dimension_.present ())
+      {
+        this->brownian_motion_dimension_.set (brownian_motion_dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!n_thermostat_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n_thermostat",
+      "");
+  }
+
+  if (!brownian_motion_dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion_dimension",
+      "");
+  }
+}
+
+thermostat* thermostat::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class thermostat (*this, f, c);
+}
+
+thermostat& thermostat::
+operator= (const thermostat& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->T_init_ = x.T_init_;
+    this->T_target_ = x.T_target_;
+    this->T_diff_ = x.T_diff_;
+    this->n_thermostat_ = x.n_thermostat_;
+    this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
+  }
+
+  return *this;
+}
+
+thermostat::
+~thermostat ()
+{
+}
+
 // cuboid
 //
 
@@ -2771,7 +3125,8 @@ cuboid (const position_type& position,
         const mass_type& mass,
         const brownian_motion_type& brownian_motion,
         const epsilon_type& epsilon,
-        const sigma_type& sigma)
+        const sigma_type& sigma,
+        const brownian_motion_dimension_type& brownian_motion_dimension)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
@@ -2780,7 +3135,8 @@ cuboid (const position_type& position,
   mass_ (mass, this),
   brownian_motion_ (brownian_motion, this),
   epsilon_ (epsilon, this),
-  sigma_ (sigma, this)
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this)
 {
 }
 
@@ -2792,7 +3148,8 @@ cuboid (::std::unique_ptr< position_type > position,
         const mass_type& mass,
         const brownian_motion_type& brownian_motion,
         const epsilon_type& epsilon,
-        const sigma_type& sigma)
+        const sigma_type& sigma,
+        const brownian_motion_dimension_type& brownian_motion_dimension)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
@@ -2801,7 +3158,8 @@ cuboid (::std::unique_ptr< position_type > position,
   mass_ (mass, this),
   brownian_motion_ (brownian_motion, this),
   epsilon_ (epsilon, this),
-  sigma_ (sigma, this)
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this)
 {
 }
 
@@ -2817,7 +3175,8 @@ cuboid (const cuboid& x,
   mass_ (x.mass_, f, this),
   brownian_motion_ (x.brownian_motion_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  sigma_ (x.sigma_, f, this),
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this)
 {
 }
 
@@ -2833,7 +3192,8 @@ cuboid (const ::xercesc::DOMElement& e,
   mass_ (this),
   brownian_motion_ (this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  brownian_motion_dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2949,6 +3309,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // brownian_motion_dimension
+    //
+    if (n.name () == "brownian_motion_dimension" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_dimension_.present ())
+      {
+        this->brownian_motion_dimension_.set (brownian_motion_dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3007,6 +3378,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "sigma",
       "");
   }
+
+  if (!brownian_motion_dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion_dimension",
+      "");
+  }
 }
 
 cuboid* cuboid::
@@ -3030,6 +3408,7 @@ operator= (const cuboid& x)
     this->brownian_motion_ = x.brownian_motion_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
+    this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
   }
 
   return *this;
@@ -3050,7 +3429,8 @@ disc (const position_type& position,
       const distance_type& distance,
       const mass_type& mass,
       const epsilon_type& epsilon,
-      const sigma_type& sigma)
+      const sigma_type& sigma,
+      const brownian_motion_dimension_type& brownian_motion_dimension)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
@@ -3058,7 +3438,8 @@ disc (const position_type& position,
   distance_ (distance, this),
   mass_ (mass, this),
   epsilon_ (epsilon, this),
-  sigma_ (sigma, this)
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this)
 {
 }
 
@@ -3069,7 +3450,8 @@ disc (::std::unique_ptr< position_type > position,
       const distance_type& distance,
       const mass_type& mass,
       const epsilon_type& epsilon,
-      const sigma_type& sigma)
+      const sigma_type& sigma,
+      const brownian_motion_dimension_type& brownian_motion_dimension)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
@@ -3077,7 +3459,8 @@ disc (::std::unique_ptr< position_type > position,
   distance_ (distance, this),
   mass_ (mass, this),
   epsilon_ (epsilon, this),
-  sigma_ (sigma, this)
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this)
 {
 }
 
@@ -3092,7 +3475,8 @@ disc (const disc& x,
   distance_ (x.distance_, f, this),
   mass_ (x.mass_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  sigma_ (x.sigma_, f, this),
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this)
 {
 }
 
@@ -3107,7 +3491,8 @@ disc (const ::xercesc::DOMElement& e,
   distance_ (this),
   mass_ (this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  brownian_motion_dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3209,6 +3594,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // brownian_motion_dimension
+    //
+    if (n.name () == "brownian_motion_dimension" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_dimension_.present ())
+      {
+        this->brownian_motion_dimension_.set (brownian_motion_dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3260,6 +3656,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "sigma",
       "");
   }
+
+  if (!brownian_motion_dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion_dimension",
+      "");
+  }
 }
 
 disc* disc::
@@ -3282,6 +3685,7 @@ operator= (const disc& x)
     this->mass_ = x.mass_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
+    this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
   }
 
   return *this;

@@ -5,6 +5,7 @@
 #include "../src/data/Cuboid.h"
 #include "../src/data/Disc.h"
 #include "../src/data/SimData.h"
+#include "../src/data/ThermostatData.h"
 #include "../src/io/input/XMLReader.h"
 
 TEST(XMLReader, parseXMLFile){
@@ -13,15 +14,17 @@ TEST(XMLReader, parseXMLFile){
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
 
-    Cuboid cuboid({12,13,14}, {15,16,17}, {18,19,20}, 21, 22, 7, 5, 6);
-    Disc disc({23,24,25}, {26,27,28}, 29, 30, 31, 5, 6);
+    Cuboid cuboid({12,13,14}, {15,16,17}, {18,19,20}, 21, 22, 7, 5, 6, 2);
+    Disc disc({23,24,25}, {26,27,28}, 29, 30, 31, 5, 6, 2);
 
     SimData simdata;
+    ThermostatData thermostatdata;
 
     xmlreader.readCuboids("../input/test.xml", cuboids, 5, 1);
     xmlreader.readDiscs("../input/test.xml", discs, 5, 1);
 
     xmlreader.readSimulation("../input/test.xml", simdata);
+    xmlreader.readThermostat("../input/test.xml", thermostatdata);
 
     for(const auto& c : cuboids){
         EXPECT_TRUE(c == cuboid);
@@ -45,4 +48,8 @@ TEST(XMLReader, parseXMLFile){
     EXPECT_TRUE((simdata.getDomain()==std::array<double, 3>{8, 9, 10}));
     EXPECT_TRUE((simdata.getDomainStart()==std::array<double, 3>{0, 0, 0}));
     EXPECT_TRUE((simdata.getGravConstant()==0));
+
+    EXPECT_TRUE(thermostatdata.getBrownianMotionDimension()==2);
+    EXPECT_TRUE(thermostatdata.getInitTemp()==2);    
+    EXPECT_TRUE(thermostatdata.getNThermostat()==10);    
 }

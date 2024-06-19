@@ -24,7 +24,7 @@ public:
      * @param brownian_motion The brownian motion average velocity.
      */
     Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-    double distance, double mass, double brownian_motion, double epsilon, double sigma);
+    double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension);
 
     /**
      * @brief Getter for the position of the cuboid.
@@ -62,6 +62,13 @@ public:
     double getMass() const;
 
     /**
+     * @brief Getter for the brownian motion of the cuboid.
+     * 
+     * @return The brownian motion average velocity of the cuboid.
+     */
+    double getBrownianMotion() const;
+
+    /**
      * @brief Getter for the value of epsilon of each particle in the cuboid.
      * 
      * @return The value of epsilon of each particle in the cuboid.
@@ -76,12 +83,12 @@ public:
     double getSigma() const;
 
     /**
-     * @brief Getter for the brownian motion of the cuboid.
+     * @brief Getter for the dimension of average brownian motion velocity.
      * 
-     * @return The brownian motion average velocity of the cuboid.
+     * @return The dimension of average brownian motion velocity of the cuboid.
      */
-    double getBrownianMotion() const;
-
+    size_t getBrownianMotionDimension() const;
+    
     /**
      * @brief Setter for the position of the cuboid.
      * 
@@ -139,6 +146,13 @@ public:
     void setSigma(double new_sigma);
 
     /**
+     * @brief Setter for the dimension of average brownian motion velocity.
+     * 
+     * @param new_brownian_motion_dimension The new dimension of average brownian motion velocity.
+     */
+    void setBrownianMotionDimension(size_t new_brownian_motion_dimension);
+
+    /**
      * @brief Equality operator for cuboid.
      * 
      * @param other The other cuboid to compare with.
@@ -155,4 +169,5 @@ private:
     double brownian_motion; ///< The brownian motion average velocity.
     double epsilon; ///< The paramter epsilon of the cuboid.
     double sigma; ///< The parameter sigma of the cuboid.
+    size_t brownian_motion_dimension; ///< Parameter specifying the dimension of average brownian motion velocity of the cuboid.
 };

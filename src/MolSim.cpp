@@ -6,7 +6,7 @@
 #include <iostream>
 #include <chrono>
 
-#include <Simulation.h>
+#include "Simulation.h"
 
 /**
  * @brief Main function for the Molecular Simulation (MolSim) program.

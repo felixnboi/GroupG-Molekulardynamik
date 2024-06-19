@@ -12,17 +12,18 @@
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 
-#include "Forces/Gravitational_Force.h"
-#include "Forces/Lennard_Jones_Force.h"
+#include "forces/Gravitational_Force.h"
+#include "forces/Lennard_Jones_Force.h"
 #include "inputFileManager.h"
-#include "ParticleContainers/ParticleContainer.h"
-#include "ParticleContainers/ParticleContainerLinkedCell.h"
-#include "ParticleContainers/ParticleContainerOld.h"
+#include "particlecontainers/ParticleContainer.h"
+#include "particlecontainers/ParticleContainerLinkedCell.h"
+#include "particlecontainers/ParticleContainerOld.h"
 #include "spdlog/spdlog.h"
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
 #include "data/SimData.h"
-#include "data/Thermostat.h"
+#include "thermostat/Thermostat.h"
+#include "data/ThermostatData.h"
 
 /**
  * @class Simulation
@@ -57,6 +58,7 @@ public:
      * 
      * @param argc The number of command-line arguments.
      * @param argv The array of command-line argument strings.
+     * 
      * @return True if initialization is successful, otherwise false.
      */
     bool initialize(int argc, char* argv[]);
@@ -79,6 +81,7 @@ public:
 private:
     SimData simdata;
     Thermostat thermostat;
+    ThermostatData thermostat_data;
 
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;
@@ -90,8 +93,6 @@ private:
     bool time_flag;
     bool cli_flag;
     bool linkedcell_flag;
-    bool thermostat_flag;
-    bool target_temp_flag;
 
     std::array<bool,6> lenJonesBoundaryFlags;
     std::array<bool,6> outflowFlags;

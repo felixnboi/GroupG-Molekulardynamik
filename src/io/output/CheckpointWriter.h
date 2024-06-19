@@ -1,5 +1,5 @@
-#include "../../ParticleContainers/ParticleContainerOld.h"
-#include "../../ParticleContainers/ParticleContainerLinkedCell.h"
+#include "../../particlecontainers/ParticleContainerOld.h"
+#include "../../particlecontainers/ParticleContainerLinkedCell.h"
 
 #include <fstream>
 

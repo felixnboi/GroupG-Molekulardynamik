@@ -1,15 +1,16 @@
 #include <gtest/gtest.h>
 
-#include "../src/Forces/Lennard_Jones_Force.h"
+#include "../src/forces/Lennard_Jones_Force.h"
 #include "../src/inputFileManager.h"
 #include "../src/particlegen/ParticleGenerator.h"
 #include "../src/io/input/FileReader.h"
-#include "../src/ParticleContainers/ParticleContainerOld.h"
-#include "../src/ParticleContainers/ParticleContainer.h"
-#include "../src/ParticleContainers/ParticleContainerLinkedCell.h"
+#include "../src/particlecontainers/ParticleContainerOld.h"
+#include "../src/particlecontainers/ParticleContainer.h"
+#include "../src/particlecontainers/ParticleContainerLinkedCell.h"
 #include "../src/data/Cuboid.h"
 #include "../src/data/Disc.h"
-#include "../src/data/Thermostat.h"
+#include "../src/data/ThermostatData.h"
+#include "../src/thermostat/Thermostat.h"
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -297,7 +298,7 @@ TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
     inputFileManager::resetFile("../input/generated-input.txt");
     // Generate particles in a cuboid and write to the file
-    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2,0.1, 5, 1), "../input/generated-input.txt");
+    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2,0.1, 5, 1, 2), "../input/generated-input.txt");
      // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
 
@@ -370,7 +371,7 @@ TEST(ParticleGenerator, GenerateDisc) {
     inputFileManager::resetFile("../input/generated-input.txt");
 
     // Generate particles in a disc and write to the file
-    ParticleGenerator::generateDisc(Disc({5.0, 5.0, 5.0},{1.0, 1.0, 1.0}, 5, 1.0, 2.0, 5, 1), "../input/generated-input.txt");
+    ParticleGenerator::generateDisc(Disc({5.0, 5.0, 5.0},{1.0, 1.0, 1.0}, 5, 1.0, 2.0, 5, 1, 2), "../input/generated-input.txt");
 
     // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
@@ -648,7 +649,8 @@ std::unique_ptr<ParticleContainer> createParticleContainer(double sizeX, double 
 // Test case for heating
 TEST(Thermostat, Heating) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, TARGET_TEMP, MAX_DELTA_TEMP, true, INITIAL_TEMP);
+    Thermostat thermostat(thermostat_data);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
     thermostat.scaleWithBeta(pc);
@@ -662,7 +664,8 @@ TEST(Thermostat, Heating) {
 // Test case for cooling
 TEST(Thermostat, Cooling) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(TARGET_TEMP_2, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, TARGET_TEMP_2, MAX_DELTA_TEMP, true, INITIAL_TEMP);
+    Thermostat thermostat(thermostat_data);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
     thermostat.scaleWithBeta(pc);
@@ -676,7 +679,9 @@ TEST(Thermostat, Cooling) {
 // Test case for holding a temperature
 TEST(Thermostat, HoldTemperature) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
-    Thermostat thermostat(0.1111111111111111, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+
+    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, 0.1111111111111111, MAX_DELTA_TEMP, true, INITIAL_TEMP);
+    Thermostat thermostat(thermostat_data);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
     thermostat.scaleWithBeta(pc);
@@ -703,7 +708,8 @@ TEST(Thermostat, InitSystemTemperature) {
     pc->addParticle(p2);
     pc->addParticle(p3);
 
-    Thermostat thermostat(TARGET_TEMP, MAX_DELTA_TEMP, N_THERMOSTAT, DIMENSIONS);
+    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, TARGET_TEMP, MAX_DELTA_TEMP, true, INITIAL_TEMP);
+    Thermostat thermostat(thermostat_data);
 
     spdlog::info("initial Temp:{}", thermostat.getCurrentTemperature(pc));
 
