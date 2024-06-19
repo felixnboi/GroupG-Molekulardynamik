@@ -41,5 +41,5 @@ public:
 
     void calculateFPairs(std::vector<std::array<std::shared_ptr<Particle>, 2UL>> pairs);
 
-    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma);
+    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadius);
 };
