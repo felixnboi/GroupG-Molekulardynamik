@@ -62,6 +62,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
 
 std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
     std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
+    bool test = false;
     for (size_t i = 0; i < arrayLength; i++){
         size_t nbrCount = 0;
         std::array<size_t,13> nbrs;
@@ -105,13 +106,15 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
             if(!(pFlag[0]||pFlag[1]||pFlag[2])){
                 for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
                     if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
+                        test = true;
                         particlePairs.push_back({*particle_i, *particle_j});
                     }
                 }
             }
             for (size_t j = 0; j < nbrCount; j++){
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
-                    if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
+                    if(pFlag[0]||pFlag[1]||pFlag[2]||ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
+                        test = true;
                         particlePairs.push_back({*particle_i, *particle_j});
                     }
                 }

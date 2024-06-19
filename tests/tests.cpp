@@ -744,10 +744,10 @@ TEST(Lennard_Jones_Force, peridicBoundary){
     pc->addParticle(p2);
     Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{true, false, false}};
     LJForce.calculateF(*pc, true, 0);
-    EXPECT_EQ(p1->getF()[0], 240);
+    EXPECT_EQ(p1->getF()[0], 120);
     EXPECT_EQ(p1->getF()[1], 0);
     EXPECT_EQ(p1->getF()[2], 0);
-    EXPECT_EQ(p2->getF()[0], -240);
+    EXPECT_EQ(p2->getF()[0], -120);
     EXPECT_EQ(p2->getF()[1], 0);
     EXPECT_EQ(p2->getF()[2], 0);
 }
