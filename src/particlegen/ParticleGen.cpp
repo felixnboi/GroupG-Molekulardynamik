@@ -285,7 +285,7 @@ int main(int argc, char *argsv[]){
         }
 
         if(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag){
-            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, 0.1, epsilon, sigma, 2));
+            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, 0.1, epsilon, sigma, 2, 0));
         }
         
     }

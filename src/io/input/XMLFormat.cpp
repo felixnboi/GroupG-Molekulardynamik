@@ -1233,6 +1233,24 @@ brownian_motion_dimension (const brownian_motion_dimension_type& x)
   this->brownian_motion_dimension_.set (x);
 }
 
+const cuboid::type_type& cuboid::
+type () const
+{
+  return this->type_.get ();
+}
+
+cuboid::type_type& cuboid::
+type ()
+{
+  return this->type_.get ();
+}
+
+void cuboid::
+type (const type_type& x)
+{
+  this->type_.set (x);
+}
+
 
 // disc
 // 
@@ -1391,6 +1409,24 @@ void disc::
 brownian_motion_dimension (const brownian_motion_dimension_type& x)
 {
   this->brownian_motion_dimension_.set (x);
+}
+
+const disc::type_type& disc::
+type () const
+{
+  return this->type_.get ();
+}
+
+disc::type_type& disc::
+type ()
+{
+  return this->type_.get ();
+}
+
+void disc::
+type (const type_type& x)
+{
+  this->type_.set (x);
 }
 
 
@@ -3126,7 +3162,8 @@ cuboid (const position_type& position,
         const brownian_motion_type& brownian_motion,
         const epsilon_type& epsilon,
         const sigma_type& sigma,
-        const brownian_motion_dimension_type& brownian_motion_dimension)
+        const brownian_motion_dimension_type& brownian_motion_dimension,
+        const type_type& type)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
@@ -3136,7 +3173,8 @@ cuboid (const position_type& position,
   brownian_motion_ (brownian_motion, this),
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
-  brownian_motion_dimension_ (brownian_motion_dimension, this)
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -3149,7 +3187,8 @@ cuboid (::std::unique_ptr< position_type > position,
         const brownian_motion_type& brownian_motion,
         const epsilon_type& epsilon,
         const sigma_type& sigma,
-        const brownian_motion_dimension_type& brownian_motion_dimension)
+        const brownian_motion_dimension_type& brownian_motion_dimension,
+        const type_type& type)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
@@ -3159,7 +3198,8 @@ cuboid (::std::unique_ptr< position_type > position,
   brownian_motion_ (brownian_motion, this),
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
-  brownian_motion_dimension_ (brownian_motion_dimension, this)
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -3176,7 +3216,8 @@ cuboid (const cuboid& x,
   brownian_motion_ (x.brownian_motion_, f, this),
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
-  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this)
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this),
+  type_ (x.type_, f, this)
 {
 }
 
@@ -3193,7 +3234,8 @@ cuboid (const ::xercesc::DOMElement& e,
   brownian_motion_ (this),
   epsilon_ (this),
   sigma_ (this),
-  brownian_motion_dimension_ (this)
+  brownian_motion_dimension_ (this),
+  type_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3320,6 +3362,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // type
+    //
+    if (n.name () == "type" && n.namespace_ ().empty ())
+    {
+      if (!type_.present ())
+      {
+        this->type_.set (type_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3385,6 +3438,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "brownian_motion_dimension",
       "");
   }
+
+  if (!type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "type",
+      "");
+  }
 }
 
 cuboid* cuboid::
@@ -3409,6 +3469,7 @@ operator= (const cuboid& x)
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
     this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
+    this->type_ = x.type_;
   }
 
   return *this;
@@ -3430,7 +3491,8 @@ disc (const position_type& position,
       const mass_type& mass,
       const epsilon_type& epsilon,
       const sigma_type& sigma,
-      const brownian_motion_dimension_type& brownian_motion_dimension)
+      const brownian_motion_dimension_type& brownian_motion_dimension,
+      const type_type& type)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
@@ -3439,7 +3501,8 @@ disc (const position_type& position,
   mass_ (mass, this),
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
-  brownian_motion_dimension_ (brownian_motion_dimension, this)
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -3451,7 +3514,8 @@ disc (::std::unique_ptr< position_type > position,
       const mass_type& mass,
       const epsilon_type& epsilon,
       const sigma_type& sigma,
-      const brownian_motion_dimension_type& brownian_motion_dimension)
+      const brownian_motion_dimension_type& brownian_motion_dimension,
+      const type_type& type)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
@@ -3460,7 +3524,8 @@ disc (::std::unique_ptr< position_type > position,
   mass_ (mass, this),
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
-  brownian_motion_dimension_ (brownian_motion_dimension, this)
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -3476,7 +3541,8 @@ disc (const disc& x,
   mass_ (x.mass_, f, this),
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
-  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this)
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this),
+  type_ (x.type_, f, this)
 {
 }
 
@@ -3492,7 +3558,8 @@ disc (const ::xercesc::DOMElement& e,
   mass_ (this),
   epsilon_ (this),
   sigma_ (this),
-  brownian_motion_dimension_ (this)
+  brownian_motion_dimension_ (this),
+  type_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3605,6 +3672,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // type
+    //
+    if (n.name () == "type" && n.namespace_ ().empty ())
+    {
+      if (!type_.present ())
+      {
+        this->type_.set (type_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3663,6 +3741,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "brownian_motion_dimension",
       "");
   }
+
+  if (!type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "type",
+      "");
+  }
 }
 
 disc* disc::
@@ -3686,6 +3771,7 @@ operator= (const disc& x)
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
     this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
+    this->type_ = x.type_;
   }
 
   return *this;

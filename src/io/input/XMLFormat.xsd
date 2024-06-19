@@ -128,10 +128,11 @@
                         <xs:element name="dimensions" type="unsigned_vector"/>
                         <xs:element name="distance" type="xs:double"/>
                         <xs:element name="mass" type="xs:double"/>    
-                        <xs:element name="brownian_motion" type="xs:double"/>                
-                        <xs:element name="epsilon" type="xs:double"/>                
-                        <xs:element name="sigma" type="xs:double"/>                
-                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>                
+                        <xs:element name="brownian_motion" type="xs:double"/>
+                        <xs:element name="epsilon" type="xs:double"/>
+                        <xs:element name="sigma" type="xs:double"/>
+                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>
+                        <xs:element name="type" type="xs:unsignedInt"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -147,7 +148,8 @@
                         <xs:element name="mass" type="xs:double"/>                      
                         <xs:element name="epsilon" type="xs:double"/>                      
                         <xs:element name="sigma" type="xs:double"/>                      
-                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>                
+                        <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>
+                        <xs:element name="type" type="xs:unsignedInt"/>               
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

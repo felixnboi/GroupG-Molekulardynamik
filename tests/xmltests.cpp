@@ -14,8 +14,8 @@ TEST(XMLReader, parseXMLFile){
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
 
-    Cuboid cuboid({12,13,14}, {15,16,17}, {18,19,20}, 21, 22, 7, 5, 6, 2);
-    Disc disc({23,24,25}, {26,27,28}, 29, 30, 31, 5, 6, 2);
+    Cuboid cuboid({12,13,14}, {15,16,17}, {18,19,20}, 21, 22, 7, 5, 6, 2, 0);
+    Disc disc({23,24,25}, {26,27,28}, 29, 30, 31, 5, 6, 2, 0);
 
     SimData simdata;
     ThermostatData thermostatdata;

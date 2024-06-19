@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>MD_vtk</baseName>
-        <writeFrequency>10</writeFrequency>
+        <writeFrequency>100</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
@@ -27,8 +27,8 @@
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
         <domain>
-            <x>100.0</x>
-            <y>50.0</y>
+            <x>63.0</x>
+            <y>36.0</y>
             <z>10.0</z>
         </domain>
         <domain_start>
@@ -40,17 +40,17 @@
         <grav_constant>-12.44</grav_constant>
     </simulationParameters>
 
-    <!-- <thermostat>
+    <thermostat>
         <T_init>40</T_init>
         <n_thermostat>1000</n_thermostat>
         <brownian_motion_dimension>2</brownian_motion_dimension>
-    </thermostat> -->
+    </thermostat>
 
     <cuboid>
         <position>
             <x>0.6</x>
             <y>2.0</y>
-            <z>0.0</z>
+            <z>5.0</z>
         </position>
         <velocity>
             <x>0.0</x>
@@ -68,13 +68,14 @@
         <epsilon>1.0</epsilon>
         <sigma>1.0</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>1</type> 
     </cuboid>
 
     <cuboid>
         <position>
             <x>0.6</x>
             <y>19.0</y>
-            <z>0.0</z>
+            <z>5.0</z>
         </position>
         <velocity>
             <x>0.0</x>
@@ -92,6 +93,7 @@
         <epsilon>1.0</epsilon>
         <sigma>0.9412</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>2</type> 
     </cuboid>
 
 </simulation>

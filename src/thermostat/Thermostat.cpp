@@ -13,13 +13,14 @@ double Thermostat::getCurrentTemperature(const std::unique_ptr<ParticleContainer
         spdlog::warn("Particle container is empty. Returning temperature as 0.");
         return 0.0;
     }
+
     for (auto it = pc->begin(); it != pc->end(); ++it) {
+        double tmp = 0;
         auto v = (*it)->getV();
-        doubled_kin_energy = 0;
         for (size_t d = 0; d < brownian_motion_dimension; ++d) {
-            doubled_kin_energy += (v[d] * v[d]);
+            tmp += (v[d] * v[d]);
         }
-        doubled_kin_energy = doubled_kin_energy * (*it)->getM();
+        doubled_kin_energy += tmp * (*it)->getM();
     }
     return doubled_kin_energy / (brownian_motion_dimension * particle_count);
 }
@@ -60,7 +61,6 @@ void Thermostat::initSystemTemperature(double new_initialTemp, std::unique_ptr<P
         spdlog::error("Invalid number of brownian_motion_dimension: {}. Must be 2 or 3.", brownian_motion_dimension);
         exit(-1);
     }
-        std::cout << "dim: " << brownian_motion_dimension << std::endl;
 
     for(auto& it : *pc){
     //for (auto it = pc->begin(); it != pc->end(); ++it) {

@@ -4522,6 +4522,53 @@ class cuboid: public ::xml_schema::type
   //@}
 
   /**
+   * @name type
+   *
+   * @brief Accessor and modifier functions for the %type
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int type_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< type_type, char > type_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const type_type&
+  type () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  type_type&
+  type ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  type (const type_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -4538,7 +4585,8 @@ class cuboid: public ::xml_schema::type
           const brownian_motion_type&,
           const epsilon_type&,
           const sigma_type&,
-          const brownian_motion_dimension_type&);
+          const brownian_motion_dimension_type&,
+          const type_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -4556,7 +4604,8 @@ class cuboid: public ::xml_schema::type
           const brownian_motion_type&,
           const epsilon_type&,
           const sigma_type&,
-          const brownian_motion_dimension_type&);
+          const brownian_motion_dimension_type&,
+          const type_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4637,6 +4686,7 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< epsilon_type > epsilon_;
   ::xsd::cxx::tree::one< sigma_type > sigma_;
   ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
+  ::xsd::cxx::tree::one< type_type > type_;
 
   //@endcond
 };
@@ -5048,6 +5098,53 @@ class disc: public ::xml_schema::type
   //@}
 
   /**
+   * @name type
+   *
+   * @brief Accessor and modifier functions for the %type
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int type_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< type_type, char > type_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const type_type&
+  type () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  type_type&
+  type ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  type (const type_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -5063,7 +5160,8 @@ class disc: public ::xml_schema::type
         const mass_type&,
         const epsilon_type&,
         const sigma_type&,
-        const brownian_motion_dimension_type&);
+        const brownian_motion_dimension_type&,
+        const type_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -5080,7 +5178,8 @@ class disc: public ::xml_schema::type
         const mass_type&,
         const epsilon_type&,
         const sigma_type&,
-        const brownian_motion_dimension_type&);
+        const brownian_motion_dimension_type&,
+        const type_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -5160,6 +5259,7 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< epsilon_type > epsilon_;
   ::xsd::cxx::tree::one< sigma_type > sigma_;
   ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
+  ::xsd::cxx::tree::one< type_type > type_;
 
   //@endcond
 };
