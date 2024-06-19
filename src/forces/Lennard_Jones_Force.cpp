@@ -43,7 +43,7 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
             int directions = 1;
             std::vector<std::array<double, 3>> direction = {particle_i->getX()-particle_j->getX()};
             for(auto d = 0; d < 3; d++){
-              if(periodicFlag[d]){
+              if((d==0&&i==1)||(d==1&&j==1)||(d==2&&k==1)){
                 if(LCContainer.getCelCount()[d]==1){
                   for (int dir = 0; dir < directions; dir++) {
                     direction.push_back(direction[dir]);
