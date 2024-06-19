@@ -68,7 +68,12 @@ public:
      * @brief Gets the size of each cell.
      * @return The size of each cell as an array of three doubles.
      */
-    const std::array<double, 3> getCellSize();
+    const std::array<double, 3> getCellSize();    
+    
+    const std::array<size_t, 3> getCelCount();
+
+    const double getRadius();
+
 
     /**
      * @brief Gets the pairs of particles within the interaction radius.
