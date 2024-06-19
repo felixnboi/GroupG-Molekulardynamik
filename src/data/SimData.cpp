@@ -4,7 +4,7 @@ SimData::SimData() = default;
 
 SimData::SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
 std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant, double initialTemp)
+size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant)
     : input_file(std::move(input_file)), 
         baseName(std::move(baseName)), 
         write_frequency(write_frequency), 
@@ -19,8 +19,7 @@ size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_st
         dimensions(dimensions),
         domain(std::move(domain)),
         domain_start(std::move(domain_start)),
-        gravConstant(gravConstant), 
-        initialTemp(initialTemp) {}
+        gravConstant(gravConstant) {}
 
 SimData::~SimData() = default;
 
@@ -39,8 +38,6 @@ double SimData::getDimensions() const { return dimensions; }
 std::array<double, 3> SimData::getDomain() const { return domain; }
 std::array<double, 3> SimData::getDomainStart() const { return domain_start; }
 double SimData::getGravConstant() const { return gravConstant; }
-double SimData::getInitialTemp() const { return initialTemp; }
-
 
 void SimData::setInputFile(const std::string& new_input_file) { input_file = new_input_file; }
 void SimData::setBaseName(const std::string& new_base_name) { baseName = new_base_name; }
@@ -57,5 +54,4 @@ void SimData::setDimensions(double new_dimensions) { dimensions = new_dimensions
 void SimData::setDomain(const std::array<double, 3>& new_domain) { domain = new_domain; }
 void SimData::setDomainStart(const std::array<double, 3>& new_domain_start) { domain_start = new_domain_start; }
 void SimData::setGravConstant(double new_grav_constant) { gravConstant = new_grav_constant; }
-void SimData::setInitialTemp(double new_initialTemp) { initialTemp = new_initialTemp; }
 

@@ -23,7 +23,7 @@ public:
      * @param mass The mass of the particles.
      */
     Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass, 
-    double epsilon, double sigma);
+    double epsilon, double sigma, size_t brownian_motion_dimension);
 
     /**
      * @brief Getter for the position of the disc.
@@ -75,6 +75,13 @@ public:
     double getSigma() const;
 
     /**
+     * @brief Getter for the dimension of average brownian motion velocity.
+     * 
+     * @return The dimension of average brownian motion velocity of the cuboid.
+     */
+    size_t getBrownianMotionDimension() const;
+
+    /**
      * @brief Setter for the position of the disc.
      * 
      * @param new_position The new position of the disc.
@@ -124,6 +131,13 @@ public:
     void setSigma(double new_sigma);
 
     /**
+     * @brief Setter for the dimension of average brownian motion velocity.
+     * 
+     * @param new_brownian_motion_dimension The new dimension of average brownian motion velocity.
+     */
+    void setBrownianMotionDimension(size_t new_brownian_motion_dimension);
+
+    /**
      * @brief Equality operator for disc.
      * 
      * @param other The other disc to compare with.
@@ -140,4 +154,5 @@ private:
     double mass; ///< The mass of the disc.
     double epsilon; ///< The parameter epsilon of the disc.
     double sigma; ///< The parameter sigma of the disc.
+    size_t brownian_motion_dimension; ///< Parameter specifying the dimension of average brownian motion velocity of the disc.
 };

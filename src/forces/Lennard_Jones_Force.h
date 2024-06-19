@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Force.h"
-#include "../ParticleContainers/ParticleContainerLinkedCell.h"
+#include "../particlecontainers/ParticleContainerLinkedCell.h"
 #include <math.h>
 
 

@@ -40,6 +40,12 @@
         <grav_constant>0</grav_constant>
     </simulationParameters>
 
+    <thermostat>
+        <T_init>2</T_init>
+        <n_thermostat>10</n_thermostat>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+    </thermostat>
+
     <cuboid>
         <position>
             <x>12</x>
@@ -61,6 +67,7 @@
         <brownian_motion>7</brownian_motion>
         <epsilon>5</epsilon>
         <sigma>6</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
     </cuboid>
 
     <disc>
@@ -79,6 +86,7 @@
         <mass>31</mass>
         <epsilon>5</epsilon>
         <sigma>6</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
     </disc>
 
 </simulation>

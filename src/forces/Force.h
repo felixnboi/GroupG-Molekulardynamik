@@ -1,6 +1,6 @@
 #pragma once
 #include "../utils/ArrayUtils.h"
-#include "../ParticleContainers/ParticleContainer.h"
+#include "../particlecontainers/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
 /**

@@ -31,18 +31,15 @@ public:
      * @param domain Array containing domain information.
      * @param domain_start Array containing the starting position of the domain.
      * @param gravConstant The gravitational constant.
-     * @param initialTemp Initial temperature of the simulation.
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant, double initialTemp);
+            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant);
 
     /**
      * @brief Destructor.
      */
     ~SimData();
-
-    // Getter functions...
     
     /**
      * @brief Getter for the input file name.
@@ -150,15 +147,6 @@ public:
     double getGravConstant() const;
 
     /**
-     * @brief Getter for the Initial temperature parameter used in simulation.
-     * 
-     * @return The Initial temperature parameter used in simulation.
-     */
-    double getInitialTemp() const;
-
-    // Setter functions...
-
-    /**
      * @brief Setter for the input file name.
      * 
      * @param new_input_file The new input file name.
@@ -263,13 +251,6 @@ public:
      */
     void setGravConstant(double new_grav_constant);
 
-     /**
-     * @brief Setter for the Initial temperature parameter used in simulation.
-     * 
-     * @param new_initialTemp The new Initial temperature parameter used in simulation.
-     */
-    void setInitialTemp(double new_initialTemp);
-
 
 private:
     std::string input_file; ///< The input file name.
@@ -287,6 +268,5 @@ private:
     std::array<double, 3> domain; ///< Array containing domain information.
     std::array<double, 3> domain_start; ///< Array containing the starting position of the domain.
     double gravConstant; ///< Gravitational constant for the Simulation.
-    double initialTemp; ///< Initial temperature of the simulation.
 };
 

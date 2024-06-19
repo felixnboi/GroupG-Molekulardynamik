@@ -574,6 +574,7 @@ class boundaries;
 class inputSettings;
 class outputSettings;
 class simulationParameters;
+class thermostat;
 class cuboid;
 class disc;
 
@@ -1896,6 +1897,82 @@ class simulation: public ::xml_schema::type
   //@}
 
   /**
+   * @name thermostat
+   *
+   * @brief Accessor and modifier functions for the %thermostat
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::thermostat thermostat_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< thermostat_type > thermostat_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< thermostat_type, char > thermostat_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const thermostat_optional&
+  thermostat () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  thermostat_optional&
+  thermostat ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  thermostat (const thermostat_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  thermostat (const thermostat_optional& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly instead
+   * of making a copy.
+   */
+  void
+  thermostat (::std::unique_ptr< thermostat_type > p);
+
+  //@}
+
+  /**
    * @name cuboid
    *
    * @brief Accessor and modifier functions for the %cuboid
@@ -2124,6 +2201,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< inputSettings_type > inputSettings_;
   ::xsd::cxx::tree::one< outputSettings_type > outputSettings_;
   ::xsd::cxx::tree::one< simulationParameters_type > simulationParameters_;
+  thermostat_optional thermostat_;
   cuboid_sequence cuboid_;
   disc_sequence disc_;
 
@@ -3592,6 +3670,394 @@ class simulationParameters: public ::xml_schema::type
 };
 
 /**
+ * @brief Class corresponding to the %thermostat schema type.
+ *
+ * @nosubgrouping
+ */
+class thermostat: public ::xml_schema::type
+{
+  public:
+  /**
+   * @name T_init
+   *
+   * @brief Accessor and modifier functions for the %T_init
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ T_init_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< T_init_type > T_init_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< T_init_type, char, ::xsd::cxx::tree::schema_type::double_ > T_init_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const T_init_optional&
+  T_init () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  T_init_optional&
+  T_init ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  T_init (const T_init_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  T_init (const T_init_optional& x);
+
+  //@}
+
+  /**
+   * @name T_target
+   *
+   * @brief Accessor and modifier functions for the %T_target
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ T_target_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< T_target_type > T_target_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< T_target_type, char, ::xsd::cxx::tree::schema_type::double_ > T_target_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const T_target_optional&
+  T_target () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  T_target_optional&
+  T_target ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  T_target (const T_target_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  T_target (const T_target_optional& x);
+
+  //@}
+
+  /**
+   * @name T_diff
+   *
+   * @brief Accessor and modifier functions for the %T_diff
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ T_diff_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< T_diff_type > T_diff_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< T_diff_type, char, ::xsd::cxx::tree::schema_type::double_ > T_diff_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const T_diff_optional&
+  T_diff () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  T_diff_optional&
+  T_diff ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  T_diff (const T_diff_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  T_diff (const T_diff_optional& x);
+
+  //@}
+
+  /**
+   * @name n_thermostat
+   *
+   * @brief Accessor and modifier functions for the %n_thermostat
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int n_thermostat_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< n_thermostat_type, char > n_thermostat_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const n_thermostat_type&
+  n_thermostat () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  n_thermostat_type&
+  n_thermostat ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  n_thermostat (const n_thermostat_type& x);
+
+  //@}
+
+  /**
+   * @name brownian_motion_dimension
+   *
+   * @brief Accessor and modifier functions for the %brownian_motion_dimension
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int brownian_motion_dimension_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< brownian_motion_dimension_type, char > brownian_motion_dimension_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const brownian_motion_dimension_type&
+  brownian_motion_dimension () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  brownian_motion_dimension_type&
+  brownian_motion_dimension ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  brownian_motion_dimension (const brownian_motion_dimension_type& x);
+
+  //@}
+
+  /**
+   * @name Constructors
+   */
+  //@{
+
+  /**
+   * @brief Create an instance from the ultimate base and
+   * initializers for required elements and attributes.
+   */
+  thermostat (const n_thermostat_type&,
+              const brownian_motion_dimension_type&);
+
+  /**
+   * @brief Create an instance from a DOM element.
+   *
+   * @param e A DOM element to extract the data from.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  thermostat (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param x An instance to make a copy of.
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  thermostat (const thermostat& x,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy the instance polymorphically.
+   *
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   * @return A pointer to the dynamically allocated copy.
+   *
+   * This function ensures that the dynamic type of the instance is
+   * used for copying and should be used for polymorphic object
+   * models instead of the copy constructor.
+   */
+  virtual thermostat*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  /**
+   * @brief Copy assignment operator.
+   *
+   * @param x An instance to make a copy of.
+   * @return A reference to itself.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  thermostat&
+  operator= (const thermostat& x);
+
+  //@}
+
+  /**
+   * @brief Destructor.
+   */
+  virtual 
+  ~thermostat ();
+
+  // Implementation.
+  //
+
+  //@cond
+
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  T_init_optional T_init_;
+  T_target_optional T_target_;
+  T_diff_optional T_diff_;
+  ::xsd::cxx::tree::one< n_thermostat_type > n_thermostat_;
+  ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
+
+  //@endcond
+};
+
+/**
  * @brief Class corresponding to the %cuboid schema type.
  *
  * @nosubgrouping
@@ -4009,6 +4475,53 @@ class cuboid: public ::xml_schema::type
   //@}
 
   /**
+   * @name brownian_motion_dimension
+   *
+   * @brief Accessor and modifier functions for the %brownian_motion_dimension
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int brownian_motion_dimension_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< brownian_motion_dimension_type, char > brownian_motion_dimension_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const brownian_motion_dimension_type&
+  brownian_motion_dimension () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  brownian_motion_dimension_type&
+  brownian_motion_dimension ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  brownian_motion_dimension (const brownian_motion_dimension_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -4024,7 +4537,8 @@ class cuboid: public ::xml_schema::type
           const mass_type&,
           const brownian_motion_type&,
           const epsilon_type&,
-          const sigma_type&);
+          const sigma_type&,
+          const brownian_motion_dimension_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -4041,7 +4555,8 @@ class cuboid: public ::xml_schema::type
           const mass_type&,
           const brownian_motion_type&,
           const epsilon_type&,
-          const sigma_type&);
+          const sigma_type&,
+          const brownian_motion_dimension_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4121,6 +4636,7 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< brownian_motion_type > brownian_motion_;
   ::xsd::cxx::tree::one< epsilon_type > epsilon_;
   ::xsd::cxx::tree::one< sigma_type > sigma_;
+  ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
 
   //@endcond
 };
@@ -4485,6 +5001,53 @@ class disc: public ::xml_schema::type
   //@}
 
   /**
+   * @name brownian_motion_dimension
+   *
+   * @brief Accessor and modifier functions for the %brownian_motion_dimension
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int brownian_motion_dimension_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< brownian_motion_dimension_type, char > brownian_motion_dimension_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const brownian_motion_dimension_type&
+  brownian_motion_dimension () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  brownian_motion_dimension_type&
+  brownian_motion_dimension ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  brownian_motion_dimension (const brownian_motion_dimension_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -4499,7 +5062,8 @@ class disc: public ::xml_schema::type
         const distance_type&,
         const mass_type&,
         const epsilon_type&,
-        const sigma_type&);
+        const sigma_type&,
+        const brownian_motion_dimension_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -4515,7 +5079,8 @@ class disc: public ::xml_schema::type
         const distance_type&,
         const mass_type&,
         const epsilon_type&,
-        const sigma_type&);
+        const sigma_type&,
+        const brownian_motion_dimension_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4594,6 +5159,7 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< epsilon_type > epsilon_;
   ::xsd::cxx::tree::one< sigma_type > sigma_;
+  ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
 
   //@endcond
 };

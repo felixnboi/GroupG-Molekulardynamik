@@ -2,12 +2,12 @@
 <simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
 
     <boundaries>
-        <left>periodic</left>
-        <right>periodic</right>
+        <left>reflecting</left>
+        <right>reflecting</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>periodic</rear>
-        <front>periodic</front>
+        <rear>reflecting</rear>
+        <front>reflecting</front>
     </boundaries>
 
     <inputSettings>
@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>MD_vtk</baseName>
-        <writeFrequency>100</writeFrequency>
+        <writeFrequency>10</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
@@ -27,9 +27,9 @@
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
         <domain>
-            <x>63.0</x>
-            <y>36.0</y>
-            <z>1.0</z>
+            <x>100.0</x>
+            <y>50.0</y>
+            <z>10.0</z>
         </domain>
         <domain_start>
             <x>0.0</x>
@@ -39,6 +39,12 @@
         <cutoff_radius>2.5</cutoff_radius>
         <grav_constant>-12.44</grav_constant>
     </simulationParameters>
+
+    <!-- <thermostat>
+        <T_init>40</T_init>
+        <n_thermostat>1000</n_thermostat>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+    </thermostat> -->
 
     <cuboid>
         <position>
@@ -61,6 +67,7 @@
         <brownian_motion>0.1</brownian_motion>
         <epsilon>1.0</epsilon>
         <sigma>1.0</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
     </cuboid>
 
     <cuboid>
@@ -84,6 +91,7 @@
         <brownian_motion>0.1</brownian_motion>
         <epsilon>1.0</epsilon>
         <sigma>0.9412</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
     </cuboid>
 
 </simulation>
