@@ -24,7 +24,7 @@ public:
      * @param brownian_motion The brownian motion average velocity.
      */
     Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-    double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension);
+    double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, size_t type);
 
     /**
      * @brief Getter for the position of the cuboid.
@@ -88,6 +88,13 @@ public:
      * @return The dimension of average brownian motion velocity of the cuboid.
      */
     size_t getBrownianMotionDimension() const;
+
+    /**
+     * @brief Getter for the type of the particles in the cuboid.
+     * 
+     * @return The type of the particles in the cuboid.
+     */
+    size_t getType() const;
     
     /**
      * @brief Setter for the position of the cuboid.
@@ -153,6 +160,13 @@ public:
     void setBrownianMotionDimension(size_t new_brownian_motion_dimension);
 
     /**
+     * @brief Setter for the type of the particles in the cuboid.
+     * 
+     * @param new_type The new type of the particles in the cuboid.
+     */
+    void setType(size_t new_type);
+
+    /**
      * @brief Equality operator for cuboid.
      * 
      * @param other The other cuboid to compare with.
@@ -170,4 +184,5 @@ private:
     double epsilon; ///< The paramter epsilon of the cuboid.
     double sigma; ///< The parameter sigma of the cuboid.
     size_t brownian_motion_dimension; ///< Parameter specifying the dimension of average brownian motion velocity of the cuboid.
+    size_t type; ///<The type of the particles in the cuboid;
 };

@@ -1,6 +1,7 @@
 #include "Lennard_Jones_Force.h"
 #include <chrono>
 #include <iostream>
+#include <cmath>
     
 
 Lennard_Jones_Force::Lennard_Jones_Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag) {
@@ -69,20 +70,27 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
       }
     }
     for(auto particle : boundery){
-      std::array<double, 3> cur_F_dummy = particle->getF();
+      std::array<double, 3> force = {0,0,0};
       for(int i = 0; i < 3; i++){
         if(reflectLenJonesFlag[2*i]&&particle->getX()[i]< LCContainer.getCellSize()[i]&&particle->getX()[i]< particle->getSigma()*twoRoot6){
           std::array<double, 3> direction = {0,0,0};
           direction[i] = 2*particle->getX()[i];
-          cur_F_dummy[i] += calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma(),0)[i];
+          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma(),0)[i];
         }
         if(reflectLenJonesFlag[2*i+1]&&particle->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&particle->getX()[i]> LCContainer.getSize()[i]-particle->getSigma()*twoRoot6){
           std::array<double, 3> direction = {0,0,0};
           direction[i] = 2*(particle->getX()[i]-LCContainer.getSize()[i]);
-          cur_F_dummy[i] += calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma(),0)[i];
+          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma(),0)[i];
         }
       }
-      particle->setF(cur_F_dummy);
+      if(std::isnan(force[0])||std::isnan(force[1])||std::isnan(force[2])){
+        std::cout << "force-nan: " << force[0] << " " << force[1] << " " << force[2] << "\n";
+      }
+      if(std::abs(force[0]) > 100000 || std::abs(force[1]) > 100000 || std::abs(force[2]) > 100000){
+        std::cout << "force: " << force[0] << " " << force[1] << " " << force[2] << "\n";
+        std::cout << "position: " << particle->getX()[0] << " " << particle->getX()[1] << " " << particle->getX()[2] << "\n";        
+      }
+      particle->applyF(force);
     }
   }
   calculateFPairs(particlePairs);
@@ -100,10 +108,10 @@ void Lennard_Jones_Force::calculateFPairs(std::vector<std::array<std::shared_ptr
      
     particle_i->setF(particle_i->getF()+force);
     particle_j->setF(particle_j->getF()-force);
-    if(force[0]+force[1]+force[2] > 10000){
-      auto d = particle_i->getX()-particle_j->getX();
-      std::cout <<"calculateF_x: " << force[0] << " y: " << force[1] << " z: " << force[2] << " distancex: " <<  d[0] << " y: " << d[1] << " z: " << d[2] << std::endl;
-    }
+    // if(force[0]+force[1]+force[2] > 100000){
+    //   auto d = particle_i->getX()-particle_j->getX();
+    //   std::cout <<"calculateF_x: " << force[0] << " y: " << force[1] << " z: " << force[2] << " distancex: " <<  d[0] << " y: " << d[1] << " z: " << d[2] << std::endl;
+    // }
   }
 }
 
@@ -120,5 +128,10 @@ std::array<double,3> Lennard_Jones_Force::calculateLennardJonesForce(std::array<
 
     // calculating the force components (along the x, y, z axes) between particle i and particle j
     std::array<double,3> force = directionlessForce*direction;
+    for(int i =0 ; i<3; i++){
+      if(direction[i] == 0 && force[i] != 0){
+        std::cout << "print\n\n\n";
+      }
+    }
     return force;
 }
