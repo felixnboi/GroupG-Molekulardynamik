@@ -2,12 +2,12 @@
 <simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
 
     <boundaries>
-        <left>reflecting</left>
-        <right>reflecting</right>
+        <left>periodic</left>
+        <right>periodic</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>reflecting</rear>
-        <front>reflecting</front>
+        <rear>periodic</rear>
+        <front>periodic</front>
     </boundaries>
 
     <inputSettings>
@@ -15,14 +15,14 @@
     </inputSettings>
 
     <outputSettings>
-        <baseName>MD_vtk</baseName>
-        <writeFrequency>100</writeFrequency>
+        <baseName>ass4_task2_1</baseName>
+        <writeFrequency>1</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
         <end_t>25</end_t>
         <delta_t>0.0005</delta_t>
-        <start_t>0.0</start_t>
+        <start_t>0.9</start_t>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
@@ -40,11 +40,11 @@
         <grav_constant>-12.44</grav_constant>
     </simulationParameters>
 
-    <thermostat>
+    <!-- <thermostat>
         <T_init>40</T_init>
         <n_thermostat>1000</n_thermostat>
         <brownian_motion_dimension>2</brownian_motion_dimension>
-    </thermostat>
+    </thermostat> -->
 
     <cuboid>
         <position>
