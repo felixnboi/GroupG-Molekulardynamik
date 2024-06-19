@@ -714,3 +714,34 @@ TEST(Thermostat, InitSystemTemperature) {
 
     EXPECT_NEAR(newTemp, newInitialTemp, EPSILON);
 }
+
+//Test for the gravity on the y axis
+TEST(Lennard_Jones_Force, gravity){
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1);
+    std::shared_ptr<Particle> p = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    pc->addParticle(p);
+    Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{false, false, false}};
+    LJForce.calculateF(*pc, false, 10);
+    EXPECT_EQ(p->getF()[0], 0);
+    EXPECT_EQ(p->getF()[1], 10);
+    EXPECT_EQ(p->getF()[2], 0);
+}
+
+TEST(Lennard_Jones_Force, peridicBoundary){
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2);
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.5, 1, 1}, 
+    (std::array<double, 3>){0, 0, 0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){9.5, 1, 1}, 
+    (std::array<double, 3>){0, 0, 0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{true, false, false}};
+    LJForce.calculateF(*pc, true, 0);
+    EXPECT_EQ(p1->getF()[0], 240);
+    EXPECT_EQ(p1->getF()[1], 0);
+    EXPECT_EQ(p1->getF()[2], 0);
+    EXPECT_EQ(p2->getF()[0], -240);
+    EXPECT_EQ(p2->getF()[1], 0);
+    EXPECT_EQ(p2->getF()[2], 0);
+}
