@@ -25,7 +25,7 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids, 
             const double epsilon = cuboid_xml.epsilon();
             const double sigma = cuboid_xml.sigma();
             const double brownian_motion_dimension = cuboid_xml.brownian_motion_dimension();
-            const size_t type = cuboid_xml.type();
+            const int type = cuboid_xml.type();
 
             cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion, epsilon, sigma, 
             brownian_motion_dimension, type));
@@ -56,7 +56,7 @@ void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs, double
             const double epsilon = disc_xml.epsilon();
             const double sigma = disc_xml.sigma();
             const double brownian_motion_dimension = disc_xml.brownian_motion_dimension();
-            const size_t type = disc_xml.type();
+            const int type = disc_xml.type();
 
             discs.push_back(Disc(position, velocity, radius, distance, mass, epsilon, sigma, brownian_motion_dimension, type));
         }

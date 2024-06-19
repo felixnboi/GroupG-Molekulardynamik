@@ -132,7 +132,7 @@
                         <xs:element name="epsilon" type="xs:double"/>
                         <xs:element name="sigma" type="xs:double"/>
                         <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>
-                        <xs:element name="type" type="xs:unsignedInt"/>
+                        <xs:element name="type" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -149,7 +149,7 @@
                         <xs:element name="epsilon" type="xs:double"/>                      
                         <xs:element name="sigma" type="xs:double"/>                      
                         <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>
-                        <xs:element name="type" type="xs:unsignedInt"/>               
+                        <xs:element name="type" type="xs:int"/>               
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

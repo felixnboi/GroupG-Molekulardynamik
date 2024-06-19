@@ -12,6 +12,7 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
     double epsilon = cuboid.getEpsilon();
     double sigma = cuboid.getSigma();
     size_t brownian_motion_dimension = cuboid.getBrownianMotionDimension();
+    size_t type = cuboid.getType();
     
     spdlog::info("Generating cuboid");
     
@@ -39,7 +40,7 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
         {
             for (size_t k = 0; k < dimensions[2]; k++) {
                 std::array<double, 3> brownianMotion = maxwellBoltzmannDistributedVelocity(averageBrownianMotion, brownian_motion_dimension);
-                input_file << position[0] << " " << position[1] << " " << position[2] << " " << velocity[0] + brownianMotion[0] << " " << velocity[1] + brownianMotion[1] << " " << velocity[2] + brownianMotion[2] << " " << mass << " " << epsilon << " "<< sigma << "\n";         
+                input_file << position[0] << " " << position[1] << " " << position[2] << " " << velocity[0] + brownianMotion[0] << " " << velocity[1] + brownianMotion[1] << " " << velocity[2] + brownianMotion[2] << " " << mass << " " << epsilon << " "<< sigma << " "<< type << "\n";         
                 position[2] += distance;
             }
             position[2] = zClone;
@@ -60,6 +61,7 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
     double mass = disc.getMass();
     double epsilon = disc.getEpsilon();
     double sigma = disc.getSigma();
+    size_t type = disc.getType();
 
     spdlog::info("Generating disc");
 
@@ -116,7 +118,7 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
 
                 input_file << particleX << " " << particleY << " " << particleZ << " "
                            << velocity[0] << " " << velocity[1] << " " << velocity[2] << " "
-                           << mass << " " << epsilon << " " << sigma  << "\n";
+                           << mass << " " << epsilon << " " << sigma  <<" "<< type << "\n";
             }
         }
     }

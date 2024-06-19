@@ -4532,7 +4532,7 @@ class cuboid: public ::xml_schema::type
   /**
    * @brief Element type.
    */
-  typedef ::xml_schema::unsigned_int type_type;
+  typedef ::xml_schema::int_ type_type;
 
   /**
    * @brief Element traits type.
@@ -5108,7 +5108,7 @@ class disc: public ::xml_schema::type
   /**
    * @brief Element type.
    */
-  typedef ::xml_schema::unsigned_int type_type;
+  typedef ::xml_schema::int_ type_type;
 
   /**
    * @brief Element traits type.

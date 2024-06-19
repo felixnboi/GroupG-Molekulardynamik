@@ -3,7 +3,7 @@
 Cuboid::Cuboid(){}
 
 Cuboid::Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, size_t type)
+double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, int type)
     : position(position),
       velocity(velocity),
       dimensions(dimensions),
@@ -24,7 +24,7 @@ double Cuboid::getBrownianMotion() const { return brownian_motion; }
 double Cuboid::getEpsilon() const{ return epsilon; }
 double Cuboid::getSigma() const{ return sigma; }
 size_t Cuboid::getBrownianMotionDimension() const{ return brownian_motion_dimension; }
-size_t Cuboid::getType() const{ return type; }
+int Cuboid::getType() const{ return type; }
 
 void Cuboid::setPosition(const std::array<double, 3>& new_position) { position = new_position; }
 void Cuboid::setVelocity(const std::array<double, 3>& new_velocity) { velocity = new_velocity; }
@@ -35,7 +35,7 @@ void Cuboid::setBrownianMotion(double new_brownian_motion) { brownian_motion = n
 void Cuboid::setEpsilon(double new_epsilon) { epsilon = new_epsilon; }
 void Cuboid::setSigma(double new_sigma) { sigma = new_sigma; }
 void Cuboid::setBrownianMotionDimension(size_t new_brownian_motion_dimension) { brownian_motion_dimension = new_brownian_motion_dimension; }
-void Cuboid::setType(size_t new_type) { type = new_type; }
+void Cuboid::setType(int new_type) { type = new_type; }
 
 bool Cuboid::operator==(const Cuboid& other) const{
     return position == other.position && velocity == other.velocity && dimensions == other.dimensions 

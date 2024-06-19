@@ -21,9 +21,12 @@ public:
      * @param radius The radius of the disc  in terms of the number of molecules along the radius.
      * @param distance The distance between the partcles.
      * @param mass The mass of the particles.
+     * @param epsilon The epsilon parameter for the particles of the disc.
+     * @param sigma The sigma paramter for the particles of the disc.
+     * @param brownian_motion_dimension The brownian motion average velocity dimension.
      */
     Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass, 
-    double epsilon, double sigma, size_t brownian_motion_dimension, size_t type);
+    double epsilon, double sigma, size_t brownian_motion_dimension, int type);
 
     /**
      * @brief Getter for the position of the disc.
@@ -86,7 +89,7 @@ public:
      * 
      * @return The type of the particles in the disc.
      */
-    size_t getType() const;
+    int getType() const;
 
     /**
      * @brief Setter for the position of the disc.
@@ -149,7 +152,7 @@ public:
      * 
      * @param new_type The new type of the particles in the disc.
      */
-    void setType(size_t new_type);
+    void setType(int new_type);
 
     /**
      * @brief Equality operator for disc.
@@ -169,5 +172,5 @@ private:
     double epsilon; ///< The parameter epsilon of the disc.
     double sigma; ///< The parameter sigma of the disc.
     size_t brownian_motion_dimension; ///< Parameter specifying the dimension of average brownian motion velocity of the disc.
-    size_t type; ///< The type of the particles in the disc.
+    int type; ///< The type of the particles in the disc.
 };
