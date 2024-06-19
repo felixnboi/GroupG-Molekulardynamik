@@ -200,11 +200,11 @@ bool Simulation::initialize(int argc, char* argv[]) {
         xmlreader.readSimulation(xml_file, simdata);
         xmlreader.readThermostat(xml_file, thermostat_data);
 
-        if(!thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
+        if(thermostat_data.getThermostatFlag() && !thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
             spdlog::error("Either initial temperature or target termperature or both have to be set when using the thermostat");
             return false;
         }
-        if(!thermostat_data.getTargetTemp() && thermostat_data.getInitTemp()){
+        if(thermostat_data.getThermostatFlag() && !thermostat_data.getTargetTemp() && thermostat_data.getInitTemp()){
             thermostat_data.setTargetTemp(thermostat_data.getInitTemp());
         }
 
