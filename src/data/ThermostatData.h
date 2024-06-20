@@ -12,18 +12,19 @@ public:
      */
     ThermostatData();
 
+
     /**
-     * @brief Constructor with full parameter list.
-     * 
-     * @param thermostat_flag
-     * @param n_thermostat
-     * @param brownian_motion_dimension
-     * @param target_temp_flag
-     * @param target_temp
-     * @param max_delta_temp
-     * @param init_temp_flag
-     * @param init_temp
-     */
+    * @brief Parameterized constructor for the ThermostatData class.
+    * 
+    * @param thermostat_flag Flag indicating if the thermostat is active.
+    * @param n_thermostat Number of thermostat iterations.
+    * @param brownian_motion_dimension Dimension of Brownian motion.
+    * @param target_temp_flag Flag indicating if target temperature is set.
+    * @param target_temp Target temperature.
+    * @param max_delta_temp Maximum change in temperature.
+    * @param init_temp_flag Flag indicating if initial temperature is set.
+    * @param init_temp Initial temperature.
+    */
     ThermostatData(bool thermostat_flag, size_t n_thermostat, size_t brownian_motion_dimension, bool target_temp_flag, 
     double target_temp, double max_delta_temp, bool init_temp_flag, double init_temp);
 
