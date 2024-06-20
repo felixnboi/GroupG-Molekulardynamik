@@ -5,5 +5,5 @@
 
 namespace CheckpointWriter
 {
-    void writeCheckpoint(ParticleContainer &particles);
+    void writeCheckpoint(ParticleContainer &particles,  const char *filename);
 }

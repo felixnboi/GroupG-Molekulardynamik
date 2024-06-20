@@ -29,8 +29,8 @@ public:
      * It iterates over all pairs of particles and updates their force vectors accordingly.
      * 
      * @param particles The container of particles for which to calculate the forces.
-     * @param reflectionLenJonesFlag The flags for our 6 boundaries in 3d space. 
      * @param linkedcells The flag for choosing the algorithm. If set linkedcells algorithm is used.
+     * @param gravConstant The gravitational constant value used for calculations.
      */
     void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) override;
 };

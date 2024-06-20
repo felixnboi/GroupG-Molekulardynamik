@@ -52,9 +52,9 @@ private:
    */
   int type;
 
-  double sigma;
-  double epsilon;
-  std::array<double, 3> domainStart;
+  double sigma; ///< The sigma value for the Lennard-Jones potential.
+  double epsilon; ///< The epsilon value for the Lennard-Jones potential.
+  std::array<double, 3> domainStart; ///< The domain start position of the particle.
 
 
 public:
@@ -74,11 +74,14 @@ public:
 
   /**
    * @brief Constructs a particle with given parameters.
-   * 
-   * @param x_arg Initial position of the particle.
-   * @param v_arg Initial velocity of the particle.
-   * @param m_arg Mass of the particle.
-   * @param type_arg Type of the particle.
+    * 
+   * @param x_arg The initial position of the particle.
+   * @param v_arg The initial velocity of the particle.
+   * @param m_arg The mass of the particle.
+   * @param type_arg The type of the particle.
+   * @param epsilon The epsilon value for the Lennard-Jones potential.
+   * @param sigma The sigma value for the Lennard-Jones potential.
+   * @param domainStart The domain start position of the particle.
    */
   Particle(
       // for visualization, we need always 3 coordinates

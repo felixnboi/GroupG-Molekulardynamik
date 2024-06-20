@@ -79,5 +79,5 @@ public:
     void setThermostatData(const ThermostatData& new_thermostat_data);
 
 private:
-    ThermostatData thermostat_data;
+    ThermostatData thermostat_data;///< An object keeping all necessary thermostat data.
 };

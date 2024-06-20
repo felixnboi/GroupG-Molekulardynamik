@@ -11,6 +11,8 @@
 #include "../src/data/Disc.h"
 #include "../src/data/ThermostatData.h"
 #include "../src/thermostat/Thermostat.h"
+#include "../src/io/output/CheckpointWriter.h"
+
 
 const double EPSILON = 1e-5;  // Tolerance
 // A helper function
@@ -734,12 +736,14 @@ TEST(Lennard_Jones_Force, gravity){
     EXPECT_EQ(p->getF()[2], 0);
 }
 
+//Tests if particles correctly attract each other through a periodic boundery
 TEST(Lennard_Jones_Force, peridicBoundary){
     auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2);
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.5, 1, 1}, 
     (std::array<double, 3>){0, 0, 0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){9.5, 1, 1}, 
     (std::array<double, 3>){0, 0, 0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+
     pc->addParticle(p1);
     pc->addParticle(p2);
     Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{true, false, false}};
@@ -750,4 +754,83 @@ TEST(Lennard_Jones_Force, peridicBoundary){
     EXPECT_EQ(p2->getF()[0], -120);
     EXPECT_EQ(p2->getF()[1], 0);
     EXPECT_EQ(p2->getF()[2], 0);
+}
+
+//Tests that perticles that leave a peridic boundery are placed at the correct point on the other side of the domain
+TEST(ParticleContainerLinkedCell, peridicBoundary){
+    double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 2.0;
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+
+    // Create a particle that will move outside the boundary
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){5, 1, 1}, 
+    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    
+    // Add the particle to the container
+    pc.addParticle(p1);
+    p1->setX({11,1,1});
+    // Set the correct flags
+    std::array<bool, 6> outflowFlag = {false, false, false, false, false, false};
+    std::array<bool, 3> peridicFlags = {true, true, true};
+
+    // Update the locations
+    pc.updateLoctions(outflowFlag, peridicFlags);
+    
+    std::vector<std::shared_ptr<Particle>> halo = pc.getHalo();
+    EXPECT_EQ(halo.size(), 0);
+    std::array<double, 3> correctPlace = {1,1,1};
+    EXPECT_EQ(p1->getX(), correctPlace);
+}
+
+TEST(CheckpointWriter, writeCheckpoint){
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
+    p1->setF({1,2,3});
+    p1->setOldF({11,22,33});
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
+    p2->setF({4,5,6});
+    p2->setOldF({44,55,66});
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 6, (std::array<double, 3>){0, 0, 0});
+    p1->setF({7,8,9});
+    p1->setOldF({77,88,99});
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+    CheckpointWriter::writeCheckpoint(*pc, "../input/checkpoint.txt");
+    
+    ParticleContainer* particles = new ParticleContainerOld();
+    FileReader fileReader;
+    fileReader.readFile(*particles, "../input/checkpoint.txt", {0,0,0});
+    auto p = particles->getParticles();
+    assert(p[0]->getX()[0]==1&&p[0]->getX()[1]==2&&p[0]->getX()[2]==3);
+    assert(p[1]->getX()[0]==2&&p[1]->getX()[1]==3&&p[1]->getX()[2]==4);
+    assert(p[2]->getX()[0]==3&&p[2]->getX()[1]==4&&p[2]->getX()[2]==5);
+
+    assert(p[0]->getV()[0]==0.1&&p[0]->getV()[1]==0.2&&p[0]->getV()[2]==0.3);
+    assert(p[1]->getV()[0]==0.2&&p[1]->getV()[1]==0.3&&p[1]->getV()[2]==0.4);
+    assert(p[2]->getV()[0]==0.3&&p[2]->getV()[1]==0.4&&p[2]->getV()[2]==0.5);
+
+    assert(p[0]->getM()==1&&p[1]->getM()==1.5&&p[2]->getM()==2);
+
+    assert(p[0]->getType()==0&&p[1]->getType()==1&&p[2]->getType()==0);
+
+    assert(p[0]->getEpsilon()==1&&p[1]->getEpsilon()==3&&p[2]->getEpsilon()==5);
+
+    assert(p[0]->getSigma()==2&&p[1]->getSigma()==4&&p[2]->getSigma()==6);
+
+    assert(p[0]->getF()[0]==1&&p[0]->getF()[1]==2&&p[0]->getF()[2]==3);
+    assert(p[1]->getF()[0]==4&&p[1]->getF()[1]==5&&p[1]->getF()[2]==6);
+    assert(p[2]->getF()[0]==7&&p[2]->getF()[1]==8&&p[2]->getF()[2]==9);
+
+    assert(p[0]->getOldF()[0]==11&&p[0]->getOldF()[1]==22&&p[0]->getOldF()[2]==33);
+    assert(p[1]->getOldF()[0]==44&p[1]->getOldF()[1]==55&&p[1]->getOldF()[2]==66);
+    assert(p[2]->getOldF()[0]==77&&p[2]->getOldF()[1]==88&&p[2]->getOldF()[2]==99);
+    delete particles;
+    delete pc;
 }
