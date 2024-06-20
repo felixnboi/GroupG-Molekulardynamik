@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
 
 /**
  * @brief Represents a disc of Particles.

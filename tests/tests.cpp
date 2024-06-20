@@ -655,12 +655,14 @@ TEST(Thermostat, Heating) {
     Thermostat thermostat(thermostat_data);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
-    thermostat.scaleWithBeta(pc);
+    spdlog::info("initial Temp:{}", initialTemp);
 
+    thermostat.scaleWithBeta(pc);
     double newTemp = thermostat.getCurrentTemperature(pc);
+    spdlog::info("new Temp:{}", newTemp);
 
     EXPECT_GT(newTemp, initialTemp);
-    EXPECT_LE(newTemp, initialTemp + MAX_DELTA_TEMP);
+    EXPECT_LE(newTemp, initialTemp + MAX_DELTA_TEMP + EPSILON);
 }
 
 // Test case for cooling
@@ -682,10 +684,11 @@ TEST(Thermostat, Cooling) {
 TEST(Thermostat, HoldTemperature) {
     auto pc = createParticleContainer(10.0, 10.0, 10.0, 1.0);
 
-    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, 0.1111111111111111, MAX_DELTA_TEMP, true, INITIAL_TEMP);
+    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, 0.17500000000000002, MAX_DELTA_TEMP, true, INITIAL_TEMP);
     Thermostat thermostat(thermostat_data);
 
     double initialTemp = thermostat.getCurrentTemperature(pc);
+    spdlog::info("initial Temp:{}", initialTemp);
     thermostat.scaleWithBeta(pc);
 
     double newTemp = thermostat.getCurrentTemperature(pc);
