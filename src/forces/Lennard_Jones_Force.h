@@ -17,6 +17,9 @@ public:
 
     /**
      * @brief Default constructor for Lenard_Jones_Force.
+     * 
+     * @param reflectLenJonesFlag Array of booleans for reflection flags in 6 directions.
+     * @param periodicFlag Array of booleans for periodic boundary conditions in 3 dimensions.
      */
     Lennard_Jones_Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag);
 
@@ -32,12 +35,26 @@ public:
      * It updates the force vectors of the particles accordingly.
      * 
      * @param particles The container of particles for which to calculate the forces.
-     * @param reflectionLenJonesFlag The flags for our 6 boundaries in 3d space. 
      * @param linkedcells The flag for choosing the algorithm. If set linkedcells algorithm is used.
+     * @param gravConstant The gravitational constant value used for calculations.
      */
     void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) override;
 
+    /**
+    * @brief Calculates the forces between pairs of particles using the Lennard-Jones potential.
+    * 
+    * @param pairs Vector of arrays containing pairs of particles.
+    */
     void calculateFPairs(std::vector<std::array<std::shared_ptr<Particle>, 2UL>> pairs);
 
+    /**
+    * @brief Calculates the Lennard-Jones force between two particles.
+    * 
+    * @param direction Direction vector between two particles.
+    * @param epsilon Depth of the potential well.
+    * @param sigma Finite distance at which the inter-particle potential is zero.
+    * @param cutOffRadius Cut-off radius beyond which the force is considered zero.
+    * @return std::array<double, 3> Calculated force vector.
+    */
     std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadius);
 };

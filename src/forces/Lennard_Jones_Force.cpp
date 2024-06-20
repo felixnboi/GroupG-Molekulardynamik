@@ -9,6 +9,7 @@ Lennard_Jones_Force::Lennard_Jones_Force(std::array<bool,6> reflectLenJonesFlag,
   this->periodicFlag = periodicFlag;
   spdlog::info("Lennard_Jones_Force object constructed");
 };
+
 Lennard_Jones_Force::~Lennard_Jones_Force() {
   spdlog::info("Lennard_Jones_Force object destructed");
 };

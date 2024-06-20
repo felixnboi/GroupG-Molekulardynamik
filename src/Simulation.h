@@ -81,27 +81,29 @@ public:
     bool isTimingEnabled() const;
 
 private:
-    SimData simdata;
-    Thermostat thermostat;
-    ThermostatData thermostat_data;
-    CheckpointData checkpoint_data;
+    SimData simdata; ///< Holds the simulation data.
+    Thermostat thermostat; ///< Thermostat for temperature control in simulation.
+    ThermostatData thermostat_data; ///< Holds thermostat data.
+    CheckpointData checkpoint_data; ///< Holds checkpoint data.
 
-    std::unique_ptr<ParticleContainer> particles;
-    std::unique_ptr<Force> force;
+    std::unique_ptr<ParticleContainer> particles; ///< Container holding simulaton particles.
+    std::unique_ptr<Force> force; ///< Force object for force calculations.
 
-    bool xml_flag;
-    bool generate_flag;
-    bool input_flag;
-    bool force_flag;
-    bool time_flag;
-    bool cli_flag;
-    bool linkedcell_flag;
+    bool xml_flag; ///< Flag indicating whether an XML file is used for input.
+    bool generate_flag; ///< Flag indicating whether particle generation is enabled.
+    bool input_flag; ///< Flag indicating whether a user input file is specified.
+    bool force_flag; ///< Flag indicating whether a force type is specified.
+    bool time_flag; ///< Flag indicating whether timing information should be logged.
+    bool cli_flag; ///< Flag indicating whether command-line interface (CLI) options are used.
+    bool linkedcell_flag; ///< Flag indicating whether the linked cell algorithm is used.
+    
+    //The order for two following Flags: {left, right, bottom, top, back, front}.
+    std::array<bool,6> lenJonesBoundaryFlags; ///< Flags for Lennard-Jones boundary conditions.
+    std::array<bool,6> outflowFlags; ///< Flags for outflow boundary conditions.
+    //The order for the following flag: {left-right, bottom-top, back-front}.
+    std::array<bool,3> periodicFlags; ///< Flags for periodic boundary conditions. 
 
-    std::array<bool,6> lenJonesBoundaryFlags;
-    std::array<bool,6> outflowFlags;
-    std::array<bool,3> periodicFlags;
-
-    std::string input_file_user;
+    std::string input_file_user; ///< User-specified input file name for loading initial particle configurations.
 
 
     /**

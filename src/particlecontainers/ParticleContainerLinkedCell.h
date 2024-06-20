@@ -47,9 +47,11 @@ public:
     ParticleIterator end() override;
 
     /**
-     * @brief Updates the locations of particles and handles outflow.
-     * @param outflowflag Flags indicating whether outflow is allowed in each direction.
-     */
+    * @brief Updates the locations of particles considering outflow and periodic boundary conditions.
+    * 
+    * @param outflowflag Array indicating which faces of the simulation domain have outflow boundaries.
+    * @param peridicflag Array indicating which dimensions have periodic boundaries.
+    */
     void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> peridicflag);
 
     /**
@@ -65,23 +67,38 @@ public:
     const std::array<double, 3> getSize();
 
     /**
-     * @brief Gets the size of each cell.
+     * @brief Getter for the size of each cell.
      * @return The size of each cell as an array of three doubles.
      */
     const std::array<double, 3> getCellSize();    
     
-    const std::array<size_t, 3> getCellCount();
+    /**
+    * @brief Getter for the number of cells in each dimension.
+    * 
+    * @return The number of cells in each dimension as an array.
+    */
+    const std::array<size_t, 3> getCelCount();
 
+    /**
+     * @brief Getter for the interaction radius.
+     * 
+    * @return The interaction radius.
+    */
     const double getRadius();
 
 
     /**
-     * @brief Gets the pairs of particles within the interaction radius.
+     * @brief Getter for the pairs of particles within the interaction radius.
      * @return A vector of pairs of particles.
      */
     std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
 
-    
+    /**
+    * @brief Gets the pairs of particles that are within the interaction radius, considering periodic boundaries.
+    * 
+    * @param pFlag Array indicating which dimensions have periodic boundaries.
+    * @return A vector of pairs of particles that are within the interaction radius, considering periodic boundaries.
+    */
     std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 
     /**
