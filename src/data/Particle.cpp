@@ -84,7 +84,7 @@ void Particle::setF(const std::array<double, 3>& newF) {
   f = newF;
 }
 
-void Particle::applyF(std::array<double, 3>& force){
+void Particle::applyF(const std::array<double, 3>& force){
   f = f+force;
 }
 

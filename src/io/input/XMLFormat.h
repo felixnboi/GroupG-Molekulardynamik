@@ -575,6 +575,7 @@ class inputSettings;
 class outputSettings;
 class simulationParameters;
 class thermostat;
+class checkpoint;
 class cuboid;
 class disc;
 
@@ -1973,6 +1974,82 @@ class simulation: public ::xml_schema::type
   //@}
 
   /**
+   * @name checkpoint
+   *
+   * @brief Accessor and modifier functions for the %checkpoint
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::checkpoint checkpoint_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< checkpoint_type > checkpoint_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< checkpoint_type, char > checkpoint_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const checkpoint_optional&
+  checkpoint () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  checkpoint_optional&
+  checkpoint ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  checkpoint (const checkpoint_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  checkpoint (const checkpoint_optional& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly instead
+   * of making a copy.
+   */
+  void
+  checkpoint (::std::unique_ptr< checkpoint_type > p);
+
+  //@}
+
+  /**
    * @name cuboid
    *
    * @brief Accessor and modifier functions for the %cuboid
@@ -2202,6 +2279,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< outputSettings_type > outputSettings_;
   ::xsd::cxx::tree::one< simulationParameters_type > simulationParameters_;
   thermostat_optional thermostat_;
+  checkpoint_optional checkpoint_;
   cuboid_sequence cuboid_;
   disc_sequence disc_;
 
@@ -4053,6 +4131,253 @@ class thermostat: public ::xml_schema::type
   T_diff_optional T_diff_;
   ::xsd::cxx::tree::one< n_thermostat_type > n_thermostat_;
   ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
+
+  //@endcond
+};
+
+/**
+ * @brief Class corresponding to the %checkpoint schema type.
+ *
+ * @nosubgrouping
+ */
+class checkpoint: public ::xml_schema::type
+{
+  public:
+  /**
+   * @name checkpoint_file
+   *
+   * @brief Accessor and modifier functions for the %checkpoint_file
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::string checkpoint_file_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< checkpoint_file_type > checkpoint_file_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< checkpoint_file_type, char > checkpoint_file_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const checkpoint_file_optional&
+  checkpoint_file () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  checkpoint_file_optional&
+  checkpoint_file ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  checkpoint_file (const checkpoint_file_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  checkpoint_file (const checkpoint_file_optional& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly instead
+   * of making a copy.
+   */
+  void
+  checkpoint_file (::std::unique_ptr< checkpoint_file_type > p);
+
+  //@}
+
+  /**
+   * @name merge_file
+   *
+   * @brief Accessor and modifier functions for the %merge_file
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::string merge_file_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< merge_file_type > merge_file_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< merge_file_type, char > merge_file_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const merge_file_optional&
+  merge_file () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  merge_file_optional&
+  merge_file ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  merge_file (const merge_file_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  merge_file (const merge_file_optional& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly instead
+   * of making a copy.
+   */
+  void
+  merge_file (::std::unique_ptr< merge_file_type > p);
+
+  //@}
+
+  /**
+   * @name Constructors
+   */
+  //@{
+
+  /**
+   * @brief Create an instance from the ultimate base and
+   * initializers for required elements and attributes.
+   */
+  checkpoint ();
+
+  /**
+   * @brief Create an instance from a DOM element.
+   *
+   * @param e A DOM element to extract the data from.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  checkpoint (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param x An instance to make a copy of.
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  checkpoint (const checkpoint& x,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy the instance polymorphically.
+   *
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   * @return A pointer to the dynamically allocated copy.
+   *
+   * This function ensures that the dynamic type of the instance is
+   * used for copying and should be used for polymorphic object
+   * models instead of the copy constructor.
+   */
+  virtual checkpoint*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  /**
+   * @brief Copy assignment operator.
+   *
+   * @param x An instance to make a copy of.
+   * @return A reference to itself.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  checkpoint&
+  operator= (const checkpoint& x);
+
+  //@}
+
+  /**
+   * @brief Destructor.
+   */
+  virtual 
+  ~checkpoint ();
+
+  // Implementation.
+  //
+
+  //@cond
+
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  checkpoint_file_optional checkpoint_file_;
+  merge_file_optional merge_file_;
 
   //@endcond
 };

@@ -6,8 +6,8 @@
         <right>periodic</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>periodic</rear>
-        <front>periodic</front>
+        <rear>outflow</rear>
+        <front>outflow</front>
     </boundaries>
 
     <inputSettings>
@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>ass4_task2_1</baseName>
-        <writeFrequency>100</writeFrequency>
+        <writeFrequency>30</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
@@ -29,7 +29,7 @@
         <domain>
             <x>63.0</x>
             <y>36.0</y>
-            <z>10.0</z>
+            <z>1</z>
         </domain>
         <domain_start>
             <x>0.0</x>
@@ -50,7 +50,7 @@
         <position>
             <x>0.6</x>
             <y>2.0</y>
-            <z>5.0</z>
+            <z>0.0</z>
         </position>
         <velocity>
             <x>0.0</x>
@@ -75,7 +75,7 @@
         <position>
             <x>0.6</x>
             <y>19.0</y>
-            <z>5.0</z>
+            <z>0.0</z>
         </position>
         <velocity>
             <x>0.0</x>

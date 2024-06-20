@@ -7,8 +7,9 @@ Simulation::Simulation(){
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
     std::string("INFO"), boundary, 3, 2, domain, domain_start, 0);
 
-    thermostat_data = ThermostatData();
     thermostat = Thermostat();
+    thermostat_data = ThermostatData();
+    checkpoint_data = CheckpointData(false, false, std::string(""), false, std::string(""));
 
     particles = nullptr;
     force = nullptr;
@@ -199,6 +200,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
         XMLReader xmlreader;
         xmlreader.readSimulation(xml_file, simdata);
         xmlreader.readThermostat(xml_file, thermostat_data);
+        xmlreader.readCheckpoint(xml_file, checkpoint_data);
 
         if(thermostat_data.getThermostatFlag() && !thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
             spdlog::error("Either initial temperature or target termperature or both have to be set when using the thermostat");
@@ -394,6 +396,15 @@ void Simulation::run() {
             iteration++;
         }
     }
+    if(checkpoint_data.getCheckpointFlag()){
+        if(checkpoint_data.getCheckpointFileFlag()){
+            CheckpointWriter::writeCheckpoint(*particles);
+        }
+        if(checkpoint_data.getMergeFileFlag()){
+
+        }
+    }
+
     spdlog::info("Output written. Terminating...");
 }
 

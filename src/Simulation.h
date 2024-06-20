@@ -9,6 +9,7 @@
 #include "io/input/FileReader.h"
 #include "io/input/XMLReader.h"
 #include "io/output/VTKWriter.h"
+#include "io/output/CheckpointWriter.h"
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 
@@ -22,8 +23,9 @@
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
 #include "data/SimData.h"
-#include "thermostat/Thermostat.h"
 #include "data/ThermostatData.h"
+#include "data/CheckpointData.h"
+#include "thermostat/Thermostat.h"
 
 /**
  * @class Simulation
@@ -82,6 +84,7 @@ private:
     SimData simdata;
     Thermostat thermostat;
     ThermostatData thermostat_data;
+    CheckpointData checkpoint_data;
 
     std::unique_ptr<ParticleContainer> particles;
     std::unique_ptr<Force> force;

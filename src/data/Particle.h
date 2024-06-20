@@ -146,7 +146,7 @@ public:
    */
   void setF(const std::array<double, 3>& newF);
 
-  void applyF(std::array<double, 3>& force);
+  void applyF(const std::array<double, 3>& force);
   /**
    * @brief Sets the old force on this particle.
    * 
@@ -174,9 +174,7 @@ public:
    * @param other Another particle to compare.
    * @return True if both particles are equal, otherwise false.
    */
-
   bool operator==(const Particle &other) const;
-
 
   /**
    * @brief Converts the particle to a string representation.
