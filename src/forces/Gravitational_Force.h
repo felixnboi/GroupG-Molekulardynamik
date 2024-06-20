@@ -31,8 +31,6 @@ public:
      * @param particles The container of particles for which to calculate the forces.
      * @param reflectionLenJonesFlag The flags for our 6 boundaries in 3d space. 
      * @param linkedcells The flag for choosing the algorithm. If set linkedcells algorithm is used.
-     * @param epsilon Not relevant for this method.
-     * @param sigma Not relevant for this method.
      */
     void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) override;
 };

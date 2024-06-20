@@ -24,6 +24,7 @@ public:
      * @param epsilon The epsilon parameter for the particles of the disc.
      * @param sigma The sigma paramter for the particles of the disc.
      * @param brownian_motion_dimension The brownian motion average velocity dimension.
+     * @param type The type of the particles in the disc.
      */
     Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass, 
     double epsilon, double sigma, size_t brownian_motion_dimension, int type);
