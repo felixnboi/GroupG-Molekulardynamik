@@ -77,7 +77,7 @@ public:
     * 
     * @return The number of cells in each dimension as an array.
     */
-    const std::array<size_t, 3> getCelCount();
+    const std::array<size_t, 3> getCellCount();
 
     /**
      * @brief Getter for the interaction radius.
