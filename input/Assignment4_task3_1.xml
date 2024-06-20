@@ -6,8 +6,8 @@
         <right>reflecting</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>reflecting</rear>
-        <front>reflecting</front>
+        <rear>outflow</rear>
+        <front>outflow</front>
     </boundaries>
 
     <inputSettings>
@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>ass4_task3_1</baseName>
-        <writeFrequency>100</writeFrequency>
+        <writeFrequency>30000</writeFrequency>
     </outputSettings>
 
     <simulationParameters>

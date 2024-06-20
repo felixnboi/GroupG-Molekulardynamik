@@ -29,7 +29,7 @@
         <domain>
             <x>303.0</x>
             <y>180.0</y>
-            <z>1</z>
+            <z>10</z>
         </domain>
         <domain_start>
             <x>0.0</x>
@@ -48,7 +48,7 @@
         <position>
             <x>150.0</x>
             <y>150.0</y>
-            <z>0.0</z>
+            <z>5.0</z>
         </position>
         <velocity>
             <x>0.0</x>
