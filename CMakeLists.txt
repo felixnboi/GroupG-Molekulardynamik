@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.14)
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
 
+find_package(XercesC REQUIRED)
+
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 
@@ -45,6 +47,7 @@ target_include_directories(MolSim
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
+            XercesC::XercesC
             xerces-c
         PRIVATE 
             spdlog::spdlog
