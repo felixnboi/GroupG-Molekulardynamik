@@ -37,7 +37,7 @@ void generateCuboid(const Cuboid& cuboid, const char *filename);
  * This function generates particles within a disc defined by its parameters.
  * The particles are written to a file.
  * 
- * @param cuboid The disc of particles to be generated.
+ * @param disc The disc of particles to be generated.
  * @param filename Path of file to which particles are written.
  */ 
 void generateDisc(const Disc& disc, const char* filename);
