@@ -108,13 +108,22 @@
             </xs:element>
 
             <xs:element name="thermostat" minOccurs="0">
-                <xs:complexType >
+                <xs:complexType>
                     <xs:sequence>
                         <xs:element name="T_init" type="xs:double" minOccurs="0"/>        
                         <xs:element name="T_target" type="xs:double" minOccurs="0"/>        
                         <xs:element name="T_diff" type="xs:double" minOccurs="0"/>
                         <xs:element name="n_thermostat" type="xs:unsignedInt"/>
                         <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>                
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="checkpoint" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="checkpoint_file" type="xs:string" minOccurs="0"/>
+                        <xs:element name="merge_file" type="xs:string" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

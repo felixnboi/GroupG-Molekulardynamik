@@ -465,6 +465,36 @@ thermostat (::std::unique_ptr< thermostat_type > x)
   this->thermostat_.set (std::move (x));
 }
 
+const simulation::checkpoint_optional& simulation::
+checkpoint () const
+{
+  return this->checkpoint_;
+}
+
+simulation::checkpoint_optional& simulation::
+checkpoint ()
+{
+  return this->checkpoint_;
+}
+
+void simulation::
+checkpoint (const checkpoint_type& x)
+{
+  this->checkpoint_.set (x);
+}
+
+void simulation::
+checkpoint (const checkpoint_optional& x)
+{
+  this->checkpoint_ = x;
+}
+
+void simulation::
+checkpoint (::std::unique_ptr< checkpoint_type > x)
+{
+  this->checkpoint_.set (std::move (x));
+}
+
 const simulation::cuboid_sequence& simulation::
 cuboid () const
 {
@@ -1047,6 +1077,70 @@ void thermostat::
 brownian_motion_dimension (const brownian_motion_dimension_type& x)
 {
   this->brownian_motion_dimension_.set (x);
+}
+
+
+// checkpoint
+// 
+
+const checkpoint::checkpoint_file_optional& checkpoint::
+checkpoint_file () const
+{
+  return this->checkpoint_file_;
+}
+
+checkpoint::checkpoint_file_optional& checkpoint::
+checkpoint_file ()
+{
+  return this->checkpoint_file_;
+}
+
+void checkpoint::
+checkpoint_file (const checkpoint_file_type& x)
+{
+  this->checkpoint_file_.set (x);
+}
+
+void checkpoint::
+checkpoint_file (const checkpoint_file_optional& x)
+{
+  this->checkpoint_file_ = x;
+}
+
+void checkpoint::
+checkpoint_file (::std::unique_ptr< checkpoint_file_type > x)
+{
+  this->checkpoint_file_.set (std::move (x));
+}
+
+const checkpoint::merge_file_optional& checkpoint::
+merge_file () const
+{
+  return this->merge_file_;
+}
+
+checkpoint::merge_file_optional& checkpoint::
+merge_file ()
+{
+  return this->merge_file_;
+}
+
+void checkpoint::
+merge_file (const merge_file_type& x)
+{
+  this->merge_file_.set (x);
+}
+
+void checkpoint::
+merge_file (const merge_file_optional& x)
+{
+  this->merge_file_ = x;
+}
+
+void checkpoint::
+merge_file (::std::unique_ptr< merge_file_type > x)
+{
+  this->merge_file_.set (std::move (x));
 }
 
 
@@ -2008,6 +2102,7 @@ simulation (const boundaries_type& boundaries,
   outputSettings_ (outputSettings, this),
   simulationParameters_ (simulationParameters, this),
   thermostat_ (this),
+  checkpoint_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -2024,6 +2119,7 @@ simulation (::std::unique_ptr< boundaries_type > boundaries,
   outputSettings_ (std::move (outputSettings), this),
   simulationParameters_ (std::move (simulationParameters), this),
   thermostat_ (this),
+  checkpoint_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -2039,6 +2135,7 @@ simulation (const simulation& x,
   outputSettings_ (x.outputSettings_, f, this),
   simulationParameters_ (x.simulationParameters_, f, this),
   thermostat_ (x.thermostat_, f, this),
+  checkpoint_ (x.checkpoint_, f, this),
   cuboid_ (x.cuboid_, f, this),
   disc_ (x.disc_, f, this)
 {
@@ -2054,6 +2151,7 @@ simulation (const ::xercesc::DOMElement& e,
   outputSettings_ (this),
   simulationParameters_ (this),
   thermostat_ (this),
+  checkpoint_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -2144,6 +2242,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // checkpoint
+    //
+    if (n.name () == "checkpoint" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< checkpoint_type > r (
+        checkpoint_traits::create (i, f, this));
+
+      if (!this->checkpoint_)
+      {
+        this->checkpoint_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // cuboid
     //
     if (n.name () == "cuboid" && n.namespace_ ().empty ())
@@ -2216,6 +2328,7 @@ operator= (const simulation& x)
     this->outputSettings_ = x.outputSettings_;
     this->simulationParameters_ = x.simulationParameters_;
     this->thermostat_ = x.thermostat_;
+    this->checkpoint_ = x.checkpoint_;
     this->cuboid_ = x.cuboid_;
     this->disc_ = x.disc_;
   }
@@ -3147,6 +3260,109 @@ operator= (const thermostat& x)
 
 thermostat::
 ~thermostat ()
+{
+}
+
+// checkpoint
+//
+
+checkpoint::
+checkpoint ()
+: ::xml_schema::type (),
+  checkpoint_file_ (this),
+  merge_file_ (this)
+{
+}
+
+checkpoint::
+checkpoint (const checkpoint& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  checkpoint_file_ (x.checkpoint_file_, f, this),
+  merge_file_ (x.merge_file_, f, this)
+{
+}
+
+checkpoint::
+checkpoint (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  checkpoint_file_ (this),
+  merge_file_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void checkpoint::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // checkpoint_file
+    //
+    if (n.name () == "checkpoint_file" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< checkpoint_file_type > r (
+        checkpoint_file_traits::create (i, f, this));
+
+      if (!this->checkpoint_file_)
+      {
+        this->checkpoint_file_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // merge_file
+    //
+    if (n.name () == "merge_file" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< merge_file_type > r (
+        merge_file_traits::create (i, f, this));
+
+      if (!this->merge_file_)
+      {
+        this->merge_file_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+}
+
+checkpoint* checkpoint::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class checkpoint (*this, f, c);
+}
+
+checkpoint& checkpoint::
+operator= (const checkpoint& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->checkpoint_file_ = x.checkpoint_file_;
+    this->merge_file_ = x.merge_file_;
+  }
+
+  return *this;
+}
+
+checkpoint::
+~checkpoint ()
 {
 }
 

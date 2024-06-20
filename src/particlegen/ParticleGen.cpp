@@ -4,6 +4,8 @@
 #include "ParticleGenerator.h"
 #include "../utils/NumericalUtils.h"
 #include "../io/input/XMLReader.h"
+#include "../data/CheckpointData.h"
+#include "../inputFileManager.h"
 
 
 /**
@@ -48,6 +50,7 @@ int main(int argc, char *argsv[]){
 
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
+    CheckpointData checkpointdata;
 
     const char* xml_file = "";
 
@@ -266,6 +269,7 @@ int main(int argc, char *argsv[]){
         XMLReader xmlreader;
         xmlreader.readCuboids(xml_file, cuboids, epsilon, sigma);
         xmlreader.readDiscs(xml_file, discs, epsilon, sigma);
+        xmlreader.readCheckpoint(xml_file, checkpointdata);
 
     }else{
         if(!cli_flag){
@@ -287,7 +291,6 @@ int main(int argc, char *argsv[]){
         if(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag){
             cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, 0.1, epsilon, sigma, 2, 0));
         }
-        
     }
 
 
@@ -298,5 +301,10 @@ int main(int argc, char *argsv[]){
     for(const auto& disc : discs){
         ParticleGenerator::generateDisc(disc, "../input/generated-input.txt");
     }
+
+    if(checkpointdata.getMergeFileFlag()){
+        inputFileManager::mergeFile("../input/generated-input.txt", checkpointdata.getMergeFile().c_str());
+    }
+    
     spdlog::info("ParticleGenerator application finished successfully.");
 }

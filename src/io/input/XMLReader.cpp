@@ -143,3 +143,34 @@ void XMLReader::readThermostat(const char* filename, ThermostatData& thermostatd
         return;
     }
 }
+
+void XMLReader::readCheckpoint(const char* filename, CheckpointData& checkpointdata){
+    try{
+        std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
+
+        if(sim->checkpoint().present()){
+            checkpointdata.setCheckpointFlag(true);
+            if(sim->checkpoint().get().checkpoint_file().present()){
+                checkpointdata.setCheckpointFileFlag(true);
+                checkpointdata.setCheckpointFile(sim->checkpoint().get().checkpoint_file().get());
+            }else{
+                checkpointdata.setCheckpointFileFlag(false);
+            }
+            if(sim->checkpoint().get().merge_file().present()){
+                checkpointdata.setMergeFileFlag(true);
+                checkpointdata.setMergeFile(sim->checkpoint().get().merge_file().get());
+            }else{
+                checkpointdata.setMergeFileFlag(false);
+            }
+            
+        }else{
+            checkpointdata.setCheckpointFlag(false);
+        }
+
+
+    }catch(const xml_schema::exception& e){
+        spdlog::error("Error during Checkpoint-parsing.");
+        spdlog::error(e.what());
+        return;
+    }
+}

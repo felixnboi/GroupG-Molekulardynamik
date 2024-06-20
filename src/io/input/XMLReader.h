@@ -5,6 +5,7 @@
 #include "../../data/Disc.h"
 #include "../../data/SimData.h"
 #include "../../data/ThermostatData.h"
+#include "../../data/CheckpointData.h"
 #include "spdlog/spdlog.h"
 
 #include <string>
@@ -60,4 +61,12 @@ public:
      * @param thermostatdata A reference to the thermostatdata object.
      */
     void readThermostat(const char* filename, ThermostatData& thermostatdata);
+
+    /**
+     * @brief Reads checkpoint data from an XML file and saves it in a checkpointdata object.
+     * 
+     * @param filename The name of the XML file to read from.
+     * @param thermostatdata A reference to the checkpointdata object.
+     */
+    void readCheckpoint(const char* filename, CheckpointData& checkpointdata);
 };

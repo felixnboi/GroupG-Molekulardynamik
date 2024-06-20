@@ -1,6 +1,6 @@
 #include "CheckpointWriter.h"
 
-void CheckpointWriter::writeCeckpoint(ParticleContainer &particles){
+void CheckpointWriter::writeCheckpoint(ParticleContainer &particles){
     std::fstream checkpoint_file;
     checkpoint_file.open("../../../input/checkpoint.txt",std::ios::out | std::ios::trunc);
     for(auto p : particles.getParticles()){

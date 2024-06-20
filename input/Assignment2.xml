@@ -61,6 +61,7 @@
         <brownian_motion>0.1</brownian_motion>
         <epsilon>5.0</epsilon>
         <sigma>1.0</sigma>
+        <type>0</type> 
     </cuboid>
 
     <cuboid>
@@ -84,6 +85,7 @@
         <brownian_motion>0.1</brownian_motion>
         <epsilon>5.0</epsilon>
         <sigma>1.0</sigma>
+        <type>1</type> 
     </cuboid>
 
 </simulation>
