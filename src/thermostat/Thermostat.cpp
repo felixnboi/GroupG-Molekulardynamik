@@ -65,9 +65,9 @@ void Thermostat::initSystemTemperature(double new_initialTemp, std::unique_ptr<P
     for(auto& it : *pc){
     //for (auto it = pc->begin(); it != pc->end(); ++it) {
         //(*it)->setV(std::sqrt(new_initialTemp / (*it)->getM()) * maxwellBoltzmannDistributedVelocity(0.1, brownian_motion_dimension));
-        auto tmp = maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (it)->getM()), brownian_motion_dimension);
+        auto tmp = maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / it->getM()), brownian_motion_dimension);
         //(it)->setV(maxwellBoltzmannDistributedVelocity(0.1, brownian_motion_dimension));
-        (it)->setV(tmp);
+        it->setV(tmp);
         std::cout <<"velocityx: " << tmp[0] << " y: " << tmp[1] << " z: " << tmp[2] << std::endl;
 
         //(*it)->setV(maxwellBoltzmannDistributedVelocity(std::sqrt(new_initialTemp / (*it)->getM()), brownian_motion_dimension));

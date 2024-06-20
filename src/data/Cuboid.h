@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
 
 /**
  * @brief This class describes the needed parameters of a cuboid of particles.
