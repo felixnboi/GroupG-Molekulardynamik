@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
+
+    <boundaries>
+        <left>reflecting</left>
+        <right>reflecting</right>
+        <bottom>reflecting</bottom>
+        <top>reflecting</top>
+        <rear>outflow</rear>
+        <front>outflow</front>
+    </boundaries>
+
+    <inputSettings>
+        <inputFile>../input/generated-input.txt</inputFile>
+    </inputSettings>
+
+    <outputSettings>
+        <baseName>profiling</baseName>
+        <writeFrequency>10000</writeFrequency>
+    </outputSettings>
+
+    <simulationParameters>
+        <end_t>1</end_t>
+        <delta_t>0.0005</delta_t>
+        <start_t>0.0</start_t>
+        <force>lennardJonesForce</force>
+        <algorithm>linkedcell</algorithm>
+        <loglevel>INFO</loglevel>
+        <domain>
+            <x>303.0</x>
+            <y>180.0</y>
+            <z>1</z>
+        </domain>
+        <domain_start>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </domain_start>
+        <cutoff_radius>3</cutoff_radius>
+        <grav_constant>-12.44</grav_constant>
+    </simulationParameters>
+
+    <thermostat>
+        <T_init>0.5</T_init>
+        <n_thermostat>1000</n_thermostat>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+    </thermostat>
+
+    <checkpoint>
+        <checkpoint_file>../input/checkpoint.txt</checkpoint_file>
+    </checkpoint>
+
+    <cuboid>
+        <position>
+            <x>1.5</x>
+            <y>2.0</y>
+            <z>0.0</z>
+        </position>
+        <velocity>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </velocity>
+        <dimensions>
+            <x>250</x>
+            <y>50</y>
+            <z>1</z>
+        </dimensions>
+        <distance>1.2</distance>
+        <mass>1.0</mass>
+        <brownian_motion>0.0</brownian_motion>
+        <epsilon>1.0</epsilon>
+        <sigma>1.2</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>0</type> 
+    </cuboid>
+
+</simulation>

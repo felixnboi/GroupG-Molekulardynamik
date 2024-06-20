@@ -348,8 +348,7 @@ void Simulation::run() {
     double initial_temp = thermostat.getThermostatData().getInitTemp();
     size_t n_thermostat = thermostat.getThermostatData().getNThermostat();
 
-    if(initial_temp != 0.0){
-        std::cout << "thermostat\n";
+    if(thermostat_flag && initial_temp != 0.0){
         thermostat.initSystemTemperature(initial_temp, particles);
     }
 

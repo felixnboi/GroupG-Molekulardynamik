@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.14)
 # define project name, version
 project(PSEMolDyn_GroupG VERSION 0.0.1)
 
-find_package(XercesC REQUIRED)
-
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 
@@ -47,7 +45,6 @@ target_include_directories(MolSim
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-            XercesC::XercesC
             xerces-c
         PRIVATE 
             spdlog::spdlog
@@ -72,8 +69,8 @@ add_subdirectory(tests)
 enable_testing()
 include(CTest)
 
-# Add the sanitize address flag
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+# Add the sanitize address flag and enable profiling
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -pg")
 
 add_subdirectory(libs/spdlog-1.14.1)
 add_subdirectory(libs/googletest-1.14.0)

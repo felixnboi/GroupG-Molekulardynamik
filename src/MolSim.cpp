@@ -26,16 +26,11 @@
  */
 int main(int argc, char *argsv[]) {
 
-    // Simulation simulation;
-    // if (!simulation.initialize(argc, argsv)) {
-    //     return EXIT_FAILURE;
-    // }
-    // simulation.run();
-
-    for(int i = 0; i<3; i++){
-        auto tmp = maxwellBoltzmannDistributedVelocity(std::sqrt(3.0),2);
-        std::cout << tmp[0] << " " << tmp[1] << " " << tmp[2] <<"\n";
+    Simulation simulation;
+    if (!simulation.initialize(argc, argsv)) {
+        return EXIT_FAILURE;
     }
+    simulation.run();
 
     return 0;
 }
