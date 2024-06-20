@@ -398,7 +398,7 @@ void Simulation::run() {
     }
     if(checkpoint_data.getCheckpointFlag()){
         if(checkpoint_data.getCheckpointFileFlag()){
-            CheckpointWriter::writeCheckpoint(*particles);
+            CheckpointWriter::writeCheckpoint(*particles, checkpoint_data.getCheckpointFile().c_str());
         }
     }
 
