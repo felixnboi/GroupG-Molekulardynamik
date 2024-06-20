@@ -73,12 +73,6 @@ public:
      */
     void run();
     
-    /**
-     * @brief Checks whether timing should be enabled for the simulation.
-     * 
-     * @return True if timing is enabled, otherwise false.
-     */
-    bool isTimingEnabled() const;
 
 private:
     SimData simdata; ///< Holds the simulation data.

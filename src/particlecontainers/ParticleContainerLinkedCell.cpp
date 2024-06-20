@@ -1,6 +1,7 @@
 #include "ParticleContainerLinkedCell.h"
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius){
+    particle_count = 0;
     cellCount = {(size_t)floor(sizeX/radius), (size_t)floor(sizeY/radius), (size_t)floor(sizeZ/radius)};
     if(cellCount[0] == 0) cellCount[0] = 1;
     if(cellCount[1] == 0) cellCount[1] = 1;
@@ -17,6 +18,10 @@ ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
     spdlog::info("Linked cells particlecontainer destructed.");
 };
 
+size_t ParticleContainerLinkedCell::getParticleCount(){
+    return particle_count;
+}
+
 void ParticleContainerLinkedCell::reserve(size_t size){
     particles.reserve(size);
 }
@@ -31,6 +36,7 @@ const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
 }
 
 void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> particle){
+    particle_count++;
     particles.push_back(particle);
     auto cords = particle->getX();
     if(cords[0]<0||cords[0]>=size[0]||cords[1]<0||cords[1]>=size[1]||cords[2]<0||cords[2]>=size[2]){

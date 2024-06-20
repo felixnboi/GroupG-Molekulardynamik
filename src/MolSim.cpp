@@ -25,20 +25,12 @@
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
-    auto start = std::chrono::high_resolution_clock::now();
 
     Simulation simulation;
     if (!simulation.initialize(argc, argsv)) {
         return EXIT_FAILURE;
     }
-
     simulation.run();
-
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    if (simulation.isTimingEnabled()) {
-        std::cout << "Execution time: " << elapsed.count() << " seconds" << std::endl;
-    }
 
     return 0;
 }

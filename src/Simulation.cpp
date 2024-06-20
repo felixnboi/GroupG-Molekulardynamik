@@ -334,6 +334,8 @@ bool Simulation::initialize(int argc, char* argv[]) {
 }
 
 void Simulation::run() {
+    auto start = std::chrono::high_resolution_clock::now();
+
     int iteration = 0;
     double current_time = 0;
     double start_time = simdata.getStartTime();
@@ -401,12 +403,14 @@ void Simulation::run() {
             CheckpointWriter::writeCheckpoint(*particles, checkpoint_data.getCheckpointFile().c_str());
         }
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    if(time_flag) {
+        std::cout << "Execution time: " << elapsed.count() << " seconds\n";
+        std::cout << "Molecule updates per second: " << iteration*particles->getParticleCount()/elapsed.count() << "\n";
+    }
 
     spdlog::info("Output written. Terminating...");
-}
-
-bool Simulation::isTimingEnabled() const {
-    return time_flag;
 }
 
 void Simulation::calculateX() {
