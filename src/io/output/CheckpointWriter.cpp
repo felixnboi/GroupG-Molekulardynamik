@@ -1,8 +1,14 @@
 #include "CheckpointWriter.h"
 
-void CheckpointWriter::writeCeckpoint(ParticleContainer &particles){
+void CheckpointWriter::writeCheckpoint(ParticleContainer &particles,  const char *filename){
     std::fstream checkpoint_file;
-    checkpoint_file.open("../../../input/checkpoint.txt",std::ios::out | std::ios::trunc);
+    std::string tmp_string;
+    checkpoint_file.open(filename,std::ios::in|std::ios::out|std::ios::trunc);
+    int count = 0;
+    for(auto p : particles.getParticles()) {
+        count++;
+    }
+    checkpoint_file << count << "\n";
     for(auto p : particles.getParticles()){
         auto x = p->getX()+p->getDomainStart();
         auto v = p->getV();
@@ -13,4 +19,5 @@ void CheckpointWriter::writeCeckpoint(ParticleContainer &particles){
             " " << p->getEpsilon() << " "<< p->getSigma() << " "<< type << " " <<
             f[0] << " " << f[1] << " " << f[2] << " " << oldF[0] << " " << oldF[1] << " " << oldF[2]<< "\n";         
     }
+    checkpoint_file.close();
 }

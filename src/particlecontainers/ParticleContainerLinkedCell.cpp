@@ -125,7 +125,7 @@ std::vector<std::shared_ptr<Particle>> ParticleContainerLinkedCell::getHalo(){
     return halo;
 }
     
-const std::array<size_t, 3> ParticleContainerLinkedCell::getCelCount(){
+const std::array<size_t, 3> ParticleContainerLinkedCell::getCellCount(){
     return cellCount;
 }
 

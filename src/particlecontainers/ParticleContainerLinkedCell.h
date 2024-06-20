@@ -70,7 +70,7 @@ public:
      */
     const std::array<double, 3> getCellSize();    
     
-    const std::array<size_t, 3> getCelCount();
+    const std::array<size_t, 3> getCellCount();
 
     const double getRadius();
 
