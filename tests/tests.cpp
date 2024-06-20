@@ -805,11 +805,11 @@ TEST(CheckpointWriter, writeCheckpoint){
     pc->addParticle(p1);
     pc->addParticle(p2);
     pc->addParticle(p3);
-    CheckpointWriter::writeCheckpoint(*pc, "../input/checkpoint.txt");
+    CheckpointWriter::writeCheckpoint(*pc, "../input/checkpointTest.txt");
     
     ParticleContainer* particles = new ParticleContainerOld();
     FileReader fileReader;
-    fileReader.readFile(*particles, "../input/checkpoint.txt", {0,0,0});
+    fileReader.readFile(*particles, "../input/checkpointTest.txt", {0,0,0});
     auto p = particles->getParticles();
     assert(p[0]->getX()[0]==1&&p[0]->getX()[1]==2&&p[0]->getX()[2]==3);
     assert(p[1]->getX()[0]==2&&p[1]->getX()[1]==3&&p[1]->getX()[2]==4);
