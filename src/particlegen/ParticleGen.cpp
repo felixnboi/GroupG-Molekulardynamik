@@ -50,7 +50,7 @@ int main(int argc, char *argsv[]){
 
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
-    CheckpointData checkpointdata;
+    CheckpointData checkpointdata(false, false, std::string(""), false, std::string(""));
 
     const char* xml_file = "";
 
@@ -305,6 +305,6 @@ int main(int argc, char *argsv[]){
     if(checkpointdata.getMergeFileFlag()){
         inputFileManager::mergeFile("../input/generated-input.txt", checkpointdata.getMergeFile().c_str());
     }
-    
+
     spdlog::info("ParticleGenerator application finished successfully.");
 }

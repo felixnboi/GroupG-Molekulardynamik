@@ -9,6 +9,11 @@
 class CheckpointData {
 public:
     /**
+     * @brief default constructor
+     */
+    CheckpointData();
+    
+    /**
      * @brief Constructor to initialize CheckpointData.
      * 
      * @param checkpoint_flag Flag indicating if checkpointing is used.

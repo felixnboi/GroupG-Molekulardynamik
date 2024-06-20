@@ -88,6 +88,7 @@ add_executable(ParticleGenerator
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Disc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/SimData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/ThermostatData.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/CheckpointData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLReader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
 )

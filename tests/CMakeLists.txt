@@ -17,6 +17,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/data/Disc.cpp 
     ${PROJECT_SOURCE_DIR}/src/data/SimData.cpp
     ${PROJECT_SOURCE_DIR}/src/data/ThermostatData.cpp
+    ${PROJECT_SOURCE_DIR}/src/data/CheckpointData.cpp
     ${PROJECT_SOURCE_DIR}/src/thermostat/Thermostat.cpp
 )
 

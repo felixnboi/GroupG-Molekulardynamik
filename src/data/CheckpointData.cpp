@@ -1,5 +1,7 @@
 #include "CheckpointData.h"
 
+CheckpointData::CheckpointData() = default;
+
 CheckpointData::CheckpointData(bool checkpoint_flag, bool checkpoint_file_flag, std::string checkpoint_file, bool merge_file_flag, 
 std::string merge_file)
     : checkpoint_flag(checkpoint_flag), 

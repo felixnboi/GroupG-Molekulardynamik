@@ -400,9 +400,6 @@ void Simulation::run() {
         if(checkpoint_data.getCheckpointFileFlag()){
             CheckpointWriter::writeCheckpoint(*particles);
         }
-        if(checkpoint_data.getMergeFileFlag()){
-
-        }
     }
 
     spdlog::info("Output written. Terminating...");
