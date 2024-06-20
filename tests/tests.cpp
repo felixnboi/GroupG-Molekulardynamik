@@ -698,32 +698,45 @@ TEST(Thermostat, HoldTemperature) {
 
 // Test case for initializing system temperature
 TEST(Thermostat, InitSystemTemperature) {
-    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    std::unique_ptr<ParticleContainer> pc1 = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    std::unique_ptr<ParticleContainer> pc2= std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
 
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
     (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 2.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+
+    std::shared_ptr<Particle> p4 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
+    (std::array<double, 3>){1.39855, -2.31087, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p5 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
+    (std::array<double, 3>){-0.835396, -0.327661, 0.0}, 1.0, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p6 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
+    (std::array<double, 3>){0.329751, 0.0308074, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container
-    pc->addParticle(p1);
-    pc->addParticle(p2);
-    pc->addParticle(p3);
+    pc1->addParticle(p1);
+    pc1->addParticle(p2);
+    pc1->addParticle(p3);
 
-    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, TARGET_TEMP, MAX_DELTA_TEMP, true, INITIAL_TEMP);
+    pc2->addParticle(p4);
+    pc2->addParticle(p5);
+    pc2->addParticle(p6);
+
+    ThermostatData thermostat_data(true, N_THERMOSTAT, 2, true, TARGET_TEMP, MAX_DELTA_TEMP, true, INITIAL_TEMP);
     Thermostat thermostat(thermostat_data);
 
-    spdlog::info("initial Temp:{}", thermostat.getCurrentTemperature(pc));
+    spdlog::info("initial Temp:{}", thermostat.getCurrentTemperature(pc1));
 
     double newInitialTemp = 3.0;
-    thermostat.initSystemTemperature(newInitialTemp, pc);
+    thermostat.initSystemTemperature(newInitialTemp, pc1);
 
-    double newTemp = thermostat.getCurrentTemperature(pc);
+    double newTemp = thermostat.getCurrentTemperature(pc1);
+    double actualTemp = thermostat.getCurrentTemperature(pc2);
 
-    EXPECT_NEAR(newTemp, newInitialTemp, EPSILON);
+    EXPECT_NEAR(newTemp, actualTemp, EPSILON);
 }
 
 //Test for the gravity on the y axis
