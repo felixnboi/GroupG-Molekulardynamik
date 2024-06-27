@@ -739,6 +739,49 @@ TEST(Thermostat, InitSystemTemperature) {
     EXPECT_NEAR(newTemp, actualTemp, EPSILON);
 }
 
+// Test case for scaling fluids with beta
+TEST(Thermostat, ScaleWithBetaFluid) {
+    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    
+    // Adding some particles with non-zero velocities
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
+    (std::array<double, 3>){1.0, 1.0, 1.0}, 1.0, true, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
+    (std::array<double, 3>){2.0, 2.0, 2.0}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
+    (std::array<double, 3>){3.0, 3.0, 3.0}, 2.0, true, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p4 = std::make_shared<Particle>((std::array<double, 3>){4.0, 5.0, 6.0}, 
+    (std::array<double, 3>){4.0, 4.0, 4.0}, 2.5, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+    pc->addParticle(p3);
+    pc->addParticle(p4);
+
+    // Creating a thermostat with some data
+    ThermostatData thermostat_data(true, N_THERMOSTAT, DIMENSIONS, true, 6.0, 2.5, true, INITIAL_TEMP);
+    Thermostat thermostat(thermostat_data);
+
+    thermostat.scaleWithBetaFluid(pc);
+
+    EXPECT_NEAR(p1->getV()[0], 1, EPSILON);
+    EXPECT_NEAR(p1->getV()[1], 1, EPSILON);
+    EXPECT_NEAR(p1->getV()[2], 1, EPSILON);
+
+    EXPECT_NEAR(p2->getV()[0], 1.5, EPSILON);
+    EXPECT_NEAR(p2->getV()[1], 1.5, EPSILON);
+    EXPECT_NEAR(p2->getV()[2], 1.5, EPSILON);
+
+    EXPECT_NEAR(p3->getV()[0], 3, EPSILON);
+    EXPECT_NEAR(p3->getV()[0], 3, EPSILON);
+    EXPECT_NEAR(p3->getV()[0], 3, EPSILON);
+
+    EXPECT_NEAR(p4->getV()[0], 4.5, EPSILON);
+    EXPECT_NEAR(p4->getV()[1], 4.5, EPSILON);
+    EXPECT_NEAR(p4->getV()[2], 4.5, EPSILON);
+}
+
+
 //Test for the gravity on the y axis
 TEST(Lennard_Jones_Force, gravity){
     auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1);
@@ -833,6 +876,8 @@ TEST(CheckpointWriter, writeCheckpoint){
     assert(p[2]->getV()[0]==0.3&&p[2]->getV()[1]==0.4&&p[2]->getV()[2]==0.5);
 
     assert(p[0]->getM()==1&&p[1]->getM()==1.5&&p[2]->getM()==2);
+
+    ASSERT_FALSE(p[0]->getIsOuter() || p[1]->getIsOuter() || p[2]->getIsOuter());
 
     assert(p[0]->getType()==0&&p[1]->getType()==1&&p[2]->getType()==0);
 
