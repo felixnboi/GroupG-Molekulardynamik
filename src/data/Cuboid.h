@@ -27,9 +27,10 @@ public:
      * @param sigma The sigma paramter for the particles of the cuboid.
      * @param brownian_motion_dimension The brownian motion average velocity dimension.
      * @param type The type of the particles in the cuboid.
+     * @param is_outer Whether the cuboid is outer cuboid(wall).
      */
     Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-    double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, int type);
+    double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, int type, bool is_outer);
 
     /**
      * @brief Getter for the position of the cuboid.
@@ -100,6 +101,13 @@ public:
      * @return The type of the particles in the cuboid.
      */
     int getType() const;
+
+    /**
+     * @brief Getter for the is_outer parameter of the particles in the cuboid.
+     * 
+     * @return The is_outer of the particles in the cuboid.
+     */
+    bool getIsOuter() const;
     
     /**
      * @brief Setter for the position of the cuboid.
@@ -172,6 +180,13 @@ public:
     void setType(int new_type);
 
     /**
+     * @brief Setter for the is_outer of the particles in the cuboid.
+     * 
+     * @param new_is_outer The new is_outer of the particles in the cuboid.
+     */
+    void setIsOuter(int new_is_outer);
+
+    /**
      * @brief Equality operator for cuboid.
      * 
      * @param other The other cuboid to compare with.
@@ -189,5 +204,6 @@ private:
     double epsilon; ///< The paramter epsilon of the cuboid.
     double sigma; ///< The parameter sigma of the cuboid.
     size_t brownian_motion_dimension; ///< Parameter specifying the dimension of average brownian motion velocity of the cuboid.
-    int type; ///<The type of the particles in the cuboid;
+    int type; ///<The type of the particles in the cuboid.
+    bool is_outer; ///< Whether the cuboid is outer cuboid(wall).
 };

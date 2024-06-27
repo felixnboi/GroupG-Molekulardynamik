@@ -20,9 +20,11 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
   
   // reset the force for each particle, store the old force and claculate the GravitationalForce
   for(auto particle : particles.getParticles()){
-    particle->setOldF(particle->getF());
-    std::array<double,3> gravForce = {0, particle->getM()*gravConstant,0};
-    particle->setF(gravForce);
+    if (!particle->getIsOuter()) {
+      particle->setOldF(particle->getF());
+      std::array<double,3> gravForce = {0, particle->getM()*gravConstant,0};
+      particle->setF(gravForce);
+    }
   }
   
   if(linkedcells){
@@ -38,6 +40,9 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
           for(auto pair : pairs){
             auto particle_i = pair[0];
             auto particle_j = pair[1];
+
+            if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
+
             double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
             double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
 
@@ -63,14 +68,15 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
             }
             for(int dir = 0; dir < directions; dir++){
               auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma, LCContainer.getRadius());
-              particle_i->setF(particle_i->getF()+force);
-              particle_j->setF(particle_j->getF()-force);
+              if (!particle_i->getIsOuter()) {particle_i->setF(particle_i->getF()+force);}
+              if (!particle_j->getIsOuter()) {particle_j->setF(particle_j->getF()-force);}
             }
           }
         }
       }
     }
     for(auto particle : boundery){
+      if (!particle->getIsOuter()) {
       std::array<double, 3> force = {0,0,0};
       for(int i = 0; i < 3; i++){
         if(reflectLenJonesFlag[2*i]&&particle->getX()[i]< LCContainer.getCellSize()[i]&&particle->getX()[i]< particle->getSigma()*twoRoot6){
@@ -86,6 +92,7 @@ void Lennard_Jones_Force::calculateF(ParticleContainer &particles, bool linkedce
       }
       particle->applyF(force);
     }
+    }
   }
   calculateFPairs(particlePairs);
 }
@@ -95,13 +102,16 @@ void Lennard_Jones_Force::calculateFPairs(std::vector<std::array<std::shared_ptr
   for (auto pair = pairs.begin(); pair != pairs.end(); pair++){
     std::shared_ptr<Particle> particle_i = (*pair)[0];
     std::shared_ptr<Particle> particle_j = (*pair)[1];
+
+    if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
+
     double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
     double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
 
     auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, 0);
      
-    particle_i->setF(particle_i->getF()+force);
-    particle_j->setF(particle_j->getF()-force);
+    if (!particle_i->getIsOuter()) {particle_i->setF(particle_i->getF()+force);}
+    if (!particle_j->getIsOuter()) {particle_j->setF(particle_j->getF()-force);}
   }
 }
 

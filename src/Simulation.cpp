@@ -5,7 +5,7 @@ Simulation::Simulation(){
     std::array<double, 3> domain = {};
     std::array<double, 3> domain_start = {0, 0, 0};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, 2, domain, domain_start, 0);
+    std::string("INFO"), boundary, 3, 2, domain, domain_start, 0, false);
 
     thermostat = Thermostat();
     thermostat_data = ThermostatData();
@@ -370,7 +370,8 @@ void Simulation::run() {
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
-                thermostat.scaleWithBeta(particles);
+                if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
+                else{thermostat.scaleWithBetaFluid(particles);}
             }
 
             iteration++;
@@ -383,7 +384,8 @@ void Simulation::run() {
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
-                thermostat.scaleWithBeta(particles);
+                if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
+                else{thermostat.scaleWithBetaFluid(particles);}
             }
 
             // plotting particle positions only at intervals of iterations
@@ -416,6 +418,8 @@ void Simulation::calculateX() {
   double delta_t = simdata.getDeltaT();
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
+    if(!(*p)->getIsOuter()){
+
     auto m = (*p)->getM(); ///< Mass of the particle.
     auto cur_x = (*p)->getX(); ///< Current position of the particle.
     auto cur_v = (*p)->getV(); ///< Current velocity of the particle.
@@ -428,6 +432,7 @@ void Simulation::calculateX() {
     }
     // set the new position for the particle
     (*p)->setX(cur_x_dummy);
+    }
   }
   if(linkedcell_flag){
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());

@@ -31,10 +31,11 @@ public:
      * @param domain Array containing domain information.
      * @param domain_start Array containing the starting position of the domain.
      * @param gravConstant The gravitational constant.
+     * @param walls_flag The walls flag.
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant);
+            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant, bool walls_flag);
 
     /**
      * @brief Destructor.
@@ -147,6 +148,13 @@ public:
     double getGravConstant() const;
 
     /**
+     * @brief Getter for the walls flag.
+     * 
+     * @return The walls flag of the simulation.
+     */
+    bool getWallsFlag() const;
+
+    /**
      * @brief Setter for the input file name.
      * 
      * @param new_input_file The new input file name.
@@ -251,6 +259,13 @@ public:
      */
     void setGravConstant(double new_grav_constant);
 
+    /**
+     * @brief Setter for the walls_flag parameter.
+     * 
+     * @param new_walls_flag The new walls_flag value used in simulation.
+     */
+    void setWallsFlag(bool new_walls_flag);
+
 
 private:
     std::string input_file; ///< The input file name.
@@ -268,5 +283,6 @@ private:
     std::array<double, 3> domain; ///< Array containing domain information.
     std::array<double, 3> domain_start; ///< Array containing the starting position of the domain.
     double gravConstant; ///< Gravitational constant for the Simulation.
+    bool walls_flag; ///< Flag indicating whether the walls in simulation are present.
 };
 

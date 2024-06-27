@@ -26,9 +26,10 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids, 
             const double sigma = cuboid_xml.sigma();
             const double brownian_motion_dimension = cuboid_xml.brownian_motion_dimension();
             const int type = cuboid_xml.type();
+            const bool is_outer = cuboid_xml.is_outer();
 
             cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion, epsilon, sigma, 
-            brownian_motion_dimension, type));
+            brownian_motion_dimension, type, is_outer));
         }
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Cuboid-parsing.");
@@ -58,7 +59,7 @@ void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs, double
             const double brownian_motion_dimension = disc_xml.brownian_motion_dimension();
             const int type = disc_xml.type();
 
-            discs.push_back(Disc(position, velocity, radius, distance, mass, epsilon, sigma, brownian_motion_dimension, type));
+            discs.push_back(Disc(position, velocity, radius, distance, mass, epsilon, sigma, brownian_motion_dimension, type, false));
         }
 
     }catch(const xml_schema::exception& e){
@@ -81,6 +82,7 @@ void XMLReader::readSimulation(const char* filename, SimData& simdata){
         simdata.setForceStr(sim->simulationParameters().force());
         simdata.setAlgorithm(sim->simulationParameters().algorithm());
         simdata.setLoglevel(sim->simulationParameters().loglevel());
+        simdata.setWallsFlag(sim->simulationParameters().walls_flag());
 
         const std::array<std::string, 6> boundary = {sim->boundaries().left(), sim->boundaries().right(), sim->boundaries().bottom(), 
         sim->boundaries().top(), sim->boundaries().rear(), sim->boundaries().front()};

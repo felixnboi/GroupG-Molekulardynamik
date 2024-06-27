@@ -55,6 +55,14 @@ public:
     void scaleWithBeta(std::unique_ptr<ParticleContainer>& pc);
 
     /**
+     * @brief Scale the temperature of a particle container towards the target temperature. Used in Assignment5 Task4 for the
+     * fluid between walls case. Capped by the maximum temperature change.
+     *
+     * @param pc The particle container to scale the temperature of.
+     */
+    void scaleWithBetaFluid(std::unique_ptr<ParticleContainer>& pc);
+
+    /**
      * @brief Set the initial temperature of a particle container. This function sets the velocity of all particles in the container to a
      * random value according to the Maxwell-Boltzmann distribution (all previous velocities are discarded).
      * Use this function for systems with no initial velocity.

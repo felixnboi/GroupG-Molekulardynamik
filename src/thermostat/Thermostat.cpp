@@ -54,6 +54,69 @@ void Thermostat::scaleWithBeta(std::unique_ptr<ParticleContainer>& pc) {
     }
 }
 
+void Thermostat::scaleWithBetaFluid(std::unique_ptr<ParticleContainer>& pc) {
+    double doubled_kin_energy = 0;
+    size_t particle_count = 0;
+    size_t brownian_motion_dimension = thermostat_data.getBrownianMotionDimension();
+    std::array<double, 3> average_velocity = {0., 0., 0.};
+
+    // Calculate average velocity
+    for (auto it = pc->begin(); it != pc->end(); ++it) {
+        if ((*it)->getIsOuter()) continue;
+        auto v = (*it)->getV();
+        for (size_t d = 0; d < brownian_motion_dimension; ++d) {
+            average_velocity[d] += v[d];
+        }
+        ++particle_count;
+    }
+
+    for (size_t d = 0; d < brownian_motion_dimension; ++d) {
+            average_velocity[d] /= (particle_count);
+        }
+
+    // Calculate kinetic energy without average velocity
+    for (auto it = pc->begin(); it != pc->end(); ++it) {
+        if ((*it)->getIsOuter()) continue;
+        double tmp = 0;
+        auto v = (*it)->getV();
+        for (size_t d = 0; d < brownian_motion_dimension; ++d) {
+            double corrected_v = v[d] - average_velocity[d];
+            tmp += (corrected_v * corrected_v);
+        }
+        doubled_kin_energy += tmp * (*it)->getM();
+    }
+    double curr_temp_without_average = doubled_kin_energy / (brownian_motion_dimension * particle_count);
+
+    if (curr_temp_without_average == 0.0) {
+        spdlog::warn("Current temperature is 0. Skipping scaling.");
+        return;
+    }
+
+    double max_delta_temp = thermostat_data.getMaxDeltaTemp();
+    double target_temp = thermostat_data.getTargetTemp();
+
+    double new_temperature;
+    if (std::isinf(max_delta_temp)) {
+        new_temperature = target_temp;
+    } else {
+        const double tempChange = std::min(std::abs(target_temp - curr_temp_without_average), max_delta_temp);
+        new_temperature = curr_temp_without_average + tempChange * (target_temp > curr_temp_without_average ? 1 : -1);
+    }
+
+    const double beta = std::sqrt(new_temperature / curr_temp_without_average);
+    
+    // Scale velocities
+    for (auto it = pc->begin(); it != pc->end(); ++it) {
+        if ((*it)->getIsOuter()) continue;
+        auto v = (*it)->getV();
+        for (size_t d = 0; d < brownian_motion_dimension; ++d) {
+            double corrected_v = (v[d] - average_velocity[d]) * beta;
+            v[d] = corrected_v + average_velocity[d];
+        }
+        (*it)->setV(v);
+    }
+}
+
 void Thermostat::initSystemTemperature(double new_initialTemp, std::unique_ptr<ParticleContainer>& pc) {
     size_t brownian_motion_dimension = thermostat_data.getBrownianMotionDimension();
 

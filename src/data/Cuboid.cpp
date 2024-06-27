@@ -3,7 +3,7 @@
 Cuboid::Cuboid(){}
 
 Cuboid::Cuboid(const std::array<double, 3>& position, const std::array<double, 3>& velocity, const std::array<unsigned, 3>& dimensions, 
-double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, int type)
+double distance, double mass, double brownian_motion, double epsilon, double sigma, size_t brownian_motion_dimension, int type, bool is_outer)
     : position(position),
       velocity(velocity),
       dimensions(dimensions),
@@ -13,7 +13,8 @@ double distance, double mass, double brownian_motion, double epsilon, double sig
       epsilon(epsilon), 
       sigma(sigma), 
       brownian_motion_dimension(brownian_motion_dimension), 
-      type(type) {}
+      type(type),
+      is_outer(is_outer) {}
 
 std::array<double, 3> Cuboid::getPosition() const { return position; }
 std::array<double, 3> Cuboid::getVelocity() const { return velocity; }
@@ -25,6 +26,7 @@ double Cuboid::getEpsilon() const{ return epsilon; }
 double Cuboid::getSigma() const{ return sigma; }
 size_t Cuboid::getBrownianMotionDimension() const{ return brownian_motion_dimension; }
 int Cuboid::getType() const{ return type; }
+bool Cuboid::getIsOuter() const{ return is_outer; }
 
 void Cuboid::setPosition(const std::array<double, 3>& new_position) { position = new_position; }
 void Cuboid::setVelocity(const std::array<double, 3>& new_velocity) { velocity = new_velocity; }
@@ -36,10 +38,11 @@ void Cuboid::setEpsilon(double new_epsilon) { epsilon = new_epsilon; }
 void Cuboid::setSigma(double new_sigma) { sigma = new_sigma; }
 void Cuboid::setBrownianMotionDimension(size_t new_brownian_motion_dimension) { brownian_motion_dimension = new_brownian_motion_dimension; }
 void Cuboid::setType(int new_type) { type = new_type; }
+void Cuboid::setIsOuter(int new_is_outer) { is_outer = new_is_outer; }
 
 bool Cuboid::operator==(const Cuboid& other) const{
     return position == other.position && velocity == other.velocity && dimensions == other.dimensions 
         && distance == other.distance && mass == other.mass && brownian_motion == other.brownian_motion 
         && epsilon == other.epsilon && sigma == other.sigma && brownian_motion_dimension == other.brownian_motion_dimension 
-        && type == other.type;
+        && type == other.type && is_outer == other.is_outer;
 }

@@ -3624,6 +3624,53 @@ class simulationParameters: public ::xml_schema::type
 
   //@}
 
+    /**
+   * @name walls_flag
+   *
+   * @brief Accessor and modifier functions for the %walls_flag
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::double_ walls_flag_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< walls_flag_type, char, ::xsd::cxx::tree::schema_type::double_ > walls_flag_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const walls_flag_type&
+  walls_flag () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  walls_flag_type&
+  walls_flag ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  walls_flag (const walls_flag_type& x);
+
+  //@}
+
   /**
    * @name Constructors
    */
@@ -3642,7 +3689,8 @@ class simulationParameters: public ::xml_schema::type
                         const domain_type&,
                         const domain_start_type&,
                         const cutoff_radius_type&,
-                        const grav_constant_type&);
+                        const grav_constant_type&,
+                        const walls_flag_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -3661,7 +3709,8 @@ class simulationParameters: public ::xml_schema::type
                         ::std::unique_ptr< domain_type >,
                         ::std::unique_ptr< domain_start_type >,
                         const cutoff_radius_type&,
-                        const grav_constant_type&);
+                        const grav_constant_type&,
+                        const walls_flag_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -3743,6 +3792,7 @@ class simulationParameters: public ::xml_schema::type
   ::xsd::cxx::tree::one< domain_start_type > domain_start_;
   ::xsd::cxx::tree::one< cutoff_radius_type > cutoff_radius_;
   ::xsd::cxx::tree::one< grav_constant_type > grav_constant_;
+  ::xsd::cxx::tree::one< walls_flag_type > walls_flag_;
 
   //@endcond
 };
@@ -4894,6 +4944,53 @@ class cuboid: public ::xml_schema::type
   //@}
 
   /**
+   * @name is_outer
+   *
+   * @brief Accessor and modifier functions for the %is_outer
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::boolean is_outer_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< is_outer_type, char > is_outer_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const is_outer_type&
+  is_outer () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  is_outer_type&
+  is_outer ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  is_outer (const is_outer_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -4911,7 +5008,8 @@ class cuboid: public ::xml_schema::type
           const epsilon_type&,
           const sigma_type&,
           const brownian_motion_dimension_type&,
-          const type_type&);
+          const type_type&,
+          const is_outer_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -4930,7 +5028,8 @@ class cuboid: public ::xml_schema::type
           const epsilon_type&,
           const sigma_type&,
           const brownian_motion_dimension_type&,
-          const type_type&);
+          const type_type&,
+          const is_outer_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -5012,6 +5111,7 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< sigma_type > sigma_;
   ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
   ::xsd::cxx::tree::one< type_type > type_;
+  ::xsd::cxx::tree::one< is_outer_type > is_outer_;
 
   //@endcond
 };
@@ -5470,6 +5570,53 @@ class disc: public ::xml_schema::type
   //@}
 
   /**
+   * @name is_outer
+   *
+   * @brief Accessor and modifier functions for the %is_outer
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::boolean is_outer_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< is_outer_type, char > is_outer_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const is_outer_type&
+  is_outer () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  is_outer_type&
+  is_outer ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  is_outer (const is_outer_type& x);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -5486,7 +5633,8 @@ class disc: public ::xml_schema::type
         const epsilon_type&,
         const sigma_type&,
         const brownian_motion_dimension_type&,
-        const type_type&);
+        const type_type&,
+        const is_outer_type&);
 
   /**
    * @brief Create an instance from the ultimate base and
@@ -5504,7 +5652,8 @@ class disc: public ::xml_schema::type
         const epsilon_type&,
         const sigma_type&,
         const brownian_motion_dimension_type&,
-        const type_type&);
+        const type_type&,
+        const is_outer_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -5585,6 +5734,7 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< sigma_type > sigma_;
   ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
   ::xsd::cxx::tree::one< type_type > type_;
+  ::xsd::cxx::tree::one< is_outer_type > is_outer_;
 
   //@endcond
 };

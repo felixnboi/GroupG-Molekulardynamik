@@ -26,11 +26,11 @@ TEST(ParticleContainerOld, AddAndGetParticles) {
     
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle> ((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -57,9 +57,9 @@ TEST(ParticleContainerOld, IteratorBeginEnd) {
     
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -81,11 +81,11 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -117,11 +117,11 @@ TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
     
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -149,9 +149,9 @@ TEST(ParticleContainerLinkedCell, IteratorBeginEnd) {
     
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -175,11 +175,11 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
 
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.1}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.05, 3.05}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
 
     // Add particles to the container
     pc->addParticle(p1);
@@ -247,7 +247,7 @@ TEST(ParticleContainerLinkedCell, UpdateLocations) {
 
     // Create a particle that will move outside the boundary
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add the particle to the container
     pc.addParticle(p1);
@@ -274,11 +274,11 @@ TEST(ParticleContainerLinkedCell, GetBoundary) {
 
     // Create particles at the boundaries
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.0, 0.0, 0.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){9.0, 9.0, 9.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){5.0, 5.0, 5.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add the particles to the container
     pc.addParticle(p1);
@@ -300,7 +300,7 @@ TEST(ParticleGenerator, GenerateCuboid){
     // Reset the input file before starting the test
     inputFileManager::resetFile("../input/generated-input.txt");
     // Generate particles in a cuboid and write to the file
-    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2,0.1, 5, 1, 2, 0), "../input/generated-input.txt");
+    ParticleGenerator::generateCuboid(Cuboid({2,2,2},{2,2,2},{2,2,2},2,2,0.1, 5, 1, 2, 0, false), "../input/generated-input.txt");
      // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
 
@@ -373,7 +373,7 @@ TEST(ParticleGenerator, GenerateDisc) {
     inputFileManager::resetFile("../input/generated-input.txt");
 
     // Generate particles in a disc and write to the file
-    ParticleGenerator::generateDisc(Disc({5.0, 5.0, 5.0},{1.0, 1.0, 1.0}, 5, 1.0, 2.0, 5, 1, 2, 0), "../input/generated-input.txt");
+    ParticleGenerator::generateDisc(Disc({5.0, 5.0, 5.0},{1.0, 1.0, 1.0}, 5, 1.0, 2.0, 5, 1, 2, 0, false), "../input/generated-input.txt");
 
     // Open the generated input file for reading
     std::ifstream input_file("../input/generated-input.txt");
@@ -504,11 +504,11 @@ TEST(inputFileManager, MergeFile){
 TEST(Lennard_Jones_Force, LennardJonesForce){
     ParticleContainer* particles = new ParticleContainerOld();
     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){0,0,0}, 
-    (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){1,0,0}, 
-    (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle> ((std::array<double, 3>){0,1,0}, 
-    (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     particles->addParticle(p1);
     particles->addParticle(p2);
     particles->addParticle(p3);
@@ -580,9 +580,9 @@ TEST(Lennard_Jones_Force, LennardJonesReflection){
     ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
         
     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){9.75,7.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle> ((std::array<double, 3>){9.0,3.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     particles.addParticle(p2);
     Lennard_Jones_Force force{{false,true,false,false,false,false}, {false, false, false}};
@@ -595,7 +595,7 @@ TEST(ParticleContainerLinkedCell, MirrorBoundary){
     ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
         
     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){5.0,5.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     p1->setX({11.0,3.0,3.0});
     p1->setV({1.0,1.0,1.0});
@@ -611,7 +611,7 @@ TEST(ParticleContainerLinkedCell, OutflowBoundary){
     ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
         
     std::shared_ptr<Particle> p1 = std::make_shared<Particle> ((std::array<double, 3>){5.0,5.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     p1->setX({11.0,3.0,3.0});
     particles.updateLoctions({false,true,false,false,false,false}, {false, false, false});
@@ -634,11 +634,11 @@ std::unique_ptr<ParticleContainer> createParticleContainer(double sizeX, double 
 
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -703,18 +703,18 @@ TEST(Thermostat, InitSystemTemperature) {
 
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
 
     std::shared_ptr<Particle> p4 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){1.39855, -2.31087, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){1.39855, -2.31087, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p5 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){-0.835396, -0.327661, 0.0}, 1.0, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){-0.835396, -0.327661, 0.0}, 1.0, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p6 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.329751, 0.0308074, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.329751, 0.0308074, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container
     pc1->addParticle(p1);
@@ -743,7 +743,7 @@ TEST(Thermostat, InitSystemTemperature) {
 TEST(Lennard_Jones_Force, gravity){
     auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1);
     std::shared_ptr<Particle> p = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     pc->addParticle(p);
     Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{false, false, false}};
     LJForce.calculateF(*pc, false, 10);
@@ -756,9 +756,9 @@ TEST(Lennard_Jones_Force, gravity){
 TEST(Lennard_Jones_Force, peridicBoundary){
     auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2);
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){0.5, 1, 1}, 
-    (std::array<double, 3>){0, 0, 0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0, 0, 0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){9.5, 1, 1}, 
-    (std::array<double, 3>){0, 0, 0}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0, 0, 0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
 
     pc->addParticle(p1);
     pc->addParticle(p2);
@@ -779,7 +779,7 @@ TEST(ParticleContainerLinkedCell, peridicBoundary){
 
     // Create a particle that will move outside the boundary
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){5, 1, 1}, 
-    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     
     // Add the particle to the container
     pc.addParticle(p1);
@@ -802,15 +802,15 @@ TEST(CheckpointWriter, writeCheckpoint){
 
     // Create some particles
     std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
     p1->setF({1,2,3});
     p1->setOldF({11,22,33});
     std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
     p2->setF({4,5,6});
     p2->setOldF({44,55,66});
     std::shared_ptr<Particle> p3 = std::make_shared<Particle>((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, 5, 6, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 6, (std::array<double, 3>){0, 0, 0});
     p1->setF({7,8,9});
     p1->setOldF({77,88,99});
     
