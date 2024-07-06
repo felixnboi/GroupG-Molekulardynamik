@@ -38,6 +38,7 @@
         </domain_start>
         <cutoff_radius>2.5</cutoff_radius>
         <grav_constant>-12.44</grav_constant>
+        <walls_flag>false</walls_flag>
     </simulationParameters>
 
     <thermostat>
@@ -69,6 +70,7 @@
         <sigma>1.0</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
         <type>1</type> 
+        <is_outer>false</is_outer>
     </cuboid>
 
     <cuboid>
@@ -94,6 +96,7 @@
         <sigma>0.9412</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
         <type>2</type> 
+        <is_outer>false</is_outer>
     </cuboid>
 
 </simulation>
