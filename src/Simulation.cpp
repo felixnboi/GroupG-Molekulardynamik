@@ -13,18 +13,6 @@ Simulation::Simulation(){
 
     particles = nullptr;
     force = nullptr;
-    
-    xml_flag = false;
-    generate_flag = false;
-    input_flag = false;
-    force_flag = false;
-    time_flag = false;
-    cli_flag = false;
-    linkedcell_flag = false;
-
-    lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
-    outflowFlags = {false, false, false, false, false, false};
-    periodicFlags = {false, false, false}; //links-rechts, oben-unten, vorne-hinten
 
     input_file_user = "";
 }
@@ -338,11 +326,11 @@ void Simulation::run() {
 
     int iteration = 0;
     double current_time = 0;
-    double start_time = simdata.getStartTime();
-    double end_time = simdata.getEndTime();
-    double delta_t = simdata.getDeltaT();
-    unsigned write_frequency = simdata.getWriteFrequency();
-    double grav_constant = simdata.getGravConstant();
+    const double start_time = simdata.getStartTime();
+    const double end_time = simdata.getEndTime();
+    const double delta_t = simdata.getDeltaT();
+    const unsigned write_frequency = simdata.getWriteFrequency();
+    const double grav_constant = simdata.getGravConstant();
 
     bool thermostat_flag = thermostat.getThermostatData().getThermostatFlag();
     double initial_temp = thermostat.getThermostatData().getInitTemp();

@@ -83,19 +83,20 @@ private:
     std::unique_ptr<ParticleContainer> particles; ///< Container holding simulaton particles.
     std::unique_ptr<Force> force; ///< Force object for force calculations.
 
-    bool xml_flag; ///< Flag indicating whether an XML file is used for input.
-    bool generate_flag; ///< Flag indicating whether particle generation is enabled.
-    bool input_flag; ///< Flag indicating whether a user input file is specified.
-    bool force_flag; ///< Flag indicating whether a force type is specified.
-    bool time_flag; ///< Flag indicating whether timing information should be logged.
-    bool cli_flag; ///< Flag indicating whether command-line interface (CLI) options are used.
-    bool linkedcell_flag; ///< Flag indicating whether the linked cell algorithm is used.
+    bool xml_flag{}; ///< Flag indicating whether an XML file is used for input.
+    bool generate_flag{}; ///< Flag indicating whether particle generation is enabled.
+    bool input_flag{}; ///< Flag indicating whether a user input file is specified.
+    bool force_flag{}; ///< Flag indicating whether a force type is specified.
+    bool time_flag{}; ///< Flag indicating whether timing information should be logged.
+    bool cli_flag{}; ///< Flag indicating whether command-line interface (CLI) options are used.
+    bool linkedcell_flag{}; ///< Flag indicating whether the linked cell algorithm is used.
     
     //The order for two following Flags: {left, right, bottom, top, back, front}.
-    std::array<bool,6> lenJonesBoundaryFlags; ///< Flags for Lennard-Jones boundary conditions.
-    std::array<bool,6> outflowFlags; ///< Flags for outflow boundary conditions.
+    std::array<bool,6> lenJonesBoundaryFlags{}; ///< Flags for Lennard-Jones boundary conditions.
+    std::array<bool,6> outflowFlags{}; ///< Flags for outflow boundary conditions.
+    
     //The order for the following flag: {left-right, bottom-top, back-front}.
-    std::array<bool,3> periodicFlags; ///< Flags for periodic boundary conditions. 
+    std::array<bool,3> periodicFlags{}; ///< Flags for periodic boundary conditions. 
 
     std::string input_file_user; ///< User-specified input file name for loading initial particle configurations.
 

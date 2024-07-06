@@ -69,8 +69,8 @@ add_subdirectory(tests)
 enable_testing()
 include(CTest)
 
-# Add the sanitize address flag and enable profiling
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -pg")
+# Add the sanitize address flag
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 
 add_subdirectory(libs/spdlog-1.14.1)
 add_subdirectory(libs/googletest-1.14.0)
