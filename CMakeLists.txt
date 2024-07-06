@@ -69,8 +69,8 @@ add_subdirectory(tests)
 enable_testing()
 include(CTest)
 
-# Add the sanitize address flag
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+# Add the sanitize address flag and enable profiling
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -pg")
 
 add_subdirectory(libs/spdlog-1.14.1)
 add_subdirectory(libs/googletest-1.14.0)
@@ -87,6 +87,8 @@ add_executable(ParticleGenerator
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Cuboid.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/Disc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/SimData.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/ThermostatData.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/CheckpointData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLReader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
 )

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "../../data/Particle.h"
-#include "../../ParticleContainers/ParticleContainer.h"
+#include "../../particlecontainers/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
 #include <cstdlib>
@@ -45,6 +45,6 @@ public:
    * @param particles The ParticleContainer to fill with the read particle data.
    * @param filename The path to the file containing the particle data.
    */
-  void readFile(ParticleContainer &particles, const char *filename);
+  void readFile(ParticleContainer &particles, const char *filename, std::array<double,3> domainStart);
 
 };

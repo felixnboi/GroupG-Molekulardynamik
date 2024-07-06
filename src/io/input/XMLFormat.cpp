@@ -435,6 +435,66 @@ simulationParameters (::std::unique_ptr< simulationParameters_type > x)
   this->simulationParameters_.set (std::move (x));
 }
 
+const simulation::thermostat_optional& simulation::
+thermostat () const
+{
+  return this->thermostat_;
+}
+
+simulation::thermostat_optional& simulation::
+thermostat ()
+{
+  return this->thermostat_;
+}
+
+void simulation::
+thermostat (const thermostat_type& x)
+{
+  this->thermostat_.set (x);
+}
+
+void simulation::
+thermostat (const thermostat_optional& x)
+{
+  this->thermostat_ = x;
+}
+
+void simulation::
+thermostat (::std::unique_ptr< thermostat_type > x)
+{
+  this->thermostat_.set (std::move (x));
+}
+
+const simulation::checkpoint_optional& simulation::
+checkpoint () const
+{
+  return this->checkpoint_;
+}
+
+simulation::checkpoint_optional& simulation::
+checkpoint ()
+{
+  return this->checkpoint_;
+}
+
+void simulation::
+checkpoint (const checkpoint_type& x)
+{
+  this->checkpoint_.set (x);
+}
+
+void simulation::
+checkpoint (const checkpoint_optional& x)
+{
+  this->checkpoint_ = x;
+}
+
+void simulation::
+checkpoint (::std::unique_ptr< checkpoint_type > x)
+{
+  this->checkpoint_.set (std::move (x));
+}
+
 const simulation::cuboid_sequence& simulation::
 cuboid () const
 {
@@ -751,42 +811,6 @@ start_t (const start_t_type& x)
   this->start_t_.set (x);
 }
 
-const simulationParameters::epsilon_type& simulationParameters::
-epsilon () const
-{
-  return this->epsilon_.get ();
-}
-
-simulationParameters::epsilon_type& simulationParameters::
-epsilon ()
-{
-  return this->epsilon_.get ();
-}
-
-void simulationParameters::
-epsilon (const epsilon_type& x)
-{
-  this->epsilon_.set (x);
-}
-
-const simulationParameters::sigma_type& simulationParameters::
-sigma () const
-{
-  return this->sigma_.get ();
-}
-
-simulationParameters::sigma_type& simulationParameters::
-sigma ()
-{
-  return this->sigma_.get ();
-}
-
-void simulationParameters::
-sigma (const sigma_type& x)
-{
-  this->sigma_.set (x);
-}
-
 const simulationParameters::force_type& simulationParameters::
 force () const
 {
@@ -883,6 +907,30 @@ domain (::std::unique_ptr< domain_type > x)
   this->domain_.set (std::move (x));
 }
 
+const simulationParameters::domain_start_type& simulationParameters::
+domain_start () const
+{
+  return this->domain_start_.get ();
+}
+
+simulationParameters::domain_start_type& simulationParameters::
+domain_start ()
+{
+  return this->domain_start_.get ();
+}
+
+void simulationParameters::
+domain_start (const domain_start_type& x)
+{
+  this->domain_start_.set (x);
+}
+
+void simulationParameters::
+domain_start (::std::unique_ptr< domain_start_type > x)
+{
+  this->domain_start_.set (std::move (x));
+}
+
 const simulationParameters::cutoff_radius_type& simulationParameters::
 cutoff_radius () const
 {
@@ -899,6 +947,200 @@ void simulationParameters::
 cutoff_radius (const cutoff_radius_type& x)
 {
   this->cutoff_radius_.set (x);
+}
+
+const simulationParameters::grav_constant_type& simulationParameters::
+grav_constant () const
+{
+  return this->grav_constant_.get ();
+}
+
+simulationParameters::grav_constant_type& simulationParameters::
+grav_constant ()
+{
+  return this->grav_constant_.get ();
+}
+
+void simulationParameters::
+grav_constant (const grav_constant_type& x)
+{
+  this->grav_constant_.set (x);
+}
+
+
+// thermostat
+// 
+
+const thermostat::T_init_optional& thermostat::
+T_init () const
+{
+  return this->T_init_;
+}
+
+thermostat::T_init_optional& thermostat::
+T_init ()
+{
+  return this->T_init_;
+}
+
+void thermostat::
+T_init (const T_init_type& x)
+{
+  this->T_init_.set (x);
+}
+
+void thermostat::
+T_init (const T_init_optional& x)
+{
+  this->T_init_ = x;
+}
+
+const thermostat::T_target_optional& thermostat::
+T_target () const
+{
+  return this->T_target_;
+}
+
+thermostat::T_target_optional& thermostat::
+T_target ()
+{
+  return this->T_target_;
+}
+
+void thermostat::
+T_target (const T_target_type& x)
+{
+  this->T_target_.set (x);
+}
+
+void thermostat::
+T_target (const T_target_optional& x)
+{
+  this->T_target_ = x;
+}
+
+const thermostat::T_diff_optional& thermostat::
+T_diff () const
+{
+  return this->T_diff_;
+}
+
+thermostat::T_diff_optional& thermostat::
+T_diff ()
+{
+  return this->T_diff_;
+}
+
+void thermostat::
+T_diff (const T_diff_type& x)
+{
+  this->T_diff_.set (x);
+}
+
+void thermostat::
+T_diff (const T_diff_optional& x)
+{
+  this->T_diff_ = x;
+}
+
+const thermostat::n_thermostat_type& thermostat::
+n_thermostat () const
+{
+  return this->n_thermostat_.get ();
+}
+
+thermostat::n_thermostat_type& thermostat::
+n_thermostat ()
+{
+  return this->n_thermostat_.get ();
+}
+
+void thermostat::
+n_thermostat (const n_thermostat_type& x)
+{
+  this->n_thermostat_.set (x);
+}
+
+const thermostat::brownian_motion_dimension_type& thermostat::
+brownian_motion_dimension () const
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+thermostat::brownian_motion_dimension_type& thermostat::
+brownian_motion_dimension ()
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+void thermostat::
+brownian_motion_dimension (const brownian_motion_dimension_type& x)
+{
+  this->brownian_motion_dimension_.set (x);
+}
+
+
+// checkpoint
+// 
+
+const checkpoint::checkpoint_file_optional& checkpoint::
+checkpoint_file () const
+{
+  return this->checkpoint_file_;
+}
+
+checkpoint::checkpoint_file_optional& checkpoint::
+checkpoint_file ()
+{
+  return this->checkpoint_file_;
+}
+
+void checkpoint::
+checkpoint_file (const checkpoint_file_type& x)
+{
+  this->checkpoint_file_.set (x);
+}
+
+void checkpoint::
+checkpoint_file (const checkpoint_file_optional& x)
+{
+  this->checkpoint_file_ = x;
+}
+
+void checkpoint::
+checkpoint_file (::std::unique_ptr< checkpoint_file_type > x)
+{
+  this->checkpoint_file_.set (std::move (x));
+}
+
+const checkpoint::merge_file_optional& checkpoint::
+merge_file () const
+{
+  return this->merge_file_;
+}
+
+checkpoint::merge_file_optional& checkpoint::
+merge_file ()
+{
+  return this->merge_file_;
+}
+
+void checkpoint::
+merge_file (const merge_file_type& x)
+{
+  this->merge_file_.set (x);
+}
+
+void checkpoint::
+merge_file (const merge_file_optional& x)
+{
+  this->merge_file_ = x;
+}
+
+void checkpoint::
+merge_file (::std::unique_ptr< merge_file_type > x)
+{
+  this->merge_file_.set (std::move (x));
 }
 
 
@@ -1031,6 +1273,78 @@ brownian_motion (const brownian_motion_type& x)
   this->brownian_motion_.set (x);
 }
 
+const cuboid::epsilon_type& cuboid::
+epsilon () const
+{
+  return this->epsilon_.get ();
+}
+
+cuboid::epsilon_type& cuboid::
+epsilon ()
+{
+  return this->epsilon_.get ();
+}
+
+void cuboid::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+const cuboid::sigma_type& cuboid::
+sigma () const
+{
+  return this->sigma_.get ();
+}
+
+cuboid::sigma_type& cuboid::
+sigma ()
+{
+  return this->sigma_.get ();
+}
+
+void cuboid::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
+const cuboid::brownian_motion_dimension_type& cuboid::
+brownian_motion_dimension () const
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+cuboid::brownian_motion_dimension_type& cuboid::
+brownian_motion_dimension ()
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+void cuboid::
+brownian_motion_dimension (const brownian_motion_dimension_type& x)
+{
+  this->brownian_motion_dimension_.set (x);
+}
+
+const cuboid::type_type& cuboid::
+type () const
+{
+  return this->type_.get ();
+}
+
+cuboid::type_type& cuboid::
+type ()
+{
+  return this->type_.get ();
+}
+
+void cuboid::
+type (const type_type& x)
+{
+  this->type_.set (x);
+}
+
 
 // disc
 // 
@@ -1135,6 +1449,78 @@ void disc::
 mass (const mass_type& x)
 {
   this->mass_.set (x);
+}
+
+const disc::epsilon_type& disc::
+epsilon () const
+{
+  return this->epsilon_.get ();
+}
+
+disc::epsilon_type& disc::
+epsilon ()
+{
+  return this->epsilon_.get ();
+}
+
+void disc::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+const disc::sigma_type& disc::
+sigma () const
+{
+  return this->sigma_.get ();
+}
+
+disc::sigma_type& disc::
+sigma ()
+{
+  return this->sigma_.get ();
+}
+
+void disc::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
+const disc::brownian_motion_dimension_type& disc::
+brownian_motion_dimension () const
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+disc::brownian_motion_dimension_type& disc::
+brownian_motion_dimension ()
+{
+  return this->brownian_motion_dimension_.get ();
+}
+
+void disc::
+brownian_motion_dimension (const brownian_motion_dimension_type& x)
+{
+  this->brownian_motion_dimension_.set (x);
+}
+
+const disc::type_type& disc::
+type () const
+{
+  return this->type_.get ();
+}
+
+disc::type_type& disc::
+type ()
+{
+  return this->type_.get ();
+}
+
+void disc::
+type (const type_type& x)
+{
+  this->type_.set (x);
 }
 
 
@@ -1454,11 +1840,11 @@ _xsd_boundaryBehavior_convert () const
   ::xsd::cxx::tree::enum_comparator< char > c (_xsd_boundaryBehavior_literals_);
   const value* i (::std::lower_bound (
                     _xsd_boundaryBehavior_indexes_,
-                    _xsd_boundaryBehavior_indexes_ + 3,
+                    _xsd_boundaryBehavior_indexes_ + 4,
                     *this,
                     c));
 
-  if (i == _xsd_boundaryBehavior_indexes_ + 3 || _xsd_boundaryBehavior_literals_[*i] != *this)
+  if (i == _xsd_boundaryBehavior_indexes_ + 4 || _xsd_boundaryBehavior_literals_[*i] != *this)
   {
     throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
   }
@@ -1467,18 +1853,20 @@ _xsd_boundaryBehavior_convert () const
 }
 
 const char* const boundaryBehavior::
-_xsd_boundaryBehavior_literals_[3] =
+_xsd_boundaryBehavior_literals_[4] =
 {
   "outflow",
   "mirror",
-  "reflecting"
+  "reflecting",
+  "periodic"
 };
 
 const boundaryBehavior::value boundaryBehavior::
-_xsd_boundaryBehavior_indexes_[3] =
+_xsd_boundaryBehavior_indexes_[4] =
 {
   ::boundaryBehavior::mirror,
   ::boundaryBehavior::outflow,
+  ::boundaryBehavior::periodic,
   ::boundaryBehavior::reflecting
 };
 
@@ -1713,6 +2101,8 @@ simulation (const boundaries_type& boundaries,
   inputSettings_ (inputSettings, this),
   outputSettings_ (outputSettings, this),
   simulationParameters_ (simulationParameters, this),
+  thermostat_ (this),
+  checkpoint_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -1728,6 +2118,8 @@ simulation (::std::unique_ptr< boundaries_type > boundaries,
   inputSettings_ (std::move (inputSettings), this),
   outputSettings_ (std::move (outputSettings), this),
   simulationParameters_ (std::move (simulationParameters), this),
+  thermostat_ (this),
+  checkpoint_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -1742,6 +2134,8 @@ simulation (const simulation& x,
   inputSettings_ (x.inputSettings_, f, this),
   outputSettings_ (x.outputSettings_, f, this),
   simulationParameters_ (x.simulationParameters_, f, this),
+  thermostat_ (x.thermostat_, f, this),
+  checkpoint_ (x.checkpoint_, f, this),
   cuboid_ (x.cuboid_, f, this),
   disc_ (x.disc_, f, this)
 {
@@ -1756,6 +2150,8 @@ simulation (const ::xercesc::DOMElement& e,
   inputSettings_ (this),
   outputSettings_ (this),
   simulationParameters_ (this),
+  thermostat_ (this),
+  checkpoint_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -1832,6 +2228,34 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // thermostat
+    //
+    if (n.name () == "thermostat" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< thermostat_type > r (
+        thermostat_traits::create (i, f, this));
+
+      if (!this->thermostat_)
+      {
+        this->thermostat_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // checkpoint
+    //
+    if (n.name () == "checkpoint" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< checkpoint_type > r (
+        checkpoint_traits::create (i, f, this));
+
+      if (!this->checkpoint_)
+      {
+        this->checkpoint_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // cuboid
     //
     if (n.name () == "cuboid" && n.namespace_ ().empty ())
@@ -1903,6 +2327,8 @@ operator= (const simulation& x)
     this->inputSettings_ = x.inputSettings_;
     this->outputSettings_ = x.outputSettings_;
     this->simulationParameters_ = x.simulationParameters_;
+    this->thermostat_ = x.thermostat_;
+    this->checkpoint_ = x.checkpoint_;
     this->cuboid_ = x.cuboid_;
     this->disc_ = x.disc_;
   }
@@ -2351,24 +2777,24 @@ simulationParameters::
 simulationParameters (const end_t_type& end_t,
                       const delta_t_type& delta_t,
                       const start_t_type& start_t,
-                      const epsilon_type& epsilon,
-                      const sigma_type& sigma,
                       const force_type& force,
                       const algorithm_type& algorithm,
                       const loglevel_type& loglevel,
                       const domain_type& domain,
-                      const cutoff_radius_type& cutoff_radius)
+                      const domain_start_type& domain_start,
+                      const cutoff_radius_type& cutoff_radius,
+                      const grav_constant_type& grav_constant)
 : ::xml_schema::type (),
   end_t_ (end_t, this),
   delta_t_ (delta_t, this),
   start_t_ (start_t, this),
-  epsilon_ (epsilon, this),
-  sigma_ (sigma, this),
   force_ (force, this),
   algorithm_ (algorithm, this),
   loglevel_ (loglevel, this),
   domain_ (domain, this),
-  cutoff_radius_ (cutoff_radius, this)
+  domain_start_ (domain_start, this),
+  cutoff_radius_ (cutoff_radius, this),
+  grav_constant_ (grav_constant, this)
 {
 }
 
@@ -2376,24 +2802,24 @@ simulationParameters::
 simulationParameters (const end_t_type& end_t,
                       const delta_t_type& delta_t,
                       const start_t_type& start_t,
-                      const epsilon_type& epsilon,
-                      const sigma_type& sigma,
                       const force_type& force,
                       const algorithm_type& algorithm,
                       const loglevel_type& loglevel,
                       ::std::unique_ptr< domain_type > domain,
-                      const cutoff_radius_type& cutoff_radius)
+                      ::std::unique_ptr< domain_start_type > domain_start,
+                      const cutoff_radius_type& cutoff_radius,
+                      const grav_constant_type& grav_constant)
 : ::xml_schema::type (),
   end_t_ (end_t, this),
   delta_t_ (delta_t, this),
   start_t_ (start_t, this),
-  epsilon_ (epsilon, this),
-  sigma_ (sigma, this),
   force_ (force, this),
   algorithm_ (algorithm, this),
   loglevel_ (loglevel, this),
   domain_ (std::move (domain), this),
-  cutoff_radius_ (cutoff_radius, this)
+  domain_start_ (std::move (domain_start), this),
+  cutoff_radius_ (cutoff_radius, this),
+  grav_constant_ (grav_constant, this)
 {
 }
 
@@ -2405,13 +2831,13 @@ simulationParameters (const simulationParameters& x,
   end_t_ (x.end_t_, f, this),
   delta_t_ (x.delta_t_, f, this),
   start_t_ (x.start_t_, f, this),
-  epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this),
   force_ (x.force_, f, this),
   algorithm_ (x.algorithm_, f, this),
   loglevel_ (x.loglevel_, f, this),
   domain_ (x.domain_, f, this),
-  cutoff_radius_ (x.cutoff_radius_, f, this)
+  domain_start_ (x.domain_start_, f, this),
+  cutoff_radius_ (x.cutoff_radius_, f, this),
+  grav_constant_ (x.grav_constant_, f, this)
 {
 }
 
@@ -2423,13 +2849,13 @@ simulationParameters (const ::xercesc::DOMElement& e,
   end_t_ (this),
   delta_t_ (this),
   start_t_ (this),
-  epsilon_ (this),
-  sigma_ (this),
   force_ (this),
   algorithm_ (this),
   loglevel_ (this),
   domain_ (this),
-  cutoff_radius_ (this)
+  domain_start_ (this),
+  cutoff_radius_ (this),
+  grav_constant_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2477,28 +2903,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!start_t_.present ())
       {
         this->start_t_.set (start_t_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // epsilon
-    //
-    if (n.name () == "epsilon" && n.namespace_ ().empty ())
-    {
-      if (!epsilon_.present ())
-      {
-        this->epsilon_.set (epsilon_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // sigma
-    //
-    if (n.name () == "sigma" && n.namespace_ ().empty ())
-    {
-      if (!sigma_.present ())
-      {
-        this->sigma_.set (sigma_traits::create (i, f, this));
         continue;
       }
     }
@@ -2559,13 +2963,38 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // cutoff-radius
+    // domain_start
     //
-    if (n.name () == "cutoff-radius" && n.namespace_ ().empty ())
+    if (n.name () == "domain_start" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< domain_start_type > r (
+        domain_start_traits::create (i, f, this));
+
+      if (!domain_start_.present ())
+      {
+        this->domain_start_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // cutoff_radius
+    //
+    if (n.name () == "cutoff_radius" && n.namespace_ ().empty ())
     {
       if (!cutoff_radius_.present ())
       {
         this->cutoff_radius_.set (cutoff_radius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // grav_constant
+    //
+    if (n.name () == "grav_constant" && n.namespace_ ().empty ())
+    {
+      if (!grav_constant_.present ())
+      {
+        this->grav_constant_.set (grav_constant_traits::create (i, f, this));
         continue;
       }
     }
@@ -2591,20 +3020,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "start_t",
-      "");
-  }
-
-  if (!epsilon_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "epsilon",
-      "");
-  }
-
-  if (!sigma_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "sigma",
       "");
   }
 
@@ -2636,10 +3051,24 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
+  if (!domain_start_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "domain_start",
+      "");
+  }
+
   if (!cutoff_radius_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "cutoff-radius",
+      "cutoff_radius",
+      "");
+  }
+
+  if (!grav_constant_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "grav_constant",
       "");
   }
 }
@@ -2660,13 +3089,13 @@ operator= (const simulationParameters& x)
     this->end_t_ = x.end_t_;
     this->delta_t_ = x.delta_t_;
     this->start_t_ = x.start_t_;
-    this->epsilon_ = x.epsilon_;
-    this->sigma_ = x.sigma_;
     this->force_ = x.force_;
     this->algorithm_ = x.algorithm_;
     this->loglevel_ = x.loglevel_;
     this->domain_ = x.domain_;
+    this->domain_start_ = x.domain_start_;
     this->cutoff_radius_ = x.cutoff_radius_;
+    this->grav_constant_ = x.grav_constant_;
   }
 
   return *this;
@@ -2674,6 +3103,266 @@ operator= (const simulationParameters& x)
 
 simulationParameters::
 ~simulationParameters ()
+{
+}
+
+// thermostat
+//
+
+thermostat::
+thermostat (const n_thermostat_type& n_thermostat,
+            const brownian_motion_dimension_type& brownian_motion_dimension)
+: ::xml_schema::type (),
+  T_init_ (this),
+  T_target_ (this),
+  T_diff_ (this),
+  n_thermostat_ (n_thermostat, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this)
+{
+}
+
+thermostat::
+thermostat (const thermostat& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  T_init_ (x.T_init_, f, this),
+  T_target_ (x.T_target_, f, this),
+  T_diff_ (x.T_diff_, f, this),
+  n_thermostat_ (x.n_thermostat_, f, this),
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this)
+{
+}
+
+thermostat::
+thermostat (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  T_init_ (this),
+  T_target_ (this),
+  T_diff_ (this),
+  n_thermostat_ (this),
+  brownian_motion_dimension_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void thermostat::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // T_init
+    //
+    if (n.name () == "T_init" && n.namespace_ ().empty ())
+    {
+      if (!this->T_init_)
+      {
+        this->T_init_.set (T_init_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // T_target
+    //
+    if (n.name () == "T_target" && n.namespace_ ().empty ())
+    {
+      if (!this->T_target_)
+      {
+        this->T_target_.set (T_target_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // T_diff
+    //
+    if (n.name () == "T_diff" && n.namespace_ ().empty ())
+    {
+      if (!this->T_diff_)
+      {
+        this->T_diff_.set (T_diff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n_thermostat
+    //
+    if (n.name () == "n_thermostat" && n.namespace_ ().empty ())
+    {
+      if (!n_thermostat_.present ())
+      {
+        this->n_thermostat_.set (n_thermostat_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // brownian_motion_dimension
+    //
+    if (n.name () == "brownian_motion_dimension" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_dimension_.present ())
+      {
+        this->brownian_motion_dimension_.set (brownian_motion_dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!n_thermostat_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n_thermostat",
+      "");
+  }
+
+  if (!brownian_motion_dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion_dimension",
+      "");
+  }
+}
+
+thermostat* thermostat::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class thermostat (*this, f, c);
+}
+
+thermostat& thermostat::
+operator= (const thermostat& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->T_init_ = x.T_init_;
+    this->T_target_ = x.T_target_;
+    this->T_diff_ = x.T_diff_;
+    this->n_thermostat_ = x.n_thermostat_;
+    this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
+  }
+
+  return *this;
+}
+
+thermostat::
+~thermostat ()
+{
+}
+
+// checkpoint
+//
+
+checkpoint::
+checkpoint ()
+: ::xml_schema::type (),
+  checkpoint_file_ (this),
+  merge_file_ (this)
+{
+}
+
+checkpoint::
+checkpoint (const checkpoint& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  checkpoint_file_ (x.checkpoint_file_, f, this),
+  merge_file_ (x.merge_file_, f, this)
+{
+}
+
+checkpoint::
+checkpoint (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  checkpoint_file_ (this),
+  merge_file_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void checkpoint::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // checkpoint_file
+    //
+    if (n.name () == "checkpoint_file" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< checkpoint_file_type > r (
+        checkpoint_file_traits::create (i, f, this));
+
+      if (!this->checkpoint_file_)
+      {
+        this->checkpoint_file_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // merge_file
+    //
+    if (n.name () == "merge_file" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< merge_file_type > r (
+        merge_file_traits::create (i, f, this));
+
+      if (!this->merge_file_)
+      {
+        this->merge_file_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+}
+
+checkpoint* checkpoint::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class checkpoint (*this, f, c);
+}
+
+checkpoint& checkpoint::
+operator= (const checkpoint& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->checkpoint_file_ = x.checkpoint_file_;
+    this->merge_file_ = x.merge_file_;
+  }
+
+  return *this;
+}
+
+checkpoint::
+~checkpoint ()
 {
 }
 
@@ -2686,14 +3375,22 @@ cuboid (const position_type& position,
         const dimensions_type& dimensions,
         const distance_type& distance,
         const mass_type& mass,
-        const brownian_motion_type& brownian_motion)
+        const brownian_motion_type& brownian_motion,
+        const epsilon_type& epsilon,
+        const sigma_type& sigma,
+        const brownian_motion_dimension_type& brownian_motion_dimension,
+        const type_type& type)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
   dimensions_ (dimensions, this),
   distance_ (distance, this),
   mass_ (mass, this),
-  brownian_motion_ (brownian_motion, this)
+  brownian_motion_ (brownian_motion, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -2703,14 +3400,22 @@ cuboid (::std::unique_ptr< position_type > position,
         ::std::unique_ptr< dimensions_type > dimensions,
         const distance_type& distance,
         const mass_type& mass,
-        const brownian_motion_type& brownian_motion)
+        const brownian_motion_type& brownian_motion,
+        const epsilon_type& epsilon,
+        const sigma_type& sigma,
+        const brownian_motion_dimension_type& brownian_motion_dimension,
+        const type_type& type)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
   dimensions_ (std::move (dimensions), this),
   distance_ (distance, this),
   mass_ (mass, this),
-  brownian_motion_ (brownian_motion, this)
+  brownian_motion_ (brownian_motion, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -2724,7 +3429,11 @@ cuboid (const cuboid& x,
   dimensions_ (x.dimensions_, f, this),
   distance_ (x.distance_, f, this),
   mass_ (x.mass_, f, this),
-  brownian_motion_ (x.brownian_motion_, f, this)
+  brownian_motion_ (x.brownian_motion_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this),
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this),
+  type_ (x.type_, f, this)
 {
 }
 
@@ -2738,7 +3447,11 @@ cuboid (const ::xercesc::DOMElement& e,
   dimensions_ (this),
   distance_ (this),
   mass_ (this),
-  brownian_motion_ (this)
+  brownian_motion_ (this),
+  epsilon_ (this),
+  sigma_ (this),
+  brownian_motion_dimension_ (this),
+  type_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2832,6 +3545,50 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!epsilon_.present ())
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!sigma_.present ())
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // brownian_motion_dimension
+    //
+    if (n.name () == "brownian_motion_dimension" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_dimension_.present ())
+      {
+        this->brownian_motion_dimension_.set (brownian_motion_dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // type
+    //
+    if (n.name () == "type" && n.namespace_ ().empty ())
+    {
+      if (!type_.present ())
+      {
+        this->type_.set (type_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2876,6 +3633,34 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "brownian_motion",
       "");
   }
+
+  if (!epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "epsilon",
+      "");
+  }
+
+  if (!sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "sigma",
+      "");
+  }
+
+  if (!brownian_motion_dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion_dimension",
+      "");
+  }
+
+  if (!type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "type",
+      "");
+  }
 }
 
 cuboid* cuboid::
@@ -2897,6 +3682,10 @@ operator= (const cuboid& x)
     this->distance_ = x.distance_;
     this->mass_ = x.mass_;
     this->brownian_motion_ = x.brownian_motion_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
+    this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
+    this->type_ = x.type_;
   }
 
   return *this;
@@ -2915,13 +3704,21 @@ disc (const position_type& position,
       const velocity_type& velocity,
       const radius_type& radius,
       const distance_type& distance,
-      const mass_type& mass)
+      const mass_type& mass,
+      const epsilon_type& epsilon,
+      const sigma_type& sigma,
+      const brownian_motion_dimension_type& brownian_motion_dimension,
+      const type_type& type)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
   radius_ (radius, this),
   distance_ (distance, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -2930,13 +3727,21 @@ disc (::std::unique_ptr< position_type > position,
       ::std::unique_ptr< velocity_type > velocity,
       const radius_type& radius,
       const distance_type& distance,
-      const mass_type& mass)
+      const mass_type& mass,
+      const epsilon_type& epsilon,
+      const sigma_type& sigma,
+      const brownian_motion_dimension_type& brownian_motion_dimension,
+      const type_type& type)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
   radius_ (radius, this),
   distance_ (distance, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this),
+  brownian_motion_dimension_ (brownian_motion_dimension, this),
+  type_ (type, this)
 {
 }
 
@@ -2949,7 +3754,11 @@ disc (const disc& x,
   velocity_ (x.velocity_, f, this),
   radius_ (x.radius_, f, this),
   distance_ (x.distance_, f, this),
-  mass_ (x.mass_, f, this)
+  mass_ (x.mass_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this),
+  brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this),
+  type_ (x.type_, f, this)
 {
 }
 
@@ -2962,7 +3771,11 @@ disc (const ::xercesc::DOMElement& e,
   velocity_ (this),
   radius_ (this),
   distance_ (this),
-  mass_ (this)
+  mass_ (this),
+  epsilon_ (this),
+  sigma_ (this),
+  brownian_motion_dimension_ (this),
+  type_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3042,6 +3855,50 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!epsilon_.present ())
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!sigma_.present ())
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // brownian_motion_dimension
+    //
+    if (n.name () == "brownian_motion_dimension" && n.namespace_ ().empty ())
+    {
+      if (!brownian_motion_dimension_.present ())
+      {
+        this->brownian_motion_dimension_.set (brownian_motion_dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // type
+    //
+    if (n.name () == "type" && n.namespace_ ().empty ())
+    {
+      if (!type_.present ())
+      {
+        this->type_.set (type_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3079,6 +3936,34 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "mass",
       "");
   }
+
+  if (!epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "epsilon",
+      "");
+  }
+
+  if (!sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "sigma",
+      "");
+  }
+
+  if (!brownian_motion_dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "brownian_motion_dimension",
+      "");
+  }
+
+  if (!type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "type",
+      "");
+  }
 }
 
 disc* disc::
@@ -3099,6 +3984,10 @@ operator= (const disc& x)
     this->radius_ = x.radius_;
     this->distance_ = x.distance_;
     this->mass_ = x.mass_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
+    this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
+    this->type_ = x.type_;
   }
 
   return *this;

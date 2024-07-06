@@ -1,6 +1,6 @@
 #pragma once
 #include "../utils/ArrayUtils.h"
-#include "../ParticleContainers/ParticleContainer.h"
+#include "../particlecontainers/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
 /**
@@ -18,11 +18,8 @@ public:
     /**
      * @brief Calculates the forces acting on particles.
      * @param particles The container of particles for which to calculate the forces.
-     * @param reflectionLenJonesFlag The flags for our 6 boundaries in 3d space. 
      * @param linkedcells The flag for choosing the algorithm. If set linkedcells algorithm is used.
-     * @param epsilon A constant important for calculating Lennardjones-Force.
-     * @param sigma A constant important for calculating Lennardjones-Force.
+     * @param gravConstant The gravitational constant value used for calculations.
      */
-    virtual void calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
-    double epsilon, double sigma) = 0;
+    virtual void calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) = 0;
 };

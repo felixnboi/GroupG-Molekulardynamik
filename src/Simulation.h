@@ -9,19 +9,23 @@
 #include "io/input/FileReader.h"
 #include "io/input/XMLReader.h"
 #include "io/output/VTKWriter.h"
+#include "io/output/CheckpointWriter.h"
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 
-#include "Forces/Gravitational_Force.h"
-#include "Forces/Lennard_Jones_Force.h"
+#include "forces/Gravitational_Force.h"
+#include "forces/Lennard_Jones_Force.h"
 #include "inputFileManager.h"
-#include "ParticleContainers/ParticleContainer.h"
-#include "ParticleContainers/ParticleContainerLinkedCell.h"
-#include "ParticleContainers/ParticleContainerOld.h"
+#include "particlecontainers/ParticleContainer.h"
+#include "particlecontainers/ParticleContainerLinkedCell.h"
+#include "particlecontainers/ParticleContainerOld.h"
 #include "spdlog/spdlog.h"
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
 #include "data/SimData.h"
+#include "data/ThermostatData.h"
+#include "data/CheckpointData.h"
+#include "thermostat/Thermostat.h"
 
 /**
  * @class Simulation
@@ -56,6 +60,7 @@ public:
      * 
      * @param argc The number of command-line arguments.
      * @param argv The array of command-line argument strings.
+     * 
      * @return True if initialization is successful, otherwise false.
      */
     bool initialize(int argc, char* argv[]);
@@ -68,31 +73,31 @@ public:
      */
     void run();
     
-    /**
-     * @brief Checks whether timing should be enabled for the simulation.
-     * 
-     * @return True if timing is enabled, otherwise false.
-     */
-    bool isTimingEnabled() const;
 
 private:
-    SimData simdata;
+    SimData simdata; ///< Holds the simulation data.
+    Thermostat thermostat; ///< Thermostat for temperature control in simulation.
+    ThermostatData thermostat_data; ///< Holds thermostat data.
+    CheckpointData checkpoint_data; ///< Holds checkpoint data.
 
-    std::unique_ptr<ParticleContainer> particles;
-    std::unique_ptr<Force> force;
+    std::unique_ptr<ParticleContainer> particles; ///< Container holding simulaton particles.
+    std::unique_ptr<Force> force; ///< Force object for force calculations.
 
-    bool xml_flag;
-    bool generate_flag;
-    bool input_flag;
-    bool force_flag;
-    bool time_flag;
-    bool cli_flag;
-    bool linkedcell_flag;
+    bool xml_flag; ///< Flag indicating whether an XML file is used for input.
+    bool generate_flag; ///< Flag indicating whether particle generation is enabled.
+    bool input_flag; ///< Flag indicating whether a user input file is specified.
+    bool force_flag; ///< Flag indicating whether a force type is specified.
+    bool time_flag; ///< Flag indicating whether timing information should be logged.
+    bool cli_flag; ///< Flag indicating whether command-line interface (CLI) options are used.
+    bool linkedcell_flag; ///< Flag indicating whether the linked cell algorithm is used.
+    
+    //The order for two following Flags: {left, right, bottom, top, back, front}.
+    std::array<bool,6> lenJonesBoundaryFlags; ///< Flags for Lennard-Jones boundary conditions.
+    std::array<bool,6> outflowFlags; ///< Flags for outflow boundary conditions.
+    //The order for the following flag: {left-right, bottom-top, back-front}.
+    std::array<bool,3> periodicFlags; ///< Flags for periodic boundary conditions. 
 
-    std::array<bool,6> lenJonesBoundaryFlags;
-    std::array<bool,6> outflowFlags;
-
-    std::string input_file_user;
+    std::string input_file_user; ///< User-specified input file name for loading initial particle configurations.
 
 
     /**

@@ -8,17 +8,16 @@ Gravitational_Force::~Gravitational_Force() {
 };
 
 
-void Gravitational_Force::calculateF(ParticleContainer &particles, std::array<bool,6> reflectLenJonesFlag, bool linkedcells, 
-    double epsilon, double sigma) {
+void Gravitational_Force::calculateF(ParticleContainer &particles, bool linkedcells, double gravConstant) {
+  // reset the force for each particle, store the old force and claculates the GravitationalForce
+  for(auto particle : particles.getParticles()){
+    particle->setOldF(particle->getF());
+    std::array<double,3> gravForce = {0, particle->getM()*gravConstant,0};
+    particle->setF(gravForce);
+  }
   std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs = particles.getParticlePairs();
   std::vector<std::shared_ptr<Particle>>::iterator particle_i; ///< Iterator for iterating over particles.
   std::vector<std::shared_ptr<Particle>>::iterator particle_j; ///< Second iterator for nested loop over particles.
-  // reset the force for each particle and store the old force
-  for (auto pair = particlePairs.begin(); pair != particlePairs.end(); pair++){
-    *particle_i = (*pair)[0];
-    (*particle_i)->setOldF((*particle_i)->getF());
-    (*particle_i)->setF({0,0,0});
-  }
 
   // iterate over all pairs of particles to calculate forces
   for (auto pair = particlePairs.begin(); pair != particlePairs.end(); pair++){

@@ -4,6 +4,8 @@
 #include "ParticleGenerator.h"
 #include "../utils/NumericalUtils.h"
 #include "../io/input/XMLReader.h"
+#include "../data/CheckpointData.h"
+#include "../inputFileManager.h"
 
 
 /**
@@ -48,6 +50,7 @@ int main(int argc, char *argsv[]){
 
     std::vector<Cuboid> cuboids;
     std::vector<Disc> discs;
+    CheckpointData checkpointdata(false, false, std::string(""), false, std::string(""));
 
     const char* xml_file = "";
 
@@ -57,6 +60,8 @@ int main(int argc, char *argsv[]){
 
     double distance = 0;
     double mass = 0;
+    double epsilon = 5;
+    double sigma = 1;
 
     while((opt = getopt_long(argc, argsv, short_ops, long_opts, nullptr)) != -1){
         switch(opt){
@@ -262,8 +267,9 @@ int main(int argc, char *argsv[]){
             return EXIT_FAILURE;
         }
         XMLReader xmlreader;
-        xmlreader.readCuboids(xml_file, cuboids);
-        xmlreader.readDiscs(xml_file, discs);
+        xmlreader.readCuboids(xml_file, cuboids, epsilon, sigma);
+        xmlreader.readDiscs(xml_file, discs, epsilon, sigma);
+        xmlreader.readCheckpoint(xml_file, checkpointdata);
 
     }else{
         if(!cli_flag){
@@ -283,9 +289,8 @@ int main(int argc, char *argsv[]){
         }
 
         if(xvel_flag&&yvel_flag&&zvel_flag&&xpos_flag&&ypos_flag&&zpos_flag&&xsize_flag&&ysize_flag&&zsize_flag&&dist_flag&&mass_flag){
-            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, 0.1));
+            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, 0.1, epsilon, sigma, 2, 0));
         }
-        
     }
 
 
@@ -296,5 +301,10 @@ int main(int argc, char *argsv[]){
     for(const auto& disc : discs){
         ParticleGenerator::generateDisc(disc, "../input/generated-input.txt");
     }
+
+    if(checkpointdata.getMergeFileFlag()){
+        inputFileManager::mergeFile("../input/generated-input.txt", checkpointdata.getMergeFile().c_str());
+    }
+
     spdlog::info("ParticleGenerator application finished successfully.");
 }

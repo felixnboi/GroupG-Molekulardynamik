@@ -2,12 +2,12 @@
 <simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
 
     <boundaries>
-        <left>reflecting</left>
-        <right>reflecting</right>
+        <left>periodic</left>
+        <right>periodic</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>reflecting</rear>
-        <front>reflecting</front>
+        <rear>outflow</rear>
+        <front>outflow</front>
     </boundaries>
 
     <inputSettings>
@@ -15,36 +15,41 @@
     </inputSettings>
 
     <outputSettings>
-        <baseName>ass3_task2</baseName>
-        <writeFrequency>100</writeFrequency>
+        <baseName>ass4_task2_1</baseName>
+        <writeFrequency>30</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
-        <end_t>20.0</end_t>
+        <end_t>5</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
         <domain>
-            <x>180.0</x>
-            <y>90.0</y>
-            <z>1.0</z>
+            <x>63.0</x>
+            <y>36.0</y>
+            <z>1</z>
         </domain>
-        <cutoff-radius>3.0</cutoff-radius>
         <domain_start>
             <x>0.0</x>
             <y>0.0</y>
             <z>0.0</z>
         </domain_start>
-        <cutoff_radius>3.0</cutoff_radius>
-        <grav_constant>0</grav_constant>
+        <cutoff_radius>2.5</cutoff_radius>
+        <grav_constant>-12.44</grav_constant>
     </simulationParameters>
+
+    <thermostat>
+        <T_init>40</T_init>
+        <n_thermostat>1000</n_thermostat>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+    </thermostat>
 
     <cuboid>
         <position>
-            <x>20.0</x>
-            <y>20.0</y>
+            <x>0.6</x>
+            <y>2.0</y>
             <z>0.0</z>
         </position>
         <velocity>
@@ -53,40 +58,42 @@
             <z>0.0</z>
         </velocity>
         <dimensions>
-            <x>100</x>
-            <y>20</y>
+            <x>50</x>
+            <y>14</y>
             <z>1</z>
         </dimensions>
-        <distance>1.1225</distance>
+        <distance>1.2</distance>
         <mass>1.0</mass>
         <brownian_motion>0.1</brownian_motion>
-        <epsilon>5.0</epsilon>
+        <epsilon>1.0</epsilon>
         <sigma>1.0</sigma>
-        <type>0</type> 
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>1</type> 
     </cuboid>
 
     <cuboid>
         <position>
-            <x>70.0</x>
-            <y>60.0</y>
+            <x>0.6</x>
+            <y>19.0</y>
             <z>0.0</z>
         </position>
         <velocity>
             <x>0.0</x>
-            <y>-10.0</y>
+            <y>0.0</y>
             <z>0.0</z>
         </velocity>
         <dimensions>
-            <x>20</x>
-            <y>20</y>
+            <x>50</x>
+            <y>14</y>
             <z>1</z>
         </dimensions>
-        <distance>1.1225</distance>
-        <mass>1.0</mass>
+        <distance>1.2</distance>
+        <mass>2.0</mass>
         <brownian_motion>0.1</brownian_motion>
-        <epsilon>5.0</epsilon>
-        <sigma>1.0</sigma>
-        <type>1</type>
+        <epsilon>1.0</epsilon>
+        <sigma>0.9412</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>2</type> 
     </cuboid>
 
 </simulation>

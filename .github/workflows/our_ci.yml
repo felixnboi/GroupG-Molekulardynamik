@@ -4,11 +4,13 @@ on:
   pull_request:
     branches:
       - assignment3
+      - assignment4
       - main
   push:
     branches:
       - main
       - assignment3
+      - assignment4
 
 jobs:
   build:

@@ -2,13 +2,13 @@
 
 Welcome to our repository for *PSE Molecular Dynamics* at TUM  
 
-## Members:
+## Members
 
 Felix Guan  
 Robert Täger  
 Maria Lelyukh  
 
-## Dependencies: 
+## Dependencies
 
 gcc/g++ compiler: the default version under most linux distributions should be sufficient  
 xerces library: to install run *sudo apt install libxerces-c-dev*  
@@ -16,13 +16,18 @@ cmake: to install run *sudo apt install cmake*
 xsdcxx compiler: to install run *sudo apt install xsdcxx*  
 paraview (for visualizing): to install run *sudo apt install paraview*  
 
-## Build instructions:
-
-1. clone the repository  
-2. *mkdir build* in the repo  
-3. *cd build*  
-4. run *cmake ..*  
-5. run *make* for building executable and *make doc_doxygen* for building documentation  
+## Build instructions
+To build the project run the following commands:
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+To build doxygen documentation:
+```
+make doc_doxygen
+``` 
 
 ## Execution instructions:
 After making there will be two executables in the build folder. One called *MolSim* which runs the main program and another called *ParticleGenerator* which is for generating Particles. ParticleGenerator takes parameters to define a cuboid, computes the particles within this cuboid and writes these Particles to a file called *generated-input.txt* which is located in the */input* folder. Always make sure to execute *ParticleGenerator* first.  
@@ -31,10 +36,7 @@ After making there will be two executables in the build folder. One called *MolS
 The MolSim executable uses the *getopt_long()* function of the standard library to parse command line arguments. The usages are as follows:  
 Usage: *"./MolSim --xml string [-t] [--help]"* or *"./MolSim [--help] [-g] [-t] [-i string] [-v int] [--log string] [--delta double] [--end double] [--start double] [--force char]"*  
 
-First usage:  
-
-<details>
-<summary> parameters </summary>
+Primary usage(recommended):  
 
 *"--xml string"*: **mandatory** Give the path to the .xml-file to be used for parameter parsing.  
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
@@ -42,13 +44,12 @@ First usage:
 
 Example: ./MolSim --xml ../input/Assignment2.xml  
 
-</details>  
 
 Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
-For backwards compatability with assignment1 and assignment2 the second usage can be used:  
+For backwards compatability with assignment1 and assignment2 the secondary usage can be used:  
 
 <details>
-<summary> parameters </summary>  
+<summary>secondary usage</summary>  
 
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
 *"-g"*: **optional** If set the program uses the *"generated-input.txt"* file in the */input* folder.  
@@ -73,23 +74,18 @@ Example: ./MolSim -g --force l --delta 0.0002 --end 5
 The ParticleGenerator executable also uses the *getopt_long()* function of the standard library to parse command line arguments. The usages are as follows:  
 Usage: *"./ParticleGenerator --xml string [--help] [-t]"* or *"./ParticleGenerator [--help] [-s] -m double -d double -x double -y double -z double --sizeX int --sizeY int --sizeY int --velocityX double --velocityY double --velocityZ double"*
 
-First usage:  
-
-<details>
-<summary> parameters </summary>  
+Primary usage:  
 
 *"--xml string"*: **mandatory** Give the path to the .xml-file to be used for parameter parsing.  
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
 
 Example: ./MolSim --xml ../input/Assignment2.xml  
 
-</details>  
-
 Please make sure that this .xml-file can be validated against [XMLFormat.xsd](/src/io/input/XMLFormat.xsd). This usage has to be used for assignments after assignment2.  
 For backwards compatability with assignment1 and assignment2 the second usage can be used:  
 
 <details>
-<summary> parameters </summary>  
+<summary> secondary usage </summary>  
 
 *"--help"*: **optional** If set a usage message is logged and program terminates.  
 *"-s"*: **optional** If set the particles in the already exsisting *generated-input.txt* file won't be overwritten and the new particles will be added as well. Please be sure that a *generated-input.txt* file has already been created when setting this option.  
@@ -112,8 +108,15 @@ Example: ./ParticleGenerator -m 1 -d 1.1225 -x 0 -y 0 -z 0 --sizeX 40 --sizeY 8 
 
 ## Visualizing with paraview:
 
-It is possible to visualize the output via paraview. Simply open the .vtu-output-files in paraview and configure to your preferred visualization.
+It is possible to visualize the output with paraview. Simply open the .vtu-output-files in paraview and configure to your preferred visualization.
 
 ## Running Tests:
     
-After building run *ctest* or *./tests/tests* in the build folder. 
+Commands to run tests after making:
+```
+./tests/tests
+```
+or
+```
+ctest
+```

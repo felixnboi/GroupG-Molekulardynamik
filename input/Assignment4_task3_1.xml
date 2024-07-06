@@ -6,8 +6,8 @@
         <right>reflecting</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>reflecting</rear>
-        <front>reflecting</front>
+        <rear>outflow</rear>
+        <front>outflow</front>
     </boundaries>
 
     <inputSettings>
@@ -15,35 +15,45 @@
     </inputSettings>
 
     <outputSettings>
-        <baseName>MD_vtk</baseName>
-        <writeFrequency>100</writeFrequency>
+        <baseName>ass4_task3_1</baseName>
+        <writeFrequency>30000</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
-        <end_t>0.005</end_t>
+        <end_t>15</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
-        <algorithm>default</algorithm>
+        <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
         <domain>
-            <x>180.0</x>
-            <y>90.0</y>
-            <z>1.0</z>
+            <x>303.0</x>
+            <y>180.0</y>
+            <z>1</z>
         </domain>
         <domain_start>
             <x>0.0</x>
             <y>0.0</y>
             <z>0.0</z>
         </domain_start>
-        <cutoff_radius>3.0</cutoff_radius>
-        <grav_constant>0</grav_constant>
+        <cutoff_radius>3</cutoff_radius>
+        <grav_constant>-12.44</grav_constant>
     </simulationParameters>
+
+    <thermostat>
+        <T_init>0.5</T_init>
+        <n_thermostat>1000</n_thermostat>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+    </thermostat>
+
+    <checkpoint>
+        <checkpoint_file>../input/checkpoint.txt</checkpoint_file>
+    </checkpoint>
 
     <cuboid>
         <position>
-            <x>0.0</x>
-            <y>0.0</y>
+            <x>1.5</x>
+            <y>2.0</y>
             <z>0.0</z>
         </position>
         <velocity>
@@ -52,17 +62,17 @@
             <z>0.0</z>
         </velocity>
         <dimensions>
-            <x>50</x>
+            <x>250</x>
             <y>50</y>
             <z>1</z>
         </dimensions>
-        <distance>1.1225</distance>
+        <distance>1.2</distance>
         <mass>1.0</mass>
-        <brownian_motion>0.1</brownian_motion>
-        <epsilon>5.0</epsilon>
-        <sigma>1.0</sigma>
+        <brownian_motion>0.0</brownian_motion>
+        <epsilon>1.0</epsilon>
+        <sigma>1.2</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
-        <type>0</type>
+        <type>0</type> 
     </cuboid>
 
 </simulation>

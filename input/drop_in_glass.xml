@@ -23,8 +23,6 @@
         <end_t>20.0</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
-        <epsilon>5.0</epsilon>
-        <sigma>1.0</sigma>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
@@ -33,7 +31,13 @@
             <y>60.0</y>
             <z>1.0</z>
         </domain>
-        <cutoff-radius>3.0</cutoff-radius>
+        <domain_start>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </domain_start>
+        <cutoff_radius>3.0</cutoff_radius>
+        <grav_constant>0</grav_constant>
     </simulationParameters>
 
     <cuboid>
@@ -55,6 +59,10 @@
         <distance>1.1225</distance>
         <mass>1000000000000000</mass>
         <brownian_motion>0.0</brownian_motion>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>0</type>
     </cuboid>
 
     <cuboid>
@@ -76,6 +84,10 @@
         <distance>1.1225</distance>
         <mass>1000000000000000</mass>
         <brownian_motion>0.0</brownian_motion>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>0</type>
     </cuboid>
 
     <cuboid>
@@ -97,6 +109,10 @@
         <distance>1.1225</distance>
         <mass>1000000000000000</mass>
         <brownian_motion>0.0</brownian_motion>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>0</type>
     </cuboid>
 
     <disc>
@@ -113,6 +129,10 @@
         <radius>8</radius>
         <distance>1.1225</distance>
         <mass>1.0</mass>
+        <epsilon>5.0</epsilon>
+        <sigma>1.0</sigma>
+        <brownian_motion_dimension>2</brownian_motion_dimension>
+        <type>1</type>
     </disc>
 
 </simulation>

@@ -21,6 +21,9 @@ Particle::Particle(int type_arg) {
   type = type_arg; 
   f = {0., 0., 0.}; 
   old_f = {0., 0., 0.}; 
+  domainStart = {0., 0., 0.}; 
+  epsilon = 5;
+  sigma = 1;
   spdlog::info("Particle generated with type {}", type_arg);
 }
 
@@ -28,6 +31,9 @@ Particle::Particle(const Particle &other){
   x = other.x;
   v = other.v;
   f = other.f;
+  domainStart = other.domainStart;
+  epsilon = other.epsilon;
+  sigma = other.sigma;
   old_f = other.old_f;
   m = other.m;
   type = other.type;
@@ -35,8 +41,12 @@ Particle::Particle(const Particle &other){
 }
 
 // Todo: maybe use initializater list instead of copy?
-Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, int type_arg){
-  x = x_arg;
+Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, int type_arg, double epsilon, double sigma, 
+std::array<double,3> domainStart){
+  this->sigma = sigma;
+  this->epsilon = epsilon;
+  this->domainStart = domainStart;
+  x = x_arg-domainStart;
   v = v_arg;
   m = m_arg;
   type = type_arg;
@@ -58,6 +68,8 @@ const std::array<double, 3> &Particle::getV() const { return v; }
 
 const std::array<double, 3> &Particle::getF() const { return f; }
 
+const std::array<double, 3> &Particle::getDomainStart() const { return domainStart; }
+
 const std::array<double, 3> &Particle::getOldF() const { return old_f; }
 
 void Particle::setX(const std::array<double, 3>& newX) {
@@ -70,6 +82,10 @@ void Particle::setV(const std::array<double, 3>& newV) {
 
 void Particle::setF(const std::array<double, 3>& newF) {
   f = newF;
+}
+
+void Particle::applyF(const std::array<double, 3>& force){
+  f = f+force;
 }
 
 void Particle::setOldF(const std::array<double, 3>& newOldF) {
@@ -87,6 +103,13 @@ std::string Particle::toString() const {
   return stream.str();
 }
 
+const double Particle::getEpsilon() const{
+  return epsilon;
+}
+
+const double Particle::getSigma() const{
+  return sigma;
+}
 
 bool Particle::operator==(const Particle &other) const {
   return (x == other.x) and (v == other.v) and (f == other.f) and

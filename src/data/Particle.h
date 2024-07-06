@@ -52,6 +52,11 @@ private:
    */
   int type;
 
+  double sigma; ///< The sigma value for the Lennard-Jones potential.
+  double epsilon; ///< The epsilon value for the Lennard-Jones potential.
+  std::array<double, 3> domainStart; ///< The domain start position of the particle.
+
+
 public:
   /**
    * @brief Constructs a particle with a given type.
@@ -69,17 +74,20 @@ public:
 
   /**
    * @brief Constructs a particle with given parameters.
-   * 
-   * @param x_arg Initial position of the particle.
-   * @param v_arg Initial velocity of the particle.
-   * @param m_arg Mass of the particle.
-   * @param type_arg Type of the particle.
+    * 
+   * @param x_arg The initial position of the particle.
+   * @param v_arg The initial velocity of the particle.
+   * @param m_arg The mass of the particle.
+   * @param type_arg The type of the particle.
+   * @param epsilon The epsilon value for the Lennard-Jones potential.
+   * @param sigma The sigma value for the Lennard-Jones potential.
+   * @param domainStart The domain start position of the particle.
    */
   Particle(
       // for visualization, we need always 3 coordinates
       // -> in case of 2d, we use only the first and the second
       std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
-      int type_arg = 0);
+      int type_arg, double epsilon, double sigma, std::array<double, 3> domainStart);
 
   /**
    * @brief Destructor.
@@ -114,6 +122,12 @@ public:
    */
   const std::array<double, 3> &getOldF() const;
 
+  const double getEpsilon() const;
+
+  const double getSigma() const;
+
+  const std::array<double, 3> &getDomainStart() const;
+
    /**
    * @brief Sets the position of the particle.
    * 
@@ -135,6 +149,7 @@ public:
    */
   void setF(const std::array<double, 3>& newF);
 
+  void applyF(const std::array<double, 3>& force);
   /**
    * @brief Sets the old force on this particle.
    * 
@@ -162,9 +177,7 @@ public:
    * @param other Another particle to compare.
    * @return True if both particles are equal, otherwise false.
    */
-
   bool operator==(const Particle &other) const;
-
 
   /**
    * @brief Converts the particle to a string representation.

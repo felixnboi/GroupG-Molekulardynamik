@@ -6,7 +6,7 @@ XMLReader::XMLReader() = default;
 
 XMLReader::~XMLReader() = default;
 
-void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
+void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids, double epsilon, double sigma){
     try{
         std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
 
@@ -22,8 +22,13 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
             const double distance = cuboid_xml.distance();
             const double mass = cuboid_xml.mass();
             const double brownian_motion = cuboid_xml.brownian_motion();
+            const double epsilon = cuboid_xml.epsilon();
+            const double sigma = cuboid_xml.sigma();
+            const double brownian_motion_dimension = cuboid_xml.brownian_motion_dimension();
+            const int type = cuboid_xml.type();
 
-            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion));
+            cuboids.push_back(Cuboid(position, velocity, dimensions, distance, mass, brownian_motion, epsilon, sigma, 
+            brownian_motion_dimension, type));
         }
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Cuboid-parsing.");
@@ -32,7 +37,7 @@ void XMLReader::readCuboids(const char* filename, std::vector<Cuboid>& cuboids){
     }
 }
 
-void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs){
+void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs, double epsilon, double sigma){
     try{
         std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
 
@@ -48,8 +53,12 @@ void XMLReader::readDiscs(const char* filename, std::vector<Disc>& discs){
             const int radius = disc_xml.radius();
             const double distance = disc_xml.distance();
             const double mass = disc_xml.mass();
+            const double epsilon = disc_xml.epsilon();
+            const double sigma = disc_xml.sigma();
+            const double brownian_motion_dimension = disc_xml.brownian_motion_dimension();
+            const int type = disc_xml.type();
 
-            discs.push_back(Disc(position, velocity, radius, distance, mass));
+            discs.push_back(Disc(position, velocity, radius, distance, mass, epsilon, sigma, brownian_motion_dimension, type));
         }
 
     }catch(const xml_schema::exception& e){
@@ -85,11 +94,82 @@ void XMLReader::readSimulation(const char* filename, SimData& simdata){
 
         simdata.setDomain(domain);
 
-        simdata.setSigma(sim->simulationParameters().sigma());
-        simdata.setEpsilon(sim->simulationParameters().epsilon());
+        const std::array<double , 3> domain_start = {sim->simulationParameters().domain_start().x(), sim->simulationParameters().domain_start().y(), 
+        sim->simulationParameters().domain_start().z()};
         
+        simdata.setDomainStart(domain_start);
+
+        simdata.setGravConstant(sim->simulationParameters().grav_constant());
+
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Simulation-parsing.");
+        spdlog::error(e.what());
+        return;
+    }
+}
+
+void XMLReader::readThermostat(const char* filename, ThermostatData& thermostatdata){
+    try{
+        std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
+
+        if(sim->thermostat().present()){
+            thermostatdata.setThermostatFlag(true);
+            if(sim->thermostat().get().T_init().present()){
+                thermostatdata.setInitTempFlag(true);
+                thermostatdata.setInitTemp(sim->thermostat().get().T_init().get());
+            }else{
+                thermostatdata.setInitTempFlag(false);
+            }
+            if(sim->thermostat().get().T_target().present()){
+                thermostatdata.setTargertTempFlag(true);
+                thermostatdata.setTargetTemp(sim->thermostat().get().T_target().get());
+            }else{
+                thermostatdata.setTargertTempFlag(false);
+            }
+            if(sim->thermostat().get().T_diff().present()){
+                thermostatdata.setMaxDeltaTemp(sim->thermostat().get().T_diff().get());
+            }else{
+                thermostatdata.setMaxDeltaTemp(std::numeric_limits<double>::infinity());
+            }
+            thermostatdata.setBrownianMotionDimension(sim->thermostat().get().brownian_motion_dimension());
+            thermostatdata.setNThermostat(sim->thermostat().get().n_thermostat());
+        }else{
+            thermostatdata.setThermostatFlag(false);
+        }
+    }
+    catch(const xml_schema::exception& e){
+        spdlog::error("Error during Thermostat-parsing.");
+        spdlog::error(e.what());
+        return;
+    }
+}
+
+void XMLReader::readCheckpoint(const char* filename, CheckpointData& checkpointdata){
+    try{
+        std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
+
+        if(sim->checkpoint().present()){
+            checkpointdata.setCheckpointFlag(true);
+            if(sim->checkpoint().get().checkpoint_file().present()){
+                checkpointdata.setCheckpointFileFlag(true);
+                checkpointdata.setCheckpointFile(sim->checkpoint().get().checkpoint_file().get());
+            }else{
+                checkpointdata.setCheckpointFileFlag(false);
+            }
+            if(sim->checkpoint().get().merge_file().present()){
+                checkpointdata.setMergeFileFlag(true);
+                checkpointdata.setMergeFile(sim->checkpoint().get().merge_file().get());
+            }else{
+                checkpointdata.setMergeFileFlag(false);
+            }
+            
+        }else{
+            checkpointdata.setCheckpointFlag(false);
+        }
+
+
+    }catch(const xml_schema::exception& e){
+        spdlog::error("Error during Checkpoint-parsing.");
         spdlog::error(e.what());
         return;
     }

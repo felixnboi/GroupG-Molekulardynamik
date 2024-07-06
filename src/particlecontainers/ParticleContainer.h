@@ -21,6 +21,13 @@ public:
     virtual ~ParticleContainer() = default;
 
     /**
+     * @brief Returns the number of particles in this particle container.
+     * 
+     * @return The number of particles in this container.
+     */
+    virtual size_t getParticleCount() = 0;
+
+    /**
      * @brief Reserves a memory for a known number of particles.
      * 
      * This function allows to preallocate memory for a specified number of elements.

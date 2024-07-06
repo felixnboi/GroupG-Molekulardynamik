@@ -3,8 +3,13 @@
 Simulation::Simulation(){
     std::array<std::string, 6> boundary = {};
     std::array<double, 3> domain = {};
+    std::array<double, 3> domain_start = {0, 0, 0};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, domain, 1, 5);
+    std::string("INFO"), boundary, 3, 2, domain, domain_start, 0);
+
+    thermostat = Thermostat();
+    thermostat_data = ThermostatData();
+    checkpoint_data = CheckpointData(false, false, std::string(""), false, std::string(""));
 
     particles = nullptr;
     force = nullptr;
@@ -19,13 +24,12 @@ Simulation::Simulation(){
 
     lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
+    periodicFlags = {false, false, false}; //links-rechts, oben-unten, vorne-hinten
 
     input_file_user = "";
 }
 
 Simulation::~Simulation() {}
-
-//TODO inizialization of outflowFlags, lenJonesBoundaryFlags and linkedcell_flag
 
 bool Simulation::initialize(int argc, char* argv[]) {
     spdlog::set_level(spdlog::level::info);
@@ -38,6 +42,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
         {"log", required_argument, nullptr, 'l'},
         {"delta", required_argument, nullptr, 'd'},
         {"force", required_argument, nullptr, 'f'},
+        {"dimensions", required_argument, nullptr, 'z'},
         {nullptr, no_argument, nullptr, 0}
     };
 
@@ -48,6 +53,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
     // Parsing command line arguments
     while ((opt = getopt_long(argc, argv, short_ops, long_opts, nullptr)) != -1) {
         switch (opt) {
+            
             case 'x':{
                 xml_file = optarg;
                 xml_flag = true;
@@ -164,7 +170,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } if (*optarg == 'l') {
-                    force = std::make_unique<Lennard_Jones_Force>();
+                    force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlags);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -193,6 +199,19 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
         XMLReader xmlreader;
         xmlreader.readSimulation(xml_file, simdata);
+        xmlreader.readThermostat(xml_file, thermostat_data);
+        xmlreader.readCheckpoint(xml_file, checkpoint_data);
+
+        if(thermostat_data.getThermostatFlag() && !thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
+            spdlog::error("Either initial temperature or target termperature or both have to be set when using the thermostat");
+            return false;
+        }
+        if(thermostat_data.getThermostatFlag() && !thermostat_data.getTargetTemp() && thermostat_data.getInitTemp()){
+            thermostat_data.setTargetTemp(thermostat_data.getInitTemp());
+        }
+
+        thermostat.setThermostatData(thermostat_data);
+
 
         if(simdata.getLoglevel() == "OFF"){spdlog::set_level(spdlog::level::off);}
         if(simdata.getLoglevel() == "ERROR"){spdlog::set_level(spdlog::level::err);}
@@ -216,6 +235,33 @@ bool Simulation::initialize(int argc, char* argv[]) {
             }
         }
 
+        for(int i = 0; i<6 ; i+=2){
+            if(simdata.getBoundary()[i] == "periodic"){
+                if(simdata.getBoundary()[i+1] == "periodic"){
+                    periodicFlags[i/2] = true;
+                    outflowFlags[i] = false;
+                    lenJonesBoundaryFlags[i] = false;
+                    outflowFlags[i+1] = false;
+                    lenJonesBoundaryFlags[i+1] = false;
+                }else{
+                    spdlog::error("Please make sure that parallel boundaries are either periodic or non-periodic");
+                    return false;
+                }
+            }
+            if(simdata.getBoundary()[i+1] == "periodic"){
+                if(simdata.getBoundary()[i] == "periodic"){
+                    periodicFlags[i/2] = true;
+                    outflowFlags[i] = false;
+                    lenJonesBoundaryFlags[i] = false;
+                    outflowFlags[i+1] = false;
+                    lenJonesBoundaryFlags[i+1] = false;
+                }else{
+                    spdlog::error("Please make sure that parallel boundaries are either periodic or non-periodic");
+                    return false;
+                }
+            }
+        }
+
         if(simdata.getAlgorithm() == "linkedcell"){
             particles = std::make_unique<ParticleContainerLinkedCell>(simdata.getDomain()[0], simdata.getDomain()[1], 
             simdata.getDomain()[2], simdata.getCutoffRadius());
@@ -231,7 +277,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         if(simdata.getForceStr() == "lennardJonesForce"){
-            force = std::make_unique<Lennard_Jones_Force>();
+            force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlags);
         }
 
     }else{
@@ -274,7 +320,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
     }
 
     FileReader fileReader;
-    fileReader.readFile(*particles, simdata.getInputFile().c_str());
+    fileReader.readFile(*particles, simdata.getInputFile().c_str(), simdata.getDomainStart());
 
     // checking if there are particles in the simulation
     if (particles->getParticles().empty()) {
@@ -288,28 +334,44 @@ bool Simulation::initialize(int argc, char* argv[]) {
 }
 
 void Simulation::run() {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    int iteration = 0;
     double current_time = 0;
     double start_time = simdata.getStartTime();
     double end_time = simdata.getEndTime();
     double delta_t = simdata.getDeltaT();
     unsigned write_frequency = simdata.getWriteFrequency();
-    int iteration = 0;
+    double grav_constant = simdata.getGravConstant();
+
+    bool thermostat_flag = thermostat.getThermostatData().getThermostatFlag();
+    double initial_temp = thermostat.getThermostatData().getInitTemp();
+    size_t n_thermostat = thermostat.getThermostatData().getNThermostat();
+
+    if(thermostat_flag && initial_temp != 0.0){
+        thermostat.initSystemTemperature(initial_temp, particles);
+    }
 
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
+        force->calculateF(*particles, linkedcell_flag, grav_constant);
         calculateV();
         current_time += delta_t;
         iteration++;
     }
 
+
     // Simulation loop
     if (time_flag) {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
+            force->calculateF(*particles, linkedcell_flag, grav_constant);
             calculateV();
+
+            if(thermostat_flag && (iteration % n_thermostat == 0)){
+                thermostat.scaleWithBeta(particles);
+            }
 
             iteration++;
             current_time += delta_t;
@@ -317,25 +379,37 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, lenJonesBoundaryFlags, linkedcell_flag, simdata.getEpsilon(), simdata.getSigma());
+            force->calculateF(*particles, linkedcell_flag, grav_constant);
             calculateV();
+
+            if(thermostat_flag && (iteration % n_thermostat == 0)){
+                thermostat.scaleWithBeta(particles);
+            }
 
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {
                 plotParticles(iteration);
             }
-            // printing simulation progress
+
             spdlog::info("Iteration {} finished", iteration);
-            // update simulation time
+
             current_time += delta_t;
             iteration++;
         }
     }
-    spdlog::info("Output written. Terminating...");
-}
+    if(checkpoint_data.getCheckpointFlag()){
+        if(checkpoint_data.getCheckpointFileFlag()){
+            CheckpointWriter::writeCheckpoint(*particles, checkpoint_data.getCheckpointFile().c_str());
+        }
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    if(time_flag) {
+        std::cout << "Execution time: " << elapsed.count() << " seconds\n";
+        std::cout << "Molecule updates per second: " << iteration*particles->getParticleCount()/elapsed.count() << "\n";
+    }
 
-bool Simulation::isTimingEnabled() const {
-    return time_flag;
+    spdlog::info("Output written. Terminating...");
 }
 
 void Simulation::calculateX() {
@@ -357,7 +431,7 @@ void Simulation::calculateX() {
   }
   if(linkedcell_flag){
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());
-    LCContainer->updateLoctions(outflowFlags);
+    LCContainer->updateLoctions(outflowFlags, periodicFlags);
   }
 }
 

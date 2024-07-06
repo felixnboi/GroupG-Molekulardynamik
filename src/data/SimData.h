@@ -27,20 +27,19 @@ public:
      * @param loglevel The level of logging for simulation.
      * @param boundary Array containing boundary information.
      * @param cutoff_radius The cutoff radius used in simulation.
+     * @param dimensions The number of dimensions of simulation (could be 2 or 3).
      * @param domain Array containing domain information.
-     * @param sigma Sigma parameter used in simulation.
-     * @param epsilon Epsilon parameter used in simulation.
+     * @param domain_start Array containing the starting position of the domain.
+     * @param gravConstant The gravitational constant.
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            std::array<double, 3> domain, double sigma, double epsilon);
+            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant);
 
     /**
      * @brief Destructor.
      */
     ~SimData();
-
-    // Getter functions...
     
     /**
      * @brief Getter for the input file name.
@@ -120,6 +119,13 @@ public:
     double getCutoffRadius() const;
 
     /**
+     * @brief Getter for the array containing number of dimensions.
+     * 
+     * @return The array containing dimensions information.
+     */
+    double getDimensions() const;
+
+    /**
      * @brief Getter for the array containing domain information.
      * 
      * @return The array containing domain information.
@@ -127,20 +133,18 @@ public:
     std::array<double, 3> getDomain() const;
 
     /**
-     * @brief Getter for the Sigma parameter used in simulation.
+     * @brief Getter for the array containing domain start.
      * 
-     * @return The Sigma parameter used in simulation.
+     * @return The array containing domain start.
      */
-    double getSigma() const;
+    std::array<double, 3> getDomainStart() const;
 
     /**
-     * @brief Getter for the Epsilon parameter used in simulation.
+     * @brief Getter for the gravitational constant.
      * 
-     * @return The Epsilon parameter used in simulation.
+     * @return The gravitational constant used in the simulation.
      */
-    double getEpsilon() const;
-
-    // Setter functions...
+    double getGravConstant() const;
 
     /**
      * @brief Setter for the input file name.
@@ -220,6 +224,13 @@ public:
     void setCutoffRadius(double new_cutoff_radius);
 
     /**
+     * @brief Setter for the number of dimensions used in simulation.
+     * 
+     * @param new_dimensions The new number of dimensions used in simulation.
+     */
+    void setDimensions(double new_dimensions);
+
+    /**
      * @brief Setter for the array containing domain information.
      * 
      * @param new_domain The new array containing domain information.
@@ -227,18 +238,19 @@ public:
     void setDomain(const std::array<double, 3>& new_domain);
 
     /**
-     * @brief Setter for the Sigma parameter used in simulation.
+     * @brief Setter for the array containing domain start.
      * 
-     * @param new_sigma The new Sigma parameter used in simulation.
+     * @param new_domain_start The new array containing domain start.
      */
-    void setSigma(double new_sigma);
+    void setDomainStart(const std::array<double, 3>& new_domain_start);
 
     /**
-     * @brief Setter for the Epsilon parameter used in simulation.
+     * @brief Setter for the gravitational constant.
      * 
-     * @param new_epsilon The new Epsilon parameter used in simulation.
+     * @param new_gravconstant The new gravitational constant used in simulation.
      */
-    void setEpsilon(double new_epsilon);
+    void setGravConstant(double new_grav_constant);
+
 
 private:
     std::string input_file; ///< The input file name.
@@ -252,8 +264,9 @@ private:
     std::string loglevel; ///< The level of logging for simulation.
     std::array<std::string, 6> boundary; ///< Array containing boundary information.
     double cutoff_radius; ///< The cutoff radius used in simulation.
+    size_t dimensions; ///<  Number of dimensions used in simulation.
     std::array<double, 3> domain; ///< Array containing domain information.
-    double sigma; ///< Sigma parameter used in simulation.
-    double epsilon; ///< Epsilon parameter used in simulation.
+    std::array<double, 3> domain_start; ///< Array containing the starting position of the domain.
+    double gravConstant; ///< Gravitational constant for the Simulation.
 };
 

@@ -16,7 +16,7 @@ namespace inputFileManager{
      * @brief Merges the contents of the specified file into the generated input file.
      * 
      * The function reads the first line of the specified file, which should contain the number of particles,
-     * and appends the particles from the file into the generated input file.
+     * and appends the particles from the second file to the first file.
      * 
      * @param filename1 The path of the file to be merged into.
      * @param filename2 The path of the file to be merged to filename1.

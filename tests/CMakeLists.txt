@@ -4,18 +4,22 @@ add_executable(tests
     xmltests.cpp
     tests.cpp
     ${PROJECT_SOURCE_DIR}/src/data/Particle.cpp
-    ${PROJECT_SOURCE_DIR}/src/ParticleContainers/ParticleContainer.h
-    ${PROJECT_SOURCE_DIR}/src/ParticleContainers/ParticleContainerOld.cpp
-    ${PROJECT_SOURCE_DIR}/src/ParticleContainers/ParticleContainerLinkedCell.cpp
-    ${PROJECT_SOURCE_DIR}/src/Forces/Lennard_Jones_Force.cpp
+    ${PROJECT_SOURCE_DIR}/src/particlecontainers/ParticleContainer.h
+    ${PROJECT_SOURCE_DIR}/src/particlecontainers/ParticleContainerOld.cpp
+    ${PROJECT_SOURCE_DIR}/src/particlecontainers/ParticleContainerLinkedCell.cpp
+    ${PROJECT_SOURCE_DIR}/src/forces/Lennard_Jones_Force.cpp
     ${PROJECT_SOURCE_DIR}/src/inputFileManager.cpp
     ${PROJECT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/FileReader.cpp
+    ${PROJECT_SOURCE_DIR}/src/io/output/CheckpointWriter.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/XMLReader.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
     ${PROJECT_SOURCE_DIR}/src/data/Cuboid.cpp    
     ${PROJECT_SOURCE_DIR}/src/data/Disc.cpp 
     ${PROJECT_SOURCE_DIR}/src/data/SimData.cpp
+    ${PROJECT_SOURCE_DIR}/src/data/ThermostatData.cpp
+    ${PROJECT_SOURCE_DIR}/src/data/CheckpointData.cpp
+    ${PROJECT_SOURCE_DIR}/src/thermostat/Thermostat.cpp
 )
 
 target_link_libraries(tests 

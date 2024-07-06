@@ -1,6 +1,7 @@
 #include "ParticleContainerOld.h"
 
 ParticleContainerOld::ParticleContainerOld(){
+    particle_count = 0;
     spdlog::info("Particlecontainer created.");
 }
 
@@ -8,11 +9,16 @@ ParticleContainerOld::~ParticleContainerOld(){
     spdlog::info("Particlecontainer destructed.");
 }
 
+size_t ParticleContainerOld::getParticleCount(){
+    return particle_count;
+}
+
 void ParticleContainerOld::reserve(size_t size){
     particles.reserve(size);
 }
 
 void ParticleContainerOld::addParticle(const std::shared_ptr<Particle> particle) {
+    particle_count++;
     particles.push_back(particle);
     spdlog::debug("Added a particle to the container");
     spdlog::trace("A particle with type {}", (*particle).getType());
