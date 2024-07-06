@@ -5,12 +5,14 @@ on:
     branches:
       - assignment3
       - assignment4
+      - assignment5
       - main
   push:
     branches:
       - main
       - assignment3
       - assignment4
+      - assignment5
 
 jobs:
   build:
