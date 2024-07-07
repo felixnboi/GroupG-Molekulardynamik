@@ -25,7 +25,7 @@ add_executable(tests
 target_link_libraries(tests 
     PUBLIC
         gtest_main 
-        xerces-c
+        ${XercesC_LIBRARIES}
 )
 
 target_include_directories(tests 
