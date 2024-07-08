@@ -5,7 +5,7 @@
     
 
 Force::Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool harmonicFlag, bool linkedcells, 
-         double gravConstant, double k, double r0) {
+         std::array<double, 3> gravConstant, double k, double r0) {
   this->reflectLenJonesFlag = reflectLenJonesFlag;
   this->periodicFlag = periodicFlag;
   this-> lenJonesFlag = lenJonesFlag;
@@ -29,8 +29,7 @@ void Force::calculateF(ParticleContainer &particles) {
   // reset the force for each particle, store the old force and claculate the GravitationalForce
   for(auto particle : particles.getParticles()){
     particle->setOldF(particle->getF());
-    std::array<double,3> gravForce = {0, particle->getM()*gravConstant,0};
-    particle->setF(gravForce);
+    particle->setF(gravConstant);
   }
   
   if(linkedcells){
