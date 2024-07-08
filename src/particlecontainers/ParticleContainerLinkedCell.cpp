@@ -26,8 +26,7 @@ void ParticleContainerLinkedCell::reserve(size_t size){
     particles.reserve(size);
 }
 
-const std::array<double, 3> ParticleContainerLinkedCell::getSize()
-{
+const std::array<double, 3> ParticleContainerLinkedCell::getSize(){
     return size;
 }
 
@@ -68,6 +67,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
 
 std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
     std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
+    particlePairs.reserve(particle_count);
     for (size_t i = 0; i < arrayLength; i++){
         std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
         size_t nbrCount = 0; // cout of how many elements are in the nbrs array (how many neighbour cells this one has, while ignoring half of them)
