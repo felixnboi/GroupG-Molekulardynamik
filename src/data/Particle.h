@@ -34,7 +34,7 @@ private:
   /**
    * Array to check if the neighbours actually exist.
    */
-  std::array<bool,4> hasNeighbour;
+  std::array<bool,4> hasNeighbour {};
 
   /**
    * Velocity of the particle
@@ -212,6 +212,14 @@ public:
    * @return True if both particles are equal, otherwise false.
    */
   bool operator==(const Particle &other) const;
+
+  /**
+   * @brief Adds a neighbour of this particle in the membrane.
+   * 
+   * @param neighbour The neighbour that is to be added.
+   * @param position The position in the neighbour array.
+   */
+  void addNeighbour(std::shared_ptr<Particle> neighbour, int position);
 
   /**
    * @brief Converts the particle to a string representation.

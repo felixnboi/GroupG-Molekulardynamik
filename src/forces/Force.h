@@ -17,7 +17,7 @@ private:
     bool gravFlag; ///< Flag if the the gravitational force should be calculated.
     bool harmonicFlag; ///< Flag if the harmonic force should be calculated.
     bool linkedcells; ///< The flag for choosing the algorithm. If set linkedcells algorithm is used.
-    double gravConstant; ///< The gravitational constant value used for calculations.
+    std::array<double, 3> gravConstant; ///< The gravitational constant value used for calculations.
     double k; ///< The stiffness constant of the harmonic force.
     double r0; ///< The average bond lenght of particles in a membrane.
 
@@ -37,7 +37,7 @@ public:
      * @param r0 The average bond lenght of particles in a membrane.
      */
     Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool harmonicFlag, bool linkedcells, 
-         double gravConstant, double k, double r0);
+         std::array<double, 3> gravConstant, double k, double r0);
 
     /**
      * @brief Default destructor for Force.

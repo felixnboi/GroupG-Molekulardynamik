@@ -124,3 +124,8 @@ std::ostream & operator<<(std::ostream &stream, const Particle &p) {
   stream << p.toString();
   return stream;
 }
+
+void Particle::addNeighbour(std::shared_ptr<Particle> neighbour, int position){
+  neighbours[position] = neighbour;
+  hasNeighbour[position] = true;
+}

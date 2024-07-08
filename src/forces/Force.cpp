@@ -5,7 +5,7 @@
     
 
 Force::Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool harmonicFlag, bool linkedcells, 
-         double gravConstant, double k, double r0) {
+         std::array<double, 3> gravConstant, double k, double r0) {
   this->reflectLenJonesFlag = reflectLenJonesFlag;
   this->periodicFlag = periodicFlag;
   this-> lenJonesFlag = lenJonesFlag;
@@ -29,8 +29,7 @@ void Force::calculateF(ParticleContainer &particles) {
   // reset the force for each particle, store the old force and claculate the GravitationalForce
   for(auto particle : particles.getParticles()){
     particle->setOldF(particle->getF());
-    std::array<double,3> gravForce = {0, particle->getM()*gravConstant,0};
-    particle->setF(gravForce);
+    particle->setF(gravConstant);
   }
   
   if(linkedcells){
@@ -118,12 +117,17 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
 }
 
 void Force::calculateFLennardJones(std::vector<std::array<std::shared_ptr<Particle>, 2UL>> pairs){
+  double twoRoot6 = pow(2, 1/6);
+
   // iterate over all pairs of particles to calculate forces
   for (auto pair = pairs.begin(); pair != pairs.end(); pair++){
     std::shared_ptr<Particle> particle_i = (*pair)[0];
     std::shared_ptr<Particle> particle_j = (*pair)[1];
     double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
     double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
+    double cutOffRadius = 0;
+
+    if(harmonicFlag) cutOffRadius = twoRoot6 * sigma;
 
     auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, 0);
      
