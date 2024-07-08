@@ -34,7 +34,7 @@ public:
      */
     SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
             std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, double gravConstant);
+            size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, std::array<double, 3> gravConstant);
 
     /**
      * @brief Destructor.
@@ -144,7 +144,7 @@ public:
      * 
      * @return The gravitational constant used in the simulation.
      */
-    double getGravConstant() const;
+    std::array<double, 3> getGravConstant() const;
 
     /**
      * @brief Setter for the input file name.
@@ -249,7 +249,7 @@ public:
      * 
      * @param new_gravconstant The new gravitational constant used in simulation.
      */
-    void setGravConstant(double new_grav_constant);
+    void setGravConstant(const std::array<double, 3> new_grav_constant);
 
 
 private:
@@ -267,6 +267,6 @@ private:
     size_t dimensions; ///<  Number of dimensions used in simulation.
     std::array<double, 3> domain; ///< Array containing domain information.
     std::array<double, 3> domain_start; ///< Array containing the starting position of the domain.
-    double gravConstant; ///< Gravitational constant for the Simulation.
+    std::array<double, 3> gravConstant; ///< Gravitational constant for the Simulation.
 };
 

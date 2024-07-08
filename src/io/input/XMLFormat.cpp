@@ -967,6 +967,12 @@ grav_constant (const grav_constant_type& x)
   this->grav_constant_.set (x);
 }
 
+void simulationParameters::
+grav_constant (::std::unique_ptr< grav_constant_type > x)
+{
+  this->grav_constant_.set (std::move (x));
+}
+
 
 // thermostat
 // 
@@ -2808,7 +2814,7 @@ simulationParameters (const end_t_type& end_t,
                       ::std::unique_ptr< domain_type > domain,
                       ::std::unique_ptr< domain_start_type > domain_start,
                       const cutoff_radius_type& cutoff_radius,
-                      const grav_constant_type& grav_constant)
+                      ::std::unique_ptr< grav_constant_type > grav_constant)
 : ::xml_schema::type (),
   end_t_ (end_t, this),
   delta_t_ (delta_t, this),
@@ -2819,7 +2825,7 @@ simulationParameters (const end_t_type& end_t,
   domain_ (std::move (domain), this),
   domain_start_ (std::move (domain_start), this),
   cutoff_radius_ (cutoff_radius, this),
-  grav_constant_ (grav_constant, this)
+  grav_constant_ (std::move (grav_constant), this)
 {
 }
 
@@ -2992,9 +2998,12 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "grav_constant" && n.namespace_ ().empty ())
     {
+      ::std::unique_ptr< grav_constant_type > r (
+        grav_constant_traits::create (i, f, this));
+
       if (!grav_constant_.present ())
       {
-        this->grav_constant_.set (grav_constant_traits::create (i, f, this));
+        this->grav_constant_.set (::std::move (r));
         continue;
       }
     }

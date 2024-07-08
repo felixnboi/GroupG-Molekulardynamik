@@ -4,8 +4,9 @@ Simulation::Simulation(){
     std::array<std::string, 6> boundary = {};
     std::array<double, 3> domain = {};
     std::array<double, 3> domain_start = {0, 0, 0};
+    std::array<double, 3> grav_constant = {0, 0, 0};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, 2, domain, domain_start, 0);
+    std::string("INFO"), boundary, 3, 2, domain, domain_start, grav_constant);
 
     thermostat = Thermostat();
     thermostat_data = ThermostatData();

@@ -3588,12 +3588,12 @@ class simulationParameters: public ::xml_schema::type
   /**
    * @brief Element type.
    */
-  typedef ::xml_schema::double_ grav_constant_type;
+  typedef ::double_vector grav_constant_type;
 
   /**
    * @brief Element traits type.
    */
-  typedef ::xsd::cxx::tree::traits< grav_constant_type, char, ::xsd::cxx::tree::schema_type::double_ > grav_constant_traits;
+  typedef ::xsd::cxx::tree::traits< grav_constant_type, char > grav_constant_traits;
 
   /**
    * @brief Return a read-only (constant) reference to the element.
@@ -3621,6 +3621,17 @@ class simulationParameters: public ::xml_schema::type
    */
   void
   grav_constant (const grav_constant_type& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly
+   * instead of making a copy.
+   */
+  void
+  grav_constant (::std::unique_ptr< grav_constant_type > p);
 
   //@}
 
@@ -3661,7 +3672,7 @@ class simulationParameters: public ::xml_schema::type
                         ::std::unique_ptr< domain_type >,
                         ::std::unique_ptr< domain_start_type >,
                         const cutoff_radius_type&,
-                        const grav_constant_type&);
+                        ::std::unique_ptr< grav_constant_type >);
 
   /**
    * @brief Create an instance from a DOM element.

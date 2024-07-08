@@ -98,8 +98,10 @@ void XMLReader::readSimulation(const char* filename, SimData& simdata){
         sim->simulationParameters().domain_start().z()};
         
         simdata.setDomainStart(domain_start);
-
-        simdata.setGravConstant(sim->simulationParameters().grav_constant());
+        
+        const std::array<double, 3> grav_constant = {sim->simulationParameters().grav_constant().x(), sim->simulationParameters().grav_constant().y(), 
+        sim->simulationParameters().grav_constant().z()};
+        simdata.setGravConstant(grav_constant);
 
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Simulation-parsing.");

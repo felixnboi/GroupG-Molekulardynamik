@@ -96,13 +96,13 @@
                         <xs:element name="end_t" type="xs:double"/>
                         <xs:element name="delta_t" type="xs:double"/>
                         <xs:element name="start_t" type="xs:double"/>
-                        <xs:element name="force" type="forces"/>                    
-                        <xs:element name="algorithm" type="algorithms"/>  
-                        <xs:element name="loglevel" type="loglevels"/>  
+                        <xs:element name="force" type="forces"/>
+                        <xs:element name="algorithm" type="algorithms"/>
+                        <xs:element name="loglevel" type="loglevels"/>
                         <xs:element name="domain" type="double_vector"/>
                         <xs:element name="domain_start" type="double_vector"/>
                         <xs:element name="cutoff_radius" type="xs:double"/>
-                        <xs:element name="grav_constant" type="xs:double"/>                    
+                        <xs:element name="grav_constant" type="double_vector"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
