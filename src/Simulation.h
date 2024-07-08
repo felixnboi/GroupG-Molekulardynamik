@@ -22,6 +22,7 @@
 #include "spdlog/spdlog.h"
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
+#include "io/output/ProfilingComponent.h"
 #include "data/SimData.h"
 #include "data/ThermostatData.h"
 #include "data/CheckpointData.h"

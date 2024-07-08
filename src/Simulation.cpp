@@ -361,6 +361,9 @@ void Simulation::run() {
         iteration++;
     }
 
+    size_t N_bins = 50;
+    std::string fileName = "simulation_profile";
+    ProfilingComponent profiler;
 
     // Simulation loop
     if (time_flag) {
@@ -373,7 +376,10 @@ void Simulation::run() {
                 if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
                 else{thermostat.scaleWithBetaFluid(particles);}
             }
-
+        //      DO WE NEED IT?
+        //     if (iteration % 10000 == 0) {
+        //     profiler.profile(N_bins, domainSize, pc, fileName);
+        // }
             iteration++;
             current_time += delta_t;
         }
@@ -388,6 +394,9 @@ void Simulation::run() {
                 else{thermostat.scaleWithBetaFluid(particles);}
             }
 
+            if (iteration % 10000 == 0) {
+            profiler.profile(N_bins, simdata.getDomain(), *particles, fileName);
+        }
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {
                 plotParticles(iteration);
