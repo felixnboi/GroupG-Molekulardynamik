@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/forces/Lennard_Jones_Force.h"
+#include "../src/forces/Force.h"
 #include "../src/inputFileManager.h"
 #include "../src/particlegen/ParticleGenerator.h"
 #include "../src/io/input/FileReader.h"
@@ -513,8 +513,8 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     particles->addParticle(p2);
     particles->addParticle(p3);
 
-    Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{false, false, false}};
-    LJForce.calculateF(*particles, false, 0);
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, false, 0, 0, 0};
+    LJForce.calculateF(*particles);
 
     const auto& updatedParticles = particles->getParticles();
 
@@ -585,8 +585,8 @@ TEST(Lennard_Jones_Force, LennardJonesReflection){
     (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     particles.addParticle(p2);
-    Lennard_Jones_Force force{{false,true,false,false,false,false}, {false, false, false}};
-    force.calculateF(particles, true, 0);
+    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, false, true, 0, 0, 0};
+    force.calculateF(particles);
     EXPECT_EQ(p1->getF()[0], -1950720); //test against manually calculated value
     EXPECT_EQ(p2->getF()[0], 0);
 }
@@ -745,8 +745,8 @@ TEST(Lennard_Jones_Force, gravity){
     std::shared_ptr<Particle> p = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
     (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     pc->addParticle(p);
-    Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{false, false, false}};
-    LJForce.calculateF(*pc, false, 10);
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, false, 10, 0, 0};
+    LJForce.calculateF(*pc);
     EXPECT_EQ(p->getF()[0], 0);
     EXPECT_EQ(p->getF()[1], 10);
     EXPECT_EQ(p->getF()[2], 0);
@@ -762,8 +762,8 @@ TEST(Lennard_Jones_Force, peridicBoundary){
 
     pc->addParticle(p1);
     pc->addParticle(p2);
-    Lennard_Jones_Force LJForce {{false, false, false, false, false, false},{true, false, false}};
-    LJForce.calculateF(*pc, true, 0);
+    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, false, true, 0, 0, 0};
+    LJForce.calculateF(*pc);
     EXPECT_EQ(p1->getF()[0], 120);
     EXPECT_EQ(p1->getF()[1], 0);
     EXPECT_EQ(p1->getF()[2], 0);

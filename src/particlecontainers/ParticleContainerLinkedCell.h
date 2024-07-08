@@ -102,18 +102,18 @@ public:
     const double getRadius();
 
     /**
-     * @brief Getter for the pairs of particles within the interaction radius.
+     * @brief Getter for the pairs of particles within the interaction radius. (Ingnores periodic boundery)
      * 
-     * @return A vector of pairs of particles.
+     * @return A vector of these pairs of particles.
      */
     std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
 
     /**
-    * @brief Gets the pairs of particles that are within the interaction radius, considering periodic boundaries.
+    * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. (Doesn't always check if they are within the cut off radius).
     * 
-    * @param pFlag Array indicating which dimensions have periodic boundaries.
+    * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
     * 
-    * @return A vector of pairs of particles that are within the interaction radius, considering periodic boundaries.
+    * @return A vector of these pairs of particles.
     */
     std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 

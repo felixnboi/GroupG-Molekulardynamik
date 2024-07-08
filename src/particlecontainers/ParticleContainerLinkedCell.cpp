@@ -69,10 +69,14 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
 std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
     std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
     for (size_t i = 0; i < arrayLength; i++){
-        size_t nbrCount = 0;
-        std::array<size_t,13> nbrs;
-        std::array<size_t,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]};
-        std::array<int,5> nbrIndices = {(int)indices[0]-1,(int)indices[0]+1, (int)indices[1]-1, (int)indices[1]+1, (int)indices[2]+1};
+        std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
+        size_t nbrCount = 0; // cout of how many elements are in the nbrs array (how many neighbour cells this one has, while ignoring half of them)
+        std::array<size_t,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]}; // indices of the current cell if it was stored in a 3 dimesional array
+        std::array<int,5> nbrIndices = {(int)indices[0]-1,(int)indices[0]+1, (int)indices[1]-1, (int)indices[1]+1, (int)indices[2]+1}; // indices of the neighbours if they were stored
+        // in a 3 dimesional array, the first is for negative x the second for positive, 3 and 4 are the same for y and 5 is for positive z (no negative z since we only look at half the cells)
+        
+        // if the pFlag (peridic flag) for a dimesion is set, the cell count is added or substracted to the neighbour indices, since we are only interseted in cells that are conected through
+        // these bounderies and invalid indices are filtered out later
         if(pFlag[0]){
             nbrIndices[0] += cellCount[0];
             nbrIndices[1] -= cellCount[0];
@@ -84,31 +88,38 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
         if(pFlag[2]){
             nbrIndices[4] -= cellCount[2];
         }
+
+        // array that cecks if the indices of nbrIndices are valid (in the domain)
         std::array<bool, 5> nbrExists = {nbrIndices[0]>=0 && nbrIndices[0] < (int)cellCount[0], 
         nbrIndices[1]<(int)cellCount[0] && nbrIndices[1] >= 0, nbrIndices[2]>=0 && nbrIndices[2]<(int)cellCount[1], 
         nbrIndices[3]>=0 && nbrIndices[3]<(int)cellCount[1], nbrIndices[4]>=0 && nbrIndices[4]<(int)cellCount[2]};
 
+        // the indices are changed, so that they now represet their indices in a one dimesional array
         indices[1] *= cellCount[0];
         indices[2] *= cellCount[0]*cellCount[1];
         nbrIndices[2] *= cellCount[0];
         nbrIndices[3] *= cellCount[0];
         nbrIndices[4] *= cellCount[0]*cellCount[1];
 
+        // for all 13 possible neighbours we want to cosider, we test if they exist. We also filter them out if they don't need a perdic boundery which is set true.
+        // If they are valid we callculate their index in the one dimesional array by adding the already updated indices of all three dimesions. 
         if(!pFlag[1]&&!pFlag[2]&&nbrExists[1]                            ) nbrs[nbrCount++] = nbrIndices[1]+indices[1]   +indices[2]   ; 
         if(           !pFlag[2]&&nbrExists[0]&&nbrExists[3]              ) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[3]+indices[2]   ; 
         if(!pFlag[0]&&!pFlag[2]&&              nbrExists[3]              ) nbrs[nbrCount++] = indices[0]   +nbrIndices[3]+indices[2]   ; 
         if(           !pFlag[2]&&nbrExists[1]&&nbrExists[3]              ) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[3]+indices[2]   ; 
         if(                      nbrExists[0]&&nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[2]+nbrIndices[4]; 
-        if(!pFlag[0]           &&nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[2]+nbrIndices[4]; 
+        if(!pFlag[0]                         &&nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[2]+nbrIndices[4]; 
         if(                      nbrExists[1]&&nbrExists[2]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[2]+nbrIndices[4]; 
         if(!pFlag[1]           &&nbrExists[0]              &&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+indices[1]   +nbrIndices[4]; 
         if(!pFlag[0]&&!pFlag[1]                            &&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +indices[1]   +nbrIndices[4]; 
         if(!pFlag[1]           &&nbrExists[1]              &&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+indices[1]   +nbrIndices[4]; 
-        if(                                                  nbrExists[0]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[3]+nbrIndices[4]; 
-        if(!pFlag[0]           &&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[3]+nbrIndices[4]; 
-        if(                                                  nbrExists[1]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[3]+nbrIndices[4]; 
+        if(                      nbrExists[0]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[0]+nbrIndices[3]+nbrIndices[4]; 
+        if(!pFlag[0]                         &&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[3]+nbrIndices[4]; 
+        if(                      nbrExists[1]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[3]+nbrIndices[4]; 
+
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             if(!(pFlag[0]||pFlag[1]||pFlag[2])){
+                // here we look at the particles in the same cell
                 for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
                     if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                         particlePairs.push_back({*particle_i, *particle_j});
@@ -116,6 +127,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
                 }
             }
             for (size_t j = 0; j < nbrCount; j++){
+                // here we look at the particles in the neighbour cells
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
                     if(pFlag[0]||pFlag[1]||pFlag[2]||ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
                         particlePairs.push_back({*particle_i, *particle_j});

@@ -13,8 +13,7 @@
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 
-#include "forces/Gravitational_Force.h"
-#include "forces/Lennard_Jones_Force.h"
+#include "forces/Force.h"
 #include "inputFileManager.h"
 #include "particlecontainers/ParticleContainer.h"
 #include "particlecontainers/ParticleContainerLinkedCell.h"
@@ -90,7 +89,12 @@ private:
     bool time_flag; ///< Flag indicating whether timing information should be logged.
     bool cli_flag; ///< Flag indicating whether command-line interface (CLI) options are used.
     bool linkedcell_flag; ///< Flag indicating whether the linked cell algorithm is used.
-    
+    bool lenJonesFlag; ///< Flag indicating whether the lennard Jones Force should be used for force calculation.
+    bool gravFlag;  ///< Flag indicating whether the gravitational Force should be used for force calculation.
+    bool harmonicFlag; ///< Flag indicating whether the harmonic Force should be used for force calculation.
+    double k; ///< The stiffness constant of the harmonic force.
+    double r0; ///< The average bond lenght of particles in a membrane.
+
     //The order for two following Flags: {left, right, bottom, top, back, front}.
     std::array<bool,6> lenJonesBoundaryFlags; ///< Flags for Lennard-Jones boundary conditions.
     std::array<bool,6> outflowFlags; ///< Flags for outflow boundary conditions.

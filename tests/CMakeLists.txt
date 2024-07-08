@@ -7,7 +7,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/particlecontainers/ParticleContainer.h
     ${PROJECT_SOURCE_DIR}/src/particlecontainers/ParticleContainerOld.cpp
     ${PROJECT_SOURCE_DIR}/src/particlecontainers/ParticleContainerLinkedCell.cpp
-    ${PROJECT_SOURCE_DIR}/src/forces/Lennard_Jones_Force.cpp
+    ${PROJECT_SOURCE_DIR}/src/forces/Force.cpp
     ${PROJECT_SOURCE_DIR}/src/inputFileManager.cpp
     ${PROJECT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/FileReader.cpp

@@ -21,6 +21,9 @@ Simulation::Simulation(){
     time_flag = false;
     cli_flag = false;
     linkedcell_flag = false;
+    lenJonesFlag = false;
+    gravFlag = false;
+    harmonicFlag = false;
 
     lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
     outflowFlags = {false, false, false, false, false, false};
@@ -166,11 +169,13 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 cli_flag = true;
                 force_flag = true;
                 if (*optarg == 'g') {
-                    force = std::make_unique<Gravitational_Force>();
+                    gravFlag = true;
+                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, harmonicFlag, linkedcell_flag, simdata.getGravConstant(), k, r0);
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } if (*optarg == 'l') {
-                    force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlags);
+                    lenJonesFlag = true;
+                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, harmonicFlag, linkedcell_flag, simdata.getGravConstant(), k, r0);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -273,12 +278,13 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         if(simdata.getForceStr() == "gravitationalForce"){
-            force = std::make_unique<Gravitational_Force>();
+            gravFlag = true;
         }
 
         if(simdata.getForceStr() == "lennardJonesForce"){
-            force = std::make_unique<Lennard_Jones_Force>(lenJonesBoundaryFlags, periodicFlags);
+            lenJonesFlag = true;
         }
+        force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, harmonicFlag, linkedcell_flag, simdata.getGravConstant(), k, r0);
 
     }else{
 
@@ -342,7 +348,6 @@ void Simulation::run() {
     double end_time = simdata.getEndTime();
     double delta_t = simdata.getDeltaT();
     unsigned write_frequency = simdata.getWriteFrequency();
-    double grav_constant = simdata.getGravConstant();
 
     bool thermostat_flag = thermostat.getThermostatData().getThermostatFlag();
     double initial_temp = thermostat.getThermostatData().getInitTemp();
@@ -355,7 +360,7 @@ void Simulation::run() {
     // Advance simulation time to start_time
     while (current_time < start_time) {
         calculateX();
-        force->calculateF(*particles, linkedcell_flag, grav_constant);
+        force->calculateF(*particles);
         calculateV();
         current_time += delta_t;
         iteration++;
@@ -366,7 +371,7 @@ void Simulation::run() {
     if (time_flag) {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, linkedcell_flag, grav_constant);
+            force->calculateF(*particles);
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
@@ -379,7 +384,7 @@ void Simulation::run() {
     } else {
         while (current_time < end_time) {
             calculateX();
-            force->calculateF(*particles, linkedcell_flag, grav_constant);
+            force->calculateF(*particles);
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){

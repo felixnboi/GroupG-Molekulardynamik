@@ -27,6 +27,16 @@ private:
   std::array<double, 3> x;
 
   /**
+   * Half of the neighbour particles in the membrane. (Specificly the ones below and the one to the right).
+   */
+  std::array<std::shared_ptr<Particle>,4> neighbours;
+
+  /**
+   * Array to check if the neighbours actually exist.
+   */
+  std::array<bool,4> hasNeighbour;
+
+  /**
    * Velocity of the particle
    */
   std::array<double, 3> v;
@@ -122,8 +132,32 @@ public:
    */
   const std::array<double, 3> &getOldF() const;
 
+  /**
+   * @brief Gets the half of the neighbours of this particle in the membrane.
+   * 
+   * @return Reference to the neighbours array.
+   */
+  const std::array<std::shared_ptr<Particle>,4> &getNeighbours() const;
+
+  /**
+   * @brief Gets a bool array which says if the neighbours actually exist.
+   * 
+   * @return Reference to the hasNeighbours array.
+   */
+  const std::array<bool,4> &getHasNeighbour() const;
+
+  /**
+   * @brief Gets the value of epsilon for this particle.
+   * 
+   * @return The value of epsilon.
+   */
   const double getEpsilon() const;
 
+  /**
+   * @brief Gets the value of sigma for this particle.
+   * 
+   * @return The value of sigma.
+   */
   const double getSigma() const;
 
   const std::array<double, 3> &getDomainStart() const;
