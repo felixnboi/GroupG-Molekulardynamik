@@ -362,8 +362,7 @@ void Simulation::run() {
     }
 
     size_t N_bins = 50;
-    std::string fileName = "simulation_profile";
-    ProfilingComponent profiler;
+    std::string cvs_file = "simulation_profile";
 
     // Simulation loop
     if (time_flag) {
@@ -378,7 +377,7 @@ void Simulation::run() {
             }
         //      DO WE NEED IT?
         //     if (iteration % 10000 == 0) {
-        //     profiler.profile(N_bins, domainSize, pc, fileName);
+        //     ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
         // }
             iteration++;
             current_time += delta_t;
@@ -395,7 +394,7 @@ void Simulation::run() {
             }
 
             if (iteration % 10000 == 0) {
-            profiler.profile(N_bins, simdata.getDomain(), *particles, fileName);
+            ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
         }
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {

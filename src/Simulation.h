@@ -10,6 +10,7 @@
 #include "io/input/XMLReader.h"
 #include "io/output/VTKWriter.h"
 #include "io/output/CheckpointWriter.h"
+#include "io/output/ProfilingComponent.h"
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 
@@ -22,7 +23,6 @@
 #include "spdlog/spdlog.h"
 #include "io/input/XMLReader.h"
 #include "io/input/XMLFormat.h"
-#include "io/output/ProfilingComponent.h"
 #include "data/SimData.h"
 #include "data/ThermostatData.h"
 #include "data/CheckpointData.h"
