@@ -37,7 +37,11 @@
             <z>0.0</z>
         </domain_start>
         <cutoff_radius>11.0</cutoff_radius>
-        <grav_constant>0</grav_constant>
+        <grav_constant>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+        </grav_constant>
     </simulationParameters>
 
     <thermostat>

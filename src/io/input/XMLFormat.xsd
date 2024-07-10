@@ -128,6 +128,16 @@
                 </xs:complexType>
             </xs:element>
 
+            <xs:element name="membrane" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="r0" type="xs:double"/>
+                        <xs:element name="k" type="xs:double"/>
+                        <xs:element name="f_z_up" type="xs:double"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
             <!-- Cuboids -->
             <xs:element name="cuboid" maxOccurs="unbounded">
                 <xs:complexType>

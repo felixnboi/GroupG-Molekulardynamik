@@ -4,23 +4,19 @@
 #include <cmath>
     
 
-Force::Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool harmonicFlag, bool linkedcells, 
-         std::array<double, 3> gravConstant, double k, double r0) {
-  this->reflectLenJonesFlag = reflectLenJonesFlag;
-  this->periodicFlag = periodicFlag;
-  this-> lenJonesFlag = lenJonesFlag;
-  this-> gravFlag = gravFlag;
-  this-> harmonicFlag = harmonicFlag;
-  this-> linkedcells = linkedcells;
-  this-> gravConstant = gravConstant;
-  this-> k = k;
-  this-> r0 = r0;
-  spdlog::info("Force object constructed");
-};
+Force::Force(std::array<bool, 6> reflectLenJonesFlag, std::array<bool, 3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool linkedcells, 
+std::array<double, 3> gravConstant, bool membraneFlag, double k, double r0) 
+  : reflectLenJonesFlag(reflectLenJonesFlag),
+    periodicFlag(periodicFlag),
+    lenJonesFlag(lenJonesFlag),
+    gravFlag(gravFlag),
+    linkedcells(linkedcells),
+    gravConstant(gravConstant),
+    membraneFlag(membraneFlag),
+    k(k),
+    r0(r0) {}
 
-Force::~Force() {
-  spdlog::info("Force object destructed");
-};
+Force::~Force() {}
 
 void Force::calculateF(ParticleContainer &particles) {
 
@@ -36,7 +32,7 @@ void Force::calculateF(ParticleContainer &particles) {
     ParticleContainerLinkedCell &LCContainer = dynamic_cast<ParticleContainerLinkedCell&>(particles);
     calculateFPeriodic(LCContainer);    
     calculateFReflecting(LCContainer);
-    if(harmonicFlag) calculateFHarmonic(LCContainer, k, r0);
+    if(membraneFlag) calculateFHarmonic(LCContainer, k, r0);
   }
 
   if(lenJonesFlag) calculateFLennardJones(particlePairs);
@@ -127,9 +123,9 @@ void Force::calculateFLennardJones(std::vector<std::array<std::shared_ptr<Partic
     double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
     double cutOffRadius = 0;
 
-    if(harmonicFlag) cutOffRadius = twoRoot6 * sigma;
+    if(membraneFlag) cutOffRadius = twoRoot6 * sigma;
 
-    auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, 0);
+    auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius);
      
     particle_i->setF(particle_i->getF()+force);
     particle_j->setF(particle_j->getF()-force);

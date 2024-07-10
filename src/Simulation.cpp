@@ -11,6 +11,7 @@ Simulation::Simulation(){
     thermostat = Thermostat();
     thermostat_data = ThermostatData();
     checkpoint_data = CheckpointData(false, false, std::string(""), false, std::string(""));
+    membrane_data = MembraneData();
 
     particles = nullptr;
     force = nullptr;
@@ -171,18 +172,21 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 force_flag = true;
                 if (*optarg == 'g') {
                     gravFlag = true;
-                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, harmonicFlag, linkedcell_flag, simdata.getGravConstant(), k, r0);
+                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, 
+                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
                     spdlog::info("Force set to Gravitational_Force");
                     break;
-                } if (*optarg == 'l') {
+                } 
+                if (*optarg == 'l') {
                     lenJonesFlag = true;
-                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, harmonicFlag, linkedcell_flag, simdata.getGravConstant(), k, r0);
+                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, 
+                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
-                    spdlog::error("Invalid argument for force");
-                    logHelp();
-                    return false;
+                spdlog::error("Invalid argument for force");
+                logHelp();
+                return false;
             }
 
             case '?':{
@@ -207,6 +211,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
         xmlreader.readSimulation(xml_file, simdata);
         xmlreader.readThermostat(xml_file, thermostat_data);
         xmlreader.readCheckpoint(xml_file, checkpoint_data);
+        xmlreader.readMembrane(xml_file, membrane_data);
 
         if(thermostat_data.getThermostatFlag() && !thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
             spdlog::error("Either initial temperature or target termperature or both have to be set when using the thermostat");
@@ -285,7 +290,8 @@ bool Simulation::initialize(int argc, char* argv[]) {
         if(simdata.getForceStr() == "lennardJonesForce"){
             lenJonesFlag = true;
         }
-        force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, harmonicFlag, linkedcell_flag, simdata.getGravConstant(), k, r0);
+        force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, linkedcell_flag, 
+        simdata.getGravConstant(), membrane_data.getMembraneFlag(), membrane_data.getK(), membrane_data.getR0());
 
     }else{
 
@@ -358,11 +364,25 @@ void Simulation::run() {
         thermostat.initSystemTemperature(initial_temp, particles);
     }
 
+    if(membrane_data.getMembraneFlag()){
+        particles->makeMembrane(50,50);
+    }
+
     // Advance simulation time to start_time
     while (current_time < start_time) {
+        if(membrane_data.getMembraneFlag()){
+            if(current_time <= 150){
+                particles->applyForce(17, 24, 50, {0 , 0, membrane_data.getF_z_up()});
+                particles->applyForce(17, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                particles->applyForce(18, 24, 50, {0 , 0, membrane_data.getF_z_up()});
+                particles->applyForce(18, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+            }
+        }
+
         calculateX();
         force->calculateF(*particles);
         calculateV();
+
         current_time += delta_t;
         iteration++;
     }
@@ -371,6 +391,14 @@ void Simulation::run() {
     // Simulation loop
     if (time_flag) {
         while (current_time < end_time) {
+            if(membrane_data.getMembraneFlag()){
+                if(current_time <= 150){
+                    particles->applyForce(17, 24, 50, {0 , 0, membrane_data.getF_z_up()});
+                    particles->applyForce(17, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                    particles->applyForce(18, 24, 50, {0 , 0, membrane_data.getF_z_up()});
+                    particles->applyForce(18, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                }
+            }
             calculateX();
             force->calculateF(*particles);
             calculateV();
@@ -384,6 +412,14 @@ void Simulation::run() {
         }
     } else {
         while (current_time < end_time) {
+            if(membrane_data.getMembraneFlag()){
+                if(current_time <= 150){
+                    particles->applyForce(17, 24, 50, {0 , 0, membrane_data.getF_z_up()});
+                    particles->applyForce(17, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                    particles->applyForce(18, 24, 50, {0 , 0, membrane_data.getF_z_up()});
+                    particles->applyForce(18, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                }
+            }
             calculateX();
             force->calculateF(*particles);
             calculateV();

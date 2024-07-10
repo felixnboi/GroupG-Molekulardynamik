@@ -8,36 +8,24 @@
 /**
  * @brief This class is used to model the forces between particles in a system.
  */
-class Force
-{
-private:
-    std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.
-    std::array<bool,3> periodicFlag; ///< If the corresponding bounderies are periodic.
-    bool lenJonesFlag; ///< Flag if the Lenard-Jones-Force should be calculated.
-    bool gravFlag; ///< Flag if the the gravitational force should be calculated.
-    bool harmonicFlag; ///< Flag if the harmonic force should be calculated.
-    bool linkedcells; ///< The flag for choosing the algorithm. If set linkedcells algorithm is used.
-    std::array<double, 3> gravConstant; ///< The gravitational constant value used for calculations.
-    double k; ///< The stiffness constant of the harmonic force.
-    double r0; ///< The average bond lenght of particles in a membrane.
+class Force{
 
 public:
-
     /**
-     * @brief Default constructor for Force.
+     * @brief Constructor with all parameters.
      * 
      * @param reflectLenJonesFlag Array of booleans for reflection flags of the 6 bounderies.
      * @param periodicFlag Array of booleans for periodic boundary conditions in 3 dimensions.
      * @param lenJonesFlag Flag if the Lenard-Jones-Force should be calculated.
      * @param gravFlag Flag if the gravitational force should be calculated.
-     * @param harmonicFlag Flag if the harmonic force should be calculated.
      * @param linkedcells The flag for choosing the algorithm. If set linkedcells algorithm is used.
      * @param gravConstant The gravitational constant value used for calculations.
+     * @param membraneFlag The flag for the membrane simulation.
      * @param k The stiffness constant of the harmonic force.
      * @param r0 The average bond lenght of particles in a membrane.
      */
-    Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool harmonicFlag, bool linkedcells, 
-         std::array<double, 3> gravConstant, double k, double r0);
+    Force(std::array<bool,6> reflectLenJonesFlag, std::array<bool,3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool linkedcells, 
+         std::array<double, 3> gravConstant, bool membraneFlag, double k, double r0);
 
     /**
      * @brief Default destructor for Force.
@@ -113,4 +101,14 @@ public:
      */
     void calculateHarmonicFroce(std::shared_ptr<Particle> particle1, std::shared_ptr<Particle> particle2, double k, double r0);
 
+private:
+    std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.
+    std::array<bool,3> periodicFlag; ///< If the corresponding bounderies are periodic.
+    bool lenJonesFlag; ///< Flag if the Lenard-Jones-Force should be calculated.
+    bool gravFlag; ///< Flag if the the gravitational force should be calculated.
+    bool linkedcells; ///< The flag for choosing the algorithm. If set linkedcells algorithm is used.
+    std::array<double, 3> gravConstant; ///< The gravitational constant value used for calculations.
+    bool membraneFlag; ///< Flag for the membrane simulation.
+    double k; ///< The stiffness constant of the harmonic force.
+    double r0; ///< The average bond lenght of particles in a membrane.
 };

@@ -176,3 +176,21 @@ void XMLReader::readCheckpoint(const char* filename, CheckpointData& checkpointd
         return;
     }
 }
+
+void XMLReader::readMembrane(const char* filename, MembraneData& membranedata){
+    try{
+        std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
+
+        if(sim->membrane().present()){
+            membranedata.setMembraneFlag(true);
+            membranedata.setR0(sim->membrane().get().r0());
+            membranedata.setK(sim->membrane().get().k());
+            membranedata.setF_z_up(sim->membrane().get().f_z_up());
+        }
+
+    }catch(const xml_schema::exception& e){
+        spdlog::error("Error during Membrane-parsing.");
+        spdlog::error(e.what());
+        return;
+    }
+}

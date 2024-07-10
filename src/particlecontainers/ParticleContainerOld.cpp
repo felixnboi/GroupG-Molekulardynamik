@@ -48,3 +48,24 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerOld::getPa
     }
     return particlePairs;
 }
+
+void ParticleContainerOld::makeMembrane(int sizeX, int sizeY){
+    for(int x = 0; x < sizeX; x++){
+        for(int y = 0; y < sizeY; y++){
+            int position = x+y*sizeX;
+            auto particle = particles[position];
+
+            // for every particle we check if it sill has the coresponfing neighbour and if yes we add it
+            if(x +1 < sizeX) particle->addNeighbour(particles[position+1], 0);
+            if(y+1 < sizeY){
+                if(x -1 >= 0) particle->addNeighbour(particles[position+sizeX-1], 1);
+                particle->addNeighbour(particles[position+sizeX], 2);
+                if(x +1 < sizeX) particle->addNeighbour(particles[position+sizeX+1], 1);
+            }
+        }
+    }
+}
+
+void ParticleContainerOld::applyForce(int x, int y, int sizeX, std::array<double, 3> force){
+    particles[x+y*sizeX]->applyF(force);
+}

@@ -47,7 +47,7 @@ TEST(XMLReader, parseXMLFile){
     EXPECT_TRUE(simdata.getCutoffRadius()==11);
     EXPECT_TRUE((simdata.getDomain()==std::array<double, 3>{8, 9, 10}));
     EXPECT_TRUE((simdata.getDomainStart()==std::array<double, 3>{0, 0, 0}));
-    EXPECT_TRUE((simdata.getGravConstant()==0));
+    EXPECT_TRUE((simdata.getGravConstant()==std::array<double, 3>{0, 0, 0}));
 
     EXPECT_TRUE(thermostatdata.getBrownianMotionDimension()==2);
     EXPECT_TRUE(thermostatdata.getInitTemp()==2);    

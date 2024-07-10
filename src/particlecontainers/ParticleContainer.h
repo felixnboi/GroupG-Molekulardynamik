@@ -78,4 +78,22 @@ public:
      * @return A vector of the pairs of all particles to iterate over.
      */
     virtual std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() = 0;
+
+    /**
+     * @brief Makes the particles now see each other as part of the same membrane.
+     * 
+     * @param sizeX The amount of particles of the mebrane in X dircetion.
+     * @param sizeY The amount of particles of the mebrane in Y dircetion.
+     */
+    virtual void makeMembrane(int sizeX, int sizeY) = 0;
+
+    /**
+     * @brief Applys force to the particle at the specified palce in the membrane.
+     * 
+     * @param sizeX The amount of particles of the mebrane in X dircetion.
+     * @param x The location of the particle int the mebrane in x dircetion.
+     * @param y The location of the particle int the mebrane in y dircetion.
+     * @param force The force that is applyed to the particle.
+     */
+    virtual void applyForce(int x, int y, int sizeX, std::array<double, 3> force) = 0;
 };

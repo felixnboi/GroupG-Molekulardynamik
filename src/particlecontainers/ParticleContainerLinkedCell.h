@@ -137,7 +137,7 @@ public:
      * @param sizeX The amount of particles of the mebrane in X dircetion.
      * @param sizeY The amount of particles of the mebrane in Y dircetion.
      */
-    void makeMembrane(int sizeX, int sizeY);
+    void makeMembrane(int sizeX, int sizeY) override;
 
     /**
      * @brief Applys force to the particle at the specified palce in the membrane.
@@ -147,7 +147,7 @@ public:
      * @param y The location of the particle int the mebrane in y dircetion.
      * @param force The force that is applyed to the particle.
      */
-    void applyForce(int x, int y, int sizeX, std::array<double, 3> force);
+    void applyForce(int x, int y, int sizeX, std::array<double, 3> force) override;
 
 private:
     size_t particle_count; ///< The number of particles in this container.

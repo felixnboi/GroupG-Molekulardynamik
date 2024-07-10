@@ -24,6 +24,7 @@
 #include "data/SimData.h"
 #include "data/ThermostatData.h"
 #include "data/CheckpointData.h"
+#include "data/MembraneData.h"
 #include "thermostat/Thermostat.h"
 
 /**
@@ -78,6 +79,7 @@ private:
     Thermostat thermostat; ///< Thermostat for temperature control in simulation.
     ThermostatData thermostat_data; ///< Holds thermostat data.
     CheckpointData checkpoint_data; ///< Holds checkpoint data.
+    MembraneData membrane_data; ///< Holds membrane data.
 
     std::unique_ptr<ParticleContainer> particles; ///< Container holding simulaton particles.
     std::unique_ptr<Force> force; ///< Force object for force calculations.
@@ -92,8 +94,6 @@ private:
     bool lenJonesFlag; ///< Flag indicating whether the lennard Jones Force should be used for force calculation.
     bool gravFlag;  ///< Flag indicating whether the gravitational Force should be used for force calculation.
     bool harmonicFlag; ///< Flag indicating whether the harmonic Force should be used for force calculation.
-    double k; ///< The stiffness constant of the harmonic force.
-    double r0; ///< The average bond lenght of particles in a membrane.
 
     //The order for two following Flags: {left, right, bottom, top, back, front}.
     std::array<bool,6> lenJonesBoundaryFlags; ///< Flags for Lennard-Jones boundary conditions.

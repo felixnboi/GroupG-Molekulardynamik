@@ -6,6 +6,7 @@
 #include "../../data/SimData.h"
 #include "../../data/ThermostatData.h"
 #include "../../data/CheckpointData.h"
+#include "../../data/MembraneData.h"
 #include "spdlog/spdlog.h"
 
 #include <string>
@@ -66,7 +67,15 @@ public:
      * @brief Reads checkpoint data from an XML file and saves it in a checkpointdata object.
      * 
      * @param filename The name of the XML file to read from.
-     * @param thermostatdata A reference to the checkpointdata object.
+     * @param checkpointdata A reference to the checkpointdata object.
      */
     void readCheckpoint(const char* filename, CheckpointData& checkpointdata);
+
+    /**
+     * @brief Reads membrane data from an XML file and saves it in a membranedata object.
+     * 
+     * @param filename The name of the XML file to read from.
+     * @param membranedata A reference to the membranedata object.
+     */
+    void readMembrane(const char* filename, MembraneData& membranedata);
 };

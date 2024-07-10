@@ -513,7 +513,7 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     particles->addParticle(p2);
     particles->addParticle(p3);
 
-    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, false, 0, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, {0, 0, 0}, false, 0, 0};
     LJForce.calculateF(*particles);
 
     const auto& updatedParticles = particles->getParticles();
@@ -585,7 +585,7 @@ TEST(Lennard_Jones_Force, LennardJonesReflection){
     (std::array<double, 3>){0,0,0},1, 0, 5, 1, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     particles.addParticle(p2);
-    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, false, true, 0, 0, 0};
+    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
     force.calculateF(particles);
     EXPECT_EQ(p1->getF()[0], -1950720); //test against manually calculated value
     EXPECT_EQ(p2->getF()[0], 0);
@@ -745,7 +745,7 @@ TEST(Lennard_Jones_Force, gravity){
     std::shared_ptr<Particle> p = std::make_shared<Particle>((std::array<double, 3>){1.0, 2.0, 3.0}, 
     (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     pc->addParticle(p);
-    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, false, 10, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, {0, 10, 0}, false, 0, 0};
     LJForce.calculateF(*pc);
     EXPECT_EQ(p->getF()[0], 0);
     EXPECT_EQ(p->getF()[1], 10);
@@ -762,7 +762,7 @@ TEST(Lennard_Jones_Force, peridicBoundary){
 
     pc->addParticle(p1);
     pc->addParticle(p2);
-    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, false, true, 0, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
     LJForce.calculateF(*pc);
     EXPECT_EQ(p1->getF()[0], 120);
     EXPECT_EQ(p1->getF()[1], 0);

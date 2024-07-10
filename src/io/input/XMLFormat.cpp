@@ -495,6 +495,36 @@ checkpoint (::std::unique_ptr< checkpoint_type > x)
   this->checkpoint_.set (std::move (x));
 }
 
+const simulation::membrane_optional& simulation::
+membrane () const
+{
+  return this->membrane_;
+}
+
+simulation::membrane_optional& simulation::
+membrane ()
+{
+  return this->membrane_;
+}
+
+void simulation::
+membrane (const membrane_type& x)
+{
+  this->membrane_.set (x);
+}
+
+void simulation::
+membrane (const membrane_optional& x)
+{
+  this->membrane_ = x;
+}
+
+void simulation::
+membrane (::std::unique_ptr< membrane_type > x)
+{
+  this->membrane_.set (std::move (x));
+}
+
 const simulation::cuboid_sequence& simulation::
 cuboid () const
 {
@@ -1147,6 +1177,64 @@ void checkpoint::
 merge_file (::std::unique_ptr< merge_file_type > x)
 {
   this->merge_file_.set (std::move (x));
+}
+
+
+// membrane
+// 
+
+const membrane::r0_type& membrane::
+r0 () const
+{
+  return this->r0_.get ();
+}
+
+membrane::r0_type& membrane::
+r0 ()
+{
+  return this->r0_.get ();
+}
+
+void membrane::
+r0 (const r0_type& x)
+{
+  this->r0_.set (x);
+}
+
+const membrane::k_type& membrane::
+k () const
+{
+  return this->k_.get ();
+}
+
+membrane::k_type& membrane::
+k ()
+{
+  return this->k_.get ();
+}
+
+void membrane::
+k (const k_type& x)
+{
+  this->k_.set (x);
+}
+
+const membrane::f_z_up_type& membrane::
+f_z_up () const
+{
+  return this->f_z_up_.get ();
+}
+
+membrane::f_z_up_type& membrane::
+f_z_up ()
+{
+  return this->f_z_up_.get ();
+}
+
+void membrane::
+f_z_up (const f_z_up_type& x)
+{
+  this->f_z_up_.set (x);
 }
 
 
@@ -2109,6 +2197,7 @@ simulation (const boundaries_type& boundaries,
   simulationParameters_ (simulationParameters, this),
   thermostat_ (this),
   checkpoint_ (this),
+  membrane_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -2126,6 +2215,7 @@ simulation (::std::unique_ptr< boundaries_type > boundaries,
   simulationParameters_ (std::move (simulationParameters), this),
   thermostat_ (this),
   checkpoint_ (this),
+  membrane_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -2142,6 +2232,7 @@ simulation (const simulation& x,
   simulationParameters_ (x.simulationParameters_, f, this),
   thermostat_ (x.thermostat_, f, this),
   checkpoint_ (x.checkpoint_, f, this),
+  membrane_ (x.membrane_, f, this),
   cuboid_ (x.cuboid_, f, this),
   disc_ (x.disc_, f, this)
 {
@@ -2158,6 +2249,7 @@ simulation (const ::xercesc::DOMElement& e,
   simulationParameters_ (this),
   thermostat_ (this),
   checkpoint_ (this),
+  membrane_ (this),
   cuboid_ (this),
   disc_ (this)
 {
@@ -2262,6 +2354,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // membrane
+    //
+    if (n.name () == "membrane" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< membrane_type > r (
+        membrane_traits::create (i, f, this));
+
+      if (!this->membrane_)
+      {
+        this->membrane_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // cuboid
     //
     if (n.name () == "cuboid" && n.namespace_ ().empty ())
@@ -2335,6 +2441,7 @@ operator= (const simulation& x)
     this->simulationParameters_ = x.simulationParameters_;
     this->thermostat_ = x.thermostat_;
     this->checkpoint_ = x.checkpoint_;
+    this->membrane_ = x.membrane_;
     this->cuboid_ = x.cuboid_;
     this->disc_ = x.disc_;
   }
@@ -3372,6 +3479,141 @@ operator= (const checkpoint& x)
 
 checkpoint::
 ~checkpoint ()
+{
+}
+
+// membrane
+//
+
+membrane::
+membrane (const r0_type& r0,
+          const k_type& k,
+          const f_z_up_type& f_z_up)
+: ::xml_schema::type (),
+  r0_ (r0, this),
+  k_ (k, this),
+  f_z_up_ (f_z_up, this)
+{
+}
+
+membrane::
+membrane (const membrane& x,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  r0_ (x.r0_, f, this),
+  k_ (x.k_, f, this),
+  f_z_up_ (x.f_z_up_, f, this)
+{
+}
+
+membrane::
+membrane (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  r0_ (this),
+  k_ (this),
+  f_z_up_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void membrane::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // r0
+    //
+    if (n.name () == "r0" && n.namespace_ ().empty ())
+    {
+      if (!r0_.present ())
+      {
+        this->r0_.set (r0_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // k
+    //
+    if (n.name () == "k" && n.namespace_ ().empty ())
+    {
+      if (!k_.present ())
+      {
+        this->k_.set (k_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // f_z_up
+    //
+    if (n.name () == "f_z_up" && n.namespace_ ().empty ())
+    {
+      if (!f_z_up_.present ())
+      {
+        this->f_z_up_.set (f_z_up_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!r0_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "r0",
+      "");
+  }
+
+  if (!k_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "k",
+      "");
+  }
+
+  if (!f_z_up_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "f_z_up",
+      "");
+  }
+}
+
+membrane* membrane::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class membrane (*this, f, c);
+}
+
+membrane& membrane::
+operator= (const membrane& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->r0_ = x.r0_;
+    this->k_ = x.k_;
+    this->f_z_up_ = x.f_z_up_;
+  }
+
+  return *this;
+}
+
+membrane::
+~membrane ()
 {
 }
 
