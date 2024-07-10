@@ -10,6 +10,7 @@
 #include "io/input/XMLReader.h"
 #include "io/output/VTKWriter.h"
 #include "io/output/CheckpointWriter.h"
+#include "io/output/ProfilingComponent.h"
 #include "utils/ArrayUtils.h"
 #include "utils/NumericalUtils.h"
 

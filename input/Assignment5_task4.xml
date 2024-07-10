@@ -103,9 +103,9 @@
     
      <cuboid>
         <position>
-            <x>1.0</x>
-            <y>0.5</y>
-            <z>0.5</z>
+            <x>3.2</x>
+            <y>0.6</y>
+            <z>0.6</z>
         </position>
         <velocity>
             <x>0.0</x>
@@ -113,18 +113,18 @@
             <z>0.0</z>
         </velocity>
         <dimensions>
-            <x>2</x>
-            <y>30</y>
-            <z>12</z>
+            <x>20</x>
+            <y>25</y>
+            <z>10</z>
         </dimensions>
-        <distance>1.0</distance>
+        <distance>1.2</distance>
         <mass>1.0</mass>
         <brownian_motion>0.0</brownian_motion>
-        <epsilon>2.0</epsilon>
-        <sigma>1.1</sigma>
+        <epsilon>1.0</epsilon>
+        <sigma>1.0</sigma>
         <brownian_motion_dimension>3</brownian_motion_dimension>
-        <type>0</type>
-        <is_outer>true</is_outer>
+        <type>2</type>
+        <is_outer>false</is_outer>
     </cuboid>
 
 </simulation>
