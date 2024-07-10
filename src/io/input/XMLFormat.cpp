@@ -1003,6 +1003,24 @@ grav_constant (::std::unique_ptr< grav_constant_type > x)
   this->grav_constant_.set (std::move (x));
 }
 
+const simulationParameters::walls_flag_type& simulationParameters::
+walls_flag () const
+{
+  return this->walls_flag_.get ();
+}
+
+simulationParameters::walls_flag_type& simulationParameters::
+walls_flag ()
+{
+  return this->walls_flag_.get ();
+}
+
+void simulationParameters::
+walls_flag (const walls_flag_type& x)
+{
+  this->walls_flag_.set (x);
+}
+
 
 // thermostat
 // 
@@ -1439,6 +1457,24 @@ type (const type_type& x)
   this->type_.set (x);
 }
 
+const cuboid::is_outer_type& cuboid::
+is_outer () const
+{
+  return this->is_outer_.get ();
+}
+
+cuboid::is_outer_type& cuboid::
+is_outer ()
+{
+  return this->is_outer_.get ();
+}
+
+void cuboid::
+is_outer (const is_outer_type& x)
+{
+  this->is_outer_.set (x);
+}
+
 
 // disc
 // 
@@ -1615,6 +1651,24 @@ void disc::
 type (const type_type& x)
 {
   this->type_.set (x);
+}
+
+const disc::is_outer_type& disc::
+is_outer () const
+{
+  return this->is_outer_.get ();
+}
+
+disc::is_outer_type& disc::
+is_outer ()
+{
+  return this->is_outer_.get ();
+}
+
+void disc::
+is_outer (const is_outer_type& x)
+{
+  this->is_outer_.set (x);
 }
 
 
@@ -2896,7 +2950,8 @@ simulationParameters (const end_t_type& end_t,
                       const domain_type& domain,
                       const domain_start_type& domain_start,
                       const cutoff_radius_type& cutoff_radius,
-                      const grav_constant_type& grav_constant)
+                      const grav_constant_type& grav_constant,
+                      const walls_flag_type& walls_flag)
 : ::xml_schema::type (),
   end_t_ (end_t, this),
   delta_t_ (delta_t, this),
@@ -2907,7 +2962,8 @@ simulationParameters (const end_t_type& end_t,
   domain_ (domain, this),
   domain_start_ (domain_start, this),
   cutoff_radius_ (cutoff_radius, this),
-  grav_constant_ (grav_constant, this)
+  grav_constant_ (grav_constant, this),
+  walls_flag_ (walls_flag, this)
 {
 }
 
@@ -2921,7 +2977,8 @@ simulationParameters (const end_t_type& end_t,
                       ::std::unique_ptr< domain_type > domain,
                       ::std::unique_ptr< domain_start_type > domain_start,
                       const cutoff_radius_type& cutoff_radius,
-                      ::std::unique_ptr< grav_constant_type > grav_constant)
+                      ::std::unique_ptr< grav_constant_type > grav_constant,
+                      const walls_flag_type& walls_flag)
 : ::xml_schema::type (),
   end_t_ (end_t, this),
   delta_t_ (delta_t, this),
@@ -2932,7 +2989,8 @@ simulationParameters (const end_t_type& end_t,
   domain_ (std::move (domain), this),
   domain_start_ (std::move (domain_start), this),
   cutoff_radius_ (cutoff_radius, this),
-  grav_constant_ (std::move (grav_constant), this)
+  grav_constant_ (std::move (grav_constant), this),
+  walls_flag_ (walls_flag, this)
 {
 }
 
@@ -2950,7 +3008,8 @@ simulationParameters (const simulationParameters& x,
   domain_ (x.domain_, f, this),
   domain_start_ (x.domain_start_, f, this),
   cutoff_radius_ (x.cutoff_radius_, f, this),
-  grav_constant_ (x.grav_constant_, f, this)
+  grav_constant_ (x.grav_constant_, f, this),
+  walls_flag_ (x.walls_flag_, f, this)
 {
 }
 
@@ -2968,7 +3027,8 @@ simulationParameters (const ::xercesc::DOMElement& e,
   domain_ (this),
   domain_start_ (this),
   cutoff_radius_ (this),
-  grav_constant_ (this)
+  grav_constant_ (this),
+  walls_flag_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3115,6 +3175,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // walls_flag
+    //
+    if (n.name () == "walls_flag" && n.namespace_ ().empty ())
+    {
+      if (!walls_flag_.present ())
+      {
+        this->walls_flag_.set (walls_flag_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3187,6 +3258,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "grav_constant",
       "");
   }
+
+  if (!walls_flag_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "walls_flag",
+      "");
+  }
 }
 
 simulationParameters* simulationParameters::
@@ -3212,6 +3290,7 @@ operator= (const simulationParameters& x)
     this->domain_start_ = x.domain_start_;
     this->cutoff_radius_ = x.cutoff_radius_;
     this->grav_constant_ = x.grav_constant_;
+    this->walls_flag_ = x.walls_flag_;
   }
 
   return *this;
@@ -3630,7 +3709,8 @@ cuboid (const position_type& position,
         const epsilon_type& epsilon,
         const sigma_type& sigma,
         const brownian_motion_dimension_type& brownian_motion_dimension,
-        const type_type& type)
+        const type_type& type,
+        const is_outer_type& is_outer)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
@@ -3641,7 +3721,8 @@ cuboid (const position_type& position,
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
   brownian_motion_dimension_ (brownian_motion_dimension, this),
-  type_ (type, this)
+  type_ (type, this),
+  is_outer_ (is_outer, this)
 {
 }
 
@@ -3655,7 +3736,8 @@ cuboid (::std::unique_ptr< position_type > position,
         const epsilon_type& epsilon,
         const sigma_type& sigma,
         const brownian_motion_dimension_type& brownian_motion_dimension,
-        const type_type& type)
+        const type_type& type,
+        const is_outer_type& is_outer)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
@@ -3666,7 +3748,8 @@ cuboid (::std::unique_ptr< position_type > position,
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
   brownian_motion_dimension_ (brownian_motion_dimension, this),
-  type_ (type, this)
+  type_ (type, this),
+  is_outer_ (is_outer, this)
 {
 }
 
@@ -3684,7 +3767,8 @@ cuboid (const cuboid& x,
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
   brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this),
-  type_ (x.type_, f, this)
+  type_ (x.type_, f, this),
+  is_outer_ (x.is_outer_, f, this)
 {
 }
 
@@ -3702,7 +3786,8 @@ cuboid (const ::xercesc::DOMElement& e,
   epsilon_ (this),
   sigma_ (this),
   brownian_motion_dimension_ (this),
-  type_ (this)
+  type_ (this),
+  is_outer_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3840,6 +3925,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // is_outer
+    //
+    if (n.name () == "is_outer" && n.namespace_ ().empty ())
+    {
+      if (!is_outer_.present ())
+      {
+        this->is_outer_.set (is_outer_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3912,6 +4008,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "type",
       "");
   }
+
+  if (!is_outer_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "is_outer",
+      "");
+  }
 }
 
 cuboid* cuboid::
@@ -3937,6 +4040,7 @@ operator= (const cuboid& x)
     this->sigma_ = x.sigma_;
     this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
     this->type_ = x.type_;
+    this->is_outer_ = x.is_outer_;
   }
 
   return *this;
@@ -3959,7 +4063,8 @@ disc (const position_type& position,
       const epsilon_type& epsilon,
       const sigma_type& sigma,
       const brownian_motion_dimension_type& brownian_motion_dimension,
-      const type_type& type)
+      const type_type& type,
+      const is_outer_type& is_outer)
 : ::xml_schema::type (),
   position_ (position, this),
   velocity_ (velocity, this),
@@ -3969,7 +4074,8 @@ disc (const position_type& position,
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
   brownian_motion_dimension_ (brownian_motion_dimension, this),
-  type_ (type, this)
+  type_ (type, this),
+  is_outer_ (is_outer, this)
 {
 }
 
@@ -3982,7 +4088,8 @@ disc (::std::unique_ptr< position_type > position,
       const epsilon_type& epsilon,
       const sigma_type& sigma,
       const brownian_motion_dimension_type& brownian_motion_dimension,
-      const type_type& type)
+      const type_type& type,
+      const is_outer_type& is_outer)
 : ::xml_schema::type (),
   position_ (std::move (position), this),
   velocity_ (std::move (velocity), this),
@@ -3992,7 +4099,8 @@ disc (::std::unique_ptr< position_type > position,
   epsilon_ (epsilon, this),
   sigma_ (sigma, this),
   brownian_motion_dimension_ (brownian_motion_dimension, this),
-  type_ (type, this)
+  type_ (type, this),
+  is_outer_ (is_outer, this)
 {
 }
 
@@ -4009,7 +4117,8 @@ disc (const disc& x,
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
   brownian_motion_dimension_ (x.brownian_motion_dimension_, f, this),
-  type_ (x.type_, f, this)
+  type_ (x.type_, f, this),
+  is_outer_ (x.is_outer_, f, this)
 {
 }
 
@@ -4026,7 +4135,8 @@ disc (const ::xercesc::DOMElement& e,
   epsilon_ (this),
   sigma_ (this),
   brownian_motion_dimension_ (this),
-  type_ (this)
+  type_ (this),
+  is_outer_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -4150,6 +4260,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // is_outer
+    //
+    if (n.name () == "is_outer" && n.namespace_ ().empty ())
+    {
+      if (!is_outer_.present ())
+      {
+        this->is_outer_.set (is_outer_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -4215,6 +4336,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "type",
       "");
   }
+
+  if (!is_outer_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "is_outer",
+      "");
+  }
 }
 
 disc* disc::
@@ -4239,6 +4367,7 @@ operator= (const disc& x)
     this->sigma_ = x.sigma_;
     this->brownian_motion_dimension_ = x.brownian_motion_dimension_;
     this->type_ = x.type_;
+    this->is_outer_ = x.is_outer_;
   }
 
   return *this;

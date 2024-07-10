@@ -3,7 +3,6 @@
 
 #include <fstream>
 
-namespace CheckpointWriter
-{
+namespace CheckpointWriter{
     void writeCheckpoint(ParticleContainer &particles,  const char *filename);
 }

@@ -6,7 +6,8 @@ Simulation::Simulation(){
     std::array<double, 3> domain_start = {0, 0, 0};
     std::array<double, 3> grav_constant = {0, 0, 0};
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
-    std::string("INFO"), boundary, 3, 2, domain, domain_start, grav_constant);
+    std::string("INFO"), boundary, 3, 2, domain, domain_start, grav_constant, false);
+
 
     thermostat = Thermostat();
     thermostat_data = ThermostatData();
@@ -387,6 +388,8 @@ void Simulation::run() {
         iteration++;
     }
 
+    size_t N_bins = 50;
+    std::string cvs_file = "simulation_profile";
 
     // Simulation loop
     if (time_flag) {
@@ -404,9 +407,10 @@ void Simulation::run() {
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
-                thermostat.scaleWithBeta(particles);
+                if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
+                else{thermostat.scaleWithBetaFluid(particles);}
             }
-
+       
             iteration++;
             current_time += delta_t;
         }
@@ -425,9 +429,14 @@ void Simulation::run() {
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
-                thermostat.scaleWithBeta(particles);
+                if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
+                else{thermostat.scaleWithBetaFluid(particles);}
             }
 
+            if (iteration % 10000 == 0) {
+                ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
+            }
+            
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {
                 plotParticles(iteration);
@@ -458,6 +467,8 @@ void Simulation::calculateX() {
   double delta_t = simdata.getDeltaT();
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
+    if(!(*p)->getIsOuter()){
+
     auto m = (*p)->getM(); ///< Mass of the particle.
     auto cur_x = (*p)->getX(); ///< Current position of the particle.
     auto cur_v = (*p)->getV(); ///< Current velocity of the particle.
@@ -470,6 +481,7 @@ void Simulation::calculateX() {
     }
     // set the new position for the particle
     (*p)->setX(cur_x_dummy);
+    }
   }
   if(linkedcell_flag){
     ParticleContainerLinkedCell *LCContainer = dynamic_cast<ParticleContainerLinkedCell*>(particles.get());

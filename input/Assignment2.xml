@@ -42,6 +42,7 @@
             <y>0.0</y>
             <z>0.0</z>
         </grav_constant>
+        <walls_flag>false</walls_flag>
     </simulationParameters>
 
     <cuboid>
@@ -67,6 +68,7 @@
         <sigma>1.0</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
         <type>0</type> 
+        <is_outer>false</is_outer>
     </cuboid>
 
     <cuboid>
@@ -92,6 +94,7 @@
         <sigma>1.0</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
         <type>1</type> 
+        <is_outer>false</is_outer>
     </cuboid>
 
 </simulation>

@@ -4,7 +4,8 @@ SimData::SimData() = default;
 
 SimData::SimData(std::string input_file, std::string baseName, unsigned write_frequency, double start_time, double end_time, double delta_t, 
 std::string force_str, std::string algorithm, std::string loglevel, std::array<std::string, 6> boundary, double cutoff_radius, 
-size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, std::array<double, 3> gravConstant)
+size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_start, std::array<double, 3> gravConstant, 
+bool walls_flag)
     : input_file(std::move(input_file)), 
         baseName(std::move(baseName)), 
         write_frequency(write_frequency), 
@@ -19,7 +20,8 @@ size_t dimensions, std::array<double, 3> domain, std::array<double, 3> domain_st
         dimensions(dimensions),
         domain(std::move(domain)),
         domain_start(std::move(domain_start)),
-        gravConstant(std::move(gravConstant)) {}
+        gravConstant(std::move(gravConstant)), 
+        walls_flag(walls_flag) {}
 
 SimData::~SimData() = default;
 
@@ -38,6 +40,7 @@ double SimData::getDimensions() const { return dimensions; }
 std::array<double, 3> SimData::getDomain() const { return domain; }
 std::array<double, 3> SimData::getDomainStart() const { return domain_start; }
 std::array<double, 3> SimData::getGravConstant() const { return gravConstant; }
+bool SimData::getWallsFlag() const { return walls_flag;}
 
 void SimData::setInputFile(const std::string& new_input_file) { input_file = new_input_file; }
 void SimData::setBaseName(const std::string& new_base_name) { baseName = new_base_name; }
@@ -54,4 +57,5 @@ void SimData::setDimensions(double new_dimensions) { dimensions = new_dimensions
 void SimData::setDomain(const std::array<double, 3>& new_domain) { domain = new_domain; }
 void SimData::setDomainStart(const std::array<double, 3>& new_domain_start) { domain_start = new_domain_start; }
 void SimData::setGravConstant(const std::array<double, 3> new_grav_constant) { gravConstant = new_grav_constant; }
+void SimData::setWallsFlag(bool new_walls_flag) {walls_flag = new_walls_flag; }
 

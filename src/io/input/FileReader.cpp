@@ -21,6 +21,7 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename, st
   double epsilon;
   double sigma;
   int type;
+  bool is_outer;
   int num_particles = 0;
 
   std::ifstream input_file(filename);
@@ -74,7 +75,7 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename, st
       if (datastream.fail()) {
         epsilon = 5;
         sigma = 1;
-        particles.addParticle(std::make_shared<Particle>(x,v,m,0,epsilon,sigma,domainStart));
+        particles.addParticle(std::make_shared<Particle>(x,v,m,false,0,epsilon,sigma,domainStart));
         continue;
       }
       datastream >> sigma;
@@ -87,7 +88,12 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename, st
         spdlog::error("Error reading file: failed to parse line {}", i);
         exit(-1);
       }
-      auto particle = std::make_shared<Particle>(x,v,m,type,epsilon,sigma,domainStart);
+      datastream >> is_outer;
+      if (datastream.fail()) {
+        spdlog::error("Error reading file: failed to parse line {}", i);
+        exit(-1);
+      }
+      auto particle = std::make_shared<Particle>(x,v,m,is_outer,type,epsilon,sigma,domainStart);
       particles.addParticle(particle);
       for (auto &fj : f) {
         datastream >> fj;

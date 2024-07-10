@@ -62,6 +62,8 @@ private:
    */
   int type;
 
+  bool is_outer;
+
   double sigma; ///< The sigma value for the Lennard-Jones potential.
   double epsilon; ///< The epsilon value for the Lennard-Jones potential.
   std::array<double, 3> domainStart; ///< The domain start position of the particle.
@@ -88,6 +90,7 @@ public:
    * @param x_arg The initial position of the particle.
    * @param v_arg The initial velocity of the particle.
    * @param m_arg The mass of the particle.
+   * @param is_outer_arg Whether the particle belongs to the outer cuboid (wall).
    * @param type_arg The type of the particle.
    * @param epsilon The epsilon value for the Lennard-Jones potential.
    * @param sigma The sigma value for the Lennard-Jones potential.
@@ -96,7 +99,7 @@ public:
   Particle(
       // for visualization, we need always 3 coordinates
       // -> in case of 2d, we use only the first and the second
-      std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
+      std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, bool is_outer_arg,
       int type_arg, double epsilon, double sigma, std::array<double, 3> domainStart);
 
   /**
@@ -146,12 +149,12 @@ public:
    */
   const std::array<bool,4> &getHasNeighbour() const;
 
-  /**
-   * @brief Gets the value of epsilon for this particle.
+   /**
+   * @brief Gets the is_outer parameter of the particle.
    * 
-   * @return The value of epsilon.
+   * @return Boolean value of is_outer.
    */
-  const double getEpsilon() const;
+  const bool getIsOuter() const;
 
   /**
    * @brief Gets the value of sigma for this particle.
@@ -160,14 +163,33 @@ public:
    */
   const double getSigma() const;
 
+  /**
+   * @brief Gets the value of epsilon for this particle.
+   * 
+   * @return The value of epsilon.
+   */
+  const double getEpsilon() const;
+
+  /**
+   * @brief Gets the domain start coordinates.
+   * 
+   * @return Reference to the coordinates array.
+   */
   const std::array<double, 3> &getDomainStart() const;
 
-   /**
+  /**
    * @brief Sets the position of the particle.
    * 
    * @param newX New position array.
    */
   void setX(const std::array<double, 3>& newX);
+
+  /**
+   * @brief Sets the is_outer parameter of the particle.
+   * 
+   * @param newIsOuter New is_outer value.
+   */
+  void setIsOuter(const bool newIsOuter);
 
   /**
    * @brief Sets the velocity of the particle.
@@ -183,7 +205,6 @@ public:
    */
   void setF(const std::array<double, 3>& newF);
 
-  void applyF(const std::array<double, 3>& force);
   /**
    * @brief Sets the old force on this particle.
    * 
@@ -204,6 +225,8 @@ public:
    * @return The type of the particle.
    */
   int getType() const;
+
+  void applyF(const std::array<double, 3>& force);
 
   /**
    * @brief Overloaded equality operator.

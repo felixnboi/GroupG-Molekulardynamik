@@ -26,9 +26,10 @@ public:
      * @param sigma The sigma paramter for the particles of the disc.
      * @param brownian_motion_dimension The brownian motion average velocity dimension.
      * @param type The type of the particles in the disc.
+     * @param is_outer Whether the disc is outer disc(wall).
      */
     Disc(const std::array<double, 3>& position, const std::array<double, 3>& velocity, int radius, double distance, double mass, 
-    double epsilon, double sigma, size_t brownian_motion_dimension, int type);
+    double epsilon, double sigma, size_t brownian_motion_dimension, int type, bool is_outer);
 
     /**
      * @brief Getter for the position of the disc.
@@ -94,6 +95,13 @@ public:
     int getType() const;
 
     /**
+     * @brief Getter for the is_outer parameter of the particles in the cuboid.
+     * 
+     * @return The is_outer of the particles in the cuboid.
+     */
+    bool getIsOuter() const;
+
+    /**
      * @brief Setter for the position of the disc.
      * 
      * @param new_position The new position of the disc.
@@ -157,6 +165,13 @@ public:
     void setType(int new_type);
 
     /**
+     * @brief Setter for the is_outer of the particles in the cuboid.
+     * 
+     * @param new_is_outer The new is_outer of the particles in the cuboid.
+     */
+    void setIsOuter(int new_is_outer);
+
+    /**
      * @brief Equality operator for disc.
      * 
      * @param other The other disc to compare with.
@@ -175,4 +190,5 @@ private:
     double sigma; ///< The parameter sigma of the disc.
     size_t brownian_motion_dimension; ///< Parameter specifying the dimension of average brownian motion velocity of the disc.
     int type; ///< The type of the particles in the disc.
+    bool is_outer; ///< Whether the disc is outer disc(wall).
 };

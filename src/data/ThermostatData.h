@@ -12,7 +12,6 @@ public:
      */
     ThermostatData();
 
-
     /**
     * @brief Parameterized constructor for the ThermostatData class.
     * 

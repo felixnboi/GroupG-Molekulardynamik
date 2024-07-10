@@ -52,6 +52,9 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
           for(auto pair : pairs){
             auto particle_i = pair[0];
             auto particle_j = pair[1];
+
+            if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
+
             double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
             double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
             

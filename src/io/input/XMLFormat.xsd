@@ -102,7 +102,8 @@
                         <xs:element name="domain" type="double_vector"/>
                         <xs:element name="domain_start" type="double_vector"/>
                         <xs:element name="cutoff_radius" type="xs:double"/>
-                        <xs:element name="grav_constant" type="double_vector"/>
+                        <xs:element name="grav_constant" type="double_vector"/> 
+                        <xs:element name="walls_flag" type="xs:boolean"/>                    
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -152,6 +153,7 @@
                         <xs:element name="sigma" type="xs:double"/>
                         <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>
                         <xs:element name="type" type="xs:int"/>
+                        <xs:element name="is_outer" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -168,7 +170,8 @@
                         <xs:element name="epsilon" type="xs:double"/>                      
                         <xs:element name="sigma" type="xs:double"/>                      
                         <xs:element name="brownian_motion_dimension" type="xs:unsignedInt"/>
-                        <xs:element name="type" type="xs:int"/>               
+                        <xs:element name="type" type="xs:int"/>  
+                        <xs:element name="is_outer" type="xs:boolean"/>             
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

@@ -42,6 +42,7 @@
             <y>0.0</y>
             <z>0.0</z>
         </grav_constant>
+        <walls_flag>false</walls_flag>
     </simulationParameters>
 
     <thermostat>
@@ -73,6 +74,7 @@
         <sigma>6</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
         <type>0</type>
+        <is_outer>false</is_outer>
     </cuboid>
 
     <disc>
@@ -93,6 +95,7 @@
         <sigma>6</sigma>
         <brownian_motion_dimension>2</brownian_motion_dimension>
         <type>0</type>
+        <is_outer>false</is_outer>
     </disc>
 
 </simulation>
