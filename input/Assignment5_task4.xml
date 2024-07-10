@@ -36,7 +36,7 @@
             <y>0.0</y>
             <z>0.0</z>
         </domain_start>
-        <cutoff_radius>2.5</cutoff_radius>
+        <cutoff_radius>2.75</cutoff_radius>
         <grav_constant>-0.8</grav_constant>
         <walls_flag>true</walls_flag>
     </simulationParameters>
