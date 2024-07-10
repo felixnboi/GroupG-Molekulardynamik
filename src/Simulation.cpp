@@ -375,10 +375,7 @@ void Simulation::run() {
                 if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
                 else{thermostat.scaleWithBetaFluid(particles);}
             }
-        //      DO WE NEED IT?
-        //     if (iteration % 10000 == 0) {
-        //     ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
-        // }
+       
             iteration++;
             current_time += delta_t;
         }
@@ -394,8 +391,9 @@ void Simulation::run() {
             }
 
             if (iteration % 10000 == 0) {
-            ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
-        }
+                ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
+            }
+            
             // plotting particle positions only at intervals of iterations
             if (iteration % write_frequency == 0) {
                 plotParticles(iteration);
