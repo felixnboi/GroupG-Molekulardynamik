@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 
 # define project name, version
-project(PSEMolDyn_GroupG VERSION 0.0.1)
+project(PSEMolDyn_GroupG)
+
+find_package(XercesC REQUIRED)
+
+include_directories(${XercesC_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd)
 
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
@@ -36,6 +41,7 @@ target_compile_features(MolSim
 
 target_include_directories(MolSim
         PUBLIC
+            ${XercesC_INCLUDE_DIRS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/spdlog-1.14.1
         PRIVATE
@@ -45,8 +51,8 @@ target_include_directories(MolSim
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-            xerces-c
-        PRIVATE 
+            ${XercesC_LIBRARIES}
+        PRIVATE
             spdlog::spdlog
 )
 
@@ -100,6 +106,7 @@ target_compile_features(ParticleGenerator
 
 target_include_directories(ParticleGenerator
         PUBLIC
+            ${XercesC_INCLUDE_DIRS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/src/particlegen
@@ -108,8 +115,8 @@ target_include_directories(ParticleGenerator
 target_link_libraries(ParticleGenerator
         # stuff that is used in headers and source files
         PUBLIC
-            xerces-c
-        PRIVATE 
+            ${XercesC_LIBRARIES}
+        PRIVATE
             spdlog::spdlog
 )
 
