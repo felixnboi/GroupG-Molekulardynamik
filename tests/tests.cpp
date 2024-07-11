@@ -93,7 +93,7 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     pc->addParticle(p3);
     
     // Get particle pairs from the container
-    std::vector<std::array<std::shared_ptr<Particle>, 2>> particlePairs = pc->getParticlePairs();
+    auto particlePairs = pc->getParticlePairs();
     
     // Check if the number of pairs matches
     EXPECT_EQ(particlePairs.size(), 3);
@@ -187,7 +187,7 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
     pc->addParticle(p3);
 
     // Get particle pairs from the container
-    std::vector<std::array<std::shared_ptr<Particle>, 2>> particlePairs = pc->getParticlePairs();
+    auto particlePairs = pc->getParticlePairs();
 
     // Check if the number of pairs matches
     EXPECT_EQ(particlePairs.size(), 3); 
