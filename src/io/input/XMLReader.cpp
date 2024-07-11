@@ -188,6 +188,12 @@ void XMLReader::readMembrane(const char* filename, MembraneData& membranedata){
             membranedata.setR0(sim->membrane().get().r0());
             membranedata.setK(sim->membrane().get().k());
             membranedata.setF_z_up(sim->membrane().get().f_z_up());
+
+            const auto& particles = sim->membrane().get().particle_up();
+
+            for(const auto& particle : particles){
+                membranedata.addParticleUp(particle.x_index(),particle.y_index());
+            }
         }
 
     }catch(const xml_schema::exception& e){
