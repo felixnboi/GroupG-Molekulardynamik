@@ -12,6 +12,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/particlegen/ParticleGenerator.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/FileReader.cpp
     ${PROJECT_SOURCE_DIR}/src/io/output/CheckpointWriter.cpp
+    ${PROJECT_SOURCE_DIR}/src/io/output/ProfilingComponent.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/XMLReader.cpp
     ${PROJECT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
     ${PROJECT_SOURCE_DIR}/src/data/Cuboid.cpp    

@@ -17,10 +17,7 @@ void CheckpointWriter::writeCheckpoint(ParticleContainer &particles,  const char
         auto type = p->getType();
         checkpoint_file << x[0] << " " << x[1] << " " << x[2] << " " << v[0] << " " << v[1] << " " << v[2]<< " " << p->getM() << 
             " " << p->getEpsilon() << " "<< p->getSigma() << " "<< type <<" " << p->getIsOuter() <<  " " <<
-            f[0] << " " << f[1] << " " << f[2] << " " << oldF[0] << " " << oldF[1] << " " << oldF[2]<< "\n";
-        // checkpoint_file << x[0] << " " << x[1] << " " << x[2] << " " << v[0] << " " << v[1] << " " << v[2]<< " " << p->getM() << 
-        //     " " << p->getIsOuter() << " "<< type <<" " << p->getEpsilon() << " "<< p->getSigma() << " " <<
-        //     f[0] << " " << f[1] << " " << f[2] << " " << oldF[0] << " " << oldF[1] << " " << oldF[2]<< "\n";           
+            f[0] << " " << f[1] << " " << f[2] << " " << oldF[0] << " " << oldF[1] << " " << oldF[2]<< "\n";     
     }
     checkpoint_file.close();
 }

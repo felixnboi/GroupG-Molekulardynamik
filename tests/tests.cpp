@@ -12,6 +12,7 @@
 #include "../src/data/ThermostatData.h"
 #include "../src/thermostat/Thermostat.h"
 #include "../src/io/output/CheckpointWriter.h"
+#include "../src/io/output/ProfilingComponent.h"
 
 
 const double EPSILON = 1e-5;  // Tolerance
@@ -893,5 +894,48 @@ TEST(CheckpointWriter, writeCheckpoint){
     assert(p[1]->getOldF()[0]==44&p[1]->getOldF()[1]==55&&p[1]->getOldF()[2]==66);
     assert(p[2]->getOldF()[0]==77&&p[2]->getOldF()[1]==88&&p[2]->getOldF()[2]==99);
     delete particles;
+    delete pc;
+}
+
+TEST(ProfilingComponentTest, EndsWithTest) {
+    EXPECT_TRUE(ProfilingComponent::ends_with("filename.csv", ".csv"));
+    EXPECT_FALSE(ProfilingComponent::ends_with("filename.txt", ".csv"));
+    EXPECT_TRUE(ProfilingComponent::ends_with("file.csv", "csv"));
+    EXPECT_FALSE(ProfilingComponent::ends_with("file.csv", ".txt"));
+}
+
+TEST(ProfilingComponentTest, ProfileTest) {
+    // Set up test data in ParticleContainer
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+
+    // Create some particles
+    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 0.0, 0.0}, 
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
+    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){1.9, 0.0, 0.0}, 
+    (std::array<double, 3>){0.4, 0.5, 0.6}, 1.5, false, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
+    
+    // Add particles to the container
+    pc->addParticle(p1);
+    pc->addParticle(p2);
+
+    std::array<double, 3> domainSize = {10.0, 10.0, 10.0};
+    size_t bins = 5;
+    std::string fileName = "test_output.csv";
+
+    ProfilingComponent::profile(bins, domainSize, *pc, fileName);
+
+    // Read the output file and check its contents
+    std::ifstream file(fileName);
+    ASSERT_TRUE(file.is_open());
+
+    std::string line;
+    std::getline(file, line);  // Skip the header line
+    EXPECT_EQ(line, "Bin, Density, Velocity_X, Velocity_Y, Velocity_Z");
+
+    // Read the first data line and check its contents
+    std::getline(file, line);
+    EXPECT_EQ(line, "0, 2, 0.25, 0.35, 0.45");
+
+    file.close();
     delete pc;
 }

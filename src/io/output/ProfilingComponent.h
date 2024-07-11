@@ -6,10 +6,15 @@
 #include "../../particlecontainers/ParticleContainerLinkedCell.h"
 
 /**
- * Used to create a density and velocity profile along the X-axis of the simulation´s domain.
+ * @brief Namespace used to create a density and velocity profile along the X-axis of the simulation´s domain.
  */
 namespace ProfilingComponent {
-
+    /**
+     * @brief Checks whether the given string ends with the given suffix.
+     * 
+     * @param str The string to conssider.
+     * @param suffix The suffix to be compared with.
+     */
     bool ends_with(const std::string& str, const std::string& suffix);
 
     /**
