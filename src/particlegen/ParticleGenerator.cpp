@@ -40,7 +40,8 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
         for (size_t j = 0; j < dimensions[1]; j++)
         {
             for (size_t k = 0; k < dimensions[2]; k++) {
-                std::array<double, 3> brownianMotion = maxwellBoltzmannDistributedVelocity(averageBrownianMotion, brownian_motion_dimension);
+                std::array<double, 3> brownianMotion = {0,0,0};
+                if(brownian_motion_dimension != 0) brownianMotion = maxwellBoltzmannDistributedVelocity(averageBrownianMotion, brownian_motion_dimension);
                 input_file << position[0] << " " << position[1] << " " << position[2] << " " << velocity[0] + brownianMotion[0] << " " << velocity[1] + brownianMotion[1] << " " << velocity[2] + brownianMotion[2] << " " << mass << " " << epsilon << " "<< sigma << " "<< type << " "<< is_outer << "\n";         
                 position[2] += distance;
             }
