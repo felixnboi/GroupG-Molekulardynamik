@@ -94,7 +94,7 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     pc->addParticle(p3);
     
     // Get particle pairs from the container
-    std::vector<std::array<std::shared_ptr<Particle>, 2>> particlePairs = pc->getParticlePairs();
+    auto particlePairs = pc->getParticlePairs();
     
     // Check if the number of pairs matches
     EXPECT_EQ(particlePairs.size(), 3);
@@ -188,7 +188,7 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
     pc->addParticle(p3);
 
     // Get particle pairs from the container
-    std::vector<std::array<std::shared_ptr<Particle>, 2>> particlePairs = pc->getParticlePairs();
+    auto particlePairs = pc->getParticlePairs();
 
     // Check if the number of pairs matches
     EXPECT_EQ(particlePairs.size(), 3); 
@@ -896,7 +896,98 @@ TEST(CheckpointWriter, writeCheckpoint){
     delete particles;
     delete pc;
 }
+TEST(ParticleContainerLinkedCell, makeMembrane){
+    //We generate a 2 dimesional cuboid of size 5 x 5
+    inputFileManager::resetFile("../input/generated-input.txt");
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleGenerator::generateCuboid(Cuboid({0,0,0},{2,2,2},{5,5,1},1,2,0.1, 5, 1, 0, 0, false), "../input/generated-input.txt");
+    FileReader fileReader;
+    fileReader.readFile(*pc, "../input/generated-input.txt", {0,0,0});
 
+    
+    //This cuboid is made into a membrane
+    pc->makeMembrane(3,3);
+
+    for(auto particle : pc->getParticles()){
+        double x = particle->getX()[0];
+        double y = particle->getX()[1];
+        auto nbrs = particle->getNeighbours();
+        auto nbrsExist = particle->getHasNeighbour();
+        //We check if all the neighbours exist and are the correct ones and that non existend neighbours are mraked as such
+        if(x<4) assert(nbrsExist[0] && nbrs[0]->getX()[0]== x+1 && nbrs[0]->getX()[1]== y);
+        else assert(!nbrsExist[0]);
+        if(x>0 && y<4) assert(nbrsExist[1] && nbrs[1]->getX()[0]== x-1 && nbrs[0]->getX()[1]== y+1);
+        else assert(!nbrsExist[1]);
+        if(y<2) assert(nbrsExist[2] && nbrs[2]->getX()[0]== x && nbrs[2]->getX()[1]== y+1);
+        else assert(!nbrsExist[2]);
+        if(x<2 && y<4) assert(nbrsExist[3] && nbrs[3]->getX()[0]== x+1 && nbrs[3]->getX()[1]== y+1);
+        else assert(!nbrsExist[3]);
+    }
+    delete pc;
+}
+
+TEST(ParticleContainerLinkedCell, setForce){
+    //We generate a 2 dimesional cuboid of size 5 x 5
+    inputFileManager::resetFile("../input/generated-input.txt");
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleGenerator::generateCuboid(Cuboid({0,0,0},{2,2,2},{5,5,1},1,2,0.1, 5, 1, 0, 0, false), "../input/generated-input.txt");
+    FileReader fileReader;
+    fileReader.readFile(*pc, "../input/generated-input.txt", {0,0,0});
+
+
+    // We apply the force {1,2,3} to the second particle in the third row 
+    pc->applyForce(1,2,5,{1,2,3});
+
+    // we check if this particle has the correct force and all others still have 0
+    auto particles = pc->getParticles();
+    for(int i = 0; i < 25; i++){
+        if(i!=11) assert(particles[i]->getF()[0]==0&&particles[i]->getF()[1]==0&&particles[i]->getF()[2]==0);
+        else assert(particles[i]->getF()[0]==1&&particles[i]->getF()[1]==2&&particles[i]->getF()[2]==3);
+    }
+    delete pc;
+}
+
+TEST(Force, calculateFHarmonic){
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    std::array <double, 3> zeros = {0,0,0};
+    std::array <double, 3> cords = {0,0,0};
+    std::array <bool, 6> tmp1 = {false,false,false,false,false,false};
+    std::array <bool, 3> tmp2 = {false,false,false};
+
+    //We add 4 particles with distances so that the diagonal is a natural number (triangle with side lenghts 3, 4, 5)
+    pc->addParticle(std::make_shared<Particle>(cords, zeros, 1, false, 1, 5, 1, zeros));
+    cords = {3,0,0};
+    pc->addParticle(std::make_shared<Particle>(cords, zeros, 1, false, 1, 5, 1, zeros));
+    cords = {0,4,0};
+    pc->addParticle(std::make_shared<Particle>(cords, zeros, 1, false, 1, 5, 1, zeros));
+    cords = {3,4,0};
+    pc->addParticle(std::make_shared<Particle>(cords, zeros, 1, false, 1, 5, 1, zeros));
+    
+    //We make these particles into a membrane so that the harmonic force can be calculated
+    pc->makeMembrane(2,2);
+
+    auto force = std::make_unique<Force>(tmp1, tmp2, false, false, true, zeros, true, 2, 1);
+    force->calculateF(*pc);
+    auto particles = pc->getParticles();
+
+    //the hand calculated forces between a pair of particles
+    std::array<double, 3> forceRight = {4,0,0}; 
+    std::array<double, 3> forceUp = {0,6,0};
+    std::array<double, 3> forceRightUP = {4.8,6.4,0};
+    std::array<double, 3> forceLeftUP = {-4.8,6.4,0};
+
+    //we calculate the expected force for each particle by adding up all forces applied to them, while considering the direction
+    auto force1 = forceRight+forceUp+forceRightUP;
+    auto force2 = -1*forceRight+forceUp+forceLeftUP;
+    auto force3 = forceRight-forceUp-forceLeftUP;
+    auto force4 = -1*forceRight-forceUp-forceRightUP;
+
+    assert(particles[0]->getX()[0]==force1[0]&&particles[0]->getX()[1]==force1[1]&&particles[0]->getX()[2]==force1[2]);
+    assert(particles[1]->getX()[0]==force2[0]&&particles[1]->getX()[1]==force2[1]&&particles[1]->getX()[2]==force2[2]);
+    assert(particles[2]->getX()[0]==force3[0]&&particles[2]->getX()[1]==force3[1]&&particles[2]->getX()[2]==force3[2]);
+    assert(particles[3]->getX()[0]==force4[0]&&particles[3]->getX()[1]==force4[1]&&particles[3]->getX()[2]==force4[2]);
+    delete pc;
+}
 TEST(ProfilingComponentTest, EndsWithTest) {
     EXPECT_TRUE(ProfilingComponent::ends_with("filename.csv", ".csv"));
     EXPECT_FALSE(ProfilingComponent::ends_with("filename.txt", ".csv"));

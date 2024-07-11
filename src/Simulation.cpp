@@ -373,10 +373,10 @@ void Simulation::run() {
     while (current_time < start_time) {
         if(membrane_data.getMembraneFlag()){
             if(current_time <= 150){
-                particles->applyForce(17, 24, 50, {0 , 0, membrane_data.getF_z_up()});
-                particles->applyForce(17, 25, 50, {0 , 0, membrane_data.getF_z_up()});
-                particles->applyForce(18, 24, 50, {0 , 0, membrane_data.getF_z_up()});
-                particles->applyForce(18, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                const auto& particle_up = membrane_data.getParticleUp();
+                for(const auto& particle : particle_up){
+                    particles->applyForce(particle.first, particle.second, 50, {0, 0, membrane_data.getF_z_up()});
+                }
             }
         }
 
@@ -396,10 +396,10 @@ void Simulation::run() {
         while (current_time < end_time) {
             if(membrane_data.getMembraneFlag()){
                 if(current_time <= 150){
-                    particles->applyForce(17, 24, 50, {0 , 0, membrane_data.getF_z_up()});
-                    particles->applyForce(17, 25, 50, {0 , 0, membrane_data.getF_z_up()});
-                    particles->applyForce(18, 24, 50, {0 , 0, membrane_data.getF_z_up()});
-                    particles->applyForce(18, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                    const auto& particle_up = membrane_data.getParticleUp();
+                    for(const auto& particle : particle_up){
+                        particles->applyForce(particle.first, particle.second, 50, {0, 0, membrane_data.getF_z_up()});
+                    }
                 }
             }
             calculateX();
@@ -418,10 +418,10 @@ void Simulation::run() {
         while (current_time < end_time) {
             if(membrane_data.getMembraneFlag()){
                 if(current_time <= 150){
-                    particles->applyForce(17, 24, 50, {0 , 0, membrane_data.getF_z_up()});
-                    particles->applyForce(17, 25, 50, {0 , 0, membrane_data.getF_z_up()});
-                    particles->applyForce(18, 24, 50, {0 , 0, membrane_data.getF_z_up()});
-                    particles->applyForce(18, 25, 50, {0 , 0, membrane_data.getF_z_up()});
+                    const auto& particle_up = membrane_data.getParticleUp();
+                    for(const auto& particle : particle_up){
+                        particles->applyForce(particle.first, particle.second, 50, {0, 0, membrane_data.getF_z_up()});
+                    }
                 }
             }
             calculateX();

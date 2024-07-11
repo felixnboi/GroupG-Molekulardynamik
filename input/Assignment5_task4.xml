@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>ass5_task4</baseName>
-        <writeFrequency>100</writeFrequency>
+        <writeFrequency>10</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
@@ -37,7 +37,11 @@
             <z>0.0</z>
         </domain_start>
         <cutoff_radius>2.75</cutoff_radius>
-        <grav_constant>-0.8</grav_constant>
+        <grav_constant>
+            <x>0.0</x>
+            <y>-0.8</y>
+            <z>0.0</z>
+        </grav_constant>
         <walls_flag>true</walls_flag>
     </simulationParameters>
 

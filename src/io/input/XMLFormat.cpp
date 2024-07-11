@@ -1255,6 +1255,24 @@ f_z_up (const f_z_up_type& x)
   this->f_z_up_.set (x);
 }
 
+const membrane::particle_up_sequence& membrane::
+particle_up () const
+{
+  return this->particle_up_;
+}
+
+membrane::particle_up_sequence& membrane::
+particle_up ()
+{
+  return this->particle_up_;
+}
+
+void membrane::
+particle_up (const particle_up_sequence& s)
+{
+  this->particle_up_ = s;
+}
+
 
 // cuboid
 // 
@@ -1669,6 +1687,46 @@ void disc::
 is_outer (const is_outer_type& x)
 {
   this->is_outer_.set (x);
+}
+
+
+// particle_up
+// 
+
+const particle_up::x_index_type& particle_up::
+x_index () const
+{
+  return this->x_index_.get ();
+}
+
+particle_up::x_index_type& particle_up::
+x_index ()
+{
+  return this->x_index_.get ();
+}
+
+void particle_up::
+x_index (const x_index_type& x)
+{
+  this->x_index_.set (x);
+}
+
+const particle_up::y_index_type& particle_up::
+y_index () const
+{
+  return this->y_index_.get ();
+}
+
+particle_up::y_index_type& particle_up::
+y_index ()
+{
+  return this->y_index_.get ();
+}
+
+void particle_up::
+y_index (const y_index_type& x)
+{
+  this->y_index_.set (x);
 }
 
 
@@ -3571,7 +3629,8 @@ membrane (const r0_type& r0,
 : ::xml_schema::type (),
   r0_ (r0, this),
   k_ (k, this),
-  f_z_up_ (f_z_up, this)
+  f_z_up_ (f_z_up, this),
+  particle_up_ (this)
 {
 }
 
@@ -3582,7 +3641,8 @@ membrane (const membrane& x,
 : ::xml_schema::type (x, f, c),
   r0_ (x.r0_, f, this),
   k_ (x.k_, f, this),
-  f_z_up_ (x.f_z_up_, f, this)
+  f_z_up_ (x.f_z_up_, f, this),
+  particle_up_ (x.particle_up_, f, this)
 {
 }
 
@@ -3593,7 +3653,8 @@ membrane (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   r0_ (this),
   k_ (this),
-  f_z_up_ (this)
+  f_z_up_ (this),
+  particle_up_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3645,6 +3706,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // particle_up
+    //
+    if (n.name () == "particle_up" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< particle_up_type > r (
+        particle_up_traits::create (i, f, this));
+
+      this->particle_up_.push_back (::std::move (r));
+      continue;
+    }
+
     break;
   }
 
@@ -3686,6 +3758,7 @@ operator= (const membrane& x)
     this->r0_ = x.r0_;
     this->k_ = x.k_;
     this->f_z_up_ = x.f_z_up_;
+    this->particle_up_ = x.particle_up_;
   }
 
   return *this;
@@ -4375,6 +4448,118 @@ operator= (const disc& x)
 
 disc::
 ~disc ()
+{
+}
+
+// particle_up
+//
+
+particle_up::
+particle_up (const x_index_type& x_index,
+             const y_index_type& y_index)
+: ::xml_schema::type (),
+  x_index_ (x_index, this),
+  y_index_ (y_index, this)
+{
+}
+
+particle_up::
+particle_up (const particle_up& x,
+             ::xml_schema::flags f,
+             ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  x_index_ (x.x_index_, f, this),
+  y_index_ (x.y_index_, f, this)
+{
+}
+
+particle_up::
+particle_up (const ::xercesc::DOMElement& e,
+             ::xml_schema::flags f,
+             ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  x_index_ (this),
+  y_index_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void particle_up::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // x_index
+    //
+    if (n.name () == "x_index" && n.namespace_ ().empty ())
+    {
+      if (!x_index_.present ())
+      {
+        this->x_index_.set (x_index_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // y_index
+    //
+    if (n.name () == "y_index" && n.namespace_ ().empty ())
+    {
+      if (!y_index_.present ())
+      {
+        this->y_index_.set (y_index_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!x_index_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "x_index",
+      "");
+  }
+
+  if (!y_index_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "y_index",
+      "");
+  }
+}
+
+particle_up* particle_up::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class particle_up (*this, f, c);
+}
+
+particle_up& particle_up::
+operator= (const particle_up& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->x_index_ = x.x_index_;
+    this->y_index_ = x.y_index_;
+  }
+
+  return *this;
+}
+
+particle_up::
+~particle_up ()
 {
 }
 

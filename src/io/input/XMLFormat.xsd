@@ -135,6 +135,14 @@
                         <xs:element name="r0" type="xs:double"/>
                         <xs:element name="k" type="xs:double"/>
                         <xs:element name="f_z_up" type="xs:double"/>
+                        <xs:element name="particle_up" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="x_index" type="xs:unsignedInt"/>
+                                    <xs:element name="y_index" type="xs:unsignedInt"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

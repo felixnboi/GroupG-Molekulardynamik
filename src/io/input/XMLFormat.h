@@ -579,6 +579,7 @@ class checkpoint;
 class membrane;
 class cuboid;
 class disc;
+class particle_up;
 
 #include <memory>    // ::std::unique_ptr
 #include <limits>    // std::numeric_limits
@@ -4671,6 +4672,70 @@ class membrane: public ::xml_schema::type
   //@}
 
   /**
+   * @name particle_up
+   *
+   * @brief Accessor and modifier functions for the %particle_up
+   * sequence element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::particle_up particle_up_type;
+
+  /**
+   * @brief Element sequence container type.
+   */
+  typedef ::xsd::cxx::tree::sequence< particle_up_type > particle_up_sequence;
+
+  /**
+   * @brief Element iterator type.
+   */
+  typedef particle_up_sequence::iterator particle_up_iterator;
+
+  /**
+   * @brief Element constant iterator type.
+   */
+  typedef particle_up_sequence::const_iterator particle_up_const_iterator;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< particle_up_type, char > particle_up_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * sequence.
+   *
+   * @return A constant reference to the sequence container.
+   */
+  const particle_up_sequence&
+  particle_up () const;
+
+  /**
+   * @brief Return a read-write reference to the element sequence.
+   *
+   * @return A reference to the sequence container.
+   */
+  particle_up_sequence&
+  particle_up ();
+
+  /**
+   * @brief Copy elements from a given sequence.
+   *
+   * @param s A sequence to copy elements from.
+   *
+   * For each element in @a s this function makes a copy and adds it 
+   * to the sequence. Note that this operation completely changes the 
+   * sequence and all old elements will be lost.
+   */
+  void
+  particle_up (const particle_up_sequence& s);
+
+  //@}
+
+  /**
    * @name Constructors
    */
   //@{
@@ -4756,6 +4821,7 @@ class membrane: public ::xml_schema::type
   ::xsd::cxx::tree::one< r0_type > r0_;
   ::xsd::cxx::tree::one< k_type > k_;
   ::xsd::cxx::tree::one< f_z_up_type > f_z_up_;
+  particle_up_sequence particle_up_;
 
   //@endcond
 };
@@ -6063,6 +6129,196 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< brownian_motion_dimension_type > brownian_motion_dimension_;
   ::xsd::cxx::tree::one< type_type > type_;
   ::xsd::cxx::tree::one< is_outer_type > is_outer_;
+
+  //@endcond
+};
+
+/**
+ * @brief Class corresponding to the %particle_up schema type.
+ *
+ * @nosubgrouping
+ */
+class particle_up: public ::xml_schema::type
+{
+  public:
+  /**
+   * @name x_index
+   *
+   * @brief Accessor and modifier functions for the %x_index
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int x_index_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< x_index_type, char > x_index_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const x_index_type&
+  x_index () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  x_index_type&
+  x_index ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  x_index (const x_index_type& x);
+
+  //@}
+
+  /**
+   * @name y_index
+   *
+   * @brief Accessor and modifier functions for the %y_index
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int y_index_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< y_index_type, char > y_index_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const y_index_type&
+  y_index () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  y_index_type&
+  y_index ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  y_index (const y_index_type& x);
+
+  //@}
+
+  /**
+   * @name Constructors
+   */
+  //@{
+
+  /**
+   * @brief Create an instance from the ultimate base and
+   * initializers for required elements and attributes.
+   */
+  particle_up (const x_index_type&,
+               const y_index_type&);
+
+  /**
+   * @brief Create an instance from a DOM element.
+   *
+   * @param e A DOM element to extract the data from.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  particle_up (const ::xercesc::DOMElement& e,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param x An instance to make a copy of.
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  particle_up (const particle_up& x,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy the instance polymorphically.
+   *
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   * @return A pointer to the dynamically allocated copy.
+   *
+   * This function ensures that the dynamic type of the instance is
+   * used for copying and should be used for polymorphic object
+   * models instead of the copy constructor.
+   */
+  virtual particle_up*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  /**
+   * @brief Copy assignment operator.
+   *
+   * @param x An instance to make a copy of.
+   * @return A reference to itself.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  particle_up&
+  operator= (const particle_up& x);
+
+  //@}
+
+  /**
+   * @brief Destructor.
+   */
+  virtual 
+  ~particle_up ();
+
+  // Implementation.
+  //
+
+  //@cond
+
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< x_index_type > x_index_;
+  ::xsd::cxx::tree::one< y_index_type > y_index_;
 
   //@endcond
 };

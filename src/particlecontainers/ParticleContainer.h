@@ -3,6 +3,7 @@
 #include "spdlog/spdlog.h"
 
 #include <vector>
+#include <utility>
 #include <iostream>
 
 using ParticleIterator = std::vector<std::shared_ptr<Particle>>::iterator; /// Iterator type for iterating over a vector of particles.

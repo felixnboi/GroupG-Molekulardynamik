@@ -1,4 +1,7 @@
 #pragma once
+#include <stddef.h>
+#include <utility>
+#include <vector>
 
 /**
  * @class MembraneData
@@ -50,6 +53,13 @@ public:
     double getF_z_up() const;
 
     /**
+     * @brief Getter for the vector of pairs
+     * 
+     * @return A constant reference to the vector of pairs
+     */
+    const std::vector<std::pair<size_t, size_t>>& getParticleUp() const;
+
+    /**
      * @brief Setter for the membrane flag
      * 
      * @param new_membrane_flag The new membrane flag
@@ -77,9 +87,25 @@ public:
      */
     void setF_z_up(double new_f_z_up);
 
+    /**
+     * @brief Setter for the vector of pairs
+     * 
+     * @param pairs A constant reference to a vector of pairs to set
+     */
+    void setParticleUp(const std::vector<std::pair<size_t, size_t>>& new_particle_up);
+
+    /**
+     * @brief Adds a particle to the particle_up vector.
+     * 
+     * @param x_index The x_index of the particle
+     * @param y_index The y_index of the particle
+     */
+    void addParticleUp(size_t x_index, size_t y_index);
+
 private:
     bool membrane_flag; ///< The flag indicating if the membrane simulation is being parsed.
     double r0; ///< The average bond length of a molecule pair.
     double k; ///< The stiffness constant.
     double f_z_up; ///< Force upwards along the z-axis.
+    std::vector<std::pair<size_t, size_t>> particle_up; ///< The vector storing the indices of the particles that are going to be influenced by the upward force.
 };
