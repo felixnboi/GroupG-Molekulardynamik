@@ -42,11 +42,11 @@ const std::vector<Particle*>& ParticleContainerOld::getParticles() {
     return particles;
 }
 
-std::vector<std::array<Particle*,2>> ParticleContainerOld::getParticlePairs(){
-    std::vector<std::array<Particle*,2>> particlePairs;
+std::vector<std::pair<Particle*, Particle*>> ParticleContainerOld::getParticlePairs(){
+    std::vector<std::pair<Particle*, Particle*>> particlePairs;
     for (auto particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
         for (auto particle_j = std::next(particle_i); particle_j!=particles.end(); particle_j++){
-            particlePairs.push_back({*particle_i, *particle_j});
+            particlePairs.emplace_back(*particle_i, *particle_j);
         }
     }
     return particlePairs;

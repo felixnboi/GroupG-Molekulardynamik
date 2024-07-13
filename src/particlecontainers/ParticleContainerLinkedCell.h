@@ -106,7 +106,7 @@ public:
      * 
      * @return A vector of these pairs of particles.
      */
-    std::vector<std::array<Particle*,2>> getParticlePairs() override;
+    std::vector<std::pair<Particle*, Particle*>> getParticlePairs() override;
 
     /**
     * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. (Doesn't always check if they are within the cut off radius).
@@ -115,7 +115,7 @@ public:
     * 
     * @return A vector of these pairs of particles.
     */
-    std::vector<std::array<Particle*,2>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
+    std::vector<std::pair<Particle*, Particle*>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 
     /**
      * @brief Gets the particles located at the boundary of the container.

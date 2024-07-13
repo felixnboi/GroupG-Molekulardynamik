@@ -85,22 +85,21 @@ private:
     std::unique_ptr<ParticleContainer> particles; ///< Container holding simulaton particles.
     std::unique_ptr<Force> force; ///< Force object for force calculations.
 
-    bool xml_flag; ///< Flag indicating whether an XML file is used for input.
-    bool generate_flag; ///< Flag indicating whether particle generation is enabled.
-    bool input_flag; ///< Flag indicating whether a user input file is specified.
-    bool force_flag; ///< Flag indicating whether a force type is specified.
-    bool time_flag; ///< Flag indicating whether timing information should be logged.
-    bool cli_flag; ///< Flag indicating whether command-line interface (CLI) options are used.
-    bool linkedcell_flag; ///< Flag indicating whether the linked cell algorithm is used.
-    bool lenJonesFlag; ///< Flag indicating whether the lennard Jones Force should be used for force calculation.
-    bool gravFlag;  ///< Flag indicating whether the gravitational Force should be used for force calculation.
-    bool harmonicFlag; ///< Flag indicating whether the harmonic Force should be used for force calculation.
+    bool xml_flag{}; ///< Flag indicating whether an XML file is used for input.
+    bool generate_flag{}; ///< Flag indicating whether particle generation is enabled.
+    bool input_flag{}; ///< Flag indicating whether a user input file is specified.
+    bool force_flag{}; ///< Flag indicating whether a force type is specified.
+    bool time_flag{}; ///< Flag indicating whether timing information should be logged.
+    bool cli_flag{}; ///< Flag indicating whether command-line interface (CLI) options are used.
+    bool linkedcell_flag{}; ///< Flag indicating whether the linked cell algorithm is used.
+    bool lenJones_flag{}; ///< Flag indicating whether the lennard Jones Force should be used for force calculation.
+    bool grav_flag{};  ///< Flag indicating whether the gravitational Force should be used for force calculation.
 
     //The order for two following Flags: {left, right, bottom, top, back, front}.
-    std::array<bool,6> lenJonesBoundaryFlags; ///< Flags for Lennard-Jones boundary conditions.
-    std::array<bool,6> outflowFlags; ///< Flags for outflow boundary conditions.
+    std::array<bool,6> lenJonesBoundaryFlags{}; ///< Flags for Lennard-Jones boundary conditions.
+    std::array<bool,6> outflowFlags{}; ///< Flags for outflow boundary conditions.
     //The order for the following flag: {left-right, bottom-top, back-front}.
-    std::array<bool,3> periodicFlags; ///< Flags for periodic boundary conditions. 
+    std::array<bool,3> periodicFlags{}; ///< Flags for periodic boundary conditions. 
 
     std::string input_file_user; ///< User-specified input file name for loading initial particle configurations.
 

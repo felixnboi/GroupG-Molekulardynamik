@@ -64,12 +64,12 @@ const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles(){
 }
 
 
-std::vector<std::array<Particle*,2>> ParticleContainerLinkedCell::getParticlePairs(){
+std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairs(){
     return getParticlePairsPeriodic({false,false,false});
 }
 
-std::vector<std::array<Particle*,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
-    std::vector<std::array<Particle*,2>> particlePairs;
+std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
+    std::vector<std::pair<Particle*, Particle*>> particlePairs;
     particlePairs.reserve(particle_count);
     for (size_t i = 0; i < arrayLength; i++){
         std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
@@ -125,7 +125,7 @@ std::vector<std::array<Particle*,2>> ParticleContainerLinkedCell::getParticlePai
                 // here we look at the particles in the same cell
                 for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
                     if(ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
-                        particlePairs.push_back({*particle_i, *particle_j});
+                        particlePairs.emplace_back(*particle_i, *particle_j);
                     }
                 }
             }
@@ -133,7 +133,7 @@ std::vector<std::array<Particle*,2>> ParticleContainerLinkedCell::getParticlePai
                 // here we look at the particles in the neighbour cells
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
                     if(pFlag[0]||pFlag[1]||pFlag[2]||ArrayUtils::L2Norm((*particle_i)->getX()-(*particle_j)->getX())<radius){
-                        particlePairs.push_back({*particle_i, *particle_j});
+                        particlePairs.emplace_back(*particle_i, *particle_j);
                     }
                 }
             }

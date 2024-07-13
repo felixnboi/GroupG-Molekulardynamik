@@ -50,8 +50,8 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
           // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
           auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
           for(const auto& pair : pairs){
-            auto particle_i = pair[0];
-            auto particle_j = pair[1];
+            auto particle_i = pair.first;
+            auto particle_j = pair.second;
 
             if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
 
@@ -115,13 +115,13 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
     }
 }
 
-void Force::calculateFLennardJones(std::vector<std::array<Particle*,2>> pairs){
+void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs){
   double twoRoot6 = pow(2, 1/6);
 
   // iterate over all pairs of particles to calculate forces
   for (const auto& pair : pairs){
-    auto particle_i = pair[0];
-    auto particle_j = pair[1];
+    auto particle_i = pair.first;
+    auto particle_j = pair.second;
     double epsilon_i = particle_i->getEpsilon();
     double epsilon_j = particle_j->getEpsilon();
     double epsilon;
@@ -142,10 +142,10 @@ void Force::calculateFLennardJones(std::vector<std::array<Particle*,2>> pairs){
   }
 }
 
-void Force::calculateFGravitation(std::vector<std::array<Particle*,2>> pairs){
+void Force::calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs){
   for (auto& pair : pairs){
-    auto particle_i = pair[0];
-    auto particle_j = pair[1];
+    auto particle_i = pair.first;
+    auto particle_j = pair.second;
 
     auto distance = particle_j->getX() - particle_i->getX();
 

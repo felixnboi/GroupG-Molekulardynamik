@@ -99,12 +99,12 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     EXPECT_EQ(particlePairs.size(), 3);
     
     // Check if the pairs are correct
-    EXPECT_TRUE((particlePairs[0][0] == p1 && particlePairs[0][1] == p2) ||
-                (particlePairs[0][0] == p2 && particlePairs[0][1] == p1));
-    EXPECT_TRUE((particlePairs[1][0] == p1 && particlePairs[1][1] == p3) ||
-                (particlePairs[1][0] == p3 && particlePairs[1][1] == p1));
-    EXPECT_TRUE((particlePairs[2][0] == p2 && particlePairs[2][1] == p3) ||
-                (particlePairs[2][0] == p3 && particlePairs[2][1] == p2));
+    EXPECT_TRUE((particlePairs[0].first == p1 && particlePairs[0].second == p2) ||
+                (particlePairs[0].first == p2 && particlePairs[0].second == p1));
+    EXPECT_TRUE((particlePairs[1].first == p1 && particlePairs[1].second == p3) ||
+                (particlePairs[1].first == p3 && particlePairs[1].second == p1));
+    EXPECT_TRUE((particlePairs[2].first == p2 && particlePairs[2].second == p3) ||
+                (particlePairs[2].first == p3 && particlePairs[2].second == p2));
     
     delete pc;
 }
@@ -195,11 +195,11 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
     // Verify specific pairs
     bool foundPair12 = false, foundPair13 = false, foundPair23 = false;
     for (const auto& pair : particlePairs) {
-        if ((pair[0] == p1 && pair[1] == p2) || (pair[0] == p2 && pair[1] == p1)) {
+        if ((pair.first == p1 && pair.second == p2) || (pair.first == p2 && pair.second == p1)) {
             foundPair12 = true;
-        } else if ((pair[0] == p1 && pair[1] == p3) || (pair[0] == p3 && pair[1] == p1)) {
+        } else if ((pair.first == p1 && pair.second == p3) || (pair.first == p3 && pair.second == p1)) {
             foundPair13 = true;
-        } else if ((pair[0] == p2 && pair[1] == p3) || (pair[0] == p3 && pair[1] == p2)) {
+        } else if ((pair.first == p2 && pair.second == p3) || (pair.first == p3 && pair.second == p2)) {
             foundPair23 = true;
         }
     }

@@ -47,14 +47,14 @@ public:
     * 
     * @param pairs Vector of arrays containing pairs of particles.
     */
-    void calculateFLennardJones(std::vector<std::array<Particle*,2>> pairs);
+    void calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs);
 
     /**
     * @brief Calculates the forces between all pairs of particles using the gravitational force.
     * 
     * @param pairs Vector of arrays containing pairs of particles.
     */
-    void calculateFGravitation(std::vector<std::array<Particle*,2>> pairs);
+    void calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs);
 
     /**
      * @brief Calculates the Lennard Jones force between all pairs of particles which are connected through a peridic boundery.
