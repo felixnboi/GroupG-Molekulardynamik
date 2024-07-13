@@ -5,7 +5,7 @@ void CheckpointWriter::writeCheckpoint(ParticleContainer &particles,  const char
     std::string tmp_string;
     checkpoint_file.open(filename,std::ios::in|std::ios::out|std::ios::trunc);
     int count = 0;
-    for(auto p : particles.getParticles()) {
+    for(const auto p : particles.getParticles()) {
         count++;
     }
     checkpoint_file << count << "\n";

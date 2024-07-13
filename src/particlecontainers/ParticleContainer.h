@@ -6,13 +6,13 @@
 #include <utility>
 #include <iostream>
 
-using ParticleIterator = std::vector<std::shared_ptr<Particle>>::iterator; /// Iterator type for iterating over a vector of particles.
+using ParticleIterator = std::vector<Particle*>::iterator; /// Iterator type for iterating over a vector of particles.
 /**
  * @brief This abstract class serves as an interface for particle containers holding particles.
  */
 class ParticleContainer{
 protected:
-    std::vector<std::shared_ptr<Particle>> particles; ///< Vector to store the particles.
+    std::vector<Particle*> particles; ///< Vector to store the particles.
     
 public:
 
@@ -42,7 +42,7 @@ public:
      * 
      * @param particle The handed over particle that needs to be added.
      */
-    virtual void addParticle(const std::shared_ptr<Particle> particle) = 0;
+    virtual void addParticle(Particle* particle) = 0;
 
     /**
      * @brief Get the iterator to the beginning of the particle container.
@@ -69,7 +69,7 @@ public:
      * 
      * @return A constant reference to the vector of particles.
      */
-    virtual const std::vector<std::shared_ptr<Particle>>& getParticles() = 0;
+    virtual const std::vector<Particle*>& getParticles() = 0;
 
     /**
      * @brief Returns the pairs of all particles to iterate over.
@@ -78,7 +78,7 @@ public:
      * 
      * @return A vector of the pairs of all particles to iterate over.
      */
-    virtual std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() = 0;
+    virtual std::vector<std::array<Particle*,2>> getParticlePairs() = 0;
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.

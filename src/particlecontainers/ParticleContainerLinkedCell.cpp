@@ -10,11 +10,14 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double si
     size = {cellSize[0]*cellCount[0],cellSize[1]*cellCount[1],cellSize[2]*cellCount[2]};
     this->radius = radius;
     arrayLength = cellCount[0]*cellCount[1]*cellCount[2];
-    linkedCells = std::make_unique<std::list<std::shared_ptr<Particle>>[]>(arrayLength);
+    linkedCells = std::make_unique<std::list<Particle*>[]>(arrayLength);
     spdlog::info("Linked cells particlecontainer created.");
 }
 
 ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
+    for(auto particle: particles){
+        delete particle;
+    }
     spdlog::info("Linked cells particlecontainer destructed.");
 };
 
@@ -34,7 +37,7 @@ const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
     return cellSize;
 }
 
-void ParticleContainerLinkedCell::addParticle(const std::shared_ptr<Particle> particle){
+void ParticleContainerLinkedCell::addParticle(Particle* particle){
     particle_count++;
     particles.push_back(particle);
     auto cords = particle->getX();
@@ -56,17 +59,17 @@ ParticleIterator ParticleContainerLinkedCell::end(){
     return particles.end();
 }
 
-const std::vector<std::shared_ptr<Particle>>& ParticleContainerLinkedCell::getParticles(){
+const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles(){
     return particles;
 }
 
 
-std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairs(){
+std::vector<std::array<Particle*,2>> ParticleContainerLinkedCell::getParticlePairs(){
     return getParticlePairsPeriodic({false,false,false});
 }
 
-std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
-    std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
+std::vector<std::array<Particle*,2>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
+    std::vector<std::array<Particle*,2>> particlePairs;
     particlePairs.reserve(particle_count);
     for (size_t i = 0; i < arrayLength; i++){
         std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
@@ -139,7 +142,7 @@ std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerLinkedCell
     return particlePairs;
 }
 
-std::vector<std::shared_ptr<Particle>> ParticleContainerLinkedCell::getHalo(){
+std::vector<Particle*> ParticleContainerLinkedCell::getHalo(){
     return halo;
 }
     
@@ -207,8 +210,8 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag,
     }
 }
 
-std::vector<std::shared_ptr<Particle>> ParticleContainerLinkedCell::getBoundary(){
-    std::vector<std::shared_ptr<Particle>> boundary;
+std::vector<Particle*> ParticleContainerLinkedCell::getBoundary(){
+    std::vector<Particle*> boundary;
     for (size_t i = 0; i < arrayLength; i++){
         size_t positionX = i%cellCount[0];
         size_t positionY = i/cellCount[0]%cellCount[1];

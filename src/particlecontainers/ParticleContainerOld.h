@@ -39,7 +39,7 @@ public:
      * 
      * @param particle The particle to add.
      */
-    void addParticle(const std::shared_ptr<Particle> particle) override;
+    void addParticle(Particle* particle) override;
 
     /**
      * @brief Returns an iterator to the beginning of the particles.
@@ -60,14 +60,14 @@ public:
      * 
      * @return A reference to the vector of particles.
      */
-    const std::vector<std::shared_ptr<Particle>>& getParticles() override;
+    const std::vector<Particle*>& getParticles() override;
     
     /**
      * @brief Gets all possible pairs of particles.
      * 
      * @return A vector of pairs of particles.
      */
-    std::vector<std::array<std::shared_ptr<Particle>,2>> getParticlePairs() override;
+    std::vector<std::array<Particle*,2>> getParticlePairs() override;
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.

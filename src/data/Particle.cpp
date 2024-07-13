@@ -109,7 +109,7 @@ void Particle::setOldF(const std::array<double, 3>& newOldF) {
 
 double Particle::getM() const { return m; }
 
-const std::array<std::shared_ptr<Particle>,4> &Particle::getNeighbours() const {return neighbours;}
+const std::array<Particle*,4> &Particle::getNeighbours() const {return neighbours;}
 
 const std::array<bool,4> &Particle::getHasNeighbour() const {return hasNeighbour;}
 
@@ -140,7 +140,7 @@ std::ostream & operator<<(std::ostream &stream, const Particle &p) {
   return stream;
 }
 
-void Particle::addNeighbour(std::shared_ptr<Particle> neighbour, int position){
+void Particle::addNeighbour(Particle* neighbour, int position){
   neighbours[position] = neighbour;
   hasNeighbour[position] = true;
 }

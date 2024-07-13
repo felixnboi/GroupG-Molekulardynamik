@@ -29,7 +29,7 @@ private:
   /**
    * Half of the neighbour particles in the membrane. (Specificly the ones below and the one to the right).
    */
-  std::array<std::shared_ptr<Particle>,4> neighbours;
+  std::array<Particle*,4> neighbours;
 
   /**
    * Array to check if the neighbours actually exist.
@@ -140,7 +140,7 @@ public:
    * 
    * @return Reference to the neighbours array.
    */
-  const std::array<std::shared_ptr<Particle>,4> &getNeighbours() const;
+  const std::array<Particle*,4> &getNeighbours() const;
 
   /**
    * @brief Gets a bool array which says if the neighbours actually exist.
@@ -242,7 +242,7 @@ public:
    * @param neighbour The neighbour that is to be added.
    * @param position The position in the neighbour array.
    */
-  void addNeighbour(std::shared_ptr<Particle> neighbour, int position);
+  void addNeighbour(Particle* neighbour, int position);
 
   /**
    * @brief Converts the particle to a string representation.

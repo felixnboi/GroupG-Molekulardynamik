@@ -47,14 +47,14 @@ public:
     * 
     * @param pairs Vector of arrays containing pairs of particles.
     */
-    void calculateFLennardJones(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs);
+    void calculateFLennardJones(std::vector<std::array<Particle*,2>> pairs);
 
     /**
     * @brief Calculates the forces between all pairs of particles using the gravitational force.
     * 
     * @param pairs Vector of arrays containing pairs of particles.
     */
-    void calculateFGravitation(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs);
+    void calculateFGravitation(std::vector<std::array<Particle*,2>> pairs);
 
     /**
      * @brief Calculates the Lennard Jones force between all pairs of particles which are connected through a peridic boundery.
@@ -99,7 +99,7 @@ public:
     * @param particle1 The first of the two particles.
     * @param particle2 The second of the two particles.
      */
-    void calculateHarmonicFroce(std::shared_ptr<Particle> particle1, std::shared_ptr<Particle> particle2, double k, double r0);
+    void calculateHarmonicFroce(Particle* particle1, Particle* particle2, double k, double r0);
 
 private:
     std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.

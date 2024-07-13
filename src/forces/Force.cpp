@@ -95,7 +95,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
 
 void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
     double twoRoot6 = pow(2, 1/6);
-    std::vector<std::shared_ptr<Particle>> boundery = LCContainer.getBoundary();
+    std::vector<Particle*> boundery = LCContainer.getBoundary();
 
     for(const auto& particle : boundery){
       std::array<double, 3> force = {0,0,0};
@@ -115,7 +115,7 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
     }
 }
 
-void Force::calculateFLennardJones(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs){
+void Force::calculateFLennardJones(std::vector<std::array<Particle*,2>> pairs){
   double twoRoot6 = pow(2, 1/6);
 
   // iterate over all pairs of particles to calculate forces
@@ -142,7 +142,7 @@ void Force::calculateFLennardJones(std::vector<std::array<std::shared_ptr<Partic
   }
 }
 
-void Force::calculateFGravitation(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs){
+void Force::calculateFGravitation(std::vector<std::array<Particle*,2>> pairs){
   for (auto& pair : pairs){
     auto particle_i = pair[0];
     auto particle_j = pair[1];
@@ -186,7 +186,7 @@ void Force::calculateFHarmonic(ParticleContainerLinkedCell &LCContainer, double 
   }
 }
 
-void Force::calculateHarmonicFroce(std::shared_ptr<Particle> particle1, std::shared_ptr<Particle> particle2, double k, double r0){
+void Force::calculateHarmonicFroce(Particle* particle1, Particle* particle2, double k, double r0){
   std::array<double,3> direction = particle2->getX() - particle1->getX();
   auto norm = ArrayUtils::L2Norm(direction);
   std::array<double,3> force = k*(norm-r0) / norm*direction;
