@@ -76,10 +76,10 @@ public:
     * @param direction Direction vector between two particles.
     * @param epsilon Depth of the potential well.
     * @param sigma Finite distance at which the inter-particle potential is zero.
-    * @param cutOffRadius Cut-off radius beyond which the force is considered zero.
+    * @param cutOffRadiusSquared Cut-off radius beyond which the force is considered zero.
     * @return std::array<double, 3> Calculated force vector.
     */
-    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadius);
+    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared);
 
     /**
      * @brief Calculates the harmonic force for all particles.

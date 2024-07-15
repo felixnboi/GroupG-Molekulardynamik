@@ -807,10 +807,10 @@ TEST(Lennard_Jones_Force, peridicBoundary){
     pc->addParticle(p2);
     Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
     LJForce.calculateF(*pc);
-    EXPECT_EQ(p1->getF()[0], 120);
+    assert(areDoublesEqual(p1->getF()[0], 120));
     EXPECT_EQ(p1->getF()[1], 0);
     EXPECT_EQ(p1->getF()[2], 0);
-    EXPECT_EQ(p2->getF()[0], -120);
+    assert(areDoublesEqual(p2->getF()[0], -120));
     EXPECT_EQ(p2->getF()[1], 0);
     EXPECT_EQ(p2->getF()[2], 0);
 }

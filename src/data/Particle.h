@@ -66,6 +66,8 @@ private:
 
   double sigma; ///< The sigma value for the Lennard-Jones potential.
   double epsilon; ///< The epsilon value for the Lennard-Jones potential.
+  double rootSigma; ///< The root of sigma.
+  double rootEpsilon; ///< The root of epsilon.
   std::array<double, 3> domainStart; ///< The domain start position of the particle.
 
 
@@ -169,6 +171,20 @@ public:
    * @return The value of epsilon.
    */
   const double getEpsilon() const;
+
+  /**
+   * @brief Gets the value of rootSigma for this particle.
+   * 
+   * @return The value of rootSigma.
+   */
+  const double getRootSigma() const;
+
+  /**
+   * @brief Gets the value of rootEpsilon for this particle.
+   * 
+   * @return The value of rootEpsilon.
+   */
+  const double getRootEpsilon() const;
 
   /**
    * @brief Gets the domain start coordinates.

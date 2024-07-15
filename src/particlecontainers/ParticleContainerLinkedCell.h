@@ -95,11 +95,11 @@ public:
     const std::array<size_t, 3> getCellCount();
 
     /**
-     * @brief Getter for the interaction radius.
+     * @brief Getter for the squared interaction radius.
      * 
-    * @return The interaction radius.
+    * @return The squared interaction radius.
     */
-    const double getRadius();
+    const double getRadiusSquared();
 
     /**
      * @brief Getter for the pairs of particles within the interaction radius. (Ingnores periodic boundery)
@@ -149,13 +149,24 @@ public:
      */
     void applyForce(int x, int y, int sizeX, std::array<double, 3> force) override;
 
+    /**
+     * @brief Check if the particles are closer than the cut off radius.
+     * 
+     * @param particle1 The first particle.
+     * @param particle2 The second particle.
+     * 
+     * @return A bool value if they are closer.
+     */
+    bool inCuttofRaius(Particle* particle1, Particle* particle2);
+
 private:
     size_t particle_count; ///< The number of particles in this container.
-    std::unique_ptr<std::list<Particle*>[]> linkedCells; ///< Array of linked cells containing particles.
+    std::vector<std::list<Particle*>> linkedCells; ///< Vector of linked cells containing particles.
     std::array<double, 3> size; ///< Size of the container in three dimensions.
     std::array<double, 3> cellSize; ///< Size of each cell in three dimensions.
     std::array<size_t, 3> cellCount; ///< Number of cells in each dimension.
-    double radius; ///< Cut-off radius.
+    double radiusSquared; ///< Cut-off radius.
     std::vector<Particle*> halo; ///< Vector containing particles outside the calculated area.
-    size_t arrayLength; ///< Total number of cells in the container.
+    size_t vectorLength; ///< Total number of cells in the container.
+    std::array<int, 8> lastReseve; /// < The estimate the vector size in getParticlePairs peridic, the amount, that was reserved last time.
 };
