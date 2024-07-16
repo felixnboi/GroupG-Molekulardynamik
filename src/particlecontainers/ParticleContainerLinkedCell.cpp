@@ -75,6 +75,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2];
     double count = 0;
     particlePairs.reserve(lastReseve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
+    #pragma omp parallel for schedule(dynamic)
     for (size_t i = 0; i < vectorLength; i++){
         std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
         size_t nbrCount = 0; // cout of how many elements are in the nbrs array (how many neighbour cells this one has, while ignoring half of them)
