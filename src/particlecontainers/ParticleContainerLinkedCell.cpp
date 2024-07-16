@@ -1,17 +1,23 @@
 #include "ParticleContainerLinkedCell.h"
 
-ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius){
-    particle_count = 0;
-    cellCount = {(size_t)floor(sizeX/radius), (size_t)floor(sizeY/radius), (size_t)floor(sizeZ/radius)};
-    if(cellCount[0] == 0) cellCount[0] = 1;
-    if(cellCount[1] == 0) cellCount[1] = 1;
-    if(cellCount[2] == 0) cellCount[2] = 1;
-    cellSize = {sizeX/cellCount[0], sizeY/cellCount[1],sizeZ/cellCount[2]};
-    size = {cellSize[0]*cellCount[0],cellSize[1]*cellCount[1],cellSize[2]*cellCount[2]};
-    radiusSquared = radius*radius;
-    vectorLength = cellCount[0]*cellCount[1]*cellCount[2];
-    linkedCells = std::vector<std::list<Particle*>>(vectorLength);
-    lastReseve = {1,1,1,1,1,1,1,1};
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius)
+    : particle_count(0),
+    cellCount([=]() -> std::array<size_t, 3> {
+        std::array<size_t, 3> temp = {(size_t)std::floor(sizeX / radius), 
+                                      (size_t)std::floor(sizeY / radius), 
+                                      (size_t)std::floor(sizeZ / radius)};
+        if (temp[0] == 0) temp[0] = 1;
+        if (temp[1] == 0) temp[1] = 1;
+        if (temp[2] == 0) temp[2] = 1;
+        return temp;
+    }()),
+    cellSize({sizeX/cellCount[0], sizeY/cellCount[1],sizeZ/cellCount[2]}),
+    size({cellSize[0]*cellCount[0],cellSize[1]*cellCount[1],cellSize[2]*cellCount[2]}),
+    radiusSquared(radius*radius),
+    vectorLength(cellCount[0]*cellCount[1]*cellCount[2]),
+    linkedCells(std::vector<std::list<Particle*>>(vectorLength)),
+    lastReseve({1,1,1,1,1,1,1,1})
+{
     spdlog::info("Linked cells particlecontainer created.");
 }
 
@@ -22,7 +28,7 @@ ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
     spdlog::info("Linked cells particlecontainer destructed.");
 };
 
-size_t ParticleContainerLinkedCell::getParticleCount(){
+size_t ParticleContainerLinkedCell::getParticleCount() const{
     return particle_count;
 }
 
@@ -30,11 +36,11 @@ void ParticleContainerLinkedCell::reserve(size_t size){
     particles.reserve(size);
 }
 
-const std::array<double, 3> ParticleContainerLinkedCell::getSize(){
+const std::array<double, 3> ParticleContainerLinkedCell::getSize() const{
     return size;
 }
 
-const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
+const std::array<double, 3> ParticleContainerLinkedCell::getCellSize() const{
     return cellSize;
 }
 
@@ -61,7 +67,7 @@ ParticleIterator ParticleContainerLinkedCell::end(){
     return particles.end();
 }
 
-const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles(){
+const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles() const{
     return particles;
 }
 
@@ -149,22 +155,22 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     return particlePairs;
 }
 
-bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2){
+const bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2) {
     const auto distance = particle1->getX()-particle2->getX();
     const auto distanceSquared = distance*distance;
     return distanceSquared[0]+distanceSquared[1]+distanceSquared[2] < radiusSquared;
 }
 
 
-std::vector<Particle*> ParticleContainerLinkedCell::getHalo(){
+std::vector<Particle*> ParticleContainerLinkedCell::getHalo() const{
     return halo;
 }
     
-const std::array<size_t, 3> ParticleContainerLinkedCell::getCellCount(){
+const std::array<size_t, 3> ParticleContainerLinkedCell::getCellCount() const{
     return cellCount;
 }
 
-const double ParticleContainerLinkedCell::getRadiusSquared(){
+const double ParticleContainerLinkedCell::getRadiusSquared() const{
     return radiusSquared;
 }
 
@@ -224,7 +230,7 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag,
     }
 }
 
-std::vector<Particle*> ParticleContainerLinkedCell::getBoundary(){
+std::vector<Particle*> ParticleContainerLinkedCell::getBoundary() const{
     std::vector<Particle*> boundary;
     for (size_t i = 0; i < vectorLength; i++){
         const size_t positionX = i%cellCount[0];

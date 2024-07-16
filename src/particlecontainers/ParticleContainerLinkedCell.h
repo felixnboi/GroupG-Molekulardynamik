@@ -28,7 +28,7 @@ public:
      * 
      * @return The number of particles in this container.
      */
-    size_t getParticleCount() override;
+    size_t getParticleCount() const override;
 
     /**
      * @brief Reserves space for a given number of particles.
@@ -71,35 +71,35 @@ public:
      * 
      * @return A reference to the vector of particles.
      */
-    const std::vector<Particle*>& getParticles() override;
+    const std::vector<Particle*>& getParticles() const override;
 
     /**
      * @brief Gets the size of the container.
      * 
      * @return The size of the container as an array of three doubles.
      */
-    const std::array<double, 3> getSize();
+    const std::array<double, 3> getSize() const;
 
     /**
      * @brief Getter for the size of each cell.
      * 
      * @return The size of each cell as an array of three doubles.
      */
-    const std::array<double, 3> getCellSize();    
+    const std::array<double, 3> getCellSize() const;    
     
     /**
     * @brief Getter for the number of cells in each dimension.
     * 
     * @return The number of cells in each dimension as an array.
     */
-    const std::array<size_t, 3> getCellCount();
+    const std::array<size_t, 3> getCellCount() const;
 
     /**
      * @brief Getter for the squared interaction radius.
      * 
     * @return The squared interaction radius.
     */
-    const double getRadiusSquared();
+    const double getRadiusSquared() const;
 
     /**
      * @brief Getter for the pairs of particles within the interaction radius. (Ingnores periodic boundery)
@@ -122,14 +122,14 @@ public:
      * 
      * @return A vector of shared pointers to the particles at the boundary.
      */
-    std::vector<Particle*> getBoundary();
+    std::vector<Particle*> getBoundary() const;
 
     /**
      * @brief Gets the particles located in the halo.
      * 
      * @return A vector of shared pointers to the particles in the halo.
      */
-    std::vector<Particle*> getHalo();
+    std::vector<Particle*> getHalo() const;
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.
@@ -157,16 +157,16 @@ public:
      * 
      * @return A bool value if they are closer.
      */
-    bool inCuttofRaius(const Particle* particle1, const Particle* particle2);
+    const bool inCuttofRaius(const Particle* particle1, const Particle* particle2) ;
 
 private:
     size_t particle_count; ///< The number of particles in this container.
-    std::vector<std::list<Particle*>> linkedCells; ///< Vector of linked cells containing particles.
-    std::array<double, 3> size; ///< Size of the container in three dimensions.
-    std::array<double, 3> cellSize; ///< Size of each cell in three dimensions.
-    std::array<size_t, 3> cellCount; ///< Number of cells in each dimension.
-    double radiusSquared; ///< Cut-off radius.
+    const std::array<size_t, 3> cellCount; ///< Number of cells in each dimension.
+    const std::array<double, 3> cellSize; ///< Size of each cell in three dimensions.
+    const std::array<double, 3> size; ///< Size of the container in three dimensions.
+    const double radiusSquared; ///< Cut-off radius.
     std::vector<Particle*> halo; ///< Vector containing particles outside the calculated area.
-    size_t vectorLength; ///< Total number of cells in the container.
+    const size_t vectorLength; ///< Total number of cells in the container.
+    std::vector<std::list<Particle*>> linkedCells; ///< Vector of linked cells containing particles.
     std::array<int, 8> lastReseve; /// < The estimate the vector size in getParticlePairs peridic, the amount, that was reserved last time.
 };

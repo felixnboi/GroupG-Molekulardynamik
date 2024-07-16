@@ -12,7 +12,7 @@ ParticleContainerOld::~ParticleContainerOld(){
     spdlog::info("Particlecontainer destructed.");
 }
 
-size_t ParticleContainerOld::getParticleCount(){
+size_t ParticleContainerOld::getParticleCount() const{
     return particle_count;
 }
 
@@ -37,7 +37,7 @@ ParticleIterator ParticleContainerOld::end() {
     return particles.end();
 }
 
-const std::vector<Particle*>& ParticleContainerOld::getParticles() {
+const std::vector<Particle*>& ParticleContainerOld::getParticles() const{
     spdlog::debug("Retrieved particles from the container");
     return particles;
 }

@@ -26,7 +26,7 @@ public:
      * 
      * @return The number of particles in this container.
      */
-    virtual size_t getParticleCount() = 0;
+    virtual size_t getParticleCount() const = 0;
 
     /**
      * @brief Reserves a memory for a known number of particles.
@@ -69,7 +69,7 @@ public:
      * 
      * @return A constant reference to the vector of particles.
      */
-    virtual const std::vector<Particle*>& getParticles() = 0;
+    virtual const std::vector<Particle*>& getParticles() const = 0;
 
     /**
      * @brief Returns the pairs of all particles to iterate over.

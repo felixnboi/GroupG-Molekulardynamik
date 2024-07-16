@@ -25,7 +25,7 @@ public:
      * 
      * @return The number of particles in this container.
      */
-    size_t getParticleCount() override;
+    size_t getParticleCount() const override;
 
     /**
      * @brief Reserves space for a given number of particles.
@@ -60,7 +60,7 @@ public:
      * 
      * @return A reference to the vector of particles.
      */
-    const std::vector<Particle*>& getParticles() override;
+    const std::vector<Particle*>& getParticles() const override;
     
     /**
      * @brief Gets all possible pairs of particles.

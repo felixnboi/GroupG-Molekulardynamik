@@ -54,19 +54,19 @@ private:
   /**
    * Mass of this particle
    */
-  double m;
+  const double m;
 
   /**
    * Type of the particle. Use it for whatever you want (e.g. to separate
    * molecules belonging to different bodies, matters, and so on)
    */
-  int type;
+  const int type;
 
   bool is_outer;
-  double sigma; ///< The sigma value for the Lennard-Jones potential.
-  double epsilon; ///< The epsilon value for the Lennard-Jones potential.
-  double rootEpsilon; ///< The root of epsilon.
-  std::array<double, 3> domainStart; ///< The domain start position of the particle.
+  const double sigma; ///< The sigma value for the Lennard-Jones potential.
+  const double epsilon; ///< The epsilon value for the Lennard-Jones potential.
+  const double rootEpsilon; ///< The root of epsilon.
+  const std::array<double, 3> domainStart; ///< The domain start position of the particle.
 
 
 public:
@@ -249,7 +249,7 @@ public:
    * @param neighbour The neighbour that is to be added.
    * @param position The position in the neighbour array.
    */
-  void addNeighbour(Particle* neighbour, int position);
+  void addNeighbour(Particle* neighbour, const int position);
 
   /**
    * @brief Converts the particle to a string representation.
