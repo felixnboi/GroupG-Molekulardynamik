@@ -202,3 +202,20 @@ void XMLReader::readMembrane(const char* filename, MembraneData& membranedata){
         return;
     }
 }
+
+void XMLReader::readOpenMP(const char* filename, OpenMPData& openmpdata){
+    try{
+        std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
+
+        if(sim->openmp().present()){
+            openmpdata.setOpenMPFlag(true);
+            openmpdata.setNumThreads(sim->openmp().get().num_threads());
+            openmpdata.setStrategy(sim->openmp().get().parallelizationstartegy());
+        }
+
+    }catch(const xml_schema::exception& e){
+        spdlog::error("Error during OpenMP-parsing.");
+        spdlog::error(e.what());
+        return;
+    }
+}

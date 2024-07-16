@@ -569,6 +569,7 @@ class boundaryBehavior;
 class forces;
 class algorithms;
 class loglevels;
+class parallelizationstrategies;
 class simulation;
 class boundaries;
 class inputSettings;
@@ -576,6 +577,7 @@ class outputSettings;
 class simulationParameters;
 class thermostat;
 class checkpoint;
+class openmp;
 class membrane;
 class cuboid;
 class disc;
@@ -1660,6 +1662,151 @@ class loglevels: public ::xml_schema::string
 };
 
 /**
+ * @brief Enumeration class corresponding to the %parallelizationstrategies
+ * schema type.
+ */
+class parallelizationstrategies: public ::xml_schema::string
+{
+  public:
+
+  /**
+   * @brief Underlying enum type.
+   */
+  enum value
+  {
+    first,
+    second
+  };
+
+  /**
+   * @brief Create an instance from the underlying enum value.
+   *
+   * @param v A enum value.
+   */
+  parallelizationstrategies (value v);
+
+  /**
+   * @brief Create an instance from a C string.
+   *
+   * @param v A string value.
+   */
+  parallelizationstrategies (const char* v);
+
+  /**
+   * @brief Create an instance from a string.
+   *
+   * @param v A string value.
+   */
+  parallelizationstrategies (const ::std::string& v);
+
+  /**
+   * @brief Create an instance from the base value.
+   *
+   * @param v A base value.
+   */
+  parallelizationstrategies (const ::xml_schema::string& v);
+
+  /**
+   * @brief Create an instance from a DOM element.
+   *
+   * @param e A DOM element to extract the data from.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  parallelizationstrategies (const ::xercesc::DOMElement& e,
+                             ::xml_schema::flags f = 0,
+                             ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Create an instance from a DOM attribute.
+   *
+   * @param a A DOM attribute to extract the data from.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  parallelizationstrategies (const ::xercesc::DOMAttr& a,
+                             ::xml_schema::flags f = 0,
+                             ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Create an instance from a string fragment.
+   *
+   * @param s A string fragment to extract the data from.
+   * @param e A pointer to DOM element containing the string fragment.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  parallelizationstrategies (const ::std::string& s,
+                             const ::xercesc::DOMElement* e,
+                             ::xml_schema::flags f = 0,
+                             ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param x An instance to make a copy of.
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  parallelizationstrategies (const parallelizationstrategies& x,
+                             ::xml_schema::flags f = 0,
+                             ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy the instance polymorphically.
+   *
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   * @return A pointer to the dynamically allocated copy.
+   *
+   * This function ensures that the dynamic type of the instance is
+   * used for copying and should be used for polymorphic object
+   * models instead of the copy constructor.
+   */
+  virtual parallelizationstrategies*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  /**
+   * @brief Assign the underlying enum value.
+   *
+   * @param v A enum value.
+   * @return A refernce to the instance.
+   */
+  parallelizationstrategies&
+  operator= (value v);
+
+  /**
+   * @brief Implicit conversion operator to the underlying
+   * enum value.
+   *
+   * @return A enum value.
+   */
+  virtual
+  operator value () const
+  {
+    return _xsd_parallelizationstrategies_convert ();
+  }
+
+  //@cond
+
+  protected:
+  value
+  _xsd_parallelizationstrategies_convert () const;
+
+  public:
+  static const char* const _xsd_parallelizationstrategies_literals_[2];
+  static const value _xsd_parallelizationstrategies_indexes_[2];
+
+  //@endcond
+};
+
+/**
  * @brief Class corresponding to the %simulation schema type.
  *
  * @nosubgrouping
@@ -2052,6 +2199,82 @@ class simulation: public ::xml_schema::type
   //@}
 
   /**
+   * @name openmp
+   *
+   * @brief Accessor and modifier functions for the %openmp
+   * optional element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::openmp openmp_type;
+
+  /**
+   * @brief Element optional container type.
+   */
+  typedef ::xsd::cxx::tree::optional< openmp_type > openmp_optional;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< openmp_type, char > openmp_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * container.
+   *
+   * @return A constant reference to the optional container.
+   */
+  const openmp_optional&
+  openmp () const;
+
+  /**
+   * @brief Return a read-write reference to the element container.
+   *
+   * @return A reference to the optional container.
+   */
+  openmp_optional&
+  openmp ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  openmp (const openmp_type& x);
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x An optional container with the new value to set.
+   *
+   * If the value is present in @a x then this function makes a copy 
+   * of this value and sets it as the new value of the element.
+   * Otherwise the element container is set the 'not present' state.
+   */
+  void
+  openmp (const openmp_optional& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly instead
+   * of making a copy.
+   */
+  void
+  openmp (::std::unique_ptr< openmp_type > p);
+
+  //@}
+
+  /**
    * @name membrane
    *
    * @brief Accessor and modifier functions for the %membrane
@@ -2358,6 +2581,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< simulationParameters_type > simulationParameters_;
   thermostat_optional thermostat_;
   checkpoint_optional checkpoint_;
+  openmp_optional openmp_;
   membrane_optional membrane_;
   cuboid_sequence cuboid_;
   disc_sequence disc_;
@@ -4518,6 +4742,207 @@ class checkpoint: public ::xml_schema::type
   protected:
   checkpoint_file_optional checkpoint_file_;
   merge_file_optional merge_file_;
+
+  //@endcond
+};
+
+/**
+ * @brief Class corresponding to the %openmp schema type.
+ *
+ * @nosubgrouping
+ */
+class openmp: public ::xml_schema::type
+{
+  public:
+  /**
+   * @name num_threads
+   *
+   * @brief Accessor and modifier functions for the %num_threads
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::xml_schema::unsigned_int num_threads_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< num_threads_type, char > num_threads_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const num_threads_type&
+  num_threads () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  num_threads_type&
+  num_threads ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  num_threads (const num_threads_type& x);
+
+  //@}
+
+  /**
+   * @name parallelizationstartegy
+   *
+   * @brief Accessor and modifier functions for the %parallelizationstartegy
+   * required element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::parallelizationstrategies parallelizationstartegy_type;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< parallelizationstartegy_type, char > parallelizationstartegy_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element.
+   *
+   * @return A constant reference to the element.
+   */
+  const parallelizationstartegy_type&
+  parallelizationstartegy () const;
+
+  /**
+   * @brief Return a read-write reference to the element.
+   *
+   * @return A reference to the element.
+   */
+  parallelizationstartegy_type&
+  parallelizationstartegy ();
+
+  /**
+   * @brief Set the element value.
+   *
+   * @param x A new value to set.
+   *
+   * This function makes a copy of its argument and sets it as
+   * the new value of the element.
+   */
+  void
+  parallelizationstartegy (const parallelizationstartegy_type& x);
+
+  /**
+   * @brief Set the element value without copying.
+   *
+   * @param p A new value to use.
+   *
+   * This function will try to use the passed value directly
+   * instead of making a copy.
+   */
+  void
+  parallelizationstartegy (::std::unique_ptr< parallelizationstartegy_type > p);
+
+  //@}
+
+  /**
+   * @name Constructors
+   */
+  //@{
+
+  /**
+   * @brief Create an instance from the ultimate base and
+   * initializers for required elements and attributes.
+   */
+  openmp (const num_threads_type&,
+          const parallelizationstartegy_type&);
+
+  /**
+   * @brief Create an instance from a DOM element.
+   *
+   * @param e A DOM element to extract the data from.
+   * @param f Flags to create the new instance with.
+   * @param c A pointer to the object that will contain the new
+   * instance.
+   */
+  openmp (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param x An instance to make a copy of.
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  openmp (const openmp& x,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  /**
+   * @brief Copy the instance polymorphically.
+   *
+   * @param f Flags to create the copy with.
+   * @param c A pointer to the object that will contain the copy.
+   * @return A pointer to the dynamically allocated copy.
+   *
+   * This function ensures that the dynamic type of the instance is
+   * used for copying and should be used for polymorphic object
+   * models instead of the copy constructor.
+   */
+  virtual openmp*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  /**
+   * @brief Copy assignment operator.
+   *
+   * @param x An instance to make a copy of.
+   * @return A reference to itself.
+   *
+   * For polymorphic object models use the @c _clone function instead.
+   */
+  openmp&
+  operator= (const openmp& x);
+
+  //@}
+
+  /**
+   * @brief Destructor.
+   */
+  virtual 
+  ~openmp ();
+
+  // Implementation.
+  //
+
+  //@cond
+
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< num_threads_type > num_threads_;
+  ::xsd::cxx::tree::one< parallelizationstartegy_type > parallelizationstartegy_;
 
   //@endcond
 };

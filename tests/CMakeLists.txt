@@ -20,6 +20,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/data/ThermostatData.cpp
     ${PROJECT_SOURCE_DIR}/src/data/CheckpointData.cpp
     ${PROJECT_SOURCE_DIR}/src/data/MembraneData.cpp
+    ${PROJECT_SOURCE_DIR}/src/data/OpenMPData.cpp
     ${PROJECT_SOURCE_DIR}/src/thermostat/Thermostat.cpp
 )
 

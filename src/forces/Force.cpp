@@ -41,58 +41,58 @@ void Force::calculateF(ParticleContainer &particles) {
 
 void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
   for(int i = 0; i < 2; i++){
-      for(int j = 0; j < 2; j++){
-        for(int k = 0; k < 2; k++){
-          // If i, j or k is set we view their respective boundery as periodic.
-          if(i+j+k==0||(i==1&&!periodicFlag[0])||(j==1&&!periodicFlag[1])||(k==1&&!periodicFlag[2])) continue;
-          // We filter out the cases where we view a boundery as periodic, but it isn't, because that would lead to false calculations.
-          // We also filter out the case where we view none of them as peridic, since we handle that case else where.
-          // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
-          auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
-          double cutoffRadiusSquared = LCContainer.getRadiusSquared();
-          #pragma omp parallel for schedule(static , 100)
-          for(const auto& pair : pairs){
-            auto particle_i = pair.first;
-            auto particle_j = pair.second;
+    for(int j = 0; j < 2; j++){
+      for(int k = 0; k < 2; k++){
+        // If i, j or k is set we view their respective boundery as periodic.
+        if(i+j+k==0||(i==1&&!periodicFlag[0])||(j==1&&!periodicFlag[1])||(k==1&&!periodicFlag[2])) continue;
+        // We filter out the cases where we view a boundery as periodic, but it isn't, because that would lead to false calculations.
+        // We also filter out the case where we view none of them as peridic, since we handle that case else where.
+        // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
+        auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
+        double cutoffRadiusSquared = LCContainer.getRadiusSquared();
+        #pragma omp parallel for schedule(static , 4)
+        for(const auto& pair : pairs){
+          auto particle_i = pair.first;
+          auto particle_j = pair.second;
 
-            if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
+          if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
 
-            double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
-            double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
-            
-            std::vector<std::array<double, 3>> direction = {particle_i->getX()-particle_j->getX()}; // The dircetion/distance from one particle to the other. 
-            // There can be multible possible directions because of the edge case 4 lines below this.
-            int directions = 1; // The amount of arrays in the vector above, normally always one exept for the egde case 3 lines below this.
-            for(auto d = 0; d < 3; d++){
-              if((d==0&&i==1)||(d==1&&j==1)||(d==2&&k==1)){ // Is true if we view the boundery of the dimesion d as periodic.
-                if(LCContainer.getCellCount()[d]==1){ // This is only for the edge case, where in one direction the domain is only one cell wide and the periodic boundery is set.
-                  // A two particle now might interact mutlible times, through the boundery in both directions and that per dimesion. (This case should porbably be avoided anyway.)
-                  for (int dir = 0; dir < directions; dir++) {
-                    direction.push_back(direction[dir]); // Doubles the amount of dircetions because for each the particles now can interact twice.
-                    direction[dir][d] -= LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through one boundery.
-                    direction[dir+directions][d] += LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through the other boundery.
-                    // This does not cancles out in the force calculation becasue there still can be sidewards movement.
-                  }
-                  directions *=2; // Upadetes the amount of dircetions.
+          double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
+          double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
+          
+          std::vector<std::array<double, 3>> direction = {particle_i->getX()-particle_j->getX()}; // The dircetion/distance from one particle to the other. 
+          // There can be multible possible directions because of the edge case 4 lines below this.
+          int directions = 1; // The amount of arrays in the vector above, normally always one exept for the egde case 3 lines below this.
+          for(auto d = 0; d < 3; d++){
+            if((d==0&&i==1)||(d==1&&j==1)||(d==2&&k==1)){ // Is true if we view the boundery of the dimesion d as periodic.
+              if(LCContainer.getCellCount()[d]==1){ // This is only for the edge case, where in one direction the domain is only one cell wide and the periodic boundery is set.
+                // A two particle now might interact mutlible times, through the boundery in both directions and that per dimesion. (This case should porbably be avoided anyway.)
+                for (int dir = 0; dir < directions; dir++) {
+                  direction.push_back(direction[dir]); // Doubles the amount of dircetions because for each the particles now can interact twice.
+                  direction[dir][d] -= LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through one boundery.
+                  direction[dir+directions][d] += LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through the other boundery.
+                  // This does not cancles out in the force calculation becasue there still can be sidewards movement.
                 }
-                else{
-                  for(int dir = 0; dir < directions; dir++){
-                    // The dircetion is updated to not be the difference of the actual position of the particles, but the way it would be through the periodic boundery.
-                    if(direction[dir][d]<0) direction[dir][d] += LCContainer.getSize()[d];
-                    else direction[dir][d] -= LCContainer.getSize()[d];
-                  }
+                directions *=2; // Upadetes the amount of dircetions.
+              }
+              else{
+                for(int dir = 0; dir < directions; dir++){
+                  // The dircetion is updated to not be the difference of the actual position of the particles, but the way it would be through the periodic boundery.
+                  if(direction[dir][d]<0) direction[dir][d] += LCContainer.getSize()[d];
+                  else direction[dir][d] -= LCContainer.getSize()[d];
                 }
               }
             }
-            for(int dir = 0; dir < directions; dir++){
-              auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, cutoffRadiusSquared);
-              particle_i->applyF(force);
-              particle_j->applyF(-1*force);
-            }
+          }
+          for(int dir = 0; dir < directions; dir++){
+            auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, cutoffRadiusSquared);
+            particle_i->applyF(force);
+            particle_j->applyF(-1*force);
           }
         }
       }
     }
+  }
 }
 
 void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
@@ -116,15 +116,14 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
           force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
         }
       }
-      particle->applyF(force);
-    }
+    particle->applyF(force);
+  }
 }
 
 void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs){
   double twoRoot6 = pow(2, 1/6);
 
   // iterate over all pairs of particles to calculate forces
-
   for (const auto& pair : pairs){
     auto particle_i = pair.first;
     auto particle_j = pair.second;

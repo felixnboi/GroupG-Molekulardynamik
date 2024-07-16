@@ -51,6 +51,11 @@
         <brownian_motion_dimension>3</brownian_motion_dimension>
     </thermostat>
 
+    <openmp>
+        <num_threads>4</num_threads>
+        <parallelizationstartegy>0</parallelizationstartegy>
+    </openmp>
+
     <cuboid>
         <position>
             <x>0.6</x>

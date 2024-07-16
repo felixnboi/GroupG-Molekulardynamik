@@ -27,8 +27,6 @@
  */
 int main(int argc, char *argsv[]) {
 
-    omp_set_num_threads(4);
-
     Simulation simulation;
     if (!simulation.initialize(argc, argsv)) {
         return EXIT_FAILURE;

@@ -8,16 +8,17 @@ Simulation::Simulation(){
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
     std::string("INFO"), boundary, 3, 2, domain, domain_start, grav_constant, false);
 
-
     thermostat = Thermostat();
     thermostat_data = ThermostatData();
     checkpoint_data = CheckpointData(false, false, std::string(""), false, std::string(""));
     membrane_data = MembraneData(false, 0, 0, 0);
+    openmp_data = OpenMPData(false, 1, std::string("first"));
 
     particles = nullptr;
     force = nullptr;
 
     input_file_user = "";
+    strategy = 0;
 }
 
 Simulation::~Simulation() {}
@@ -198,6 +199,17 @@ bool Simulation::initialize(int argc, char* argv[]) {
         xmlreader.readThermostat(xml_file, thermostat_data);
         xmlreader.readCheckpoint(xml_file, checkpoint_data);
         xmlreader.readMembrane(xml_file, membrane_data);
+        xmlreader.readOpenMP(xml_file, openmp_data);
+
+        if(openmp_data.getOpenMPFlag()){
+            omp_set_num_threads(openmp_data.getNumThreads());
+            if(openmp_data.getStrategy() == std::string("first")){
+                strategy = 1;
+            }
+            if(openmp_data.getStrategy() == std::string("second")){
+                strategy = 2;
+            }
+        }
 
         if(thermostat_data.getThermostatFlag() && !thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
             spdlog::error("Either initial temperature or target termperature or both have to be set when using the thermostat");
