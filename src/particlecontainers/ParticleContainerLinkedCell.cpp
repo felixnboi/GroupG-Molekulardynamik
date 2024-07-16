@@ -1,4 +1,5 @@
 #include "ParticleContainerLinkedCell.h"
+#include <omp.h>
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius){
     particle_count = 0;
@@ -130,8 +131,11 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
                 // here we look at the particles in the same cell
                 for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
                     if(inCuttofRaius(*particle_i, *particle_j)){
+                        #pragma omp critical
+                        {
                         particlePairs.emplace_back(*particle_i, *particle_j);
                         count++;
+                        }
                     }
                 }
             }
@@ -139,8 +143,11 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
                 // here we look at the particles in the neighbour cells
                 for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
                     if(pFlag[0]||pFlag[1]||pFlag[2]||inCuttofRaius(*particle_i, *particle_j)){
+                        #pragma omp critical
+                        {
                         particlePairs.emplace_back(*particle_i, *particle_j);
                         count++;
+                        }
                     }
                 }
             }

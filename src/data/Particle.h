@@ -13,6 +13,7 @@
 #include <array>
 #include <string>
 #include <iostream>
+#include <omp.h>
 
 
 /**

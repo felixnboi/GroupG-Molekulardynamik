@@ -100,7 +100,10 @@ void Particle::setIsOuter(bool newIsOuter) {
 
 void Particle::applyF(const std::array<double, 3>& force){
   if(!is_outer){
+    #pragma omp critical
+    {
     f = f+force;
+    }
   }
 }
 

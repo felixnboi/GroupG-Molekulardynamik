@@ -49,7 +49,8 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
           // We also filter out the case where we view none of them as peridic, since we handle that case else where.
           // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
           auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
-          double cutofRadiusSquared = LCContainer.getRadiusSquared();
+          double cutoffRadiusSquared = LCContainer.getRadiusSquared();
+          #pragma omp parallel for schedule(static)
           for(const auto& pair : pairs){
             auto particle_i = pair.first;
             auto particle_j = pair.second;
@@ -84,9 +85,9 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
               }
             }
             for(int dir = 0; dir < directions; dir++){
-              auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, cutofRadiusSquared);
-              particle_i->setF(particle_i->getF()+force);
-              particle_j->setF(particle_j->getF()-force);
+              auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, cutoffRadiusSquared);
+              particle_i->applyF(force);
+              particle_j->applyF(-1*force);
             }
           }
         }
