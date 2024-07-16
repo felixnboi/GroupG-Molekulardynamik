@@ -29,7 +29,7 @@ private:
   /**
    * Half of the neighbour particles in the membrane. (Specificly the ones below and the one to the right).
    */
-  std::array<std::shared_ptr<Particle>,4> neighbours;
+  std::array<Particle*,4> neighbours;
 
   /**
    * Array to check if the neighbours actually exist.
@@ -63,9 +63,9 @@ private:
   int type;
 
   bool is_outer;
-
   double sigma; ///< The sigma value for the Lennard-Jones potential.
   double epsilon; ///< The epsilon value for the Lennard-Jones potential.
+  double rootEpsilon; ///< The root of epsilon.
   std::array<double, 3> domainStart; ///< The domain start position of the particle.
 
 
@@ -140,7 +140,7 @@ public:
    * 
    * @return Reference to the neighbours array.
    */
-  const std::array<std::shared_ptr<Particle>,4> &getNeighbours() const;
+  const std::array<Particle*,4> &getNeighbours() const;
 
   /**
    * @brief Gets a bool array which says if the neighbours actually exist.
@@ -169,6 +169,13 @@ public:
    * @return The value of epsilon.
    */
   const double getEpsilon() const;
+
+  /**
+   * @brief Gets the value of rootEpsilon for this particle.
+   * 
+   * @return The value of rootEpsilon.
+   */
+  const double getRootEpsilon() const;
 
   /**
    * @brief Gets the domain start coordinates.
@@ -217,14 +224,14 @@ public:
    * 
    * @return The mass of the particle.
    */
-  double getM() const;
+  const double getM() const;
 
   /**
    * @brief Gets the type of the particle.
    * 
    * @return The type of the particle.
    */
-  int getType() const;
+  const int getType() const;
 
   void applyF(const std::array<double, 3>& force);
 
@@ -242,7 +249,7 @@ public:
    * @param neighbour The neighbour that is to be added.
    * @param position The position in the neighbour array.
    */
-  void addNeighbour(std::shared_ptr<Particle> neighbour, int position);
+  void addNeighbour(Particle* neighbour, int position);
 
   /**
    * @brief Converts the particle to a string representation.

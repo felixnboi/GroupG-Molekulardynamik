@@ -49,13 +49,14 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
           // We also filter out the case where we view none of them as peridic, since we handle that case else where.
           // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
           auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
+          double cutofRadiusSquared = LCContainer.getRadiusSquared();
           for(const auto& pair : pairs){
-            auto particle_i = pair[0];
-            auto particle_j = pair[1];
+            auto particle_i = pair.first;
+            auto particle_j = pair.second;
 
             if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
 
-            double epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
+            double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
             double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
             
             std::vector<std::array<double, 3>> direction = {particle_i->getX()-particle_j->getX()}; // The dircetion/distance from one particle to the other. 
@@ -83,7 +84,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
               }
             }
             for(int dir = 0; dir < directions; dir++){
-              auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma, LCContainer.getRadius());
+              auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, cutofRadiusSquared);
               particle_i->setF(particle_i->getF()+force);
               particle_j->setF(particle_j->getF()-force);
             }
@@ -95,57 +96,52 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
 
 void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
     double twoRoot6 = pow(2, 1/6);
-    std::vector<std::shared_ptr<Particle>> boundery = LCContainer.getBoundary();
+    std::vector<Particle*> boundery = LCContainer.getBoundary();
 
     for(const auto& particle : boundery){
       std::array<double, 3> force = {0,0,0};
+      auto sigma  = particle->getSigma();
       for(int i = 0; i < 3; i++){
-        if(reflectLenJonesFlag[2*i]&&particle->getX()[i]< LCContainer.getCellSize()[i]&&particle->getX()[i]< particle->getSigma()*twoRoot6){
+        auto xi = particle->getX()[i];
+        if(reflectLenJonesFlag[2*i]&&xi< LCContainer.getCellSize()[i]&&xi< sigma*twoRoot6){
           std::array<double, 3> direction = {0,0,0};
-          direction[i] = 2*particle->getX()[i];
-          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma(),0)[i];
+          direction[i] = 2*xi;
+          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
         }
-        if(reflectLenJonesFlag[2*i+1]&&particle->getX()[i]> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&particle->getX()[i]> LCContainer.getSize()[i]-particle->getSigma()*twoRoot6){
+        if(reflectLenJonesFlag[2*i+1]&&xi> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&xi> LCContainer.getSize()[i]-sigma*twoRoot6){
           std::array<double, 3> direction = {0,0,0};
-          direction[i] = 2*(particle->getX()[i]-LCContainer.getSize()[i]);
-          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), particle->getSigma(),0)[i];
+          direction[i] = 2*(xi-LCContainer.getSize()[i]);
+          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
         }
       }
       particle->applyF(force);
     }
 }
 
-void Force::calculateFLennardJones(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs){
+void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs){
   double twoRoot6 = pow(2, 1/6);
 
   // iterate over all pairs of particles to calculate forces
   for (const auto& pair : pairs){
-    auto particle_i = pair[0];
-    auto particle_j = pair[1];
-    double epsilon_i = particle_i->getEpsilon();
-    double epsilon_j = particle_j->getEpsilon();
-    double epsilon;
-    if(epsilon_i == epsilon_j){
-      epsilon = epsilon_i;
-    }else{
-      epsilon = sqrt(particle_i->getEpsilon()*particle_j->getEpsilon());
-    }
+    auto particle_i = pair.first;
+    auto particle_j = pair.second;
+    double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
     double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
     double cutOffRadius = 0;
 
     if(membraneFlag) cutOffRadius = twoRoot6 * sigma;
 
-    auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius);
+    auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius*cutOffRadius);
      
     particle_i->setF(particle_i->getF()+force);
     particle_j->setF(particle_j->getF()-force);
   }
 }
 
-void Force::calculateFGravitation(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs){
+void Force::calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs){
   for (auto& pair : pairs){
-    auto particle_i = pair[0];
-    auto particle_j = pair[1];
+    auto particle_i = pair.first;
+    auto particle_j = pair.second;
 
     auto distance = particle_j->getX() - particle_i->getX();
 
@@ -156,21 +152,17 @@ void Force::calculateFGravitation(std::vector<std::array<std::shared_ptr<Particl
   }
 }
 
-std::array<double,3> Force::calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadius){
+std::array<double,3> Force::calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared){
   // calculating the Euclidean distance between particle i and particle j
-    auto norm = ArrayUtils::L2Norm(direction);
-    if(cutOffRadius > 0 && norm > cutOffRadius) return {0,0,0};
-    auto norm_squared = pow(norm, 2);
-    auto norm_pow6 = pow(norm_squared, 3);
-    auto sigmaPow6 = pow(sigma,6);
+    auto normSquared = direction[0]*direction[0]+direction[1]*direction[1]+direction[2]*direction[2];
+    if(cutOffRadiusSquared > 0 && normSquared > cutOffRadiusSquared) return {0,0,0};
+    auto sigmaDividedByNormSquared = sigma*sigma/normSquared;
+    auto sigmaDivedByNormPow6 = sigmaDividedByNormSquared*sigmaDividedByNormSquared*sigmaDividedByNormSquared;
 
     // calculating everything for the force except for the direction
-    double directionlessForce = -24*epsilon/norm_squared*(sigmaPow6/norm_pow6-2*pow(sigmaPow6/norm_pow6,2));
+    double directionlessForce = 48*epsilon/normSquared*sigmaDivedByNormPow6*(sigmaDivedByNormPow6-0.5);
 
-    // calculating the force components (along the x, y, z axes) between particle i and particle j
-    std::array<double,3> force = directionlessForce*direction;
-    
-    return force;
+    return directionlessForce*direction;
 }
 
 void Force::calculateFHarmonic(ParticleContainerLinkedCell &LCContainer, double k, double r0){
@@ -186,7 +178,7 @@ void Force::calculateFHarmonic(ParticleContainerLinkedCell &LCContainer, double 
   }
 }
 
-void Force::calculateHarmonicFroce(std::shared_ptr<Particle> particle1, std::shared_ptr<Particle> particle2, double k, double r0){
+void Force::calculateHarmonicFroce(Particle* particle1, Particle* particle2, double k, double r0){
   std::array<double,3> direction = particle2->getX() - particle1->getX();
   auto norm = ArrayUtils::L2Norm(direction);
   std::array<double,3> force = k*(norm-r0) / norm*direction;

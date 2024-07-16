@@ -25,6 +25,7 @@ Particle::Particle(int type_arg) {
   is_outer = false;
   epsilon = 5;
   sigma = 1;
+  rootEpsilon = sqrt(epsilon);
   spdlog::info("Particle generated with type {}", type_arg);
 }
 
@@ -35,6 +36,7 @@ Particle::Particle(const Particle &other){
   domainStart = other.domainStart;
   epsilon = other.epsilon;
   sigma = other.sigma;
+  rootEpsilon = sqrt(epsilon);
   old_f = other.old_f;
   m = other.m;
   is_outer = other.is_outer;
@@ -47,6 +49,7 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg, dou
 std::array<double,3> domainStart){
   this->sigma = sigma;
   this->epsilon = epsilon;
+  rootEpsilon = sqrt(epsilon);
   this->domainStart = domainStart;
   x = x_arg-domainStart;
   v = v_arg;
@@ -107,13 +110,13 @@ void Particle::setOldF(const std::array<double, 3>& newOldF) {
   }
 }
 
-double Particle::getM() const { return m; }
+const double Particle::getM() const { return m; }
 
-const std::array<std::shared_ptr<Particle>,4> &Particle::getNeighbours() const {return neighbours;}
+const std::array<Particle*,4> &Particle::getNeighbours() const {return neighbours;}
 
 const std::array<bool,4> &Particle::getHasNeighbour() const {return hasNeighbour;}
 
-int Particle::getType() const { return type; }
+const int Particle::getType() const { return type; }
 
 std::string Particle::toString() const {
   std::stringstream stream;
@@ -130,6 +133,10 @@ const double Particle::getSigma() const{
   return sigma;
 }
 
+const double Particle::getRootEpsilon() const{
+  return rootEpsilon;
+}
+
 bool Particle::operator==(const Particle &other) const {
   return (x == other.x) and (v == other.v) and (f == other.f) and
          (type == other.type) and (m == other.m) and (old_f == other.old_f);
@@ -140,7 +147,7 @@ std::ostream & operator<<(std::ostream &stream, const Particle &p) {
   return stream;
 }
 
-void Particle::addNeighbour(std::shared_ptr<Particle> neighbour, int position){
+void Particle::addNeighbour(Particle* neighbour, int position){
   neighbours[position] = neighbour;
   hasNeighbour[position] = true;
 }

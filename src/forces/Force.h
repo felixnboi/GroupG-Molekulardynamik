@@ -47,14 +47,14 @@ public:
     * 
     * @param pairs Vector of arrays containing pairs of particles.
     */
-    void calculateFLennardJones(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs);
+    void calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs);
 
     /**
     * @brief Calculates the forces between all pairs of particles using the gravitational force.
     * 
     * @param pairs Vector of arrays containing pairs of particles.
     */
-    void calculateFGravitation(std::vector<std::array<std::shared_ptr<Particle>,2>> pairs);
+    void calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs);
 
     /**
      * @brief Calculates the Lennard Jones force between all pairs of particles which are connected through a peridic boundery.
@@ -76,10 +76,10 @@ public:
     * @param direction Direction vector between two particles.
     * @param epsilon Depth of the potential well.
     * @param sigma Finite distance at which the inter-particle potential is zero.
-    * @param cutOffRadius Cut-off radius beyond which the force is considered zero.
+    * @param cutOffRadiusSquared Cut-off radius beyond which the force is considered zero.
     * @return std::array<double, 3> Calculated force vector.
     */
-    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadius);
+    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared);
 
     /**
      * @brief Calculates the harmonic force for all particles.
@@ -99,7 +99,7 @@ public:
     * @param particle1 The first of the two particles.
     * @param particle2 The second of the two particles.
      */
-    void calculateHarmonicFroce(std::shared_ptr<Particle> particle1, std::shared_ptr<Particle> particle2, double k, double r0);
+    void calculateHarmonicFroce(Particle* particle1, Particle* particle2, double k, double r0);
 
 private:
     std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.

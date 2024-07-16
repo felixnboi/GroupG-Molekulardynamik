@@ -4,10 +4,7 @@ void CheckpointWriter::writeCheckpoint(ParticleContainer &particles,  const char
     std::fstream checkpoint_file;
     std::string tmp_string;
     checkpoint_file.open(filename,std::ios::in|std::ios::out|std::ios::trunc);
-    int count = 0;
-    for(auto p : particles.getParticles()) {
-        count++;
-    }
+    int count = particles.getParticles().size();
     checkpoint_file << count << "\n";
     for(auto p : particles.getParticles()){
         auto x = p->getX()+p->getDomainStart();

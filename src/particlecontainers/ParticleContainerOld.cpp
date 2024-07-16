@@ -6,6 +6,9 @@ ParticleContainerOld::ParticleContainerOld(){
 }
 
 ParticleContainerOld::~ParticleContainerOld(){
+    for(auto particle: particles){
+        delete particle;
+    }
     spdlog::info("Particlecontainer destructed.");
 }
 
@@ -17,7 +20,7 @@ void ParticleContainerOld::reserve(size_t size){
     particles.reserve(size);
 }
 
-void ParticleContainerOld::addParticle(const std::shared_ptr<Particle> particle) {
+void ParticleContainerOld::addParticle(Particle* particle) {
     particle_count++;
     particles.push_back(particle);
     spdlog::debug("Added a particle to the container");
@@ -34,16 +37,16 @@ ParticleIterator ParticleContainerOld::end() {
     return particles.end();
 }
 
-const std::vector<std::shared_ptr<Particle>>& ParticleContainerOld::getParticles() {
+const std::vector<Particle*>& ParticleContainerOld::getParticles() {
     spdlog::debug("Retrieved particles from the container");
     return particles;
 }
 
-std::vector<std::array<std::shared_ptr<Particle>,2>> ParticleContainerOld::getParticlePairs(){
-    std::vector<std::array<std::shared_ptr<Particle>,2>> particlePairs;
+std::vector<std::pair<Particle*, Particle*>> ParticleContainerOld::getParticlePairs(){
+    std::vector<std::pair<Particle*, Particle*>> particlePairs;
     for (auto particle_i = particles.begin(); particle_i != particles.end(); particle_i++){
         for (auto particle_j = std::next(particle_i); particle_j!=particles.end(); particle_j++){
-            particlePairs.push_back({*particle_i, *particle_j});
+            particlePairs.emplace_back(*particle_i, *particle_j);
         }
     }
     return particlePairs;

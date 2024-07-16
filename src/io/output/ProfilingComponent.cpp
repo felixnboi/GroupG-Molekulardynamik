@@ -12,7 +12,7 @@ void ProfilingComponent::profile(size_t bins, std::array<double,3> domainSize, P
     std::vector<double> velocities(3 * bins, 0.0);
     const double bin_size = domainSize[0] / bins;
     size_t size = pc.getParticleCount();
-    const std::vector<std::shared_ptr<Particle>>& particles = pc.getParticles();
+    const std::vector<Particle*>& particles = pc.getParticles();
 
     for (size_t j = 0; j < size; ++j) {
         auto& particle = particles[j];

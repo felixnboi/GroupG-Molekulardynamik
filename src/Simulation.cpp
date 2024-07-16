@@ -16,21 +16,6 @@ Simulation::Simulation(){
 
     particles = nullptr;
     force = nullptr;
-    
-    xml_flag = false;
-    generate_flag = false;
-    input_flag = false;
-    force_flag = false;
-    time_flag = false;
-    cli_flag = false;
-    linkedcell_flag = false;
-    lenJonesFlag = false;
-    gravFlag = false;
-    harmonicFlag = false;
-
-    lenJonesBoundaryFlags = {false, false, false, false, false, false}; //links,rechts,unten,oben,hinten,vorne
-    outflowFlags = {false, false, false, false, false, false};
-    periodicFlags = {false, false, false}; //links-rechts, oben-unten, vorne-hinten
 
     input_file_user = "";
 }
@@ -38,7 +23,7 @@ Simulation::Simulation(){
 Simulation::~Simulation() {}
 
 bool Simulation::initialize(int argc, char* argv[]) {
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::off);
     const char* const short_ops = "v:i:gt";
     const option long_opts[] = {
         {"help", no_argument, nullptr, 'h'},
@@ -172,15 +157,15 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 cli_flag = true;
                 force_flag = true;
                 if (*optarg == 'g') {
-                    gravFlag = true;
-                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, 
+                    grav_flag = true;
+                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, 
                     linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } 
                 if (*optarg == 'l') {
-                    lenJonesFlag = true;
-                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, 
+                    lenJones_flag = true;
+                    force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, 
                     linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
@@ -285,13 +270,13 @@ bool Simulation::initialize(int argc, char* argv[]) {
         }
 
         if(simdata.getForceStr() == "gravitationalForce"){
-            gravFlag = true;
+            grav_flag = true;
         }
 
         if(simdata.getForceStr() == "lennardJonesForce"){
-            lenJonesFlag = true;
+            lenJones_flag = true;
         }
-        force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJonesFlag, gravFlag, linkedcell_flag, 
+        force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, linkedcell_flag, 
         simdata.getGravConstant(), membrane_data.getMembraneFlag(), membrane_data.getK(), membrane_data.getR0());
 
     }else{
