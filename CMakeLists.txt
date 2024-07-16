@@ -48,13 +48,27 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(MolSim
-        # stuff that is used in headers and source files
-        PUBLIC
-            ${XercesC_LIBRARIES}
-        PRIVATE
-            spdlog::spdlog
-)
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(MolSim
+    # stuff that is used in headers and source files
+    PUBLIC
+        ${XercesC_LIBRARIES}
+        OpenMP::OpenMP_CXX
+    PRIVATE
+        spdlog::spdlog
+    )
+else()
+    target_link_libraries(MolSim
+    # stuff that is used in headers and source files
+    PUBLIC
+        ${XercesC_LIBRARIES}
+    PRIVATE
+        spdlog::spdlog
+    )
+endif()
+
+
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
@@ -76,7 +90,7 @@ enable_testing()
 include(CTest)
 
 # Add the sanitize address flag and enable profiling
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -pg")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -pg -fopenmp")
 
 add_subdirectory(libs/spdlog-1.14.1)
 add_subdirectory(libs/googletest-1.14.0)

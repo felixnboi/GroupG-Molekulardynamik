@@ -157,7 +157,7 @@ public:
      * 
      * @return A bool value if they are closer.
      */
-    bool inCuttofRaius(Particle* particle1, Particle* particle2);
+    bool inCuttofRaius(const Particle* particle1, const Particle* particle2);
 
 private:
     size_t particle_count; ///< The number of particles in this container.

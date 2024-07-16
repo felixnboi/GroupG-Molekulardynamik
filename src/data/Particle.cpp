@@ -26,7 +26,6 @@ Particle::Particle(int type_arg) {
   epsilon = 5;
   sigma = 1;
   rootEpsilon = sqrt(epsilon);
-  rootSigma = sqrt(sigma);
   spdlog::info("Particle generated with type {}", type_arg);
 }
 
@@ -38,7 +37,6 @@ Particle::Particle(const Particle &other){
   epsilon = other.epsilon;
   sigma = other.sigma;
   rootEpsilon = sqrt(epsilon);
-  rootSigma = sqrt(sigma);
   old_f = other.old_f;
   m = other.m;
   is_outer = other.is_outer;
@@ -52,7 +50,6 @@ std::array<double,3> domainStart){
   this->sigma = sigma;
   this->epsilon = epsilon;
   rootEpsilon = sqrt(epsilon);
-  rootSigma = sqrt(sigma);
   this->domainStart = domainStart;
   x = x_arg-domainStart;
   v = v_arg;
@@ -113,13 +110,13 @@ void Particle::setOldF(const std::array<double, 3>& newOldF) {
   }
 }
 
-double Particle::getM() const { return m; }
+const double Particle::getM() const { return m; }
 
 const std::array<Particle*,4> &Particle::getNeighbours() const {return neighbours;}
 
 const std::array<bool,4> &Particle::getHasNeighbour() const {return hasNeighbour;}
 
-int Particle::getType() const { return type; }
+const int Particle::getType() const { return type; }
 
 std::string Particle::toString() const {
   std::stringstream stream;
@@ -134,10 +131,6 @@ const double Particle::getEpsilon() const{
 
 const double Particle::getSigma() const{
   return sigma;
-}
-
-const double Particle::getRootSigma() const{
-  return rootSigma;
 }
 
 const double Particle::getRootEpsilon() const{

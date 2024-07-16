@@ -25,7 +25,6 @@
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
-    spdlog::set_level(spdlog::level::off);
 
     Simulation simulation;
     if (!simulation.initialize(argc, argsv)) {

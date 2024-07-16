@@ -63,10 +63,8 @@ private:
   int type;
 
   bool is_outer;
-
   double sigma; ///< The sigma value for the Lennard-Jones potential.
   double epsilon; ///< The epsilon value for the Lennard-Jones potential.
-  double rootSigma; ///< The root of sigma.
   double rootEpsilon; ///< The root of epsilon.
   std::array<double, 3> domainStart; ///< The domain start position of the particle.
 
@@ -173,13 +171,6 @@ public:
   const double getEpsilon() const;
 
   /**
-   * @brief Gets the value of rootSigma for this particle.
-   * 
-   * @return The value of rootSigma.
-   */
-  const double getRootSigma() const;
-
-  /**
    * @brief Gets the value of rootEpsilon for this particle.
    * 
    * @return The value of rootEpsilon.
@@ -233,14 +224,14 @@ public:
    * 
    * @return The mass of the particle.
    */
-  double getM() const;
+  const double getM() const;
 
   /**
    * @brief Gets the type of the particle.
    * 
    * @return The type of the particle.
    */
-  int getType() const;
+  const int getType() const;
 
   void applyF(const std::array<double, 3>& force);
 

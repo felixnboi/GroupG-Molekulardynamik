@@ -149,7 +149,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     return particlePairs;
 }
 
-bool ParticleContainerLinkedCell::inCuttofRaius(Particle* particle1, Particle* particle2){
+bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2){
     auto distance = particle1->getX()-particle2->getX();
     auto distanceSquared = distance*distance;
     return distanceSquared[0]+distanceSquared[1]+distanceSquared[2] < radiusSquared;
