@@ -55,7 +55,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerOld::getParticlePa
 void ParticleContainerOld::makeMembrane(int sizeX, int sizeY){
     for(int x = 0; x < sizeX; x++){
         for(int y = 0; y < sizeY; y++){
-            int position = x+y*sizeX;
+            const int position = x+y*sizeX;
             auto particle = particles[position];
 
             // for every particle we check if it sill has the coresponfing neighbour and if yes we add it

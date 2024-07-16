@@ -94,8 +94,10 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename, st
         spdlog::error("Error reading file: failed to parse line {}", i);
         exit(-1);
       }
+      
       Particle *particle = new Particle(x,v,m,is_outer,type,epsilon,sigma,domainStart);
       particles.addParticle(particle);
+
       for (auto &fj : f) {
         datastream >> fj;
       }

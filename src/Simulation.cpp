@@ -337,14 +337,14 @@ void Simulation::run() {
 
     int iteration = 0;
     double current_time = 0;
-    double start_time = simdata.getStartTime();
-    double end_time = simdata.getEndTime();
-    double delta_t = simdata.getDeltaT();
-    unsigned write_frequency = simdata.getWriteFrequency();
+    const double start_time = simdata.getStartTime();
+    const double end_time = simdata.getEndTime();
+    const double delta_t = simdata.getDeltaT();
+    const unsigned write_frequency = simdata.getWriteFrequency();
 
-    bool thermostat_flag = thermostat.getThermostatData().getThermostatFlag();
-    double initial_temp = thermostat.getThermostatData().getInitTemp();
-    size_t n_thermostat = thermostat.getThermostatData().getNThermostat();
+    const bool thermostat_flag = thermostat.getThermostatData().getThermostatFlag();
+    const double initial_temp = thermostat.getThermostatData().getInitTemp();
+    const size_t n_thermostat = thermostat.getThermostatData().getNThermostat();
 
     if(thermostat_flag && initial_temp != 0.0){
         thermostat.initSystemTemperature(initial_temp, particles);
@@ -449,15 +449,15 @@ void Simulation::run() {
 }
 
 void Simulation::calculateX() {
-  double delta_t = simdata.getDeltaT();
+  const double delta_t = simdata.getDeltaT();
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
     if(!(*p)->getIsOuter()){
 
-    auto m = (*p)->getM(); ///< Mass of the particle.
-    auto cur_x = (*p)->getX(); ///< Current position of the particle.
-    auto cur_v = (*p)->getV(); ///< Current velocity of the particle.
-    auto cur_F = (*p)->getF(); ///< Current force acting on the particle.
+    const auto& m = (*p)->getM(); ///< Mass of the particle.
+    const auto& cur_x = (*p)->getX(); ///< Current position of the particle.
+    const auto& cur_v = (*p)->getV(); ///< Current velocity of the particle.
+    const auto& cur_F = (*p)->getF(); ///< Current force acting on the particle.
     std::array<double, 3> cur_x_dummy = {0,0,0}; ///< Dummy array to store new position components.
 
     // calculating new position components for each dimension (x, y, z)
@@ -475,13 +475,13 @@ void Simulation::calculateX() {
 }
 
 void Simulation::calculateV() {
-  double delta_t = simdata.getDeltaT();
+  const double delta_t = simdata.getDeltaT();
   // iterating over all particles to calculate new positions
   for (auto p = particles->begin(); p != particles->end(); p++){
-    auto m = (*p)->getM(); ///< Mass of the particle.
-    auto cur_v = (*p)->getV(); ///< Current velocity of the particle.
-    auto cur_F = (*p)->getF(); ///< Current force acting on the particle.
-    auto old_F = (*p)->getOldF(); ///< Previous force acting on the particle.
+    const auto& m = (*p)->getM(); ///< Mass of the particle.
+    const auto& cur_v = (*p)->getV(); ///< Current velocity of the particle.
+    const auto& cur_F = (*p)->getF(); ///< Current force acting on the particle.
+    const auto& old_F = (*p)->getOldF(); ///< Previous force acting on the particle.
     std::array<double, 3> cur_v_dummy = {0,0,0}; ///< Dummy array to store new velocity components.
     // calculating new velocity components for each dimension (x, y, z)
     for(int i = 0; i<3; i++){

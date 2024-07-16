@@ -5,15 +5,15 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
     std::string tmp_string;
 
     std::array<double, 3> position = cuboid.getPosition();
-    std::array<double, 3> velocity = cuboid.getVelocity();
-    std::array<unsigned, 3> dimensions = cuboid.getDimensions();
-    double mass = cuboid.getMass();
-    double distance = cuboid.getDistance();
-    double epsilon = cuboid.getEpsilon();
-    double sigma = cuboid.getSigma();
-    size_t brownian_motion_dimension = cuboid.getBrownianMotionDimension();
-    size_t type = cuboid.getType();
-    bool is_outer = cuboid.getIsOuter();
+    const std::array<double, 3> velocity = cuboid.getVelocity();
+    const std::array<unsigned, 3> dimensions = cuboid.getDimensions();
+    const double mass = cuboid.getMass();
+    const double distance = cuboid.getDistance();
+    const double epsilon = cuboid.getEpsilon();
+    const double sigma = cuboid.getSigma();
+    const size_t brownian_motion_dimension = cuboid.getBrownianMotionDimension();
+    const size_t type = cuboid.getType();
+    const bool is_outer = cuboid.getIsOuter();
     
     spdlog::info("Generating cuboid");
     
@@ -26,14 +26,14 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
     }
 
     input_file.seekp(current);
-    int numParticles = std::stoi(tmp_string)+dimensions[0]*dimensions[1]*dimensions[2];
+    const int numParticles = std::stoi(tmp_string)+dimensions[0]*dimensions[1]*dimensions[2];
     input_file << numParticles;
     input_file.close();
     
-    double yClone = position[1];
-    double zClone = position[2];
+    const double yClone = position[1];
+    const double zClone = position[2];
     
-    double averageBrownianMotion = cuboid.getBrownianMotion();
+    const double averageBrownianMotion = cuboid.getBrownianMotion();
     input_file.open(filename,std::ios::in|std::ios::out|std::ios::app);
     for (size_t i = 0; i < dimensions[0]; i++)
     {
@@ -56,21 +56,21 @@ void ParticleGenerator::generateCuboid(const Cuboid& cuboid, const char *filenam
 
 
 void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
-    std::array<double ,3> position = disc.getPosition();
-    std::array<double ,3> velocity = disc.getVelocity();
-    int MoleculesPerRadius = disc.getRadius();
-    double distance = disc.getDistance();
-    double mass = disc.getMass();
-    double epsilon = disc.getEpsilon();
-    double sigma = disc.getSigma();
-    size_t type = disc.getType();
-    bool is_outer = disc.getIsOuter();
+    const std::array<double ,3> position = disc.getPosition();
+    const std::array<double ,3> velocity = disc.getVelocity();
+    const int MoleculesPerRadius = disc.getRadius();
+    const double distance = disc.getDistance();
+    const double mass = disc.getMass();
+    const double epsilon = disc.getEpsilon();
+    const double sigma = disc.getSigma();
+    const size_t type = disc.getType();
+    const bool is_outer = disc.getIsOuter();
 
     spdlog::info("Generating disc");
 
     std::fstream input_file;
     std::string tmp_string;
-    double radius = MoleculesPerRadius * distance;
+    const double radius = MoleculesPerRadius * distance;
 
     
     input_file.open(filename, std::ios::in | std::ios::out);
@@ -90,9 +90,9 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
 
     for (int i = -MoleculesPerRadius; i <= MoleculesPerRadius; ++i) {
         for (int j = -MoleculesPerRadius; j <= MoleculesPerRadius; ++j) {
-            double size_x = i * distance;
-            double size_y = j * distance;
-            double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
+            const double size_x = i * distance;
+            const double size_y = j * distance;
+            const double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
             if (distanceFromCenter <= radius) {
                 numParticles++;
             }
@@ -110,14 +110,14 @@ void ParticleGenerator::generateDisc(const Disc& disc, const char* filename) {
     // Generate particles within the specified radius
     for (int i = -MoleculesPerRadius; i <= MoleculesPerRadius; ++i) {
         for (int j = -MoleculesPerRadius; j <= MoleculesPerRadius; ++j) {
-            double size_x = i * distance;
-            double size_y = j * distance;
-            double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
+            const double size_x = i * distance;
+            const double size_y = j * distance;
+            const double distanceFromCenter = std::sqrt(size_x * size_x + size_y * size_y);
 
             if (distanceFromCenter <= radius) {
-                double particleX = position[0] + size_x;
-                double particleY = position[1] + size_y;
-                double particleZ = position[2];
+                const double particleX = position[0] + size_x;
+                const double particleY = position[1] + size_y;
+                const double particleZ = position[2];
 
                 input_file << particleX << " " << particleY << " " << particleZ << " "
                            << velocity[0] << " " << velocity[1] << " " << velocity[2] << " "

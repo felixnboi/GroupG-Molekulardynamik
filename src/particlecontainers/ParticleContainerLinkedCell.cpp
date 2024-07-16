@@ -41,13 +41,13 @@ const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
 void ParticleContainerLinkedCell::addParticle(Particle* particle){
     particle_count++;
     particles.push_back(particle);
-    auto cords = particle->getX();
+    const auto cords = particle->getX();
     if(cords[0]<0||cords[0]>=size[0]||cords[1]<0||cords[1]>=size[1]||cords[2]<0||cords[2]>=size[2]){
         halo.push_back(particle);
         spdlog::info("Added Particle is not inside of the calculated area\n");
     }
     else{
-        size_t index = (size_t)(particle->getX()[0]/cellSize[0])+((size_t)(particle->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)(particle->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
+        const size_t index = (size_t)(particle->getX()[0]/cellSize[0])+((size_t)(particle->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)(particle->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
         linkedCells[index].push_back(particle);
     }
     lastReseve[0] = particle_count;
@@ -72,7 +72,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
 
 std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
     std::vector<std::pair<Particle*, Particle*>> particlePairs;
-    int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2];
+    const int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2];
     double count = 0;
     particlePairs.reserve(lastReseve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
     for (size_t i = 0; i < vectorLength; i++){
@@ -150,8 +150,8 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
 }
 
 bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2){
-    auto distance = particle1->getX()-particle2->getX();
-    auto distanceSquared = distance*distance;
+    const auto distance = particle1->getX()-particle2->getX();
+    const auto distanceSquared = distance*distance;
     return distanceSquared[0]+distanceSquared[1]+distanceSquared[2] < radiusSquared;
 }
 
@@ -227,10 +227,10 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag,
 std::vector<Particle*> ParticleContainerLinkedCell::getBoundary(){
     std::vector<Particle*> boundary;
     for (size_t i = 0; i < vectorLength; i++){
-        size_t positionX = i%cellCount[0];
-        size_t positionY = i/cellCount[0]%cellCount[1];
-        size_t positionZ = i/cellCount[0]/cellCount[1];
-        if((positionX==0)||(positionY==0)||(positionZ=0)||(positionX==cellCount[0]-1)||(positionY==cellCount[1]-1)||(positionZ==cellCount[2]-1)){
+        const size_t positionX = i%cellCount[0];
+        const size_t positionY = i/cellCount[0]%cellCount[1];
+        const size_t positionZ = i/cellCount[0]/cellCount[1];
+        if((positionX==0)||(positionY==0)||(positionZ==0)||(positionX==cellCount[0]-1)||(positionY==cellCount[1]-1)||(positionZ==cellCount[2]-1)){
             for(auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
                 boundary.push_back(*particle_i);
             }
@@ -242,7 +242,7 @@ std::vector<Particle*> ParticleContainerLinkedCell::getBoundary(){
 void ParticleContainerLinkedCell::makeMembrane(int sizeX, int sizeY){
     for(int x = 0; x < sizeX; x++){
         for(int y = 0; y < sizeY; y++){
-            int position = x+y*sizeX;
+            const int position = x+y*sizeX;
             auto particle = particles[position];
 
             // for every particle we check if it sill has the coresponfing neighbour and if yes we add it

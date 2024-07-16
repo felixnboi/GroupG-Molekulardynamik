@@ -999,9 +999,9 @@ TEST(ProfilingComponentTest, ProfileTest) {
     ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
 
     // Create some particles
-    std::shared_ptr<Particle> p1 = std::make_shared<Particle>((std::array<double, 3>){1.0, 0.0, 0.0}, 
+    Particle* p1 = new Particle((std::array<double, 3>){1.0, 0.0, 0.0}, 
     (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
-    std::shared_ptr<Particle> p2 = std::make_shared<Particle>((std::array<double, 3>){1.9, 0.0, 0.0}, 
+    Particle* p2 = new Particle((std::array<double, 3>){1.9, 0.0, 0.0}, 
     (std::array<double, 3>){0.4, 0.5, 0.6}, 1.5, false, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container

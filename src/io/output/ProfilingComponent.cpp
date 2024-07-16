@@ -11,19 +11,21 @@ void ProfilingComponent::profile(size_t bins, std::array<double,3> domainSize, P
     std::vector<int> densities(bins, 0);
     std::vector<double> velocities(3 * bins, 0.0);
     const double bin_size = domainSize[0] / bins;
-    size_t size = pc.getParticleCount();
+    const size_t size = pc.getParticleCount();
     const std::vector<Particle*>& particles = pc.getParticles();
 
     for (size_t j = 0; j < size; ++j) {
         auto& particle = particles[j];
-        double x0 = 0; // since our domain starts at (0,0,0)
-        for (size_t i = 0; i < bins; ++i, x0 += bin_size) {
-            if (particle->getX()[0] < x0 || particle->getX()[0] >= x0 + bin_size) continue;
-            densities[i]++;
-            velocities[3 * i + 0] += particle->getV()[0];
-            velocities[3 * i + 1] += particle->getV()[1];
-            velocities[3 * i + 2] += particle->getV()[2];
-        }
+
+        const double particle_x = particle->getX()[0];
+        size_t bin_index = static_cast<size_t>(particle_x / bin_size);
+        if (bin_index >= bins) continue;
+
+        densities[bin_index]++;
+        velocities[3 * bin_index + 0] += particle->getV()[0];
+        velocities[3 * bin_index + 1] += particle->getV()[1];
+        velocities[3 * bin_index + 2] += particle->getV()[2];
+
     }
 
     // computing averages
