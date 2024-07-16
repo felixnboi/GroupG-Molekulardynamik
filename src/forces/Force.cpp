@@ -58,7 +58,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
         }
         if(strategy == 1 || strategy == 2 || strategy == 3){
           #ifdef _OPENMP
-          #pragma omp parallel for schedule(static , 4)
+          #pragma omp parallel for schedule(static , 8)
           #endif
           for(const auto& pair : pairs){
             calculateFPeriodicHelper(pair, i, j, k, LCContainer);
@@ -119,7 +119,7 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
   }
   if(strategy == 1 || strategy == 2 || strategy == 3){
     #ifdef _OPENMP
-    #pragma omp parallel for schedule(static, 4)
+    #pragma omp parallel for schedule(static, 8)
     #endif
     for(const auto& particle : boundery){
       calculateFReflectingHelper(particle, LCContainer);
@@ -155,7 +155,7 @@ void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> 
   }
   if(strategy == 1){
     #ifdef _OPENMP
-    #pragma omp parallel for schedule(static, 4)
+    #pragma omp parallel for schedule(static, 8)
     #endif
     for (const auto& pair : pairs){
       calculateFLennardJonesHelper(pair);

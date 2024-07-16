@@ -1294,28 +1294,28 @@ num_threads (const num_threads_type& x)
   this->num_threads_.set (x);
 }
 
-const openmp::parallelizationstartegy_type& openmp::
-parallelizationstartegy () const
+const openmp::parallelizationstrategy_type& openmp::
+parallelizationstrategy () const
 {
-  return this->parallelizationstartegy_.get ();
+  return this->parallelizationstrategy_.get ();
 }
 
-openmp::parallelizationstartegy_type& openmp::
-parallelizationstartegy ()
+openmp::parallelizationstrategy_type& openmp::
+parallelizationstrategy ()
 {
-  return this->parallelizationstartegy_.get ();
-}
-
-void openmp::
-parallelizationstartegy (const parallelizationstartegy_type& x)
-{
-  this->parallelizationstartegy_.set (x);
+  return this->parallelizationstrategy_.get ();
 }
 
 void openmp::
-parallelizationstartegy (::std::unique_ptr< parallelizationstartegy_type > x)
+parallelizationstrategy (const parallelizationstrategy_type& x)
 {
-  this->parallelizationstartegy_.set (std::move (x));
+  this->parallelizationstrategy_.set (x);
+}
+
+void openmp::
+parallelizationstrategy (::std::unique_ptr< parallelizationstrategy_type > x)
+{
+  this->parallelizationstrategy_.set (std::move (x));
 }
 
 
@@ -3836,10 +3836,10 @@ checkpoint::
 
 openmp::
 openmp (const num_threads_type& num_threads,
-        const parallelizationstartegy_type& parallelizationstartegy)
+        const parallelizationstrategy_type& parallelizationstrategy)
 : ::xml_schema::type (),
   num_threads_ (num_threads, this),
-  parallelizationstartegy_ (parallelizationstartegy, this)
+  parallelizationstrategy_ (parallelizationstrategy, this)
 {
 }
 
@@ -3849,7 +3849,7 @@ openmp (const openmp& x,
         ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   num_threads_ (x.num_threads_, f, this),
-  parallelizationstartegy_ (x.parallelizationstartegy_, f, this)
+  parallelizationstrategy_ (x.parallelizationstrategy_, f, this)
 {
 }
 
@@ -3859,7 +3859,7 @@ openmp (const ::xercesc::DOMElement& e,
         ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   num_threads_ (this),
-  parallelizationstartegy_ (this)
+  parallelizationstrategy_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3889,16 +3889,16 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // parallelizationstartegy
+    // parallelizationstrategy
     //
-    if (n.name () == "parallelizationstartegy" && n.namespace_ ().empty ())
+    if (n.name () == "parallelizationstrategy" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< parallelizationstartegy_type > r (
-        parallelizationstartegy_traits::create (i, f, this));
+      ::std::unique_ptr< parallelizationstrategy_type > r (
+        parallelizationstrategy_traits::create (i, f, this));
 
-      if (!parallelizationstartegy_.present ())
+      if (!parallelizationstrategy_.present ())
       {
-        this->parallelizationstartegy_.set (::std::move (r));
+        this->parallelizationstrategy_.set (::std::move (r));
         continue;
       }
     }
@@ -3913,10 +3913,10 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!parallelizationstartegy_.present ())
+  if (!parallelizationstrategy_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "parallelizationstartegy",
+      "parallelizationstrategy",
       "");
   }
 }
@@ -3935,7 +3935,7 @@ operator= (const openmp& x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
     this->num_threads_ = x.num_threads_;
-    this->parallelizationstartegy_ = x.parallelizationstartegy_;
+    this->parallelizationstrategy_ = x.parallelizationstrategy_;
   }
 
   return *this;

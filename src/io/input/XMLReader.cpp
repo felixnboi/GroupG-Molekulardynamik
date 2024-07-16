@@ -210,7 +210,7 @@ void XMLReader::readOpenMP(const char* filename, OpenMPData& openmpdata){
         if(sim->openmp().present()){
             openmpdata.setOpenMPFlag(true);
             openmpdata.setNumThreads(sim->openmp().get().num_threads());
-            openmpdata.setStrategy(sim->openmp().get().parallelizationstartegy());
+            openmpdata.setStrategy(sim->openmp().get().parallelizationstrategy());
         }
 
     }catch(const xml_schema::exception& e){

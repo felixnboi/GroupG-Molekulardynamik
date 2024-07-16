@@ -122,7 +122,7 @@ public:
     size_t i, std::array<bool, 3> pFlag);
 
     inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i,  
-    std::list<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
+    std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
 
     /**
      * @brief Gets the particles located at the boundary of the container.
@@ -177,7 +177,7 @@ public:
 
 private:
     size_t particle_count; ///< The number of particles in this container.
-    std::vector<std::list<Particle*>> linkedCells; ///< Vector of linked cells containing particles.
+    std::vector<std::vector<Particle*>> linkedCells; ///< Vector of linked cells containing particles.
     std::array<double, 3> size; ///< Size of the container in three dimensions.
     std::array<double, 3> cellSize; ///< Size of each cell in three dimensions.
     std::array<size_t, 3> cellCount; ///< Number of cells in each dimension.

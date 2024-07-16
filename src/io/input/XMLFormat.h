@@ -4803,9 +4803,9 @@ class openmp: public ::xml_schema::type
   //@}
 
   /**
-   * @name parallelizationstartegy
+   * @name parallelizationstrategy
    *
-   * @brief Accessor and modifier functions for the %parallelizationstartegy
+   * @brief Accessor and modifier functions for the %parallelizationstrategy
    * required element.
    */
   //@{
@@ -4813,28 +4813,28 @@ class openmp: public ::xml_schema::type
   /**
    * @brief Element type.
    */
-  typedef ::parallelizationstrategies parallelizationstartegy_type;
+  typedef ::parallelizationstrategies parallelizationstrategy_type;
 
   /**
    * @brief Element traits type.
    */
-  typedef ::xsd::cxx::tree::traits< parallelizationstartegy_type, char > parallelizationstartegy_traits;
+  typedef ::xsd::cxx::tree::traits< parallelizationstrategy_type, char > parallelizationstrategy_traits;
 
   /**
    * @brief Return a read-only (constant) reference to the element.
    *
    * @return A constant reference to the element.
    */
-  const parallelizationstartegy_type&
-  parallelizationstartegy () const;
+  const parallelizationstrategy_type&
+  parallelizationstrategy () const;
 
   /**
    * @brief Return a read-write reference to the element.
    *
    * @return A reference to the element.
    */
-  parallelizationstartegy_type&
-  parallelizationstartegy ();
+  parallelizationstrategy_type&
+  parallelizationstrategy ();
 
   /**
    * @brief Set the element value.
@@ -4845,7 +4845,7 @@ class openmp: public ::xml_schema::type
    * the new value of the element.
    */
   void
-  parallelizationstartegy (const parallelizationstartegy_type& x);
+  parallelizationstrategy (const parallelizationstrategy_type& x);
 
   /**
    * @brief Set the element value without copying.
@@ -4856,7 +4856,7 @@ class openmp: public ::xml_schema::type
    * instead of making a copy.
    */
   void
-  parallelizationstartegy (::std::unique_ptr< parallelizationstartegy_type > p);
+  parallelizationstrategy (::std::unique_ptr< parallelizationstrategy_type > p);
 
   //@}
 
@@ -4870,7 +4870,7 @@ class openmp: public ::xml_schema::type
    * initializers for required elements and attributes.
    */
   openmp (const num_threads_type&,
-          const parallelizationstartegy_type&);
+          const parallelizationstrategy_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -4943,7 +4943,7 @@ class openmp: public ::xml_schema::type
 
   protected:
   ::xsd::cxx::tree::one< num_threads_type > num_threads_;
-  ::xsd::cxx::tree::one< parallelizationstartegy_type > parallelizationstartegy_;
+  ::xsd::cxx::tree::one< parallelizationstrategy_type > parallelizationstrategy_;
 
   //@endcond
 };

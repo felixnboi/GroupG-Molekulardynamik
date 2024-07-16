@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include <stddef.h>
 
 /**
  * @class MembraneData

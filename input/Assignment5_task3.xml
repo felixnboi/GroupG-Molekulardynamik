@@ -53,7 +53,7 @@
 
     <openmp>
         <num_threads>4</num_threads>
-        <parallelizationstartegy>0</parallelizationstartegy>
+        <parallelizationstrategy>second</parallelizationstrategy>
     </openmp>
 
     <cuboid>
