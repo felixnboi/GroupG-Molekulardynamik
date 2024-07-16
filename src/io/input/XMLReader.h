@@ -85,7 +85,7 @@ public:
      * @brief Reads membrane data from an XML file and saves it in a openmpdata object.
      * 
      * @param filename The name of the XML file to read from.
-     * @param membranedata A reference to the openmpdata object.
+     * @param openmpdata A reference to the openmpdata object.
      */
     void readOpenMP(const char* filename, OpenMPData& openmpdata);
 };
