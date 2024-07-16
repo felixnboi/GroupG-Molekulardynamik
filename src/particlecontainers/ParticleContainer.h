@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <omp.h>
 
 using ParticleIterator = std::vector<Particle*>::iterator; /// Iterator type for iterating over a vector of particles.
 /**

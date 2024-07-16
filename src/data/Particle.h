@@ -11,6 +11,7 @@
 #include "spdlog/spdlog.h"
 
 #include <array>
+#include <stddef.h>
 #include <string>
 #include <iostream>
 #include <omp.h>
@@ -234,8 +235,14 @@ public:
    * @return The type of the particle.
    */
   const int getType() const;
-
-  void applyF(const std::array<double, 3>& force);
+  
+  /**
+   * @brief This function adds the specified force on top.
+   * 
+   * @param force The force vector to be added on top.
+   * @param strategy Value used for the parallelization strategy.
+   */
+  void applyF(const std::array<double, 3>& force, size_t strategy);
 
   /**
    * @brief Overloaded equality operator.

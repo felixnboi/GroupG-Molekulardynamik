@@ -2459,11 +2459,11 @@ _xsd_parallelizationstrategies_convert () const
   ::xsd::cxx::tree::enum_comparator< char > c (_xsd_parallelizationstrategies_literals_);
   const value* i (::std::lower_bound (
                     _xsd_parallelizationstrategies_indexes_,
-                    _xsd_parallelizationstrategies_indexes_ + 2,
+                    _xsd_parallelizationstrategies_indexes_ + 3,
                     *this,
                     c));
 
-  if (i == _xsd_parallelizationstrategies_indexes_ + 2 || _xsd_parallelizationstrategies_literals_[*i] != *this)
+  if (i == _xsd_parallelizationstrategies_indexes_ + 3 || _xsd_parallelizationstrategies_literals_[*i] != *this)
   {
     throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
   }
@@ -2472,17 +2472,19 @@ _xsd_parallelizationstrategies_convert () const
 }
 
 const char* const parallelizationstrategies::
-_xsd_parallelizationstrategies_literals_[2] =
+_xsd_parallelizationstrategies_literals_[3] =
 {
   "first",
-  "second"
+  "second",
+  "third"
 };
 
 const parallelizationstrategies::value parallelizationstrategies::
-_xsd_parallelizationstrategies_indexes_[2] =
+_xsd_parallelizationstrategies_indexes_[3] =
 {
   ::parallelizationstrategies::first,
-  ::parallelizationstrategies::second
+  ::parallelizationstrategies::second,
+  ::parallelizationstrategies::third
 };
 
 // simulation

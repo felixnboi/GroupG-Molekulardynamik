@@ -55,6 +55,7 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="first"/>
             <xs:enumeration value="second"/>
+            <xs:enumeration value="third"/>
         </xs:restriction>
     </xs:simpleType>
 

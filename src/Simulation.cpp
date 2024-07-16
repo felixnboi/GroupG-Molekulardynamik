@@ -160,14 +160,14 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 if (*optarg == 'g') {
                     grav_flag = true;
                     force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, 
-                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
+                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0, 0);
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } 
                 if (*optarg == 'l') {
                     lenJones_flag = true;
                     force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, 
-                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
+                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0, 0);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -208,6 +208,9 @@ bool Simulation::initialize(int argc, char* argv[]) {
             }
             if(openmp_data.getStrategy() == std::string("second")){
                 strategy = 2;
+            }
+            if(openmp_data.getStrategy() == std::string("third")){
+                strategy = 3;
             }
         }
 
@@ -273,7 +276,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
         if(simdata.getAlgorithm() == "linkedcell"){
             particles = std::make_unique<ParticleContainerLinkedCell>(simdata.getDomain()[0], simdata.getDomain()[1], 
-            simdata.getDomain()[2], simdata.getCutoffRadius());
+            simdata.getDomain()[2], simdata.getCutoffRadius(), strategy);
             linkedcell_flag = true;
         }
 
@@ -289,7 +292,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
             lenJones_flag = true;
         }
         force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, linkedcell_flag, 
-        simdata.getGravConstant(), membrane_data.getMembraneFlag(), membrane_data.getK(), membrane_data.getR0());
+        simdata.getGravConstant(), membrane_data.getMembraneFlag(), membrane_data.getK(), membrane_data.getR0(), strategy);
 
     }else{
 

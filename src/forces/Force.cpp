@@ -5,7 +5,7 @@
     
 
 Force::Force(std::array<bool, 6> reflectLenJonesFlag, std::array<bool, 3> periodicFlag, bool lenJonesFlag, bool gravFlag, bool linkedcells, 
-std::array<double, 3> gravConstant, bool membraneFlag, double k, double r0) 
+std::array<double, 3> gravConstant, bool membraneFlag, double k, double r0, size_t strategy) 
   : reflectLenJonesFlag(reflectLenJonesFlag),
     periodicFlag(periodicFlag),
     lenJonesFlag(lenJonesFlag),
@@ -14,7 +14,9 @@ std::array<double, 3> gravConstant, bool membraneFlag, double k, double r0)
     gravConstant(gravConstant),
     membraneFlag(membraneFlag),
     k(k),
-    r0(r0) {}
+    r0(r0),
+    strategy(strategy),
+    twoRoot6(pow(2, 1/6)) {}
 
 Force::~Force() {}
 
@@ -49,45 +51,17 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
         // We also filter out the case where we view none of them as peridic, since we handle that case else where.
         // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
         auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
-        double cutoffRadiusSquared = LCContainer.getRadiusSquared();
-        #pragma omp parallel for schedule(static , 4)
-        for(const auto& pair : pairs){
-          auto particle_i = pair.first;
-          auto particle_j = pair.second;
-
-          if (particle_i->getIsOuter() && particle_j->getIsOuter()) continue;
-
-          double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
-          double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
-          
-          std::vector<std::array<double, 3>> direction = {particle_i->getX()-particle_j->getX()}; // The dircetion/distance from one particle to the other. 
-          // There can be multible possible directions because of the edge case 4 lines below this.
-          int directions = 1; // The amount of arrays in the vector above, normally always one exept for the egde case 3 lines below this.
-          for(auto d = 0; d < 3; d++){
-            if((d==0&&i==1)||(d==1&&j==1)||(d==2&&k==1)){ // Is true if we view the boundery of the dimesion d as periodic.
-              if(LCContainer.getCellCount()[d]==1){ // This is only for the edge case, where in one direction the domain is only one cell wide and the periodic boundery is set.
-                // A two particle now might interact mutlible times, through the boundery in both directions and that per dimesion. (This case should porbably be avoided anyway.)
-                for (int dir = 0; dir < directions; dir++) {
-                  direction.push_back(direction[dir]); // Doubles the amount of dircetions because for each the particles now can interact twice.
-                  direction[dir][d] -= LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through one boundery.
-                  direction[dir+directions][d] += LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through the other boundery.
-                  // This does not cancles out in the force calculation becasue there still can be sidewards movement.
-                }
-                directions *=2; // Upadetes the amount of dircetions.
-              }
-              else{
-                for(int dir = 0; dir < directions; dir++){
-                  // The dircetion is updated to not be the difference of the actual position of the particles, but the way it would be through the periodic boundery.
-                  if(direction[dir][d]<0) direction[dir][d] += LCContainer.getSize()[d];
-                  else direction[dir][d] -= LCContainer.getSize()[d];
-                }
-              }
-            }
+        if(strategy == 0){
+          for(const auto& pair : pairs){
+          calculateFPeriodicHelper(pair, i, j, k, LCContainer);
           }
-          for(int dir = 0; dir < directions; dir++){
-            auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, cutoffRadiusSquared);
-            particle_i->applyF(force);
-            particle_j->applyF(-1*force);
+        }
+        if(strategy == 1 || strategy == 2 || strategy == 3){
+          #ifdef _OPENMP
+          #pragma omp parallel for schedule(static , 4)
+          #endif
+          for(const auto& pair : pairs){
+            calculateFPeriodicHelper(pair, i, j, k, LCContainer);
           }
         }
       }
@@ -95,49 +69,118 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
   }
 }
 
-void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
-    double twoRoot6 = pow(2, 1/6);
-    std::vector<Particle*> boundery = LCContainer.getBoundaries(reflectLenJonesFlag);
+inline void Force::calculateFPeriodicHelper(const std::pair<Particle *, Particle *> &pair, int i, int j, int k, ParticleContainerLinkedCell &LCContainer){
+  auto particle_i = pair.first;
+  auto particle_j = pair.second;
 
-    #pragma omp parallel for schedule(static, 4)
-    for(const auto& particle : boundery){
-      std::array<double, 3> force = {0,0,0};
-      auto sigma  = particle->getSigma();
-      for(int i = 0; i < 3; i++){
-        auto xi = particle->getX()[i];
-        if(reflectLenJonesFlag[2*i]&&xi< LCContainer.getCellSize()[i]&&xi< sigma*twoRoot6){
-          std::array<double, 3> direction = {0,0,0};
-          direction[i] = 2*xi;
-          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
+  if (particle_i->getIsOuter() && particle_j->getIsOuter()) return;
+
+  double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
+  double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
+  
+  std::vector<std::array<double, 3>> direction = {particle_i->getX()-particle_j->getX()}; // The dircetion/distance from one particle to the other. 
+  // There can be multible possible directions because of the edge case 4 lines below this.
+  int directions = 1; // The amount of arrays in the vector above, normally always one exept for the egde case 3 lines below this.
+  for(auto d = 0; d < 3; d++){
+    if((d==0&&i==1)||(d==1&&j==1)||(d==2&&k==1)){ // Is true if we view the boundery of the dimesion d as periodic.
+      if(LCContainer.getCellCount()[d]==1){ // This is only for the edge case, where in one direction the domain is only one cell wide and the periodic boundery is set.
+        // A two particle now might interact mutlible times, through the boundery in both directions and that per dimesion. (This case should porbably be avoided anyway.)
+        for (int dir = 0; dir < directions; dir++) {
+          direction.push_back(direction[dir]); // Doubles the amount of dircetions because for each the particles now can interact twice.
+          direction[dir][d] -= LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through one boundery.
+          direction[dir+directions][d] += LCContainer.getSize()[d]; // Sets the dircetion/distance form one patritcle to the other through the other boundery.
+          // This does not cancles out in the force calculation becasue there still can be sidewards movement.
         }
-        if(reflectLenJonesFlag[2*i+1]&&xi> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&xi> LCContainer.getSize()[i]-sigma*twoRoot6){
-          std::array<double, 3> direction = {0,0,0};
-          direction[i] = 2*(xi-LCContainer.getSize()[i]);
-          force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
+        directions *=2; // Upadetes the amount of dircetions.
+      }
+      else{
+        for(int dir = 0; dir < directions; dir++){
+          // The dircetion is updated to not be the difference of the actual position of the particles, but the way it would be through the periodic boundery.
+          if(direction[dir][d]<0) direction[dir][d] += LCContainer.getSize()[d];
+          else direction[dir][d] -= LCContainer.getSize()[d];
         }
       }
-    particle->applyF(force);
+    }
+  }
+  for(int dir = 0; dir < directions; dir++){
+    auto force = calculateLennardJonesForce(direction[dir], epsilon, sigma*sigma, LCContainer.getRadiusSquared());
+    particle_i->applyF(force, strategy);
+    particle_j->applyF(-1*force, strategy);
   }
 }
 
-void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs){
-  double twoRoot6 = pow(2, 1/6);
+void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
+  std::vector<Particle*> boundery = LCContainer.getBoundaries(reflectLenJonesFlag);
 
-  // iterate over all pairs of particles to calculate forces
-  for (const auto& pair : pairs){
-    auto particle_i = pair.first;
-    auto particle_j = pair.second;
-    double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
-    double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
-    double cutOffRadius = 0;
-
-    if(membraneFlag) cutOffRadius = twoRoot6 * sigma;
-
-    auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius*cutOffRadius);
-     
-    particle_i->applyF(force);
-    particle_j->applyF(-1*force);
+  if(strategy == 0){
+    for(const auto& particle : boundery){
+    calculateFReflectingHelper(particle, LCContainer);
+    }
   }
+  if(strategy == 1 || strategy == 2 || strategy == 3){
+    #ifdef _OPENMP
+    #pragma omp parallel for schedule(static, 4)
+    #endif
+    for(const auto& particle : boundery){
+      calculateFReflectingHelper(particle, LCContainer);
+    }
+  }
+}
+
+inline void Force::calculateFReflectingHelper(Particle* particle, ParticleContainerLinkedCell &LCContainer){
+  std::array<double, 3> force = {0,0,0};
+  auto sigma  = particle->getSigma();
+  for(int i = 0; i < 3; i++){
+    auto xi = particle->getX()[i];
+    if(reflectLenJonesFlag[2*i]&&xi< LCContainer.getCellSize()[i]&&xi< sigma*twoRoot6){
+      std::array<double, 3> direction = {0,0,0};
+      direction[i] = 2*xi;
+      force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
+    }
+    if(reflectLenJonesFlag[2*i+1]&&xi> LCContainer.getSize()[i]-LCContainer.getCellSize()[i]&&xi> LCContainer.getSize()[i]-sigma*twoRoot6){
+      std::array<double, 3> direction = {0,0,0};
+      direction[i] = 2*(xi-LCContainer.getSize()[i]);
+      force[i] = calculateLennardJonesForce(direction, particle->getEpsilon(), sigma,0)[i];
+    }
+  }
+  particle->applyF(force, strategy);
+}
+
+void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs){
+  // iterate over all pairs of particles to calculate forces
+  if(strategy == 0){
+    for (const auto& pair : pairs){
+      calculateFLennardJonesHelper(pair);
+    }
+  }
+  if(strategy == 1){
+    #ifdef _OPENMP
+    #pragma omp parallel for schedule(static, 4)
+    #endif
+    for (const auto& pair : pairs){
+      calculateFLennardJonesHelper(pair);
+    }
+  }
+  if(strategy == 2 || strategy == 3){
+    for (const auto& pair : pairs){
+      calculateFLennardJonesHelper(pair);
+    }
+  }
+}
+
+inline void Force::calculateFLennardJonesHelper(const std::pair<Particle *, Particle *> &pair){
+  auto particle_i = pair.first;
+  auto particle_j = pair.second;
+  double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
+  double sigma = (particle_i->getSigma()+particle_j->getSigma())/2;
+  double cutOffRadius = 0;
+
+  if(membraneFlag) cutOffRadius = twoRoot6 * sigma;
+
+  auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius*cutOffRadius);
+    
+  particle_i->applyF(force, strategy);
+  particle_j->applyF(-1*force, strategy);
 }
 
 void Force::calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs){

@@ -113,7 +113,7 @@ TEST(ParticleContainerOld, GetParticlePairs) {
 // Test case for addParticle and getParticles methods
 TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius, 0);
     
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -145,7 +145,7 @@ TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
 // Test case for iterators
 TEST(ParticleContainerLinkedCell, IteratorBeginEnd) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius, 0);
     
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -171,7 +171,7 @@ TEST(ParticleContainerLinkedCell, IteratorBeginEnd) {
 // Test case for getParticlePairs
 TEST(ParticleContainerLinkedCell, GetParticlePairs) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -215,7 +215,7 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
 // Test case for getSize method
 TEST(ParticleContainerLinkedCell, GetSize) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
     
     // Get the size of the container
     std::array<double, 3> size = pc.getSize();
@@ -229,7 +229,7 @@ TEST(ParticleContainerLinkedCell, GetSize) {
 // Test case for getCellSize method
 TEST(ParticleContainerLinkedCell, GetCellSize) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
     
     // Get the cell size of the container
     std::array<double, 3> cellSize = pc.getCellSize();
@@ -243,7 +243,7 @@ TEST(ParticleContainerLinkedCell, GetCellSize) {
 //Test case for updateLoctions method
 TEST(ParticleContainerLinkedCell, UpdateLocations) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create a particle that will move outside the boundary
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -270,7 +270,7 @@ TEST(ParticleContainerLinkedCell, UpdateLocations) {
 // Test case for getBoundary method
 TEST(ParticleContainerLinkedCell, GetBoundary) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create particles at the boundaries
     Particle *p1 = new Particle((std::array<double, 3>){0.0, 0.0, 0.0}, 
@@ -513,7 +513,7 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     particles->addParticle(p2);
     particles->addParticle(p3);
 
-    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, {0, 0, 0}, false, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, {0, 0, 0}, false, 0, 0, 0};
     LJForce.calculateF(*particles);
 
     const auto& updatedParticles = particles->getParticles();
@@ -577,7 +577,7 @@ TEST(FileReader, readFile){
 }
 
 TEST(Lennard_Jones_Force, LennardJonesReflection){
-    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5, 0);
         
     Particle* p1 = new Particle((std::array<double, 3>){9.75,7.0,5.0}, 
     (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
@@ -585,14 +585,14 @@ TEST(Lennard_Jones_Force, LennardJonesReflection){
     (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     particles.addParticle(p2);
-    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
+    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, true, {0, 0, 0}, false, 0, 0, 0};
     force.calculateF(particles);
     EXPECT_EQ(p1->getF()[0], -1950720); //test against manually calculated value
     EXPECT_EQ(p2->getF()[0], 0);
 }
 
 TEST(ParticleContainerLinkedCell, MirrorBoundary){
-    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5, 0);
         
     Particle* p1 = new Particle((std::array<double, 3>){5.0,5.0,5.0}, 
     (std::array<double, 3>){0,0,0},1, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
@@ -608,7 +608,7 @@ TEST(ParticleContainerLinkedCell, MirrorBoundary){
 }
 
 TEST(ParticleContainerLinkedCell, OutflowBoundary){
-    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5, 0);
         
     Particle* p1 = new Particle((std::array<double, 3>){5.0,5.0,5.0}, 
     (std::array<double, 3>){0,0,0},1, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
@@ -630,7 +630,7 @@ const size_t DIMENSIONS = 3;
 
 // Helper function to create a particle container with some particles
 std::unique_ptr<ParticleContainer> createParticleContainer(double sizeX, double sizeY, double sizeZ, double radius) {
-    auto pc = std::make_unique<ParticleContainerLinkedCell>(sizeX, sizeY, sizeZ, radius);
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -698,8 +698,8 @@ TEST(Thermostat, HoldTemperature) {
 
 // Test case for initializing system temperature
 TEST(Thermostat, InitSystemTemperature) {
-    std::unique_ptr<ParticleContainer> pc1 = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
-    std::unique_ptr<ParticleContainer> pc2= std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    std::unique_ptr<ParticleContainer> pc1 = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0, 0);
+    std::unique_ptr<ParticleContainer> pc2= std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -741,7 +741,7 @@ TEST(Thermostat, InitSystemTemperature) {
 
 // Test case for scaling fluids with beta
 TEST(Thermostat, ScaleWithBetaFluid) {
-    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0, 0);
     
     // Adding some particles with non-zero velocities
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -784,11 +784,11 @@ TEST(Thermostat, ScaleWithBetaFluid) {
 
 //Test for the gravity on the y axis
 TEST(Lennard_Jones_Force, gravity){
-    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1);
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1, 0);
     Particle *p = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
     (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     pc->addParticle(p);
-    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, {0, 10, 0}, false, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, {0, 10, 0}, false, 0, 0, 0};
     LJForce.calculateF(*pc);
     EXPECT_EQ(p->getF()[0], 0);
     EXPECT_EQ(p->getF()[1], 10);
@@ -797,7 +797,7 @@ TEST(Lennard_Jones_Force, gravity){
 
 //Tests if particles correctly attract each other through a periodic boundery
 TEST(Lennard_Jones_Force, peridicBoundary){
-    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2);
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2, 0);
     Particle *p1 = new Particle((std::array<double, 3>){0.5, 1, 1}, 
     (std::array<double, 3>){0, 0, 0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
     Particle *p2 = new Particle((std::array<double, 3>){9.5, 1, 1}, 
@@ -805,7 +805,7 @@ TEST(Lennard_Jones_Force, peridicBoundary){
 
     pc->addParticle(p1);
     pc->addParticle(p2);
-    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, true, {0, 0, 0}, false, 0, 0, 0};
     LJForce.calculateF(*pc);
     assert(areDoublesEqual(p1->getF()[0], 120));
     EXPECT_EQ(p1->getF()[1], 0);
@@ -818,7 +818,7 @@ TEST(Lennard_Jones_Force, peridicBoundary){
 //Tests that perticles that leave a peridic boundery are placed at the correct point on the other side of the domain
 TEST(ParticleContainerLinkedCell, peridicBoundary){
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 2.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create a particle that will move outside the boundary
     Particle *p1 = new Particle((std::array<double, 3>){5, 1, 1}, 
@@ -841,7 +841,7 @@ TEST(ParticleContainerLinkedCell, peridicBoundary){
 }
 
 TEST(CheckpointWriter, writeCheckpoint){
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
@@ -899,7 +899,7 @@ TEST(CheckpointWriter, writeCheckpoint){
 TEST(ParticleContainerLinkedCell, makeMembrane){
     //We generate a 2 dimesional cuboid of size 5 x 5
     inputFileManager::resetFile("../input/generated-input.txt");
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
     ParticleGenerator::generateCuboid(Cuboid({0,0,0},{2,2,2},{5,5,1},1,2,0.1, 5, 1, 0, 0, false), "../input/generated-input.txt");
     FileReader fileReader;
     fileReader.readFile(*pc, "../input/generated-input.txt", {0,0,0});
@@ -929,7 +929,7 @@ TEST(ParticleContainerLinkedCell, makeMembrane){
 TEST(ParticleContainerLinkedCell, setForce){
     //We generate a 2 dimesional cuboid of size 5 x 5
     inputFileManager::resetFile("../input/generated-input.txt");
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
     ParticleGenerator::generateCuboid(Cuboid({0,0,0},{2,2,2},{5,5,1},1,2,0.1, 5, 1, 0, 0, false), "../input/generated-input.txt");
     FileReader fileReader;
     fileReader.readFile(*pc, "../input/generated-input.txt", {0,0,0});
@@ -948,7 +948,7 @@ TEST(ParticleContainerLinkedCell, setForce){
 }
 
 TEST(Force, calculateFHarmonic){
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
     std::array <bool, 6> tmp1 = {false,false,false,false,false,false};
     std::array <bool, 3> tmp2 = {false,false,false};
 
@@ -965,7 +965,7 @@ TEST(Force, calculateFHarmonic){
     //We make these particles into a membrane so that the harmonic force can be calculated
     pc->makeMembrane(2,2);
 
-    Force force (tmp1, tmp2, false, false, true, {0,0,0}, true, 2, 1);
+    Force force (tmp1, tmp2, false, false, true, {0,0,0}, true, 2, 1, 0);
     force.calculateF(*pc);
     auto particles = pc->getParticles();
 

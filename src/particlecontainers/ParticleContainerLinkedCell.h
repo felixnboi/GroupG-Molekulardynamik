@@ -15,8 +15,9 @@ public:
      * @param sizeY The size of the container in the Y dimension.
      * @param sizeZ The size of the container in the Z dimension.
      * @param radius Cut-off radius.
+     * @param startegy The value deciding which parallelization strategy is used.
      */
-    ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius);
+    ParticleContainerLinkedCell(double sizeX, double sizeY, double sizeZ, double radius, size_t startegy);
 
     /**
      * @brief Destructor for ParticleContainerLinkedCell.
@@ -117,6 +118,12 @@ public:
     */
     std::vector<std::pair<Particle*, Particle*>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 
+    inline size_t getParticlePairsPeriodicHelper1(std::vector<std::pair<Particle*, Particle*>>& particlePairs, 
+    size_t i, std::array<bool, 3> pFlag);
+
+    inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i,  
+    std::list<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
+
     /**
      * @brief Gets the particles located at the boundary of the container.
      * 
@@ -177,5 +184,6 @@ private:
     double radiusSquared; ///< Cut-off radius.
     std::vector<Particle*> halo; ///< Vector containing particles outside the calculated area.
     size_t vectorLength; ///< Total number of cells in the container.
-    std::array<int, 8> lastReseve; /// < The estimate the vector size in getParticlePairs peridic, the amount, that was reserved last time.
+    std::array<size_t, 8> lastReserve; /// < The estimate the vector size in getParticlePairs peridic, the amount, that was reserved last time.
+    size_t strategy; ///< Value used for choosing the parallelization strategy.
 };

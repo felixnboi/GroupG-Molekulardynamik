@@ -1675,7 +1675,8 @@ class parallelizationstrategies: public ::xml_schema::string
   enum value
   {
     first,
-    second
+    second,
+    third
   };
 
   /**
@@ -1800,8 +1801,8 @@ class parallelizationstrategies: public ::xml_schema::string
   _xsd_parallelizationstrategies_convert () const;
 
   public:
-  static const char* const _xsd_parallelizationstrategies_literals_[2];
-  static const value _xsd_parallelizationstrategies_indexes_[2];
+  static const char* const _xsd_parallelizationstrategies_literals_[3];
+  static const value _xsd_parallelizationstrategies_indexes_[3];
 
   //@endcond
 };
