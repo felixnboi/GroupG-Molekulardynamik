@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <array>
+#include <omp.h>
 
 #include "io/input/FileReader.h"
 #include "io/input/XMLReader.h"

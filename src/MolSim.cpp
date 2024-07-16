@@ -5,6 +5,7 @@
  */
 #include <iostream>
 #include <chrono>
+#include <omp.h>
 
 #include "Simulation.h"
 
@@ -25,6 +26,8 @@
  * @return The exit status of the program.
  */
 int main(int argc, char *argsv[]) {
+
+    omp_set_num_threads(4);
 
     Simulation simulation;
     if (!simulation.initialize(argc, argsv)) {

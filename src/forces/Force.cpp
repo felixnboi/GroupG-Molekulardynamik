@@ -50,7 +50,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
           // Now the force is calculated for all particle pairs, which are connected through ALL the bouderies we view as being peridic.
           auto pairs = LCContainer.getParticlePairsPeriodic({i==1,j==1,k==1});
           double cutoffRadiusSquared = LCContainer.getRadiusSquared();
-          #pragma omp parallel for schedule(static)
+          #pragma omp parallel for schedule(static , 100)
           for(const auto& pair : pairs){
             auto particle_i = pair.first;
             auto particle_j = pair.second;
@@ -97,8 +97,9 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
 
 void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
     double twoRoot6 = pow(2, 1/6);
-    std::vector<Particle*> boundery = LCContainer.getBoundary();
+    std::vector<Particle*> boundery = LCContainer.getBoundaries(reflectLenJonesFlag);
 
+    #pragma omp parallel for schedule(static, 4)
     for(const auto& particle : boundery){
       std::array<double, 3> force = {0,0,0};
       auto sigma  = particle->getSigma();
@@ -123,6 +124,7 @@ void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> 
   double twoRoot6 = pow(2, 1/6);
 
   // iterate over all pairs of particles to calculate forces
+
   for (const auto& pair : pairs){
     auto particle_i = pair.first;
     auto particle_j = pair.second;
@@ -134,8 +136,8 @@ void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> 
 
     auto force = calculateLennardJonesForce(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius*cutOffRadius);
      
-    particle_i->setF(particle_i->getF()+force);
-    particle_j->setF(particle_j->getF()-force);
+    particle_i->applyF(force);
+    particle_j->applyF(-1*force);
   }
 }
 

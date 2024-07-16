@@ -68,6 +68,7 @@ private:
   double epsilon; ///< The epsilon value for the Lennard-Jones potential.
   double rootEpsilon; ///< The root of epsilon.
   std::array<double, 3> domainStart; ///< The domain start position of the particle.
+  omp_lock_t lock; ///< OpenMP lock.
 
 
 public:

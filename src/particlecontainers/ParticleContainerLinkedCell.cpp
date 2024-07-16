@@ -76,7 +76,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2];
     double count = 0;
     particlePairs.reserve(lastReseve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
-    #pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel for schedule(static, 4)
     for (size_t i = 0; i < vectorLength; i++){
         std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
         size_t nbrCount = 0; // cout of how many elements are in the nbrs array (how many neighbour cells this one has, while ignoring half of them)
@@ -85,7 +85,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
         // in a 3 dimesional array, the first is for negative x the second for positive, 3 and 4 are the same for y and 5 is for positive z (no negative z since we only look at half the cells)
         
         // if the pFlag (peridic flag) for a dimesion is set, the cell count is added or substracted to the neighbour indices, since we are only interseted in cells that are conected through
-        // these bounderies and invalid indices are filtered out later
+        // these boundaries and invalid indices are filtered out later
         if(pFlag[0]){
             nbrIndices[0] += cellCount[0];
             nbrIndices[1] -= cellCount[0];
@@ -266,4 +266,21 @@ void ParticleContainerLinkedCell::makeMembrane(int sizeX, int sizeY){
 
 void ParticleContainerLinkedCell::applyForce(int x, int y, int sizeX, std::array<double, 3> force){
     particles[x+y*sizeX]->applyF(force);
+}
+
+std::vector<Particle*> ParticleContainerLinkedCell::getBoundaries(std::array<bool, 6> boundaries){
+    std::vector<Particle*> boundary;
+    for (size_t i = 0; i < vectorLength; i++){
+        size_t positionX = i%cellCount[0];
+        size_t positionY = i/cellCount[0]%cellCount[1];
+        size_t positionZ = i/cellCount[0]/cellCount[1];
+        if((positionX==0&&boundaries[0])||(positionY==0&&boundaries[2])||(positionZ=0&&boundaries[4])||
+        (positionX==cellCount[0]-1&&boundaries[1])||(positionY==cellCount[1]-1&&boundaries[3])||
+        (positionZ==cellCount[2]-1&&boundaries[5])){
+            for(auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
+                boundary.push_back(*particle_i);
+            }
+        }
+    }
+    return boundary;
 }

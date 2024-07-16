@@ -159,6 +159,15 @@ public:
      */
     bool inCuttofRaius(const Particle* particle1, const Particle* particle2);
 
+    /**
+     * @brief Gets the particles located at the the specified boundaries of the container.
+     * 
+     * @param bounderies The bounderies at which the particles are that interest us.
+     * 
+     * @return A vector of pointers to the particles at the specified boundaries.
+     */
+    std::vector<Particle*> getBoundaries(std::array<bool, 6> boundaries);
+
 private:
     size_t particle_count; ///< The number of particles in this container.
     std::vector<std::list<Particle*>> linkedCells; ///< Vector of linked cells containing particles.

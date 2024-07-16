@@ -29,6 +29,12 @@ target_link_libraries(tests
         ${XercesC_LIBRARIES}
 )
 
+# also link openmp here or it wont compile
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(tests PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 target_include_directories(tests 
     PRIVATE 
         ../libs/spdlog-1.14.1/include

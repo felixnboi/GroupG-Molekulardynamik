@@ -12,7 +12,7 @@ Simulation::Simulation(){
     thermostat = Thermostat();
     thermostat_data = ThermostatData();
     checkpoint_data = CheckpointData(false, false, std::string(""), false, std::string(""));
-    membrane_data = MembraneData();
+    membrane_data = MembraneData(false, 0, 0, 0);
 
     particles = nullptr;
     force = nullptr;
@@ -442,7 +442,6 @@ void Simulation::run() {
     std::chrono::duration<double> elapsed = end - start;
     if(time_flag) {
         std::cout << "Execution time: " << elapsed.count() << " seconds\n";
-        std::cout << "Molecule updates per second: " << iteration*particles->getParticleCount()/elapsed.count() << "\n";
     }
 
     spdlog::info("Output written. Terminating...");
