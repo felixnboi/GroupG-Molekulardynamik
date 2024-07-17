@@ -38,7 +38,7 @@ TEST(ParticleContainerOld, AddAndGetParticles) {
     pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle*>& particles = pc->getParticles();
+    auto particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -93,7 +93,7 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     pc->addParticle(p3);
     
     // Get particle pairs from the container
-    auto particlePairs = pc->getParticlePairs();
+    std::vector<std::pair<Particle *const, Particle *const>> particlePairs = pc->getParticlePairs();
     
     // Check if the number of pairs matches
     EXPECT_EQ(particlePairs.size(), 3);
@@ -129,7 +129,7 @@ TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
     pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle*>& particles = pc->getParticles();
+    auto particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -260,7 +260,7 @@ TEST(ParticleContainerLinkedCell, UpdateLocations) {
     pc.updateLoctions(outflowFlag, {false, false, false});
     
     // Check if the particle has been moved to the halo region
-    std::vector<Particle*> halo = pc.getHalo();
+    auto halo = pc.getHalo();
     EXPECT_EQ(halo.size(), 1);
     if(halo.size()>=1) {
         EXPECT_TRUE(halo[0] == p1);
@@ -286,7 +286,7 @@ TEST(ParticleContainerLinkedCell, GetBoundary) {
     pc.addParticle(p3);
     
     // Get the boundary particles from the container
-    std::vector<Particle*> boundary = pc.getBoundary();
+    auto boundary = pc.getBoundary();
     
     // Check if the boundary particles match the expected values
     EXPECT_EQ(boundary.size(), 2);
@@ -516,7 +516,7 @@ TEST(Lennard_Jones_Force, LennardJonesForce){
     Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, {0, 0, 0}, false, 0, 0, 0};
     LJForce.calculateF(*particles);
 
-    const auto& updatedParticles = particles->getParticles();
+    auto updatedParticles = particles->getParticles();
 
     // Verify forces on each particle
     const auto& p1_updated = updatedParticles[0];
@@ -834,7 +834,7 @@ TEST(ParticleContainerLinkedCell, peridicBoundary){
     // Update the locations
     pc.updateLoctions(outflowFlag, peridicFlags);
     
-    std::vector<Particle*> halo = pc.getHalo();
+    auto halo = pc.getHalo();
     EXPECT_EQ(halo.size(), 0);
     std::array<double, 3> correctPlace = {1,1,1};
     EXPECT_EQ(p1->getX(), correctPlace);

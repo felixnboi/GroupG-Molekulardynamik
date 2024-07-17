@@ -48,21 +48,21 @@ public:
      * 
      * @param pairs Vector of arrays containing pairs of particles.
      */
-    void calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs);
+    void calculateFLennardJones(std::vector<std::pair<Particle* const, Particle* const>> pairs);
 
     /**
      * @brief Helper method for parallelization strategy.
      * 
      * @param pair The current pair of particle pointers to be used for calculations.
      */
-    inline void calculateFLennardJonesHelper(const std::pair<Particle *, Particle *> &pair);
+    inline void calculateFLennardJonesHelper(const std::pair<Particle* const, Particle* const> &pair);
 
     /**
      * @brief Calculates the forces between all pairs of particles using the gravitational force.
      * 
      * @param pairs Vector of arrays containing pairs of particles.
      */
-    void calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs);
+    void calculateFGravitation(std::vector<std::pair<Particle* const, Particle* const>> pairs);
 
     /**
      * @brief Calculates the Lennard Jones force between all pairs of particles which are connected through a peridic boundery.
@@ -80,7 +80,7 @@ public:
      * @param k Either 0 or 1. If 1 current particle pair is connected through the periodic boundary in z-direction.
      * @param LCContainer The linked cell particle container.
      */
-    inline void calculateFPeriodicHelper(const std::pair<Particle *, Particle *> &pair, int i, int j, int k, ParticleContainerLinkedCell &LCContainer);
+    inline void calculateFPeriodicHelper(const std::pair<Particle* const, Particle* const> &pair, int i, int j, int k, ParticleContainerLinkedCell &LCContainer);
 
     /**
      * @brief Calculates the force for all particles which are to close to a reflecting boundery.

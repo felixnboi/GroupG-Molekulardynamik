@@ -43,7 +43,7 @@ public:
      * 
      * @return A vector of these pairs of particles.
      */
-    std::vector<std::pair<Particle*, Particle*>> getParticlePairs() override;
+    std::vector<std::pair<Particle* const, Particle* const>> getParticlePairs() override;
 
     /**
     * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. 
@@ -53,7 +53,7 @@ public:
     * 
     * @return A vector of these pairs of particles.
     */
-    std::vector<std::pair<Particle*, Particle*>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
+    std::vector<std::pair<Particle* const, Particle* const>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 
     /**
     * @brief Helper method of getParticlePairsPeriodic. Adds the particle pairs to particlePairs, as discribed in getParticlePairsPeriodic, with the exeptiom
@@ -65,10 +65,10 @@ public:
     * 
     * @return The amount of particles added to particle pairs.
     */
-    inline size_t getParticlePairsPeridicOneCell(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i, std::array<bool, 3> pFlag);
+    inline size_t getParticlePairsPeridicOneCell(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, size_t i, std::array<bool, 3> pFlag);
 
-    inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i,  
-    std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
+    inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, size_t i,  
+    ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
 
     /**
      * @brief Check if the particles are closer than the cut off radius.
@@ -195,4 +195,5 @@ private:
     size_t vectorLength; ///< Total number of cells in the container.
     std::array<size_t, 8> lastReserve; /// < The estimate the vector size in getParticlePairs peridic, the amount, that was reserved last time.
     size_t strategy; ///< Value used for choosing the parallelization strategy.
+    omp_lock_t lock;
 };

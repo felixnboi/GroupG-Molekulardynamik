@@ -20,7 +20,7 @@
     </outputSettings>
 
     <simulationParameters>
-        <end_t>0.005</end_t>
+        <end_t>0.01</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>

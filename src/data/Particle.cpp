@@ -73,7 +73,9 @@ std::array<double,3> domainStart){
 
 Particle::~Particle() {
   // Cannot use logging because at end of main logger is destructed before particles -> Would lead to use-after-free;
+  #ifdef _OPENMP
   omp_destroy_lock(&lock);
+  #endif
 }
 
 const std::array<double, 3> &Particle::getX() const { return x; }

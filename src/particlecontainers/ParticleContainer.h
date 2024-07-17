@@ -79,7 +79,7 @@ public:
      * 
      * @return A vector of the pairs of all particles to iterate over.
      */
-    virtual std::vector<std::pair<Particle*, Particle*>> getParticlePairs() = 0;
+    virtual std::vector<std::pair<Particle* const, Particle* const>> getParticlePairs() = 0;
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.

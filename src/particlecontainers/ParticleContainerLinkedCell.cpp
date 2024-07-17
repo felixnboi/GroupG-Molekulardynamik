@@ -13,6 +13,9 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double si
     vectorLength = cellCount[0]*cellCount[1]*cellCount[2];
     linkedCells = std::vector<std::vector<Particle*>>(vectorLength);
     lastReserve = {1,1,1,1,1,1,1,1};
+    #ifdef _OPENMP
+    omp_init_lock(&lock);
+    #endif
     spdlog::info("Linked cells particlecontainer created.");
 }
 
@@ -20,6 +23,9 @@ ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
     for(auto particle: particles){
         delete particle;
     }
+    #ifdef _OPENMP
+    omp_destroy_lock(&lock);
+    #endif
     spdlog::info("Linked cells particlecontainer destructed.");
 };
 
@@ -42,12 +48,12 @@ void ParticleContainerLinkedCell::addParticle(Particle* particle){
     lastReserve[0] = particle_count;
 }
 
-std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairs(){
+std::vector<std::pair<Particle* const, Particle* const>> ParticleContainerLinkedCell::getParticlePairs(){
     return getParticlePairsPeriodic({false,false,false});
 }
 
-std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
-    std::vector<std::pair<Particle*, Particle*>> particlePairs;
+std::vector<std::pair<Particle* const, Particle* const>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
+    std::vector<std::pair<Particle* const, Particle* const>> particlePairs;
     int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2];
     size_t count = 0;
     particlePairs.reserve(lastReserve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
@@ -59,7 +65,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     }
     if(strategy == 1 || strategy == 2){
         #ifdef _OPENMP
-        #pragma omp parallel for schedule(static, 4)
+        #pragma omp parallel for schedule(auto)
         #endif
         for (size_t i = 0; i < vectorLength; i++){
             size_t tmp = getParticlePairsPeridicOneCell(particlePairs, i, pFlag);
@@ -73,7 +79,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     return particlePairs;
 }
 
-inline size_t ParticleContainerLinkedCell::getParticlePairsPeridicOneCell(std::vector<std::pair<Particle*, Particle*>>& particlePairs, 
+inline size_t ParticleContainerLinkedCell::getParticlePairsPeridicOneCell(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, 
 size_t i, std::array<bool, 3> pFlag){
     size_t count = 0;
     std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
@@ -141,7 +147,7 @@ size_t i, std::array<bool, 3> pFlag){
     }
     if(strategy == 3){
         #ifdef _OPENMP
-        #pragma omp parallel for schedule(static, 4)
+        #pragma omp parallel for schedule(auto)
         #endif
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             size_t tmp = getParticlePairsPeriodicHelper2(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
@@ -154,8 +160,8 @@ size_t i, std::array<bool, 3> pFlag){
     return count;
 }
 
-inline size_t ParticleContainerLinkedCell::getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle*, Particle*>>& particlePairs, 
-size_t i, std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag){
+inline size_t ParticleContainerLinkedCell::getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, 
+size_t i, ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag){
     size_t count = 0;
     if(!(pFlag[0]||pFlag[1]||pFlag[2])){
         // here we look at the particles in the same cell
@@ -167,7 +173,7 @@ size_t i, std::vector<Particle*>::iterator particle_i, size_t nbrCount, const st
                 {
                     particlePairs.emplace_back(*particle_i, *particle_j);
                 }
-                count++;
+                count++;        
             }
         }
     }

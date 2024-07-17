@@ -58,7 +58,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
         }
         if(strategy == 1 || strategy == 2 || strategy == 3){
           #ifdef _OPENMP
-          #pragma omp parallel for schedule(static , 4)
+          #pragma omp parallel for schedule(auto)
           #endif
           for(const auto& pair : pairs){
             calculateFPeriodicHelper(pair, i, j, k, LCContainer);
@@ -69,7 +69,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer){
   }
 }
 
-inline void Force::calculateFPeriodicHelper(const std::pair<Particle *, Particle *> &pair, int i, int j, int k, ParticleContainerLinkedCell &LCContainer){
+inline void Force::calculateFPeriodicHelper(const std::pair<Particle* const, Particle* const> &pair, int i, int j, int k, ParticleContainerLinkedCell &LCContainer){
   auto particle_i = pair.first;
   auto particle_j = pair.second;
 
@@ -110,7 +110,7 @@ inline void Force::calculateFPeriodicHelper(const std::pair<Particle *, Particle
 }
 
 void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
-  std::vector<Particle*> boundery = LCContainer.getBoundaries(reflectLenJonesFlag);
+  auto boundery = LCContainer.getBoundaries(reflectLenJonesFlag);
 
   if(strategy == 0){
     for(const auto& particle : boundery){
@@ -119,7 +119,7 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer){
   }
   if(strategy == 1 || strategy == 2 || strategy == 3){
     #ifdef _OPENMP
-    #pragma omp parallel for schedule(static, 4)
+    #pragma omp parallel for schedule(auto)
     #endif
     for(const auto& particle : boundery){
       calculateFReflectingHelper(particle, LCContainer);
@@ -146,7 +146,7 @@ inline void Force::calculateFReflectingHelper(Particle* particle, ParticleContai
   particle->applyF(force, strategy);
 }
 
-void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs){
+void Force::calculateFLennardJones(std::vector<std::pair<Particle* const, Particle* const>> pairs){
   // iterate over all pairs of particles to calculate forces
   if(strategy == 0){
     for (const auto& pair : pairs){
@@ -155,7 +155,7 @@ void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> 
   }
   if(strategy == 1 || strategy == 2 || strategy == 3){
     #ifdef _OPENMP
-    #pragma omp parallel for schedule(static, 4)
+    #pragma omp parallel for schedule(auto)
     #endif
     for (const auto& pair : pairs){
       calculateFLennardJonesHelper(pair);
@@ -163,7 +163,7 @@ void Force::calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> 
   }
 }
 
-inline void Force::calculateFLennardJonesHelper(const std::pair<Particle *, Particle *> &pair){
+inline void Force::calculateFLennardJonesHelper(const std::pair<Particle* const, Particle* const> &pair){
   auto particle_i = pair.first;
   auto particle_j = pair.second;
   double epsilon = particle_i->getRootEpsilon()*particle_j->getRootEpsilon();
@@ -178,7 +178,7 @@ inline void Force::calculateFLennardJonesHelper(const std::pair<Particle *, Part
   particle_j->applyF(-1*force, strategy);
 }
 
-void Force::calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> pairs){
+void Force::calculateFGravitation(std::vector<std::pair<Particle* const, Particle* const>> pairs){
   for (auto& pair : pairs){
     auto particle_i = pair.first;
     auto particle_j = pair.second;
@@ -187,8 +187,8 @@ void Force::calculateFGravitation(std::vector<std::pair<Particle*, Particle*>> p
 
     auto force = particle_i->getM() * particle_j->getM()/pow(ArrayUtils::L2Norm(distance), 3) * distance;
 
-    particle_i->setF(particle_i->getF()+force);
-    particle_j->setF(particle_j->getF()-force);
+    particle_i->applyF(force, strategy);
+    particle_j->applyF(-1*force, strategy);
   }
 }
 
