@@ -48,27 +48,19 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_link_libraries(MolSim
+# stuff that is used in headers and source files
+PUBLIC
+    ${XercesC_LIBRARIES}
+PRIVATE
+    spdlog::spdlog
+)
+
+#this part is for openmp
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
-    target_link_libraries(MolSim
-    # stuff that is used in headers and source files
-    PUBLIC
-        ${XercesC_LIBRARIES}
-        OpenMP::OpenMP_CXX
-    PRIVATE
-        spdlog::spdlog
-    )
-else()
-    target_link_libraries(MolSim
-    # stuff that is used in headers and source files
-    PUBLIC
-        ${XercesC_LIBRARIES}
-    PRIVATE
-        spdlog::spdlog
-    )
+    target_link_libraries(MolSim PUBLIC OpenMP::OpenMP_CXX)
 endif()
-
-
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
@@ -90,7 +82,7 @@ enable_testing()
 include(CTest)
 
 # Add the sanitize address flag and enable profiling
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -pg -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 
 add_subdirectory(libs/spdlog-1.14.1)
 add_subdirectory(libs/googletest-1.14.0)
@@ -110,6 +102,7 @@ add_executable(ParticleGenerator
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/ThermostatData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/CheckpointData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data/MembraneData.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data/OpenMPData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLReader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/input/XMLFormat.cpp
 )
@@ -134,6 +127,12 @@ target_link_libraries(ParticleGenerator
         PRIVATE
             spdlog::spdlog
 )
+
+# also link openmp here or it wont compile
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(ParticleGenerator PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used

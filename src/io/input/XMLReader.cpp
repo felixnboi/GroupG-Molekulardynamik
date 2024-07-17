@@ -183,7 +183,31 @@ void XMLReader::readMembrane(const char* filename, MembraneData& membranedata){
     try{
         std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
 
+        const simulation::cuboid_sequence& cuboid_sequence = sim->cuboid();
+        std::vector<simulation::cuboid_type> cuboid_vector(cuboid_sequence.begin(), cuboid_sequence.end());
+
+        const simulation::disc_sequence& disc_sequence = sim->disc();
+        std::vector<simulation::disc_type> disc_vector(disc_sequence.begin(), disc_sequence.end());
+
         if(sim->membrane().present()){
+            membranedata.setErrorFlag(false);
+            if(sim->thermostat().present()){
+                membranedata.setErrorFlag(true);
+            }
+            if(disc_vector.size()!=0){
+                membranedata.setErrorFlag(true);
+            }
+            if(cuboid_vector.size()!=1){
+                membranedata.setErrorFlag(true);
+            }
+            for(const auto& cuboid_xml : cuboid_vector){
+                if(cuboid_xml.dimensions().z() != 1){
+                    membranedata.setErrorFlag(true);
+                }
+                membranedata.setSizeX(cuboid_xml.dimensions().x());
+                membranedata.setSizeY(cuboid_xml.dimensions().y());
+            }
+
             membranedata.setMembraneFlag(true);
             membranedata.setR0(sim->membrane().get().r0());
             membranedata.setK(sim->membrane().get().k());
@@ -192,12 +216,29 @@ void XMLReader::readMembrane(const char* filename, MembraneData& membranedata){
             const auto& particles = sim->membrane().get().particle_up();
 
             for(const auto& particle : particles){
-                membranedata.addParticleUp(particle.x_index(),particle.y_index());
+                membranedata.addParticleUp(particle.x_index(), particle.y_index());
             }
         }
 
     }catch(const xml_schema::exception& e){
         spdlog::error("Error during Membrane-parsing.");
+        spdlog::error(e.what());
+        return;
+    }
+}
+
+void XMLReader::readOpenMP(const char* filename, OpenMPData& openmpdata){
+    try{
+        std::unique_ptr<simulation> sim = simulation_(std::string{filename}, xml_schema::flags::dont_validate);
+
+        if(sim->openmp().present()){
+            openmpdata.setOpenMPFlag(true);
+            openmpdata.setNumThreads(sim->openmp().get().num_threads());
+            openmpdata.setStrategy(sim->openmp().get().parallelizationstrategy());
+        }
+
+    }catch(const xml_schema::exception& e){
+        spdlog::error("Error during OpenMP-parsing.");
         spdlog::error(e.what());
         return;
     }

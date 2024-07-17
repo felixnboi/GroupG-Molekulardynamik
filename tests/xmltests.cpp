@@ -1,11 +1,15 @@
 #include <gtest/gtest.h>
 #include <array>
 #include <string>
+#include <utility>
 
 #include "../src/data/Cuboid.h"
 #include "../src/data/Disc.h"
 #include "../src/data/SimData.h"
 #include "../src/data/ThermostatData.h"
+#include "../src/data/CheckpointData.h"
+#include "../src/data/MembraneData.h"
+#include "../src/data/OpenMPData.h"
 #include "../src/io/input/XMLReader.h"
 
 TEST(XMLReader, parseXMLFile){
@@ -19,12 +23,38 @@ TEST(XMLReader, parseXMLFile){
 
     SimData simdata;
     ThermostatData thermostatdata;
+    CheckpointData checkpointdata;
+    MembraneData membranedata;
+    OpenMPData openmpdata;
+
 
     xmlreader.readCuboids("../input/test.xml", cuboids, 5, 1);
     xmlreader.readDiscs("../input/test.xml", discs, 5, 1);
 
     xmlreader.readSimulation("../input/test.xml", simdata);
     xmlreader.readThermostat("../input/test.xml", thermostatdata);
+    xmlreader.readCheckpoint("../input/test.xml", checkpointdata);
+    xmlreader.readMembrane("../input/test.xml", membranedata);
+    xmlreader.readOpenMP("../input/test.xml", openmpdata);
+
+    EXPECT_TRUE(checkpointdata.getCheckpointFile()=="testcheckpoint");
+    EXPECT_TRUE(checkpointdata.getCheckpointFileFlag());
+    EXPECT_TRUE(!checkpointdata.getMergeFileFlag());
+
+    EXPECT_TRUE(membranedata.getErrorFlag());
+    EXPECT_TRUE(membranedata.getMembraneFlag());
+    EXPECT_TRUE(membranedata.getF_z_up()==0.8);
+    EXPECT_TRUE(membranedata.getK()==300);
+    EXPECT_TRUE(membranedata.getR0()==2.2);
+    for(const auto& p : membranedata.getParticleUp()){
+        EXPECT_TRUE(p.first == 17);
+        EXPECT_TRUE(p.second == 24);
+    }
+
+    EXPECT_TRUE(openmpdata.getOpenMPFlag());
+    EXPECT_TRUE(openmpdata.getNumThreads()==4);
+    EXPECT_TRUE(openmpdata.getStrategy()=="second");
+    
 
     for(const auto& c : cuboids){
         EXPECT_TRUE(c == cuboid);
@@ -51,5 +81,5 @@ TEST(XMLReader, parseXMLFile){
 
     EXPECT_TRUE(thermostatdata.getBrownianMotionDimension()==2);
     EXPECT_TRUE(thermostatdata.getInitTemp()==2);    
-    EXPECT_TRUE(thermostatdata.getNThermostat()==10);    
+    EXPECT_TRUE(thermostatdata.getNThermostat()==10);
 }

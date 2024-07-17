@@ -8,16 +8,17 @@ Simulation::Simulation(){
     simdata = SimData(std::string(""), std::string("MD_vtk"), 100, 0, 1000, 0.014, std::string(""), std::string("default"), 
     std::string("INFO"), boundary, 3, 2, domain, domain_start, grav_constant, false);
 
-
     thermostat = Thermostat();
     thermostat_data = ThermostatData();
     checkpoint_data = CheckpointData(false, false, std::string(""), false, std::string(""));
-    membrane_data = MembraneData();
+    membrane_data = MembraneData(false, false, 0, 0, 0, 50, 50);
+    openmp_data = OpenMPData(false, 1, std::string(""));
 
     particles = nullptr;
     force = nullptr;
 
     input_file_user = "";
+    strategy = 0;
 }
 
 Simulation::~Simulation() {}
@@ -159,14 +160,14 @@ bool Simulation::initialize(int argc, char* argv[]) {
                 if (*optarg == 'g') {
                     grav_flag = true;
                     force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, 
-                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
+                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0, 0);
                     spdlog::info("Force set to Gravitational_Force");
                     break;
                 } 
                 if (*optarg == 'l') {
                     lenJones_flag = true;
                     force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, 
-                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0);
+                    linkedcell_flag, simdata.getGravConstant(), false, 0, 0, 0);
                     spdlog::info("Force set to Lennard_Jones_Force");
                     break;
                 } 
@@ -198,6 +199,31 @@ bool Simulation::initialize(int argc, char* argv[]) {
         xmlreader.readThermostat(xml_file, thermostat_data);
         xmlreader.readCheckpoint(xml_file, checkpoint_data);
         xmlreader.readMembrane(xml_file, membrane_data);
+        xmlreader.readOpenMP(xml_file, openmp_data);
+
+        if(membrane_data.getErrorFlag()){
+            spdlog::error("Error during membrane parsing!");
+        }
+
+        if(openmp_data.getOpenMPFlag()){
+            #ifdef _OPENMP
+            omp_set_num_threads(openmp_data.getNumThreads());
+            #endif
+            if(openmp_data.getStrategy() == std::string("first")){
+                strategy = 1;
+            }
+            if(openmp_data.getStrategy() == std::string("second")){
+                strategy = 2;
+            }
+            if(openmp_data.getStrategy() == std::string("third")){
+                strategy = 3;
+            }
+        }else{
+            #ifdef _OPENMP
+            omp_set_num_threads(1);
+            #endif
+            strategy = 0;
+        }
 
         if(thermostat_data.getThermostatFlag() && !thermostat_data.getInitTempFlag() && !thermostat_data.getTargetTemp()){
             spdlog::error("Either initial temperature or target termperature or both have to be set when using the thermostat");
@@ -261,7 +287,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
         if(simdata.getAlgorithm() == "linkedcell"){
             particles = std::make_unique<ParticleContainerLinkedCell>(simdata.getDomain()[0], simdata.getDomain()[1], 
-            simdata.getDomain()[2], simdata.getCutoffRadius());
+            simdata.getDomain()[2], simdata.getCutoffRadius(), strategy);
             linkedcell_flag = true;
         }
 
@@ -277,7 +303,7 @@ bool Simulation::initialize(int argc, char* argv[]) {
             lenJones_flag = true;
         }
         force = std::make_unique<Force>(lenJonesBoundaryFlags, periodicFlags, lenJones_flag, grav_flag, linkedcell_flag, 
-        simdata.getGravConstant(), membrane_data.getMembraneFlag(), membrane_data.getK(), membrane_data.getR0());
+        simdata.getGravConstant(), membrane_data.getMembraneFlag(), membrane_data.getK(), membrane_data.getR0(), strategy);
 
     }else{
 
@@ -351,7 +377,7 @@ void Simulation::run() {
     }
 
     if(membrane_data.getMembraneFlag()){
-        particles->makeMembrane(50,50);
+        particles->makeMembrane(membrane_data.getSizeX(), membrane_data.getSizeY());
     }
 
     // Advance simulation time to start_time
@@ -442,7 +468,6 @@ void Simulation::run() {
     std::chrono::duration<double> elapsed = end - start;
     if(time_flag) {
         std::cout << "Execution time: " << elapsed.count() << " seconds\n";
-        std::cout << "Molecule updates per second: " << iteration*particles->getParticleCount()/elapsed.count() << "\n";
     }
 
     spdlog::info("Output written. Terminating...");

@@ -75,7 +75,7 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename, st
       if (datastream.fail()) {
         epsilon = 5;
         sigma = 1;
-        Particle *particle = new Particle(x,v,m,false,0,epsilon,sigma,domainStart);
+        Particle *particle = new Particle(x,v,m,0,false,sigma,epsilon,domainStart);
         particles.addParticle(particle);
         continue;
       }
@@ -95,7 +95,7 @@ void FileReader::readFile(ParticleContainer &particles, const char *filename, st
         exit(-1);
       }
       
-      Particle *particle = new Particle(x,v,m,is_outer,type,epsilon,sigma,domainStart);
+      Particle *particle = new Particle(x,v,m,type,is_outer,sigma,epsilon,domainStart);
       particles.addParticle(particle);
 
       for (auto &fj : f) {

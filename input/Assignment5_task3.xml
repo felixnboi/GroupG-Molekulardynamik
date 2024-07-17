@@ -20,7 +20,7 @@
     </outputSettings>
 
     <simulationParameters>
-        <end_t>0.005</end_t>
+        <end_t>0.01</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
@@ -50,6 +50,11 @@
         <n_thermostat>1000</n_thermostat>
         <brownian_motion_dimension>3</brownian_motion_dimension>
     </thermostat>
+
+    <openmp>
+        <num_threads>4</num_threads>
+        <parallelizationstrategy>second</parallelizationstrategy>
+    </openmp>
 
     <cuboid>
         <position>

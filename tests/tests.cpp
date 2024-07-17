@@ -27,11 +27,11 @@ TEST(ParticleContainerOld, AddAndGetParticles) {
     
     // Create some particles
     Particle* p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle* p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle* p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -39,7 +39,7 @@ TEST(ParticleContainerOld, AddAndGetParticles) {
     pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle*>& particles = pc->getParticles();
+    auto particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -58,9 +58,9 @@ TEST(ParticleContainerOld, IteratorBeginEnd) {
     
     // Create some particles
     Particle* p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle* p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -82,11 +82,11 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -94,7 +94,7 @@ TEST(ParticleContainerOld, GetParticlePairs) {
     pc->addParticle(p3);
     
     // Get particle pairs from the container
-    auto particlePairs = pc->getParticlePairs();
+    std::vector<std::pair<Particle *const, Particle *const>> particlePairs = pc->getParticlePairs();
     
     // Check if the number of pairs matches
     EXPECT_EQ(particlePairs.size(), 3);
@@ -114,15 +114,15 @@ TEST(ParticleContainerOld, GetParticlePairs) {
 // Test case for addParticle and getParticles methods
 TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius, 0);
     
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -130,7 +130,7 @@ TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
     pc->addParticle(p3);
     
     // Get particles from the container
-    const std::vector<Particle*>& particles = pc->getParticles();
+    auto particles = pc->getParticles();
     
     // Check if the number of particles matches
     EXPECT_EQ(particles.size(), 3);
@@ -146,13 +146,13 @@ TEST(ParticleContainerLinkedCell, AddAndGetParticles) {
 // Test case for iterators
 TEST(ParticleContainerLinkedCell, IteratorBeginEnd) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius, 0);
     
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -172,15 +172,15 @@ TEST(ParticleContainerLinkedCell, IteratorBeginEnd) {
 // Test case for getParticlePairs
 TEST(ParticleContainerLinkedCell, GetParticlePairs) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p2 = new Particle((std::array<double, 3>){1.0, 2.0, 3.1}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p3 = new Particle((std::array<double, 3>){1.0, 2.05, 3.05}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
 
     // Add particles to the container
     pc->addParticle(p1);
@@ -216,7 +216,7 @@ TEST(ParticleContainerLinkedCell, GetParticlePairs) {
 // Test case for getSize method
 TEST(ParticleContainerLinkedCell, GetSize) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
     
     // Get the size of the container
     std::array<double, 3> size = pc.getSize();
@@ -230,7 +230,7 @@ TEST(ParticleContainerLinkedCell, GetSize) {
 // Test case for getCellSize method
 TEST(ParticleContainerLinkedCell, GetCellSize) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
     
     // Get the cell size of the container
     std::array<double, 3> cellSize = pc.getCellSize();
@@ -244,11 +244,11 @@ TEST(ParticleContainerLinkedCell, GetCellSize) {
 //Test case for updateLoctions method
 TEST(ParticleContainerLinkedCell, UpdateLocations) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create a particle that will move outside the boundary
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add the particle to the container
     pc.addParticle(p1);
@@ -261,7 +261,7 @@ TEST(ParticleContainerLinkedCell, UpdateLocations) {
     pc.updateLoctions(outflowFlag, {false, false, false});
     
     // Check if the particle has been moved to the halo region
-    std::vector<Particle*> halo = pc.getHalo();
+    auto halo = pc.getHalo();
     EXPECT_EQ(halo.size(), 1);
     if(halo.size()>=1) {
         EXPECT_TRUE(halo[0] == p1);
@@ -271,15 +271,15 @@ TEST(ParticleContainerLinkedCell, UpdateLocations) {
 // Test case for getBoundary method
 TEST(ParticleContainerLinkedCell, GetBoundary) {
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 1.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create particles at the boundaries
     Particle *p1 = new Particle((std::array<double, 3>){0.0, 0.0, 0.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p2 = new Particle((std::array<double, 3>){9.0, 9.0, 9.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle *p3 = new Particle((std::array<double, 3>){5.0, 5.0, 5.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.5, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add the particles to the container
     pc.addParticle(p1);
@@ -287,7 +287,7 @@ TEST(ParticleContainerLinkedCell, GetBoundary) {
     pc.addParticle(p3);
     
     // Get the boundary particles from the container
-    std::vector<Particle*> boundary = pc.getBoundary();
+    auto boundary = pc.getBoundary();
     
     // Check if the boundary particles match the expected values
     EXPECT_EQ(boundary.size(), 2);
@@ -505,19 +505,19 @@ TEST(inputFileManager, MergeFile){
 TEST(Lennard_Jones_Force, LennardJonesForce){
     ParticleContainer* particles = new ParticleContainerOld();
     Particle* p1 = new Particle((std::array<double, 3>){0,0,0}, 
-    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle* p2 = new Particle((std::array<double, 3>){1,0,0}, 
-    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle* p3 = new Particle((std::array<double, 3>){0,1,0}, 
-    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     particles->addParticle(p1);
     particles->addParticle(p2);
     particles->addParticle(p3);
 
-    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, {0, 0, 0}, false, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, true, false, false, {0, 0, 0}, false, 0, 0, 0};
     LJForce.calculateF(*particles);
 
-    const auto& updatedParticles = particles->getParticles();
+    auto updatedParticles = particles->getParticles();
 
     // Verify forces on each particle
     const auto& p1_updated = updatedParticles[0];
@@ -578,41 +578,41 @@ TEST(FileReader, readFile){
 }
 
 TEST(Lennard_Jones_Force, LennardJonesReflection){
-    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5, 0);
         
     Particle* p1 = new Particle((std::array<double, 3>){9.75,7.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     Particle* p2 = new Particle((std::array<double, 3>){9.0,3.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     particles.addParticle(p2);
-    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
+    Force force{{false,true,false,false,false,false}, {false, false, false}, true, false, true, {0, 0, 0}, false, 0, 0, 0};
     force.calculateF(particles);
     EXPECT_EQ(p1->getF()[0], -1950720); //test against manually calculated value
     EXPECT_EQ(p2->getF()[0], 0);
 }
 
 TEST(ParticleContainerLinkedCell, MirrorBoundary){
-    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5, 0);
         
     Particle* p1 = new Particle((std::array<double, 3>){5.0,5.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     p1->setX({11.0,3.0,3.0});
     p1->setV({1.0,1.0,1.0});
     particles.updateLoctions({true,false,true,true,true,true}, {false, false, false});
     std::array<double, 3UL> positionAfterMirroring = {9.0,3.0,3.0};
-    std::array<double, 3UL> velocityAfterMirroring = {-1.0,1.0,1.0};
+    std::array<double, 3UL> velocityAfterMirroring = {-1.0,-1.0,-1.0};
     EXPECT_EQ(p1->getX(), positionAfterMirroring); 
     EXPECT_EQ(p1->getV(), velocityAfterMirroring); 
     EXPECT_EQ(particles.getHalo().size(),0);
 }
 
 TEST(ParticleContainerLinkedCell, OutflowBoundary){
-    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5);
+    ParticleContainerLinkedCell particles(10.0,10.0,10.0,2.5, 0);
         
     Particle* p1 = new Particle((std::array<double, 3>){5.0,5.0,5.0}, 
-    (std::array<double, 3>){0,0,0},1, false, 1, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){0,0,0},1, 1, false, 1, 5, (std::array<double, 3>){0,0,0});
     particles.addParticle(p1);
     p1->setX({11.0,3.0,3.0});
     particles.updateLoctions({false,true,false,false,false,false}, {false, false, false});
@@ -631,15 +631,15 @@ const size_t DIMENSIONS = 3;
 
 // Helper function to create a particle container with some particles
 std::unique_ptr<ParticleContainer> createParticleContainer(double sizeX, double sizeY, double sizeZ, double radius) {
-    auto pc = std::make_unique<ParticleContainerLinkedCell>(sizeX, sizeY, sizeZ, radius);
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container
     pc->addParticle(p1);
@@ -699,23 +699,23 @@ TEST(Thermostat, HoldTemperature) {
 
 // Test case for initializing system temperature
 TEST(Thermostat, InitSystemTemperature) {
-    std::unique_ptr<ParticleContainer> pc1 = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
-    std::unique_ptr<ParticleContainer> pc2= std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    std::unique_ptr<ParticleContainer> pc1 = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0, 0);
+    std::unique_ptr<ParticleContainer> pc2= std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 1, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.0, 0.0, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
 
     Particle *p4 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){1.39855, -2.31087, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){1.39855, -2.31087, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p5 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){-0.835396, -0.327661, 0.0}, 1.0, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){-0.835396, -0.327661, 0.0}, 1.0, 1, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p6 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.329751, 0.0308074, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.329751, 0.0308074, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container
     pc1->addParticle(p1);
@@ -742,17 +742,17 @@ TEST(Thermostat, InitSystemTemperature) {
 
 // Test case for scaling fluids with beta
 TEST(Thermostat, ScaleWithBetaFluid) {
-    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0);
+    std::unique_ptr<ParticleContainer> pc = std::make_unique<ParticleContainerLinkedCell>(10.0, 10.0, 10.0, 1.0, 0);
     
     // Adding some particles with non-zero velocities
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){1.0, 1.0, 1.0}, 1.0, true, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){1.0, 1.0, 1.0}, 1.0, 0, true, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){2.0, 2.0, 2.0}, 1.5, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){2.0, 2.0, 2.0}, 1.5, 1, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){3.0, 3.0, 3.0}, 2.0, true, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){3.0, 3.0, 3.0}, 2.0, 0, true, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p4 = new Particle((std::array<double, 3>){4.0, 5.0, 6.0}, 
-    (std::array<double, 3>){4.0, 4.0, 4.0}, 2.5, false, 1, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){4.0, 4.0, 4.0}, 2.5, 1, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     
     pc->addParticle(p1);
     pc->addParticle(p2);
@@ -785,11 +785,11 @@ TEST(Thermostat, ScaleWithBetaFluid) {
 
 //Test for the gravity on the y axis
 TEST(Lennard_Jones_Force, gravity){
-    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1);
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 1, 0);
     Particle *p = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     pc->addParticle(p);
-    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, {0, 10, 0}, false, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{false, false, false}, false, true, false, {0, 10, 0}, false, 0, 0, 0};
     LJForce.calculateF(*pc);
     EXPECT_EQ(p->getF()[0], 0);
     EXPECT_EQ(p->getF()[1], 10);
@@ -798,15 +798,15 @@ TEST(Lennard_Jones_Force, gravity){
 
 //Tests if particles correctly attract each other through a periodic boundery
 TEST(Lennard_Jones_Force, peridicBoundary){
-    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2);
+    auto pc = std::make_unique<ParticleContainerLinkedCell>(10, 10, 10, 2, 0);
     Particle *p1 = new Particle((std::array<double, 3>){0.5, 1, 1}, 
-    (std::array<double, 3>){0, 0, 0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0, 0, 0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
     Particle *p2 = new Particle((std::array<double, 3>){9.5, 1, 1}, 
-    (std::array<double, 3>){0, 0, 0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0, 0, 0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0, 0, 0});
 
     pc->addParticle(p1);
     pc->addParticle(p2);
-    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, true, {0, 0, 0}, false, 0, 0};
+    Force LJForce {{false, false, false, false, false, false},{true, false, false}, true, false, true, {0, 0, 0}, false, 0, 0, 0};
     LJForce.calculateF(*pc);
     assert(areDoublesEqual(p1->getF()[0], 120));
     EXPECT_EQ(p1->getF()[1], 0);
@@ -819,11 +819,11 @@ TEST(Lennard_Jones_Force, peridicBoundary){
 //Tests that perticles that leave a peridic boundery are placed at the correct point on the other side of the domain
 TEST(ParticleContainerLinkedCell, peridicBoundary){
     double sizeX = 10.0, sizeY = 10.0, sizeZ = 10.0, radius = 2.0;
-    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius);
+    ParticleContainerLinkedCell pc(sizeX, sizeY, sizeZ, radius, 0);
 
     // Create a particle that will move outside the boundary
     Particle *p1 = new Particle((std::array<double, 3>){5, 1, 1}, 
-    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, false, 0, 5, 1, (std::array<double, 3>){0,0,0});
+    (std::array<double, 3>){10.0, 0.0, 0.0}, 1.0, 0, false, 1, 5, (std::array<double, 3>){0,0,0});
     
     // Add the particle to the container
     pc.addParticle(p1);
@@ -835,26 +835,26 @@ TEST(ParticleContainerLinkedCell, peridicBoundary){
     // Update the locations
     pc.updateLoctions(outflowFlag, peridicFlags);
     
-    std::vector<Particle*> halo = pc.getHalo();
+    auto halo = pc.getHalo();
     EXPECT_EQ(halo.size(), 0);
     std::array<double, 3> correctPlace = {1,1,1};
     EXPECT_EQ(p1->getX(), correctPlace);
 }
 
 TEST(CheckpointWriter, writeCheckpoint){
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
 
     // Create some particles
     Particle *p1 = new Particle((std::array<double, 3>){1.0, 2.0, 3.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 2, 1, (std::array<double, 3>){0, 0, 0});
     p1->setF({1,2,3});
     p1->setOldF({11,22,33});
     Particle *p2 = new Particle((std::array<double, 3>){2.0, 3.0, 4.0}, 
-    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, false, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.2, 0.3, 0.4}, 1.5, 1, false, 4, 3, (std::array<double, 3>){0, 0, 0});
     p2->setF({4,5,6});
     p2->setOldF({44,55,66});
     Particle *p3 = new Particle((std::array<double, 3>){3.0, 4.0, 5.0}, 
-    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, false, 0, 5, 6, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.3, 0.4, 0.5}, 2.0, 0, false, 6, 5, (std::array<double, 3>){0, 0, 0});
     p1->setF({7,8,9});
     p1->setOldF({77,88,99});
     
@@ -899,7 +899,7 @@ TEST(CheckpointWriter, writeCheckpoint){
 TEST(ParticleContainerLinkedCell, makeMembrane){
     //We generate a 2 dimesional cuboid of size 5 x 5
     inputFileManager::resetFile("../input/generated-input.txt");
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
     ParticleGenerator::generateCuboid(Cuboid({0,0,0},{2,2,2},{5,5,1},1,2,0.1, 5, 1, 0, 0, false), "../input/generated-input.txt");
     FileReader fileReader;
     fileReader.readFile(*pc, "../input/generated-input.txt", {0,0,0});
@@ -929,7 +929,7 @@ TEST(ParticleContainerLinkedCell, makeMembrane){
 TEST(ParticleContainerLinkedCell, setForce){
     //We generate a 2 dimesional cuboid of size 5 x 5
     inputFileManager::resetFile("../input/generated-input.txt");
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
     ParticleGenerator::generateCuboid(Cuboid({0,0,0},{2,2,2},{5,5,1},1,2,0.1, 5, 1, 0, 0, false), "../input/generated-input.txt");
     FileReader fileReader;
     fileReader.readFile(*pc, "../input/generated-input.txt", {0,0,0});
@@ -948,24 +948,24 @@ TEST(ParticleContainerLinkedCell, setForce){
 }
 
 TEST(Force, calculateFHarmonic){
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
     std::array <bool, 6> tmp1 = {false,false,false,false,false,false};
     std::array <bool, 3> tmp2 = {false,false,false};
 
     //We add 4 particles with distances so that the diagonal is a natural number (triangle with side lenghts 3, 4, 5)
-    Particle* p1 = new Particle({0,0,0}, {0,0,0}, 1, false, 1, 5, 1, {0,0,0});
+    Particle* p1 = new Particle({0,0,0}, {0,0,0}, 1, 1, false, 1, 5, {0,0,0});
     pc->addParticle(p1);
-    Particle* p2 = new Particle({3,0,0}, {0,0,0}, 1, false, 1, 5, 1, {0,0,0});
+    Particle* p2 = new Particle({3,0,0}, {0,0,0}, 1, 1, false, 1, 5, {0,0,0});
     pc->addParticle(p2);
-    Particle* p3 = new Particle({0,4,0}, {0,0,0}, 1, false, 1, 5, 1, {0,0,0});
+    Particle* p3 = new Particle({0,4,0}, {0,0,0}, 1, 1, false, 1, 5, {0,0,0});
     pc->addParticle(p3);
-    Particle* p4 = new Particle({3,4,0}, {0,0,0}, 1, false, 1, 5, 1, {0,0,0});
+    Particle* p4 = new Particle({3,4,0}, {0,0,0}, 1, 1, false, 1, 5, {0,0,0});
     pc->addParticle(p4);
     
     //We make these particles into a membrane so that the harmonic force can be calculated
     pc->makeMembrane(2,2);
 
-    Force force (tmp1, tmp2, false, false, true, {0,0,0}, true, 2, 1);
+    Force force (tmp1, tmp2, false, false, true, {0,0,0}, true, 2, 1, 0);
     force.calculateF(*pc);
     auto particles = pc->getParticles();
 
@@ -996,13 +996,13 @@ TEST(ProfilingComponentTest, EndsWithTest) {
 
 TEST(ProfilingComponentTest, ProfileTest) {
     // Set up test data in ParticleContainer
-    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2);
+    ParticleContainer* pc = new ParticleContainerLinkedCell(10, 10, 10, 2, 0);
 
     // Create some particles
     Particle* p1 = new Particle((std::array<double, 3>){1.0, 0.0, 0.0}, 
-    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, false, 0, 1, 2, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.1, 0.2, 0.3}, 1.0, 0, false, 2, 1, (std::array<double, 3>){0, 0, 0});
     Particle* p2 = new Particle((std::array<double, 3>){1.9, 0.0, 0.0}, 
-    (std::array<double, 3>){0.4, 0.5, 0.6}, 1.5, false, 1, 3, 4, (std::array<double, 3>){0, 0, 0});
+    (std::array<double, 3>){0.4, 0.5, 0.6}, 1.5, 1, false, 4, 3, (std::array<double, 3>){0, 0, 0});
     
     // Add particles to the container
     pc->addParticle(p1);

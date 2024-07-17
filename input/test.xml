@@ -51,6 +51,25 @@
         <brownian_motion_dimension>2</brownian_motion_dimension>
     </thermostat>
 
+    <checkpoint>
+        <checkpoint_file>testcheckpoint</checkpoint_file>
+    </checkpoint>
+
+    <openmp>
+        <num_threads>4</num_threads>
+        <parallelizationstrategy>second</parallelizationstrategy>
+    </openmp>
+
+    <membrane>
+        <r0>2.2</r0>
+        <k>300</k>
+        <f_z_up>0.8</f_z_up>
+        <particle_up>
+            <x_index>17</x_index>
+            <y_index>24</y_index>
+        </particle_up>
+    </membrane>
+
     <cuboid>
         <position>
             <x>12</x>

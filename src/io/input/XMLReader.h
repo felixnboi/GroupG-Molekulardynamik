@@ -7,6 +7,7 @@
 #include "../../data/ThermostatData.h"
 #include "../../data/CheckpointData.h"
 #include "../../data/MembraneData.h"
+#include "../../data/OpenMPData.h"
 #include "spdlog/spdlog.h"
 
 #include <string>
@@ -79,4 +80,12 @@ public:
      * @param membranedata A reference to the membranedata object.
      */
     void readMembrane(const char* filename, MembraneData& membranedata);
+
+    /**
+     * @brief Reads membrane data from an XML file and saves it in a openmpdata object.
+     * 
+     * @param filename The name of the XML file to read from.
+     * @param openmpdata A reference to the openmpdata object.
+     */
+    void readOpenMP(const char* filename, OpenMPData& openmpdata);
 };

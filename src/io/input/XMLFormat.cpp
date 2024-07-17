@@ -336,6 +336,51 @@ operator= (value v)
 }
 
 
+// parallelizationstrategies
+// 
+
+parallelizationstrategies::
+parallelizationstrategies (value v)
+: ::xml_schema::string (_xsd_parallelizationstrategies_literals_[v])
+{
+}
+
+parallelizationstrategies::
+parallelizationstrategies (const char* v)
+: ::xml_schema::string (v)
+{
+}
+
+parallelizationstrategies::
+parallelizationstrategies (const ::std::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+parallelizationstrategies::
+parallelizationstrategies (const ::xml_schema::string& v)
+: ::xml_schema::string (v)
+{
+}
+
+parallelizationstrategies::
+parallelizationstrategies (const parallelizationstrategies& v,
+                           ::xml_schema::flags f,
+                           ::xml_schema::container* c)
+: ::xml_schema::string (v, f, c)
+{
+}
+
+parallelizationstrategies& parallelizationstrategies::
+operator= (value v)
+{
+  static_cast< ::xml_schema::string& > (*this) = 
+  ::xml_schema::string (_xsd_parallelizationstrategies_literals_[v]);
+
+  return *this;
+}
+
+
 // simulation
 // 
 
@@ -493,6 +538,36 @@ void simulation::
 checkpoint (::std::unique_ptr< checkpoint_type > x)
 {
   this->checkpoint_.set (std::move (x));
+}
+
+const simulation::openmp_optional& simulation::
+openmp () const
+{
+  return this->openmp_;
+}
+
+simulation::openmp_optional& simulation::
+openmp ()
+{
+  return this->openmp_;
+}
+
+void simulation::
+openmp (const openmp_type& x)
+{
+  this->openmp_.set (x);
+}
+
+void simulation::
+openmp (const openmp_optional& x)
+{
+  this->openmp_ = x;
+}
+
+void simulation::
+openmp (::std::unique_ptr< openmp_type > x)
+{
+  this->openmp_.set (std::move (x));
 }
 
 const simulation::membrane_optional& simulation::
@@ -1195,6 +1270,52 @@ void checkpoint::
 merge_file (::std::unique_ptr< merge_file_type > x)
 {
   this->merge_file_.set (std::move (x));
+}
+
+
+// openmp
+// 
+
+const openmp::num_threads_type& openmp::
+num_threads () const
+{
+  return this->num_threads_.get ();
+}
+
+openmp::num_threads_type& openmp::
+num_threads ()
+{
+  return this->num_threads_.get ();
+}
+
+void openmp::
+num_threads (const num_threads_type& x)
+{
+  this->num_threads_.set (x);
+}
+
+const openmp::parallelizationstrategy_type& openmp::
+parallelizationstrategy () const
+{
+  return this->parallelizationstrategy_.get ();
+}
+
+openmp::parallelizationstrategy_type& openmp::
+parallelizationstrategy ()
+{
+  return this->parallelizationstrategy_.get ();
+}
+
+void openmp::
+parallelizationstrategy (const parallelizationstrategy_type& x)
+{
+  this->parallelizationstrategy_.set (x);
+}
+
+void openmp::
+parallelizationstrategy (::std::unique_ptr< parallelizationstrategy_type > x)
+{
+  this->parallelizationstrategy_.set (std::move (x));
 }
 
 
@@ -2294,6 +2415,78 @@ _xsd_loglevels_indexes_[6] =
   ::loglevels::WARN
 };
 
+// parallelizationstrategies
+//
+
+parallelizationstrategies::
+parallelizationstrategies (const ::xercesc::DOMElement& e,
+                           ::xml_schema::flags f,
+                           ::xml_schema::container* c)
+: ::xml_schema::string (e, f, c)
+{
+  _xsd_parallelizationstrategies_convert ();
+}
+
+parallelizationstrategies::
+parallelizationstrategies (const ::xercesc::DOMAttr& a,
+                           ::xml_schema::flags f,
+                           ::xml_schema::container* c)
+: ::xml_schema::string (a, f, c)
+{
+  _xsd_parallelizationstrategies_convert ();
+}
+
+parallelizationstrategies::
+parallelizationstrategies (const ::std::string& s,
+                           const ::xercesc::DOMElement* e,
+                           ::xml_schema::flags f,
+                           ::xml_schema::container* c)
+: ::xml_schema::string (s, e, f, c)
+{
+  _xsd_parallelizationstrategies_convert ();
+}
+
+parallelizationstrategies* parallelizationstrategies::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class parallelizationstrategies (*this, f, c);
+}
+
+parallelizationstrategies::value parallelizationstrategies::
+_xsd_parallelizationstrategies_convert () const
+{
+  ::xsd::cxx::tree::enum_comparator< char > c (_xsd_parallelizationstrategies_literals_);
+  const value* i (::std::lower_bound (
+                    _xsd_parallelizationstrategies_indexes_,
+                    _xsd_parallelizationstrategies_indexes_ + 3,
+                    *this,
+                    c));
+
+  if (i == _xsd_parallelizationstrategies_indexes_ + 3 || _xsd_parallelizationstrategies_literals_[*i] != *this)
+  {
+    throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+  }
+
+  return *i;
+}
+
+const char* const parallelizationstrategies::
+_xsd_parallelizationstrategies_literals_[3] =
+{
+  "first",
+  "second",
+  "third"
+};
+
+const parallelizationstrategies::value parallelizationstrategies::
+_xsd_parallelizationstrategies_indexes_[3] =
+{
+  ::parallelizationstrategies::first,
+  ::parallelizationstrategies::second,
+  ::parallelizationstrategies::third
+};
+
 // simulation
 //
 
@@ -2309,6 +2502,7 @@ simulation (const boundaries_type& boundaries,
   simulationParameters_ (simulationParameters, this),
   thermostat_ (this),
   checkpoint_ (this),
+  openmp_ (this),
   membrane_ (this),
   cuboid_ (this),
   disc_ (this)
@@ -2327,6 +2521,7 @@ simulation (::std::unique_ptr< boundaries_type > boundaries,
   simulationParameters_ (std::move (simulationParameters), this),
   thermostat_ (this),
   checkpoint_ (this),
+  openmp_ (this),
   membrane_ (this),
   cuboid_ (this),
   disc_ (this)
@@ -2344,6 +2539,7 @@ simulation (const simulation& x,
   simulationParameters_ (x.simulationParameters_, f, this),
   thermostat_ (x.thermostat_, f, this),
   checkpoint_ (x.checkpoint_, f, this),
+  openmp_ (x.openmp_, f, this),
   membrane_ (x.membrane_, f, this),
   cuboid_ (x.cuboid_, f, this),
   disc_ (x.disc_, f, this)
@@ -2361,6 +2557,7 @@ simulation (const ::xercesc::DOMElement& e,
   simulationParameters_ (this),
   thermostat_ (this),
   checkpoint_ (this),
+  openmp_ (this),
   membrane_ (this),
   cuboid_ (this),
   disc_ (this)
@@ -2466,6 +2663,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // openmp
+    //
+    if (n.name () == "openmp" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< openmp_type > r (
+        openmp_traits::create (i, f, this));
+
+      if (!this->openmp_)
+      {
+        this->openmp_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // membrane
     //
     if (n.name () == "membrane" && n.namespace_ ().empty ())
@@ -2553,6 +2764,7 @@ operator= (const simulation& x)
     this->simulationParameters_ = x.simulationParameters_;
     this->thermostat_ = x.thermostat_;
     this->checkpoint_ = x.checkpoint_;
+    this->openmp_ = x.openmp_;
     this->membrane_ = x.membrane_;
     this->cuboid_ = x.cuboid_;
     this->disc_ = x.disc_;
@@ -3616,6 +3828,121 @@ operator= (const checkpoint& x)
 
 checkpoint::
 ~checkpoint ()
+{
+}
+
+// openmp
+//
+
+openmp::
+openmp (const num_threads_type& num_threads,
+        const parallelizationstrategy_type& parallelizationstrategy)
+: ::xml_schema::type (),
+  num_threads_ (num_threads, this),
+  parallelizationstrategy_ (parallelizationstrategy, this)
+{
+}
+
+openmp::
+openmp (const openmp& x,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  num_threads_ (x.num_threads_, f, this),
+  parallelizationstrategy_ (x.parallelizationstrategy_, f, this)
+{
+}
+
+openmp::
+openmp (const ::xercesc::DOMElement& e,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  num_threads_ (this),
+  parallelizationstrategy_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void openmp::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // num_threads
+    //
+    if (n.name () == "num_threads" && n.namespace_ ().empty ())
+    {
+      if (!num_threads_.present ())
+      {
+        this->num_threads_.set (num_threads_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // parallelizationstrategy
+    //
+    if (n.name () == "parallelizationstrategy" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< parallelizationstrategy_type > r (
+        parallelizationstrategy_traits::create (i, f, this));
+
+      if (!parallelizationstrategy_.present ())
+      {
+        this->parallelizationstrategy_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!num_threads_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "num_threads",
+      "");
+  }
+
+  if (!parallelizationstrategy_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "parallelizationstrategy",
+      "");
+  }
+}
+
+openmp* openmp::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class openmp (*this, f, c);
+}
+
+openmp& openmp::
+operator= (const openmp& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->num_threads_ = x.num_threads_;
+    this->parallelizationstrategy_ = x.parallelizationstrategy_;
+  }
+
+  return *this;
+}
+
+openmp::
+~openmp ()
 {
 }
 

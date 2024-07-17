@@ -16,7 +16,7 @@
 
     <outputSettings>
         <baseName>ass4_task2_1</baseName>
-        <writeFrequency>30</writeFrequency>
+        <writeFrequency>100</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
@@ -37,7 +37,11 @@
             <z>0.0</z>
         </domain_start>
         <cutoff_radius>2.5</cutoff_radius>
-        <grav_constant>-12.44</grav_constant>
+        <grav_constant>
+            <x>0.0</x>
+            <y>-12.44</y>
+            <z>0.0</z>
+        </grav_constant>
         <walls_flag>false</walls_flag>
     </simulationParameters>
 
@@ -46,6 +50,11 @@
         <n_thermostat>1000</n_thermostat>
         <brownian_motion_dimension>2</brownian_motion_dimension>
     </thermostat>
+
+    <openmp>
+        <num_threads>4</num_threads>
+        <parallelizationstrategy>second</parallelizationstrategy>
+    </openmp>
 
     <cuboid>
         <position>

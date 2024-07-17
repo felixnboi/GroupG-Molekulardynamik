@@ -21,6 +21,7 @@ add_executable(tests
     ${PROJECT_SOURCE_DIR}/src/data/ThermostatData.cpp
     ${PROJECT_SOURCE_DIR}/src/data/CheckpointData.cpp
     ${PROJECT_SOURCE_DIR}/src/data/MembraneData.cpp
+    ${PROJECT_SOURCE_DIR}/src/data/OpenMPData.cpp
     ${PROJECT_SOURCE_DIR}/src/thermostat/Thermostat.cpp
 )
 
@@ -29,6 +30,12 @@ target_link_libraries(tests
         gtest_main 
         ${XercesC_LIBRARIES}
 )
+
+# also link openmp here or it wont compile
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(tests PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 target_include_directories(tests 
     PRIVATE 

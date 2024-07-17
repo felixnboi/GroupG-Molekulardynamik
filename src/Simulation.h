@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <array>
+#include <omp.h>
 
 #include "io/input/FileReader.h"
 #include "io/input/XMLReader.h"
@@ -26,6 +27,7 @@
 #include "data/ThermostatData.h"
 #include "data/CheckpointData.h"
 #include "data/MembraneData.h"
+#include "data/OpenMPData.h"
 #include "thermostat/Thermostat.h"
 
 /**
@@ -81,6 +83,7 @@ private:
     ThermostatData thermostat_data; ///< Holds thermostat data.
     CheckpointData checkpoint_data; ///< Holds checkpoint data.
     MembraneData membrane_data; ///< Holds membrane data.
+    OpenMPData openmp_data; ///< Holds openmp_data.
 
     std::unique_ptr<ParticleContainer> particles; ///< Container holding simulaton particles.
     std::unique_ptr<Force> force; ///< Force object for force calculations.
@@ -102,6 +105,8 @@ private:
     std::array<bool,3> periodicFlags{}; ///< Flags for periodic boundary conditions. 
 
     std::string input_file_user; ///< User-specified input file name for loading initial particle configurations.
+
+    size_t strategy;///< Value used to determine the parallelization strategy to be used.
 
 
     /**

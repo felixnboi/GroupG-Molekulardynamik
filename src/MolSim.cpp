@@ -5,6 +5,7 @@
  */
 #include <iostream>
 #include <chrono>
+#include <omp.h>
 
 #include "Simulation.h"
 

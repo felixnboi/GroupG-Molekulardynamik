@@ -67,7 +67,7 @@ public:
      * 
      * @return A vector of pairs of particles.
      */
-    std::vector<std::pair<Particle*, Particle*>> getParticlePairs() override;
+    std::vector<std::pair<Particle* const, Particle* const>> getParticlePairs() override;
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.
