@@ -46,29 +46,41 @@ public:
     std::vector<std::pair<Particle* const, Particle* const>> getParticlePairs() override;
 
     /**
-    * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. 
-    * @brief (Doesn't always check if they are within the cut off radius).
-    * 
-    * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
-    * 
-    * @return A vector of these pairs of particles.
-    */
+     * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. 
+     * @brief (Doesn't always check if they are within the cut off radius).
+     * 
+     * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
+     * 
+     * @return A vector of these pairs of particles.
+     */
     std::vector<std::pair<Particle* const, Particle* const>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
 
     /**
-    * @brief Helper method of getParticlePairsPeriodic. Adds the particle pairs to particlePairs, as discribed in getParticlePairsPeriodic, with the exeptiom
-    * @brief that the first particle of each pair also is in the cell with index i.
-    * 
-    * @param particlePairs The vector to which the particle pairs should be added.
-    * @param i The index of the cell in linkedCells, in which the first particle of each pair must be.
-    * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
-    * 
-    * @return The amount of particles added to particle pairs.
-    */
+     * @brief Helper method of getParticlePairsPeriodic. Adds the particle pairs to particlePairs, as discribed in getParticlePairsPeriodic, with the exeptiom
+     * @brief that the first particle of each pair also is in the cell with index i.
+     * 
+     * @param particlePairs The vector to which the particle pairs should be added.
+     * @param i The index of the cell in linkedCells, in which the first particle of each pair must be.
+     * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
+     * 
+     * @return The amount of particles added to particle pairs.
+     */
     inline size_t getParticlePairsPeridicOneCell(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, size_t i, std::array<bool, 3> pFlag);
 
-    inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, size_t i,  
-    ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
+    /**
+     * @brief Helper method of getParticlePairsPeriodic. Adds the particle pairs to of particle_i to particlePairs, with the same restictions as in getParticlePairsPeriodic.
+     * 
+     * @param particlePairs The vector to which the particle pairs should be added.
+     * @param i The index of the cell in linkedCells, in which particle_i currently is.
+     * @param particle_i The first particle of the pairs.
+     * @param nbrCount The amount of neighbour cells we want to look at. (Only half of the possible ones because of Newtons third law)
+     * @param nbrs The neighbour cells we want to look at. Only the elements with index < nbrCount are actual ones.
+     * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
+     * 
+     * @return The amount of particles added to particle pairs.
+     */
+    inline size_t getParticlePairsPeriodicOneParticle(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, size_t i,  
+    std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
 
     /**
      * @brief Check if the particles are closer than the cut off radius.
@@ -80,19 +92,12 @@ public:
     inline bool inCuttofRaius(std::array<double, 3UL> distance);
 
     /**
-    * @brief Updates the locations of particles considering outflow and periodic boundary conditions.
-    * 
-    * @param outflowflag Array indicating which faces of the simulation domain have outflow boundaries.
-    * @param periodicflag Array indicating which dimensions have periodic boundaries.
-    */
-    void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag);
-
-    /**
-     * @brief Gets the particles located at the boundary of the container.
+     * @brief Updates the locations of particles considering outflow and periodic boundary conditions.
      * 
-     * @return A vector of shared pointers to the particles at the boundary.
+     * @param outflowflag Array indicating which faces of the simulation domain have outflow boundaries.
+     * @param periodicflag Array indicating which dimensions have periodic boundaries.
      */
-    std::vector<Particle*> getBoundary();
+    void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag);
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.
@@ -111,6 +116,31 @@ public:
      * @param force The force that is applyed to the particle.
      */
     void applyForce(int x, int y, int sizeX, std::array<double, 3> force) override;
+
+    /**
+     * @brief Calculates the what the one dimesional linked cell index would be in 3 dimesions.
+     * 
+     * @param index The one dimesional index of a cell in linkedCells.
+     * 
+     * @return What that index would be if linkedCells were three dimesional.
+     */
+    std::array<size_t, 3> index1DTo3D(size_t index);
+
+    /**
+     * @brief Calculates the index in linkedCells of a particle with this position.
+     * 
+     * @param position The position of the particle
+     * 
+     * @return The index it would have in linked cells.
+     */
+    size_t positionToIndex(std::array<double, 3> position);
+
+    /**
+     * @brief Gets the particles located at the boundary of the container.
+     * 
+     * @return A vector of shared pointers to the particles at the boundary.
+     */
+    std::vector<Particle*> getBoundary();
 
     /**
      * @brief Gets the particles located at the the specified boundaries of the container.
@@ -192,7 +222,7 @@ private:
     std::array<size_t, 3> cellCount; ///< Number of cells in each dimension.
     double radiusSquared; ///< Cut-off radius.
     std::vector<Particle*> halo; ///< Vector containing particles outside the calculated area.
-    size_t vectorLength; ///< Total number of cells in the container.
+    size_t cellCountTotal; ///< Total number of cells in the container.
     std::array<size_t, 8> lastReserve; /// < The estimate the vector size in getParticlePairs peridic, the amount, that was reserved last time.
     size_t strategy; ///< Value used for choosing the parallelization strategy.
     omp_lock_t lock;

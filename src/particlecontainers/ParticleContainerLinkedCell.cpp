@@ -10,8 +10,8 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(double sizeX, double si
     cellSize = {sizeX/cellCount[0], sizeY/cellCount[1],sizeZ/cellCount[2]};
     size = {cellSize[0]*cellCount[0],cellSize[1]*cellCount[1],cellSize[2]*cellCount[2]};
     radiusSquared = radius*radius;
-    vectorLength = cellCount[0]*cellCount[1]*cellCount[2];
-    linkedCells = std::vector<std::vector<Particle*>>(vectorLength);
+    cellCountTotal = cellCount[0]*cellCount[1]*cellCount[2];
+    linkedCells = std::vector<std::vector<Particle*>>(cellCountTotal);
     lastReserve = {1,1,1,1,1,1,1,1};
     #ifdef _OPENMP
     omp_init_lock(&lock);
@@ -36,14 +36,14 @@ void ParticleContainerLinkedCell::reserve(size_t size){
 void ParticleContainerLinkedCell::addParticle(Particle* particle){
     particle_count++;
     particles.push_back(particle);
+    particle->setStrategy(strategy);
     auto cords = particle->getX();
     if(cords[0]<0||cords[0]>=size[0]||cords[1]<0||cords[1]>=size[1]||cords[2]<0||cords[2]>=size[2]){
         halo.push_back(particle);
         spdlog::info("Added Particle is not inside of the calculated area\n");
     }
     else{
-        size_t index = (size_t)(particle->getX()[0]/cellSize[0])+((size_t)(particle->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)(particle->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
-        linkedCells[index].push_back(particle);
+        linkedCells[positionToIndex(cords)].push_back(particle);
     }
     lastReserve[0] = particle_count;
 }
@@ -53,21 +53,24 @@ std::vector<std::pair<Particle* const, Particle* const>> ParticleContainerLinked
 }
 
 std::vector<std::pair<Particle* const, Particle* const>> ParticleContainerLinkedCell::getParticlePairsPeriodic(std::array<bool, 3> pFlag){
-    std::vector<std::pair<Particle* const, Particle* const>> particlePairs;
-    int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2];
-    size_t count = 0;
-    particlePairs.reserve(lastReserve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
+    std::vector<std::pair<Particle* const, Particle* const>> particlePairs; // The particle pairs we want to return.
+    int index = (pFlag[0] << 2) | (pFlag[1] << 1) | pFlag[2]; // The index of last reserve.
+    size_t count = 0; // The amount of particles added to particlePairs.
+    particlePairs.reserve(lastReserve[index]*1.5); //We take the last reserve as our estimation, but overestimate slighty for better runtime
+
+    // Depending on the strategy selceted the next for loop is paralellized or not. In the for loop we iterrate over all cells and for each
+    // cell we call getParticlePairsPeridicOneCell, which adds all particle pairs to particlePairs, where the first particle is in the current
+    // cell and also only those pairs that need all active pFlags to interact.
     if(strategy == 0 || strategy == 3){
-        for (size_t i = 0; i < vectorLength; i++){
-            size_t tmp = getParticlePairsPeridicOneCell(particlePairs, i, pFlag);
-            count += tmp;
+        for (size_t i = 0; i < cellCountTotal; i++){
+            count += getParticlePairsPeridicOneCell(particlePairs, i, pFlag);
         }
     }
-    if(strategy == 1 || strategy == 2){
+    else { // strategy is 1 or 2
         #ifdef _OPENMP
         #pragma omp parallel for schedule(auto)
         #endif
-        for (size_t i = 0; i < vectorLength; i++){
+        for (size_t i = 0; i < cellCountTotal; i++){
             size_t tmp = getParticlePairsPeridicOneCell(particlePairs, i, pFlag);
             #ifdef _OPENMP
             #pragma omp atomic
@@ -81,10 +84,10 @@ std::vector<std::pair<Particle* const, Particle* const>> ParticleContainerLinked
 
 inline size_t ParticleContainerLinkedCell::getParticlePairsPeridicOneCell(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, 
 size_t i, std::array<bool, 3> pFlag){
-    size_t count = 0;
+    size_t count = 0; // The amount of particles added to particlePairs.
     std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
-    size_t nbrCount = 0; // cout of how many elements are in the nbrs array (how many neighbour cells this one has, while ignoring half of them)
-    std::array<size_t,3> indices = {i%cellCount[0],i/cellCount[0]%cellCount[1], i/cellCount[0]/cellCount[1]}; // indices of the current cell if it was stored in a 3 dimesional array
+    size_t nbrCount = 0; // count of how many elements are in the nbrs array (how many neighbour cells this one has, while ignoring half of them)
+    std::array<size_t,3> indices = index1DTo3D(i); // indices of the current cell if it was stored in a 3 dimesional array
     std::array<int,5> nbrIndices = {(int)indices[0]-1,(int)indices[0]+1, (int)indices[1]-1, (int)indices[1]+1, (int)indices[2]+1}; // indices of the neighbours if they were stored
     // in a 3 dimesional array, the first is for negative x the second for positive, 3 and 4 are the same for y and 5 is for positive z (no negative z since we only look at half the cells)
     
@@ -130,39 +133,33 @@ size_t i, std::array<bool, 3> pFlag){
     if(!pFlag[0]                         &&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = indices[0]   +nbrIndices[3]+nbrIndices[4]; 
     if(                      nbrExists[1]&&nbrExists[3]&&nbrExists[4]) nbrs[nbrCount++] = nbrIndices[1]+nbrIndices[3]+nbrIndices[4]; 
 
-    if(strategy == 0){
-        for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
-            size_t tmp = getParticlePairsPeriodicHelper2(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
-            count += tmp;
-        }
-    }
-    if(strategy == 1 || strategy == 2){
-        for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
-            size_t tmp = getParticlePairsPeriodicHelper2(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
-            #ifdef _OPENMP
-            #pragma omp atomic
-            #endif
-            count += tmp;
-        }
-    }
+    // Depending on the selected strategy the next for loop is parallel or not. The loop interates over all particles in the current
+    // cell and for each it calls getParticlePairsPeriodicOneParticle, which adds all viable pairs with this particle to particle pairs.
+    // (Or half of those because of Netwons third law) 
     if(strategy == 3){
         #ifdef _OPENMP
         #pragma omp parallel for schedule(auto)
         #endif
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
-            size_t tmp = getParticlePairsPeriodicHelper2(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
+            size_t tmp = getParticlePairsPeriodicOneParticle(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
             #ifdef _OPENMP
             #pragma omp atomic
             #endif
             count += tmp;
         }
     }
+    else { // strategy is 0, 1 or 2
+        for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
+            count += getParticlePairsPeriodicOneParticle(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
+        }
+    }
+
     return count;
 }
 
-inline size_t ParticleContainerLinkedCell::getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, 
+inline size_t ParticleContainerLinkedCell::getParticlePairsPeriodicOneParticle(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, 
 size_t i, ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag){
-    size_t count = 0;
+    size_t count = 0; // The amount of particles added to particlePairs.
     if(!(pFlag[0]||pFlag[1]||pFlag[2])){
         // here we look at the particles in the same cell
         for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
@@ -201,10 +198,10 @@ inline bool ParticleContainerLinkedCell::inCuttofRaius(std::array<double, 3UL> d
 
 void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag){
     size_t newIndex;
-    for (size_t i = 0; i < vectorLength; i++){
-        for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
+    for (size_t i = 0; i < cellCountTotal; i++){ // Iterates over all cells
+        for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){ // Iterates over all particles in this cell
             std::array<double, 3UL> cords = (*particle_i)->getX();
-            for (size_t j = 0; j < 3; j++){
+            for (size_t j = 0; j < 3; j++){ // Iterates over all dimensions
                 if(periodicflag[j]){
                     cords[j] = fmod(cords[j],(size[j]));
                     if(cords[j]<0) cords[j]+=size[j];
@@ -217,35 +214,32 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag,
                         particle_i = --linkedCells[i].erase(particle_i);
                         goto loopend;
                     }
+                    //position and velocity get mirrored at the boundery
                     cords[j] = -cords[j];
-                    std::array<double, 3UL> speed = (*particle_i)->getV();
-                    speed[j] *= -1;
-                    (*particle_i)->setV(speed);
+                    (*particle_i)->setV(-1*(*particle_i)->getV());
                 }
                 if(cords[j]>=size[j]) {
                     if(outflowflag[2*j+1]){
                         halo.push_back(*particle_i);
-                       
+                        (*particle_i)->setF({0,0,0});
+                        (*particle_i)->setOldF({0,0,0});
                         particle_i = --linkedCells[i].erase(particle_i);
                         goto loopend;
                     }
                     cords[j] = fmod(cords[j],(2*size[j]));
                     if(cords[j]>size[j]){
-                        std::array<double, 3UL> speed = (*particle_i)->getV();
-                        speed[j] *= -1;
-                        (*particle_i)->setV(speed);
+                        //position and velocity get mirrored at the boundery (the fmod does the same only multible times)
+                        (*particle_i)->setV(-1*(*particle_i)->getV());
                         cords[j] = 2*size[j]-cords[j];
                     }
                     if(cords[j]==size[j]) {
-                        std::array<double, 3UL> speed = (*particle_i)->getV();
-                        speed[j] *= -1;
-                        (*particle_i)->setV(speed);
+                        // To avoid divided by zero exeptions
                         cords[j] = nextafter(cords[j],0);
                     }
                 }
                 (*particle_i)->setX(cords);
             }
-            newIndex = (size_t)((*particle_i)->getX()[0]/cellSize[0])+((size_t)((*particle_i)->getX()[1]/cellSize[1]))*cellCount[0]+((size_t)((*particle_i)->getX()[2]/cellSize[2]))*cellCount[0]*cellCount[1];
+            newIndex = positionToIndex(cords);
             if(newIndex != i){
                 linkedCells[newIndex].push_back(*particle_i);
                 particle_i = --linkedCells[i].erase(particle_i);
@@ -255,51 +249,47 @@ void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag,
     }
 }
 
-std::vector<Particle*> ParticleContainerLinkedCell::getBoundary(){
-    std::vector<Particle*> boundary;
-    for (size_t i = 0; i < vectorLength; i++){
-        size_t positionX = i%cellCount[0];
-        size_t positionY = i/cellCount[0]%cellCount[1];
-        size_t positionZ = i/cellCount[0]/cellCount[1];
-        if((positionX==0)||(positionY==0)||(positionZ=0)||(positionX==cellCount[0]-1)||(positionY==cellCount[1]-1)||(positionZ==cellCount[2]-1)){
-            for(auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
-                boundary.push_back(*particle_i);
-            }
-        }
-    }
-    return boundary;
-}
-
 void ParticleContainerLinkedCell::makeMembrane(int sizeX, int sizeY){
     for(int x = 0; x < sizeX; x++){
         for(int y = 0; y < sizeY; y++){
             int position = x+y*sizeX;
             auto particle = particles[position];
 
-            // for every particle we check if it sill has the coresponfing neighbour and if yes we add it
-            if(x +1 < sizeX) particle->addNeighbour(particles[position+1], 0);
-            if(y+1 < sizeY){
-                if(x -1 >= 0) particle->addNeighbour(particles[position+sizeX-1], 1);
+            // for every particle we check if the coresponding neighbour does actually exist and if yes we add it
+            if(x + 1 < sizeX) particle->addNeighbour(particles[position+1], 0);
+            if(y + 1 < sizeY){
+                if(x - 1 >= 0) particle->addNeighbour(particles[position+sizeX-1], 1);
                 particle->addNeighbour(particles[position+sizeX], 2);
-                if(x +1 < sizeX) particle->addNeighbour(particles[position+sizeX+1], 1);
+                if(x + 1 < sizeX) particle->addNeighbour(particles[position+sizeX+1], 1);
             }
         }
     }
 }
 
 void ParticleContainerLinkedCell::applyForce(int x, int y, int sizeX, std::array<double, 3> force){
-    particles[x+y*sizeX]->applyF(force, 0);
+    particles[x+y*sizeX]->applyF(force);
+}
+
+std::array<size_t, 3> ParticleContainerLinkedCell::index1DTo3D(size_t index){
+    return {index%cellCount[0], index/cellCount[0]%cellCount[1], index/cellCount[0]/cellCount[1]};
+}
+
+size_t ParticleContainerLinkedCell::positionToIndex(std::array<double, 3> position){
+    return (size_t)(position[0]/cellSize[0])+((size_t)(position[1]/cellSize[1]))*cellCount[0]+((size_t)(position[2]/cellSize[2]))*cellCount[0]*cellCount[1];
+}
+
+
+std::vector<Particle*> ParticleContainerLinkedCell::getBoundary(){
+    return getBoundaries({true,true,true,true,true,true});
 }
 
 std::vector<Particle*> ParticleContainerLinkedCell::getBoundaries(std::array<bool, 6> boundaries){
     std::vector<Particle*> boundary;
-    for (size_t i = 0; i < vectorLength; i++){
-        size_t positionX = i%cellCount[0];
-        size_t positionY = i/cellCount[0]%cellCount[1];
-        size_t positionZ = i/cellCount[0]/cellCount[1];
-        if((positionX==0&&boundaries[0])||(positionY==0&&boundaries[2])||(positionZ=0&&boundaries[4])||
-        (positionX==cellCount[0]-1&&boundaries[1])||(positionY==cellCount[1]-1&&boundaries[3])||
-        (positionZ==cellCount[2]-1&&boundaries[5])){
+    for (size_t i = 0; i < cellCountTotal; i++){
+        auto indices = index1DTo3D(i);
+        if((indices[0]==0&&boundaries[0])||(indices[1]==0&&boundaries[2])||(indices[2]=0&&boundaries[4])||
+        (indices[0]==cellCount[0]-1&&boundaries[1])||(indices[1]==cellCount[1]-1&&boundaries[3])||
+        (indices[2]==cellCount[2]-1&&boundaries[5])){
             for(auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
                 boundary.push_back(*particle_i);
             }

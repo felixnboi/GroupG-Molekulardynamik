@@ -65,11 +65,13 @@ private:
   int type;
 
   bool is_outer;
-  double sigma; ///< The sigma value for the Lennard-Jones potential.
+  double sigma; ///< The sigma value for the Lennard-Jones potential.  
+  double sigmaHalf; ///< The sigma divided by two.
   double epsilon; ///< The epsilon value for the Lennard-Jones potential.
   double rootEpsilon; ///< The root of epsilon.
   std::array<double, 3> domainStart; ///< The domain start position of the particle.
   omp_lock_t lock; ///< OpenMP lock.
+  size_t strategy; ///< The strategy we use for parallellization.
 
 
 public:
@@ -139,6 +141,13 @@ public:
   const std::array<double, 3> &getOldF() const;
 
   /**
+   * @brief Gets the domain start coordinates.
+   * 
+   * @return Reference to the coordinates array.
+   */
+  const std::array<double, 3> &getDomainStart() const;
+
+  /**
    * @brief Gets the half of the neighbours of this particle in the membrane.
    * 
    * @return Reference to the neighbours array.
@@ -167,6 +176,13 @@ public:
   const double getSigma() const;
 
   /**
+   * @brief Gets the value of sigmaHalf for this particle.
+   * 
+   * @return The value of sigmaHalf.
+   */
+  const double getSigmaHalf() const;
+
+  /**
    * @brief Gets the value of epsilon for this particle.
    * 
    * @return The value of epsilon.
@@ -181,11 +197,18 @@ public:
   const double getRootEpsilon() const;
 
   /**
-   * @brief Gets the domain start coordinates.
+   * @brief Gets the mass of the particle.
    * 
-   * @return Reference to the coordinates array.
+   * @return The mass of the particle.
    */
-  const std::array<double, 3> &getDomainStart() const;
+  const double getM() const;
+
+  /**
+   * @brief Gets the type of the particle.
+   * 
+   * @return The type of the particle.
+   */
+  const int getType() const;
 
   /**
    * @brief Sets the position of the particle.
@@ -193,13 +216,6 @@ public:
    * @param newX New position array.
    */
   void setX(const std::array<double, 3>& newX);
-
-  /**
-   * @brief Sets the is_outer parameter of the particle.
-   * 
-   * @param newIsOuter New is_outer value.
-   */
-  void setIsOuter(const bool newIsOuter);
 
   /**
    * @brief Sets the velocity of the particle.
@@ -221,36 +237,27 @@ public:
    * @param newOldF New old force array.
    */
   void setOldF(const std::array<double, 3>& newOldF);
-
-  /**
-   * @brief Gets the mass of the particle.
-   * 
-   * @return The mass of the particle.
-   */
-  const double getM() const;
-
-  /**
-   * @brief Gets the type of the particle.
-   * 
-   * @return The type of the particle.
-   */
-  const int getType() const;
   
   /**
    * @brief This function adds the specified force on top.
    * 
    * @param force The force vector to be added on top.
-   * @param strategy Value used for the parallelization strategy.
    */
-  void applyF(const std::array<double, 3>& force, size_t strategy);
+  void applyF(const std::array<double, 3>& force);
 
   /**
-   * @brief Overloaded equality operator.
+   * @brief Sets the is_outer parameter of the particle.
    * 
-   * @param other Another particle to compare.
-   * @return True if both particles are equal, otherwise false.
+   * @param newIsOuter New is_outer value.
    */
-  bool operator==(const Particle &other) const;
+  void setIsOuter(const bool newIsOuter);
+
+  /**
+   * @brief Sets the strategy parameter of the particle.
+   * 
+   * @param newStrategy New strategy value.
+   */
+  void setStrategy(const size_t newStrategy);
 
   /**
    * @brief Adds a neighbour of this particle in the membrane.
@@ -266,6 +273,14 @@ public:
    * @return A string representation of the particle.
    */
   std::string toString() const;
+
+  /**
+   * @brief Overloaded equality operator.
+   * 
+   * @param other Another particle to compare.
+   * @return True if both particles are equal, otherwise false.
+   */
+  bool operator==(const Particle &other) const;
 };
 
 /**
