@@ -63,9 +63,9 @@ public:
     * @brief Updates the locations of particles considering outflow and periodic boundary conditions.
     * 
     * @param outflowflag Array indicating which faces of the simulation domain have outflow boundaries.
-    * @param peridicflag Array indicating which dimensions have periodic boundaries.
+    * @param periodicflag Array indicating which dimensions have periodic boundaries.
     */
-    void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> peridicflag);
+    void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag);
 
     /**
      * @brief Gets the particles in the container.
@@ -164,7 +164,7 @@ public:
      * 
      * @return A bool value if they are closer.
      */
-    bool inCuttofRaius(const Particle* particle1, const Particle* particle2);
+    inline bool inCuttofRaius(const Particle* particle1, const Particle* particle2);
 
     /**
      * @brief Gets the particles located at the the specified boundaries of the container.

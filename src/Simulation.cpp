@@ -351,8 +351,6 @@ bool Simulation::initialize(int argc, char* argv[]) {
 
     spdlog::info("end_time:{}, delta_t:{}, start_time:{}", simdata.getEndTime(), simdata.getDeltaT(), simdata.getStartTime());
 
-    std::cout << "max threads:" << omp_get_num_procs() << "\n";
-
     return true;
 }
 

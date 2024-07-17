@@ -66,7 +66,6 @@ const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles(){
     return particles;
 }
 
-
 std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairs(){
     return getParticlePairsPeriodic({false,false,false});
 }
@@ -78,12 +77,13 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     particlePairs.reserve(lastReserve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
     if(strategy == 0 || strategy == 3){
         for (size_t i = 0; i < vectorLength; i++){
-            count += getParticlePairsPeriodicHelper1(particlePairs, i, pFlag);
+            size_t tmp = getParticlePairsPeriodicHelper1(particlePairs, i, pFlag);
+            count += tmp;
         }
     }
     if(strategy == 1 || strategy == 2){
         #ifdef _OPENMP
-        #pragma omp parallel for schedule(static, 8)
+        #pragma omp parallel for schedule(static, 4)
         #endif
         for (size_t i = 0; i < vectorLength; i++){
             size_t tmp = getParticlePairsPeriodicHelper1(particlePairs, i, pFlag);
@@ -106,7 +106,7 @@ size_t i, std::array<bool, 3> pFlag){
     std::array<int,5> nbrIndices = {(int)indices[0]-1,(int)indices[0]+1, (int)indices[1]-1, (int)indices[1]+1, (int)indices[2]+1}; // indices of the neighbours if they were stored
     // in a 3 dimesional array, the first is for negative x the second for positive, 3 and 4 are the same for y and 5 is for positive z (no negative z since we only look at half the cells)
     
-    // if the pFlag (peridic flag) for a dimesion is set, the cell count is added or substracted to the neighbour indices, since we are only interseted in cells that are conected through
+    // if the pFlag (periodic flag) for a dimesion is set, the cell count is added or substracted to the neighbour indices, since we are only interseted in cells that are conected through
     // these boundaries and invalid indices are filtered out later
     if(pFlag[0]){
         nbrIndices[0] += cellCount[0];
@@ -165,7 +165,7 @@ size_t i, std::array<bool, 3> pFlag){
     }
     if(strategy == 3){
         #ifdef _OPENMP
-        #pragma omp parallel for schedule(dynamic, 8)
+        #pragma omp parallel for schedule(static, 4)
         #endif
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             size_t tmp = getParticlePairsPeriodicHelper2(particlePairs, i, particle_i, nbrCount, nbrs, pFlag);
@@ -212,12 +212,11 @@ size_t i, std::vector<Particle*>::iterator particle_i, size_t nbrCount, const st
     return count;
 }
 
-bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2){
+inline bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2){
     auto distance = particle1->getX()-particle2->getX();
     auto distanceSquared = distance*distance;
     return distanceSquared[0]+distanceSquared[1]+distanceSquared[2] < radiusSquared;
 }
-
 
 std::vector<Particle*> ParticleContainerLinkedCell::getHalo(){
     return halo;
@@ -231,13 +230,13 @@ const double ParticleContainerLinkedCell::getRadiusSquared(){
     return radiusSquared;
 }
 
-void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> peridicflag){
+void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag){
     size_t newIndex;
     for (size_t i = 0; i < vectorLength; i++){
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){
             std::array<double, 3UL> cords = (*particle_i)->getX();
             for (size_t j = 0; j < 3; j++){
-                if(peridicflag[j]){
+                if(periodicflag[j]){
                     cords[j] = fmod(cords[j],(size[j]));
                     if(cords[j]<0) cords[j]+=size[j];
                 }
