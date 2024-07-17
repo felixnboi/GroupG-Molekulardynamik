@@ -120,11 +120,11 @@ public:
     /**
      * @brief Applies the formula for the caluclation of the the harmonic force, with the given values.
      * 
-     * @param r0 The average bond lenght.
      * @param particle1 The first of the two particles.
      * @param particle2 The second of the two particles.
+     * @param r0 The average bond lenght.
      */
-    void harmonicFroceFormula(Particle* particle1, Particle* particle2, double r0) const;
+    void harmonicForceFormula(Particle* particle1, Particle* particle2, double r0) const;
 
 private:
     const std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.
@@ -135,7 +135,7 @@ private:
     const std::array<double, 3> gravConstant; ///< The gravitational constant value used for calculations.
     const bool membraneFlag; ///< Flag for the membrane simulation.
     const double k; ///< The stiffness constant of the harmonic force.
-    const double r0; ///< The average bond lenght of particles in a membrane.
+    const double r0global; ///< The average bond lenght of particles in a membrane.
     const double r0Diagonal; /// < r0 multiplied with the square root of two
     const size_t strategy; ///< The value to determine which parallelization strategy to use.
     const double twoRoot6; ///< Sixth root of two.

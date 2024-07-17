@@ -16,12 +16,12 @@
 
     <outputSettings>
         <baseName>ass5_task1</baseName>
-        <writeFrequency>100</writeFrequency>
+        <writeFrequency>400</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
         <end_t>500</end_t>
-        <delta_t>0.01</delta_t>
+        <delta_t>0.0025</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>

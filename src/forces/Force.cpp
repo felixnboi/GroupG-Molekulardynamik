@@ -14,7 +14,7 @@ std::array<double, 3> gravConstant, bool membraneFlag, double k, double r0, size
     gravConstant(gravConstant),
     membraneFlag(membraneFlag),
     k(k),
-    r0(r0),
+    r0global(r0),
     r0Diagonal(pow(2, 0.5) * r0),
     strategy(strategy),
     twoRoot6(pow(2, 1/6)) {}
@@ -216,14 +216,14 @@ void Force::calculateFHarmonic(ParticleContainerLinkedCell &LCContainer) const {
     auto neighbours = particle->getNeighbours();
     auto hasNeighbour = particle->getHasNeighbour();
 
-    if(hasNeighbour[0]) harmonicFroceFormula(particle, neighbours[0],r0);
-    if(hasNeighbour[1]) harmonicFroceFormula(particle, neighbours[1], r0Diagonal);
-    if(hasNeighbour[2]) harmonicFroceFormula(particle, neighbours[2], r0);
-    if(hasNeighbour[3]) harmonicFroceFormula(particle, neighbours[3], r0Diagonal);
+    if(hasNeighbour[0]) harmonicForceFormula(particle, neighbours[0], r0global);
+    if(hasNeighbour[1]) harmonicForceFormula(particle, neighbours[1], r0Diagonal);
+    if(hasNeighbour[2]) harmonicForceFormula(particle, neighbours[2], r0global);
+    if(hasNeighbour[3]) harmonicForceFormula(particle, neighbours[3], r0Diagonal);
   }
 }
 
-void Force::harmonicFroceFormula(Particle* particle1, Particle* particle2, double r0) const {
+void Force::harmonicForceFormula(Particle* particle1, Particle* particle2, double r0) const {
   std::array<double,3> direction = particle2->getX() - particle1->getX();
   auto norm = ArrayUtils::L2Norm(direction);
   std::array<double,3> force = k*(norm-r0) / norm*direction;
