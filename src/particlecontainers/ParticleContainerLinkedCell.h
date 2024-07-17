@@ -25,13 +25,6 @@ public:
     ~ParticleContainerLinkedCell();
 
     /**
-     * @brief Returns the number of particles in this particle container.
-     * 
-     * @return The number of particles in this container.
-     */
-    size_t getParticleCount() override;
-
-    /**
      * @brief Reserves space for a given number of particles.
      * 
      * @param size The number of particles to reserve space for.
@@ -46,18 +39,45 @@ public:
     void addParticle(Particle* particle) override;
 
     /**
-     * @brief Returns an iterator to the beginning of the particles.
+     * @brief Getter for the pairs of particles within the interaction radius. (Ingnores periodic boundery)
      * 
-     * @return An iterator to the beginning of the particles.
+     * @return A vector of these pairs of particles.
      */
-    ParticleIterator begin() override;
+    std::vector<std::pair<Particle*, Particle*>> getParticlePairs() override;
 
     /**
-     * @brief Returns an iterator to the end of the particles.
+    * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. 
+    * @brief (Doesn't always check if they are within the cut off radius).
+    * 
+    * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
+    * 
+    * @return A vector of these pairs of particles.
+    */
+    std::vector<std::pair<Particle*, Particle*>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
+
+    /**
+    * @brief Helper method of getParticlePairsPeriodic. Adds the particle pairs to particlePairs, as discribed in getParticlePairsPeriodic, with the exeptiom
+    * @brief that the first particle of each pair also is in the cell with index i.
+    * 
+    * @param particlePairs The vector to which the particle pairs should be added.
+    * @param i The index of the cell in linkedCells, in which the first particle of each pair must be.
+    * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
+    * 
+    * @return The amount of particles added to particle pairs.
+    */
+    inline size_t getParticlePairsPeridicOneCell(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i, std::array<bool, 3> pFlag);
+
+    inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i,  
+    std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
+
+    /**
+     * @brief Check if the particles are closer than the cut off radius.
      * 
-     * @return An iterator to the end of the particles.
+     * @param distance The location of one of the particles substracted by the location of the other.
+     * 
+     * @return A bool value if they are closer.
      */
-    ParticleIterator end() override;
+    inline bool inCuttofRaius(std::array<double, 3UL> distance);
 
     /**
     * @brief Updates the locations of particles considering outflow and periodic boundary conditions.
@@ -68,75 +88,11 @@ public:
     void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag);
 
     /**
-     * @brief Gets the particles in the container.
-     * 
-     * @return A reference to the vector of particles.
-     */
-    const std::vector<Particle*>& getParticles() override;
-
-    /**
-     * @brief Gets the size of the container.
-     * 
-     * @return The size of the container as an array of three doubles.
-     */
-    const std::array<double, 3> getSize();
-
-    /**
-     * @brief Getter for the size of each cell.
-     * 
-     * @return The size of each cell as an array of three doubles.
-     */
-    const std::array<double, 3> getCellSize();    
-    
-    /**
-    * @brief Getter for the number of cells in each dimension.
-    * 
-    * @return The number of cells in each dimension as an array.
-    */
-    const std::array<size_t, 3> getCellCount();
-
-    /**
-     * @brief Getter for the squared interaction radius.
-     * 
-    * @return The squared interaction radius.
-    */
-    const double getRadiusSquared();
-
-    /**
-     * @brief Getter for the pairs of particles within the interaction radius. (Ingnores periodic boundery)
-     * 
-     * @return A vector of these pairs of particles.
-     */
-    std::vector<std::pair<Particle*, Particle*>> getParticlePairs() override;
-
-    /**
-    * @brief Gets the pairs of particles that could interact through EVERY periodic boundery where the flag is set and only those. (Doesn't always check if they are within the cut off radius).
-    * 
-    * @param pFlag Array indicating for which dimensions particles should interact through the periodic boundaries.
-    * 
-    * @return A vector of these pairs of particles.
-    */
-    std::vector<std::pair<Particle*, Particle*>> getParticlePairsPeriodic(std::array<bool, 3> pFlag);
-
-    inline size_t getParticlePairsPeriodicHelper1(std::vector<std::pair<Particle*, Particle*>>& particlePairs, 
-    size_t i, std::array<bool, 3> pFlag);
-
-    inline size_t getParticlePairsPeriodicHelper2(std::vector<std::pair<Particle*, Particle*>>& particlePairs, size_t i,  
-    std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
-
-    /**
      * @brief Gets the particles located at the boundary of the container.
      * 
      * @return A vector of shared pointers to the particles at the boundary.
      */
     std::vector<Particle*> getBoundary();
-
-    /**
-     * @brief Gets the particles located in the halo.
-     * 
-     * @return A vector of shared pointers to the particles in the halo.
-     */
-    std::vector<Particle*> getHalo();
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.
@@ -157,16 +113,6 @@ public:
     void applyForce(int x, int y, int sizeX, std::array<double, 3> force) override;
 
     /**
-     * @brief Check if the particles are closer than the cut off radius.
-     * 
-     * @param particle1 The first particle.
-     * @param particle2 The second particle.
-     * 
-     * @return A bool value if they are closer.
-     */
-    inline bool inCuttofRaius(const Particle* particle1, const Particle* particle2);
-
-    /**
      * @brief Gets the particles located at the the specified boundaries of the container.
      * 
      * @param bounderies The bounderies at which the particles are that interest us.
@@ -174,6 +120,69 @@ public:
      * @return A vector of pointers to the particles at the specified boundaries.
      */
     std::vector<Particle*> getBoundaries(std::array<bool, 6> boundaries);
+
+    /**
+     * @brief Gets the particles located in the halo.
+     * 
+     * @return A vector of shared pointers to the particles in the halo.
+     */
+    std::vector<Particle*> getHalo();
+    
+    /**
+    * @brief Getter for the number of cells in each dimension.
+    * 
+    * @return The number of cells in each dimension as an array.
+    */
+    const std::array<size_t, 3> getCellCount();
+
+    /**
+     * @brief Getter for the squared interaction radius.
+     * 
+    * @return The squared interaction radius.
+    */
+    const double getRadiusSquared();
+
+    /**
+     * @brief Gets the particles in the container.
+     * 
+     * @return A reference to the vector of particles.
+     */
+    const std::vector<Particle*>& getParticles() override;
+
+    /**
+     * @brief Returns the number of particles in this particle container.
+     * 
+     * @return The number of particles in this container.
+     */
+    size_t getParticleCount() override;
+
+    /**
+     * @brief Gets the size of the container.
+     * 
+     * @return The size of the container as an array of three doubles.
+     */
+    const std::array<double, 3> getSize();
+
+    /**
+     * @brief Getter for the size of each cell.
+     * 
+     * @return The size of each cell as an array of three doubles.
+     */
+    const std::array<double, 3> getCellSize();    
+
+    /**
+     * @brief Returns an iterator to the beginning of the particles.
+     * 
+     * @return An iterator to the beginning of the particles.
+     */
+    ParticleIterator begin() override;
+
+    /**
+     * @brief Returns an iterator to the end of the particles.
+     * 
+     * @return An iterator to the end of the particles.
+     */
+    ParticleIterator end() override;
 
 private:
     size_t particle_count; ///< The number of particles in this container.

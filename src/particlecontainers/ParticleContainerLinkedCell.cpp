@@ -23,20 +23,8 @@ ParticleContainerLinkedCell::~ParticleContainerLinkedCell(){
     spdlog::info("Linked cells particlecontainer destructed.");
 };
 
-size_t ParticleContainerLinkedCell::getParticleCount(){
-    return particle_count;
-}
-
 void ParticleContainerLinkedCell::reserve(size_t size){
     particles.reserve(size);
-}
-
-const std::array<double, 3> ParticleContainerLinkedCell::getSize(){
-    return size;
-}
-
-const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
-    return cellSize;
 }
 
 void ParticleContainerLinkedCell::addParticle(Particle* particle){
@@ -54,18 +42,6 @@ void ParticleContainerLinkedCell::addParticle(Particle* particle){
     lastReserve[0] = particle_count;
 }
 
-ParticleIterator ParticleContainerLinkedCell::begin(){
-    return particles.begin();
-}
-
-ParticleIterator ParticleContainerLinkedCell::end(){
-    return particles.end();
-}
-
-const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles(){
-    return particles;
-}
-
 std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getParticlePairs(){
     return getParticlePairsPeriodic({false,false,false});
 }
@@ -77,7 +53,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     particlePairs.reserve(lastReserve[index]*1.5); //We take the last resever as our estimation, but overestimate slighty for better runtime
     if(strategy == 0 || strategy == 3){
         for (size_t i = 0; i < vectorLength; i++){
-            size_t tmp = getParticlePairsPeriodicHelper1(particlePairs, i, pFlag);
+            size_t tmp = getParticlePairsPeridicOneCell(particlePairs, i, pFlag);
             count += tmp;
         }
     }
@@ -86,7 +62,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
         #pragma omp parallel for schedule(static, 4)
         #endif
         for (size_t i = 0; i < vectorLength; i++){
-            size_t tmp = getParticlePairsPeriodicHelper1(particlePairs, i, pFlag);
+            size_t tmp = getParticlePairsPeridicOneCell(particlePairs, i, pFlag);
             #ifdef _OPENMP
             #pragma omp atomic
             #endif
@@ -97,7 +73,7 @@ std::vector<std::pair<Particle*, Particle*>> ParticleContainerLinkedCell::getPar
     return particlePairs;
 }
 
-inline size_t ParticleContainerLinkedCell::getParticlePairsPeriodicHelper1(std::vector<std::pair<Particle*, Particle*>>& particlePairs, 
+inline size_t ParticleContainerLinkedCell::getParticlePairsPeridicOneCell(std::vector<std::pair<Particle*, Particle*>>& particlePairs, 
 size_t i, std::array<bool, 3> pFlag){
     size_t count = 0;
     std::array<size_t,13> nbrs; // array of the neighbour cells of the current cell. (Conatins only half of them so that each pair is not considered twice, 13 because (3^3-1)/2 = 13)
@@ -184,7 +160,7 @@ size_t i, std::vector<Particle*>::iterator particle_i, size_t nbrCount, const st
     if(!(pFlag[0]||pFlag[1]||pFlag[2])){
         // here we look at the particles in the same cell
         for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
-            if(inCuttofRaius(*particle_i, *particle_j)){
+            if(inCuttofRaius((*particle_i)->getX()- (*particle_j)->getX())){
                 #ifdef _OPENMP
                 #pragma omp critical
                 #endif
@@ -198,7 +174,7 @@ size_t i, std::vector<Particle*>::iterator particle_i, size_t nbrCount, const st
     for (size_t j = 0; j < nbrCount; j++){
         // here we look at the particles in the neighbour cells
         for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
-            if(pFlag[0]||pFlag[1]||pFlag[2]||inCuttofRaius(*particle_i, *particle_j)){
+            if(pFlag[0]||pFlag[1]||pFlag[2]||inCuttofRaius((*particle_i)->getX()- (*particle_j)->getX())){
                 #ifdef _OPENMP
                 #pragma omp critical
                 #endif
@@ -212,22 +188,9 @@ size_t i, std::vector<Particle*>::iterator particle_i, size_t nbrCount, const st
     return count;
 }
 
-inline bool ParticleContainerLinkedCell::inCuttofRaius(const Particle* particle1, const Particle* particle2){
-    auto distance = particle1->getX()-particle2->getX();
+inline bool ParticleContainerLinkedCell::inCuttofRaius(std::array<double, 3UL> distance){
     auto distanceSquared = distance*distance;
     return distanceSquared[0]+distanceSquared[1]+distanceSquared[2] < radiusSquared;
-}
-
-std::vector<Particle*> ParticleContainerLinkedCell::getHalo(){
-    return halo;
-}
-    
-const std::array<size_t, 3> ParticleContainerLinkedCell::getCellCount(){
-    return cellCount;
-}
-
-const double ParticleContainerLinkedCell::getRadiusSquared(){
-    return radiusSquared;
 }
 
 void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag){
@@ -337,4 +300,40 @@ std::vector<Particle*> ParticleContainerLinkedCell::getBoundaries(std::array<boo
         }
     }
     return boundary;
+}
+
+std::vector<Particle*> ParticleContainerLinkedCell::getHalo(){
+    return halo;
+}
+    
+const std::array<size_t, 3> ParticleContainerLinkedCell::getCellCount(){
+    return cellCount;
+}
+
+const double ParticleContainerLinkedCell::getRadiusSquared(){
+    return radiusSquared;
+}
+
+const std::vector<Particle*>& ParticleContainerLinkedCell::getParticles(){
+    return particles;
+}
+
+size_t ParticleContainerLinkedCell::getParticleCount(){
+    return particle_count;
+}
+
+const std::array<double, 3> ParticleContainerLinkedCell::getSize(){
+    return size;
+}
+
+const std::array<double, 3> ParticleContainerLinkedCell::getCellSize(){
+    return cellSize;
+}
+
+ParticleIterator ParticleContainerLinkedCell::begin(){
+    return particles.begin();
+}
+
+ParticleIterator ParticleContainerLinkedCell::end(){
+    return particles.end();
 }
