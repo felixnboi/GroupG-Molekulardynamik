@@ -51,11 +51,11 @@ public:
     void calculateFLennardJones(std::vector<std::pair<Particle*, Particle*>> pairs);
 
     /**
-     * @brief Helper method for parallelization strategy.
+     * @brief Helper method for calculateFLennardJones. Callculates and sets the Lennard Johnes force for on particle pair.
      * 
-     * @param pair The current pair of particle pointers to be used for calculations.
+     * @param pair The current pair of particles to be used for the calculations.
      */
-    inline void calculateFLennardJonesHelper(const std::pair<Particle *, Particle *> &pair);
+    inline void calculateFLennardJonesOnePair(const std::pair<Particle *, Particle *> &pair);
 
     /**
      * @brief Calculates the forces between all pairs of particles using the gravitational force.
@@ -72,15 +72,16 @@ public:
     void calculateFPeriodic(ParticleContainerLinkedCell &LCContainer);
 
     /**
-     * @brief Helper method for parallelization strategy.
+     * @brief Helper method for calculateFPeriodic. Calculates the periodic Lennard Jones force for one pair of particles,
+     * @brief which is connected through one or more periodic bounderys.
      * 
      * @param pair The current pair of particle pointers we want to use for calculations.
-     * @param i Either 0 or 1. If 1 current particle pair is connected through the periodic boundary in x-direction.
-     * @param j Either 0 or 1. If 1 current particle pair is connected through the periodic boundary in y-direction.
-     * @param k Either 0 or 1. If 1 current particle pair is connected through the periodic boundary in z-direction.
+     * @param i If true current particle pair is connected through the periodic boundary in x-direction.
+     * @param j If true current particle pair is connected through the periodic boundary in y-direction.
+     * @param k If true current particle pair is connected through the periodic boundary in z-direction.
      * @param LCContainer The linked cell particle container.
      */
-    inline void calculateFPeriodicHelper(const std::pair<Particle *, Particle *> &pair, int i, int j, int k, ParticleContainerLinkedCell &LCContainer);
+    inline void calculateFPeriodicOnePair(const std::pair<Particle *, Particle *> &pair, bool i, bool j, bool k, ParticleContainerLinkedCell &LCContainer);
 
     /**
      * @brief Calculates the force for all particles which are to close to a reflecting boundery.
@@ -90,42 +91,41 @@ public:
     void calculateFReflecting(ParticleContainerLinkedCell &LCContainer);
 
     /**
-     * @brief Helper method for parallelization strategy
+     * @brief Helper method for calculateFReflecting. Calculates and sets the reflecting force for one particle.
      * 
-     * @param particle The current pointer to use for calculation. 
+     * @param particle The particle to use for calculation. 
+     * @param LCContainer The Container of the particles.
      */
-    inline void calculateFReflectingHelper(Particle* particle, ParticleContainerLinkedCell &LCContainer);
+    inline void calculateFReflectingOneParticle(Particle* particle, ParticleContainerLinkedCell &LCContainer);
 
     /**
-     * @brief Calculates the Lennard-Jones force between two particles.
+     * @brief Applies the formula for the caluclation of the the Lennard-Jones force, with the given values.
      * 
      * @param direction Direction vector between two particles.
      * @param epsilon Depth of the potential well.
      * @param sigma Finite distance at which the inter-particle potential is zero.
-     * @param cutOffRadiusSquared Cut-off radius beyond which the force is considered zero.
-     * @return std::array<double, 3> Calculated force vector.
+     * @param cutOffRadiusSquared Squared cut off radius beyond which the force is considered zero, if zero this is ingored.
+     * 
+     * @return The calculated force vector.
      */
-    std::array<double,3> calculateLennardJonesForce(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared);
+    std::array<double,3> lennardJonesForceFormula(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared);
 
     /**
      * @brief Calculates the harmonic force for all particles.
      * 
      * @param LCContainer The Container of the particles.
-     * @param k The stiffness constant.
-     * @param r0 The average bond lenght.
      */
-    void calculateFHarmonic(ParticleContainerLinkedCell &LCContainer, double k, double r0);
+    void calculateFHarmonic(ParticleContainerLinkedCell &LCContainer);
 
     /**
-     * @brief Calculates the harmonic force between two particles.
+     * @brief Applies the formula for the caluclation of the the harmonic force, with the given values.
      * 
      * @param LCContainer The Container of the particles.
-     * @param k The stiffness constant.
      * @param r0 The average bond lenght.
      * @param particle1 The first of the two particles.
      * @param particle2 The second of the two particles.
      */
-    void calculateHarmonicFroce(Particle* particle1, Particle* particle2, double k, double r0);
+    void harmonicFroceFormula(Particle* particle1, Particle* particle2, double r0);
 
 private:
     const std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.
@@ -137,6 +137,7 @@ private:
     const bool membraneFlag; ///< Flag for the membrane simulation.
     const double k; ///< The stiffness constant of the harmonic force.
     const double r0; ///< The average bond lenght of particles in a membrane.
+    const double r0Diagonal; /// < r0 multiplied with the square root of two
     const size_t strategy; ///< The value to determine which parallelization strategy to use.
     const double twoRoot6; ///< Sixth root of two.
 };

@@ -601,7 +601,7 @@ TEST(ParticleContainerLinkedCell, MirrorBoundary){
     p1->setV({1.0,1.0,1.0});
     particles.updateLoctions({true,false,true,true,true,true}, {false, false, false});
     std::array<double, 3UL> positionAfterMirroring = {9.0,3.0,3.0};
-    std::array<double, 3UL> velocityAfterMirroring = {-1.0,1.0,1.0};
+    std::array<double, 3UL> velocityAfterMirroring = {-1.0,-1.0,-1.0};
     EXPECT_EQ(p1->getX(), positionAfterMirroring); 
     EXPECT_EQ(p1->getV(), velocityAfterMirroring); 
     EXPECT_EQ(particles.getHalo().size(),0);
