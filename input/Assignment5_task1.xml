@@ -27,8 +27,8 @@
         <algorithm>linkedcell</algorithm>
         <loglevel>INFO</loglevel>
         <domain>
-            <x>148.0</x>
-            <y>148.0</y>
+            <x>200.0</x>
+            <y>200.0</y>
             <z>148.0</z>
         </domain>
         <domain_start>
@@ -70,8 +70,8 @@
 
     <cuboid>
         <position>
-            <x>15.0</x>
-            <y>15.0</y>
+            <x>50.0</x>
+            <y>50.0</y>
             <z>1.5</z>
         </position>
         <velocity>

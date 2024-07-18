@@ -108,7 +108,7 @@ public:
      * 
      * @return The calculated force vector.
      */
-    std::array<double,3> lennardJonesForceFormula(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared) const;
+    std::array<double,3> lennardJonesForceFormula(const std::array<double,3>& direction, double epsilon, double sigma, double cutOffRadiusSquared) const;
 
     /**
      * @brief Calculates the harmonic force for all particles.

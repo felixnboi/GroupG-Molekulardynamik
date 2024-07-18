@@ -80,7 +80,7 @@ public:
      * @return The amount of particles added to particle pairs.
      */
     inline size_t getParticlePairsPeriodicOneParticle(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, size_t i,  
-    std::vector<Particle*>::iterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag);
+    ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, const std::array<bool, 3>& pFlag);
 
     /**
      * @brief Check if the particles are closer than the cut off radius.
@@ -89,7 +89,7 @@ public:
      * 
      * @return A bool value if they are closer.
      */
-    inline bool inCuttofRaius(std::array<double, 3UL> distance);
+    inline bool inCuttofRaius(const std::array<double, 3UL>& distance);
 
     /**
      * @brief Updates the locations of particles considering outflow and periodic boundary conditions.
@@ -97,7 +97,7 @@ public:
      * @param outflowflag Array indicating which faces of the simulation domain have outflow boundaries.
      * @param periodicflag Array indicating which dimensions have periodic boundaries.
      */
-    void updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag);
+    void updateLoctions(const std::array<bool,6>& outflowflag, const std::array<bool,3>& periodicflag);
 
     /**
      * @brief Makes the particles now see each other as part of the same membrane.
@@ -115,7 +115,7 @@ public:
      * @param y The location of the particle int the mebrane in y dircetion.
      * @param force The force that is applyed to the particle.
      */
-    void applyForce(int x, int y, int sizeX, std::array<double, 3> force) override;
+    void applyForce(int x, int y, int sizeX, const std::array<double, 3>& force) override;
 
     /**
      * @brief Calculates the what the one dimesional linked cell index would be in 3 dimesions.

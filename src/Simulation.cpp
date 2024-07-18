@@ -418,8 +418,11 @@ void Simulation::run() {
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
-                if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
-                else{thermostat.scaleWithBetaFluid(particles);}
+                if(!simdata.getWallsFlag()){
+                    thermostat.scaleWithBeta(particles);
+                }else{
+                    thermostat.scaleWithBetaFluid(particles);
+                }
             }
        
             iteration++;
@@ -440,11 +443,14 @@ void Simulation::run() {
             calculateV();
 
             if(thermostat_flag && (iteration % n_thermostat == 0)){
-                if(!simdata.getWallsFlag()){thermostat.scaleWithBeta(particles);}
-                else{thermostat.scaleWithBetaFluid(particles);}
+                if(!simdata.getWallsFlag()){
+                    thermostat.scaleWithBeta(particles);
+                }else{
+                    thermostat.scaleWithBetaFluid(particles);
+                }
             }
 
-            if (iteration % 10000 == 0) {
+            if (simdata.getWallsFlag() && iteration % 10000 == 0) {
                 ProfilingComponent::profile(N_bins, simdata.getDomain(), *particles, cvs_file);
             }
             

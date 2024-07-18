@@ -163,12 +163,15 @@ size_t i, std::array<bool, 3> pFlag){
 }
 
 inline size_t ParticleContainerLinkedCell::getParticlePairsPeriodicOneParticle(std::vector<std::pair<Particle* const, Particle* const>>& particlePairs, 
-size_t i, ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, std::array<bool, 3> pFlag){
+size_t i, ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,13>& nbrs, const std::array<bool, 3>& pFlag){
     size_t count = 0; // The amount of particles added to particlePairs.
     if(!(pFlag[0]||pFlag[1]||pFlag[2])){
         // here we look at the particles in the same cell
         for (auto particle_j = std::next(particle_i); particle_j!=linkedCells[i].end(); particle_j++){
-            if(inCuttofRaius((*particle_i)->getX()- (*particle_j)->getX())){
+            const auto& x_i = (*particle_i)->getX();
+            const auto& x_j = (*particle_j)->getX();
+            
+            if(inCuttofRaius({x_i[0]-x_j[0], x_i[1]-x_j[1], x_i[2]-x_j[2]})){
                 #ifdef _OPENMP
                 #pragma omp critical
                 #endif
@@ -182,7 +185,10 @@ size_t i, ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,
     for (size_t j = 0; j < nbrCount; j++){
         // here we look at the particles in the neighbour cells
         for (auto particle_j = linkedCells[nbrs[j]].begin(); particle_j != linkedCells[nbrs[j]].end(); particle_j++){
-            if(pFlag[0]||pFlag[1]||pFlag[2]||inCuttofRaius((*particle_i)->getX()- (*particle_j)->getX())){
+            const auto& x_i = (*particle_i)->getX();
+            const auto& x_j = (*particle_j)->getX();
+            
+            if(pFlag[0]||pFlag[1]||pFlag[2]||inCuttofRaius({x_i[0]-x_j[0], x_i[1]-x_j[1], x_i[2]-x_j[2]})){
                 #ifdef _OPENMP
                 #pragma omp critical
                 #endif
@@ -196,12 +202,13 @@ size_t i, ParticleIterator particle_i, size_t nbrCount, const std::array<size_t,
     return count;
 }
 
-inline bool ParticleContainerLinkedCell::inCuttofRaius(std::array<double, 3UL> distance){
-    auto distanceSquared = distance*distance;
+inline bool ParticleContainerLinkedCell::inCuttofRaius(const std::array<double, 3UL>& distance){
+    std::array<double, 3UL> distanceSquared = {distance[0]*distance[0], distance[1]*distance[1], distance[2]*distance[2]};
+    //auto distanceSquared = distance*distance;
     return distanceSquared[0]+distanceSquared[1]+distanceSquared[2] < radiusSquared;
 }
 
-void ParticleContainerLinkedCell::updateLoctions(std::array<bool,6> outflowflag, std::array<bool,3> periodicflag){
+void ParticleContainerLinkedCell::updateLoctions(const std::array<bool,6>& outflowflag, const std::array<bool,3>& periodicflag){
     size_t newIndex;
     for (size_t i = 0; i < cellCountTotal; i++){ // Iterates over all cells
         for (auto particle_i = linkedCells[i].begin(); particle_i != linkedCells[i].end(); particle_i++){ // Iterates over all particles in this cell
@@ -271,7 +278,7 @@ void ParticleContainerLinkedCell::makeMembrane(int sizeX, int sizeY){
     }
 }
 
-void ParticleContainerLinkedCell::applyForce(int x, int y, int sizeX, std::array<double, 3> force){
+void ParticleContainerLinkedCell::applyForce(int x, int y, int sizeX, const std::array<double, 3>& force){
     particles[x+y*sizeX]->applyF(force);
 }
 

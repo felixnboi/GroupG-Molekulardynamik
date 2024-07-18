@@ -138,21 +138,30 @@ void Particle::setOldF(const std::array<double, 3>& newOldF) {
 void Particle::applyF(const std::array<double, 3>& force){
   if(!is_outer){
     if(strategy == 0){
-      f = f+force;
+      //f = f+force;
+      f[0] += force[0];
+      f[1] += force[1];
+      f[2] += force[2];
     }
     if(strategy == 1){
       #ifdef _OPENMP
       #pragma omp critical
       #endif
       {
-        f = f+force;
+      //f = f+force;
+      f[0] += force[0];
+      f[1] += force[1];
+      f[2] += force[2];
       }
     }
     if(strategy == 2 || strategy == 3){
       #ifdef _OPENMP
       omp_set_lock(&lock);
       #endif
-      f = f+force;
+      //f = f+force;
+      f[0] += force[0];
+      f[1] += force[1];
+      f[2] += force[2];
       #ifdef _OPENMP
       omp_unset_lock(&lock);
       #endif

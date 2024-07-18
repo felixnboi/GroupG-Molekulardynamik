@@ -16,11 +16,11 @@
 
     <outputSettings>
         <baseName>ass5_task4</baseName>
-        <writeFrequency>10</writeFrequency>
+        <writeFrequency>100</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
-        <end_t>500</end_t>
+        <end_t>0.05</end_t>
         <delta_t>0.0005</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
@@ -51,7 +51,12 @@
         <brownian_motion_dimension>3</brownian_motion_dimension>
     </thermostat>
 
-     <cuboid>
+    <openmp>
+        <num_threads>4</num_threads>
+        <parallelizationstrategy>second</parallelizationstrategy>
+    </openmp>
+
+    <cuboid>
         <position>
             <x>1.0</x>
             <y>0.5</y>
@@ -77,8 +82,7 @@
         <is_outer>true</is_outer>
     </cuboid>
 
-
-     <cuboid>
+    <cuboid>
         <position>
             <x>27.2</x>
             <y>0.5</y>
@@ -104,8 +108,7 @@
         <is_outer>true</is_outer>
     </cuboid>
 
-    
-     <cuboid>
+    <cuboid>
         <position>
             <x>3.2</x>
             <y>0.6</y>

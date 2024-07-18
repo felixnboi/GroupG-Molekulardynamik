@@ -98,5 +98,5 @@ public:
      * @param y The location of the particle int the mebrane in y dircetion.
      * @param force The force that is applyed to the particle.
      */
-    virtual void applyForce(int x, int y, int sizeX, std::array<double, 3> force) = 0;
+    virtual void applyForce(int x, int y, int sizeX, const std::array<double, 3>& force) = 0;
 };
