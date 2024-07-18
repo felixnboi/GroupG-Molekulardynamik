@@ -71,8 +71,8 @@ void Thermostat::scaleWithBetaFluid(std::unique_ptr<ParticleContainer>& pc) {
     }
 
     for (size_t d = 0; d < brownian_motion_dimension; ++d) {
-            average_velocity[d] /= (particle_count);
-        }
+        average_velocity[d] /= (particle_count);
+    }
 
     // Calculate kinetic energy without average velocity
     for (const auto& particle : pc->getParticles()) {

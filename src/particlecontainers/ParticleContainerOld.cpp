@@ -69,6 +69,6 @@ void ParticleContainerOld::makeMembrane(int sizeX, int sizeY){
     }
 }
 
-void ParticleContainerOld::applyForce(int x, int y, int sizeX, std::array<double, 3> force){
+void ParticleContainerOld::applyForce(int x, int y, int sizeX, const std::array<double, 3>& force){
     particles[x+y*sizeX]->applyF(force);
 }

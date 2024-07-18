@@ -85,7 +85,7 @@ public:
      * @param y The location of the particle int the mebrane in y dircetion.
      * @param force The force that is applyed to the particle.
      */
-    void applyForce(int x, int y, int sizeX, std::array<double, 3> force) override;
+    void applyForce(int x, int y, int sizeX, const std::array<double, 3>& force) override;
 
 private:
     size_t particle_count; ///< The number of particles in this container.

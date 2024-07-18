@@ -53,7 +53,7 @@ void Force::calculateFLennardJones(std::vector<std::pair<Particle* const, Partic
   }
   else{ // strategy is 1, 2 or 3
     #ifdef _OPENMP
-    #pragma omp parallel for schedule(static, 4)
+    #pragma omp parallel for schedule(auto)
     #endif
     for (const auto& pair : pairs){
       calculateFLennardJonesOnePair(pair);
@@ -70,7 +70,11 @@ inline void Force::calculateFLennardJonesOnePair(const std::pair<Particle* const
 
   if(membraneFlag) cutOffRadius = twoRoot6 * sigma;
 
-  auto force = lennardJonesForceFormula(particle_i->getX()-particle_j->getX(), epsilon, sigma, cutOffRadius*cutOffRadius);
+  auto x_i = particle_i->getX();
+  auto x_j = particle_j->getX();
+  const std::array<double, 3UL> tmp = {x_i[0]-x_j[0], x_i[1]-x_j[1], x_i[2]-x_j[2]};
+
+  auto force = lennardJonesForceFormula(tmp, epsilon, sigma, cutOffRadius*cutOffRadius);
     
   particle_i->applyF(force);
   particle_j->applyF(-1*force);
@@ -110,7 +114,7 @@ void Force::calculateFPeriodic(ParticleContainerLinkedCell &LCContainer) const {
     }
     else{ // strategy is 1, 2 or 3
       #ifdef _OPENMP
-      #pragma omp parallel for schedule(static , 4)
+      #pragma omp parallel for schedule(auto)
       #endif
       for(const auto& pair : pairs){
         calculateFPeriodicOnePair(pair, i, j, k, LCContainer);
@@ -171,7 +175,7 @@ void Force::calculateFReflecting(ParticleContainerLinkedCell &LCContainer) const
   }
   if(strategy == 1 || strategy == 2 || strategy == 3){
     #ifdef _OPENMP
-    #pragma omp parallel for schedule(static, 4)
+    #pragma omp parallel for schedule(auto)
     #endif
     for(const auto& particle : boundery){
       calculateFReflectingOneParticle(particle, LCContainer);
@@ -198,7 +202,7 @@ inline void Force::calculateFReflectingOneParticle(Particle* particle, ParticleC
   particle->applyF(force);
 }
 
-std::array<double,3> Force::lennardJonesForceFormula(std::array<double,3> direction, double epsilon, double sigma, double cutOffRadiusSquared) const {
+std::array<double,3> Force::lennardJonesForceFormula(const std::array<double,3>& direction, double epsilon, double sigma, double cutOffRadiusSquared) const {
   auto normSquared = direction[0]*direction[0]+direction[1]*direction[1]+direction[2]*direction[2]; 
   // In some cases it wasn't checkt if the particles are closer than the cut off radius, so we check in those cases.
   if(cutOffRadiusSquared > 0 && normSquared > cutOffRadiusSquared) return {0,0,0};
