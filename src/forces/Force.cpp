@@ -216,15 +216,19 @@ void Force::calculateFHarmonic(ParticleContainerLinkedCell &LCContainer) const {
     auto neighbours = particle->getNeighbours();
     auto hasNeighbour = particle->getHasNeighbour();
 
-    if(hasNeighbour[0]) harmonicForceFormula(particle, neighbours[0], r0global);
-    if(hasNeighbour[1]) harmonicForceFormula(particle, neighbours[1], r0Diagonal);
-    if(hasNeighbour[2]) harmonicForceFormula(particle, neighbours[2], r0global);
-    if(hasNeighbour[3]) harmonicForceFormula(particle, neighbours[3], r0Diagonal);
+    if(hasNeighbour[0]) harmonicForceFormula(particle, neighbours[0], r0global, LCContainer.getSize());
+    if(hasNeighbour[1]) harmonicForceFormula(particle, neighbours[1], r0Diagonal, LCContainer.getSize());
+    if(hasNeighbour[2]) harmonicForceFormula(particle, neighbours[2], r0global, LCContainer.getSize());
+    if(hasNeighbour[3]) harmonicForceFormula(particle, neighbours[3], r0Diagonal, LCContainer.getSize());
   }
 }
 
-void Force::harmonicForceFormula(Particle* particle1, Particle* particle2, double r0) const {
+void Force::harmonicForceFormula(Particle* particle1, Particle* particle2, double r0, std::array<double,3> size) const {
   std::array<double,3> direction = particle2->getX() - particle1->getX();
+  for(int i = 0; i <3; i++){
+    if(direction[i]>size[i]/2) direction[i] = direction[i]-size[i];
+    if(direction[i]<-size[i]/2) direction[i] = size[i]+direction[i];
+  }
   auto norm = ArrayUtils::L2Norm(direction);
   std::array<double,3> force = k*(norm-r0) / norm*direction;
   particle1->setF(particle1->getF()+force);

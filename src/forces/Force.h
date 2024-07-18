@@ -123,8 +123,9 @@ public:
      * @param particle1 The first of the two particles.
      * @param particle2 The second of the two particles.
      * @param r0 The average bond lenght.
+     * @param size The size of the domain of the particle container.
      */
-    void harmonicForceFormula(Particle* particle1, Particle* particle2, double r0) const;
+    void harmonicForceFormula(Particle* particle1, Particle* particle2, double r0, std::array<double,3> size) const;
 
 private:
     const std::array<bool,6> reflectLenJonesFlag; ///< If the corresponding boundery is reflecting.

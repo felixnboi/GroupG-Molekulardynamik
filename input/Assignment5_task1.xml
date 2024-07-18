@@ -2,12 +2,12 @@
 <simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../src/io/input/XMLFormat.xsd">
 
     <boundaries>
-        <left>reflecting</left>
-        <right>reflecting</right>
+        <left>periodic</left>
+        <right>periodic</right>
         <bottom>reflecting</bottom>
         <top>reflecting</top>
-        <rear>reflecting</rear>
-        <front>reflecting</front>
+        <rear>periodic</rear>
+        <front>periodic</front>
     </boundaries>
 
     <inputSettings>
@@ -16,12 +16,12 @@
 
     <outputSettings>
         <baseName>ass5_task1</baseName>
-        <writeFrequency>400</writeFrequency>
+        <writeFrequency>100</writeFrequency>
     </outputSettings>
 
     <simulationParameters>
         <end_t>500</end_t>
-        <delta_t>0.0025</delta_t>
+        <delta_t>0.01</delta_t>
         <start_t>0.0</start_t>
         <force>lennardJonesForce</force>
         <algorithm>linkedcell</algorithm>
